@@ -5,10 +5,10 @@ services:
     image: mysql:5.6
     container_name: docker-mysql
     environment:
-      MYSQL_DATABASE: database_name
-      MYSQL_USER: my_username
-      MYSQL_PASSWORD: my_password
-      MYSQL_ROOT_PASSWORD: my_password
+      MYSQL_DATABASE: admin_key
+      MYSQL_USER: adminkey
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
     ports:
       - "3306:3306"
     restart: always
