@@ -26,9 +26,9 @@ phpunit.phar
 /apps
 /extensions
 /packages
-/mysql
+!/mysql/
 
 # NPM packages
 /node_modules
 .env
-package-lock.json
+package-lock.json!/mysql/admin_key/
