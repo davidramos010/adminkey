@@ -31,4 +31,16 @@ phpunit.phar
 # NPM packages
 /node_modules
 .env
-package-lock.json!/mysql/admin_key/
+package-lock.json!/mysql/admin_key/!/mysql/admin_key/
+
+!/mysql/mysql/
+
+!/mysql/performance_schema/
+
+!/mysql/auto.cnf
+
+!/mysql/ib_logfile0
+
+!/mysql/ib_logfile1
+
+!/mysql/ibdata1
