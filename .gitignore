@@ -33,7 +33,7 @@ phpunit.phar
 .env
 package-lock.json!/mysql/admin_key/!/mysql/admin_key/
 
-!/mysql/mysql/
+/mysql/mysql/
 
 !/mysql/performance_schema/
 
@@ -44,3 +44,4 @@ package-lock.json!/mysql/admin_key/!/mysql/admin_key/
 !/mysql/ib_logfile1
 
 !/mysql/ibdata1
+/mysql/
