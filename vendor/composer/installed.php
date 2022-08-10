@@ -10,6 +10,15 @@
         'dev' => true,
     ),
     'versions' => array(
+        'almasaeed2010/adminlte' => array(
+            'pretty_version' => 'v3.x-dev',
+            'version' => '3.9999999.9999999.9999999-dev',
+            'reference' => 'bd4d9c72931f1dd28601b6bfb387554a381ad540',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../almasaeed2010/adminlte',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'behat/gherkin' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
@@ -80,7 +89,7 @@
         'codeception/codeception' => array(
             'pretty_version' => '4.2.x-dev',
             'version' => '4.2.9999999.9999999-dev',
-            'reference' => '30c5ed851cece7d4d8850db35ab683ed00f8467c',
+            'reference' => '0ce6194b54e0099c10e0f6432fd80f9bfee32e27',
             'type' => 'library',
             'install_path' => __DIR__ . '/../codeception/codeception',
             'aliases' => array(),
@@ -216,6 +225,26 @@
             ),
             'dev_requirement' => true,
         ),
+        'hail812/yii2-adminlte-widgets' => array(
+            'pretty_version' => 'v1.0.5',
+            'version' => '1.0.5.0',
+            'reference' => 'bc942430d7a5f5636f6c492553b5f444bf4a6df6',
+            'type' => 'yii2-extension',
+            'install_path' => __DIR__ . '/../hail812/yii2-adminlte-widgets',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'hail812/yii2-adminlte3' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => 'df2c9892a2856e3070374ce9856494033d5e5694',
+            'type' => 'yii2-extension',
+            'install_path' => __DIR__ . '/../hail812/yii2-adminlte3',
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
+            'dev_requirement' => false,
+        ),
         'myclabs/deep-copy' => array(
             'pretty_version' => '1.x-dev',
             'version' => '1.9999999.9999999.9999999-dev',
@@ -233,6 +262,15 @@
             'install_path' => __DIR__ . '/../nikic/php-parser',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'npm-asset/bootstrap' => array(
+            'pretty_version' => '4.6.2',
+            'version' => '4.6.2.0',
+            'reference' => NULL,
+            'type' => 'npm-asset',
+            'install_path' => __DIR__ . '/../npm-asset/bootstrap',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'paragonie/random_compat' => array(
             'pretty_version' => 'dev-master',
@@ -612,7 +650,7 @@
         'symfony/console' => array(
             'pretty_version' => '5.4.x-dev',
             'version' => '5.4.9999999.9999999-dev',
-            'reference' => '7490104449afe1f761da22d20435607a8ef16a09',
+            'reference' => '8fe565067c4e8786d10e6ba36b161fc10e4c5224',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/console',
             'aliases' => array(),
@@ -849,10 +887,19 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'yiisoft/yii2-bootstrap4' => array(
+            'pretty_version' => '2.0.10',
+            'version' => '2.0.10.0',
+            'reference' => 'e6d0e58f43d3910129d554ac183aac17f65be639',
+            'type' => 'yii2-extension',
+            'install_path' => __DIR__ . '/../yiisoft/yii2-bootstrap4',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'yiisoft/yii2-bootstrap5' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'c943bc32e9b842d644389473f1716ba004784624',
+            'reference' => 'fe254a7d1f360ef8e5cea2a2bd5f32c95f423155',
             'type' => 'yii2-extension',
             'install_path' => __DIR__ . '/../yiisoft/yii2-bootstrap5',
             'aliases' => array(

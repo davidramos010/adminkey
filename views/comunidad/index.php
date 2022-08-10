@@ -10,42 +10,65 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\ComunidadSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Comunidads';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Comunidades';
 ?>
 <div class="comunidad-index">
+    <div class="ribbon_wrap" >
+        <div class="row">
+            <div class="col-md-10">
+                <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
+                    <?php
+                    echo Html::ul([
+                        'En cada formulario el sistema validara que no se repitan los campos:',
+                        'En caso que esta combinación ya exista, el sistema recomienda editar el registro existente para no crear un nuevo registro.'
+                    ], ['encode' => false]);
 
-    <h1><?= Html::encode($this->title) ?></h1>
+                    ?>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="d-flex justify-content-end">
+                    <?php
+                    echo Html::a(' Nuevo',['create'],['class' => 'btn btn-success']);
+                    ?>
+                </div>
+            </div>
+        </div>
 
-    <p>
-        <?= Html::a('Create comunidad', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'nombre',
-            'dirección',
-            'telefono1',
-            'telefono2',
-            //'contacto',
-            //'nomenclatura',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Comunidad $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
-            ],
-        ],
-    ]); ?>
-
-    <?php Pjax::end(); ?>
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title"><?= $this->title; ?></h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <?php Pjax::begin(); ?>
+                <?= GridView::widget([
+                    'dataProvider' => $dataProvider,
+                    'filterModel' => $searchModel,
+                    'formatter' => array('class' => 'yii\i18n\Formatter', 'nullDisplay' => ''),
+                    'columns' => [
+                        ['class' => 'yii\grid\SerialColumn'],
+                        //'id',
+                        'nombre',
+                        'direccion',
+                        'telefono1',
+                        'telefono2',
+                        'contacto',
+                        //'nomenclatura',
+                        [
+                            'class' => ActionColumn::className(),
+                            'urlCreator' => function ($action, Comunidad $model, $key, $index, $column) {
+                                return Url::toRoute([$action, 'id' => $model->id]);
+                            }
+                        ],
+                    ],
+                ]); ?>
+                <?php Pjax::end(); ?>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer clearfix">
+            </div>
+        </div>
+    </div>
 
 </div>

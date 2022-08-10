@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "llave".
@@ -111,4 +112,25 @@ class Llave extends \yii\db\ActiveRecord
     {
         return new LlaveQuery(get_called_class());
     }
+
+
+    public static function getComunidadesDropdownList()
+    {
+        $query = "SELECT id, nombre FROM comunidad order by nombre";
+        $result = Yii::$app->db
+            ->createCommand($query)
+            ->queryAll();
+        return ArrayHelper::map($result, 'id', 'nombre');
+    }
+
+
+    public static function getTipoLlaveDropdownList()
+    {
+        $query = "SELECT id, descripcion FROM tipo_llave order by descripcion";
+        $result = Yii::$app->db
+            ->createCommand($query)
+            ->queryAll();
+        return ArrayHelper::map($result, 'id', 'descripcion');
+    }
+
 }

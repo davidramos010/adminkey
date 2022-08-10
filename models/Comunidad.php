@@ -9,7 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property string|null $nombre
- * @property string|null $dirección
+ * @property string|null $direccion
  * @property string|null $telefono1
  * @property string|null $telefono2
  * @property string|null $contacto
@@ -33,7 +33,7 @@ class Comunidad extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'dirección'], 'string', 'max' => 255],
+            [['nombre', 'direccion'], 'string', 'max' => 255],
             [['telefono1', 'telefono2', 'contacto'], 'string', 'max' => 100],
             [['nomenclatura'], 'string', 'max' => 6],
             [['nomenclatura'], 'unique'],
@@ -48,7 +48,7 @@ class Comunidad extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nombre' => 'Nombre',
-            'dirección' => 'Dirección',
+            'direccion' => 'Direccion',
             'telefono1' => 'Telefono1',
             'telefono2' => 'Telefono2',
             'contacto' => 'Contacto',
