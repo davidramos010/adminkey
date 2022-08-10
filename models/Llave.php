@@ -57,9 +57,9 @@ class Llave extends \yii\db\ActiveRecord
             'id_comunidad' => 'Id comunidad',
             'id_tipo' => 'Id Tipo',
             'copia' => 'Copia',
-            'codigo' => 'Codigo',
-            'descripcion' => 'Descripcion',
-            'observacion' => 'Observacion',
+            'codigo' => 'Código',
+            'descripcion' => 'Descripción',
+            'observacion' => 'Observación',
             'activa' => 'Activa',
         ];
     }

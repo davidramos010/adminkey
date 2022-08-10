@@ -23,25 +23,25 @@ use yii\widgets\ActiveForm;
             <?php $form = ActiveForm::begin(); ?>
             <div class="card-body">
                 <div class="form-group">
-                    <?= $form->field($model, 'id_comunidad')->dropDownList(Llave::getComunidadesDropdownList() , ['prompt' => 'Seleccione Uno' ])->label('Comunidad'); ?>
+                    <?= $form->field($model, 'id_comunidad')->dropDownList(Llave::getComunidadesDropdownList() , ['class'=>'form-control','prompt' => 'Seleccione Uno' ])->label('Comunidad'); ?>
                 </div>
                 <div class="form-group">
-                    <?= $form->field($model, 'id_tipo')->dropDownList(Llave::getTipoLlaveDropdownList() , ['prompt' => 'Seleccione Uno' ])->label('Tipo'); ?>
+                    <?= $form->field($model, 'id_tipo')->dropDownList(Llave::getTipoLlaveDropdownList() , ['class'=>'form-control', 'prompt' => 'Seleccione Uno' ])->label('Tipo'); ?>
+                </div>
+                <div class="form-group col-3">
+                    <?= $form->field($model, 'copia')->textInput(['type' => 'number','maxlength' => 2,'class'=>'form-control'])->label('Número de copias') ?>
+                </div>
+                <div class="form-group col-3">
+                    <?= $form->field($model, 'codigo')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Código') ?>
                 </div>
                 <div class="form-group">
-                    <?= $form->field($model, 'copia')->textInput(['maxlength' => true,'class'=>'form-control', ''])->label('Numero de copias') ?>
+                    <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Descripción') ?>
                 </div>
                 <div class="form-group">
-                    <?= $form->field($model, 'codigo')->textInput(['maxlength' => true,'class'=>'form-control'])->label('codigo') ?>
-                </div>
-                <div class="form-group">
-                    <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true,'class'=>'form-control'])->label('descripcion') ?>
-                </div>
-                <div class="form-group">
-                    <?= $form->field($model, 'observacion')->textInput(['maxlength' => true,'class'=>'form-control'])->label('observacion') ?>
+                    <?= $form->field($model, 'observacion')->textArea(['class'=>'form-control'])->label('Observaciones') ?>
                 </div>
                 <div  style="padding-top: 15px" >
-                    <?= Html::submitButton('Guardar Comunidad', ['class' => 'btn btn-success ']) ?>
+                    <?= Html::submitButton('Guardar Llave', ['class' => 'btn btn-success ']) ?>
                     <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
                 </div>
             </div>

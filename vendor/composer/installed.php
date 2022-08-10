@@ -858,6 +858,17 @@
             'aliases' => array(),
             'dev_requirement' => true,
         ),
+        'vilochane/yii2-barcode-generator' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => 'b900ad0c26f6895deaa3d8ce88060d07c0d77fe6',
+            'type' => 'yii2-extension',
+            'install_path' => __DIR__ . '/../vilochane/yii2-barcode-generator',
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
+            'dev_requirement' => false,
+        ),
         'webmozart/assert' => array(
             'pretty_version' => '1.11.0',
             'version' => '1.11.0.0',
@@ -950,7 +961,7 @@
         'yiisoft/yii2-symfonymailer' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '1a64cf981796866bcc7124e67ab8a1ef3ca1190a',
+            'reference' => '1e826a5778b3f2b88a25b2d59936758ac8fc61cf',
             'type' => 'yii2-extension',
             'install_path' => __DIR__ . '/../yiisoft/yii2-symfonymailer',
             'aliases' => array(

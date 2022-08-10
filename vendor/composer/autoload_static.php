@@ -51,6 +51,10 @@ class ComposerStaticInitd124558e82094461284a40e47b78d854
         array (
             'cebe\\markdown\\' => 14,
         ),
+        'b' => 
+        array (
+            'barcode\\barcode\\' => 16,
+        ),
         'W' => 
         array (
             'Webmozart\\Assert\\' => 17,
@@ -163,6 +167,10 @@ class ComposerStaticInitd124558e82094461284a40e47b78d854
         'cebe\\markdown\\' => 
         array (
             0 => __DIR__ . '/..' . '/cebe/markdown',
+        ),
+        'barcode\\barcode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/vilochane/yii2-barcode-generator',
         ),
         'Webmozart\\Assert\\' => 
         array (
@@ -307,9 +315,9 @@ class ComposerStaticInitd124558e82094461284a40e47b78d854
         ),
         'Codeception\\' => 
         array (
-            0 => __DIR__ . '/..' . '/codeception/stub/src',
-            1 => __DIR__ . '/..' . '/codeception/verify/src/Codeception',
-            2 => __DIR__ . '/..' . '/codeception/codeception/src/Codeception',
+            0 => __DIR__ . '/..' . '/codeception/codeception/src/Codeception',
+            1 => __DIR__ . '/..' . '/codeception/stub/src',
+            2 => __DIR__ . '/..' . '/codeception/verify/src/Codeception',
         ),
     );
 

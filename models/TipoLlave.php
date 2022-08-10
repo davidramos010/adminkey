@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "tipoLlave".
+ * This is the model class for table "tipo-llave".
  *
  * @property int $id
  * @property string|null $codigo
