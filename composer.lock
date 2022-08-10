@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "69fb2cfad95059a360a8d78956b6e8dc",
+    "content-hash": "4711592b2184a954a96fca1a3cb08aff",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -54,7 +54,7 @@
             "version": "v5.2.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:twbs/bootstrap.git",
+                "url": "https://github.com/twbs/bootstrap.git",
                 "reference": "edf9c40956d19e6ab3f9151bfe0dfac6be06fa21"
             },
             "dist": {
@@ -90,7 +90,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jquery/jquery-dist.git",
+                "url": "https://github.com/jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -1606,6 +1606,51 @@
             "time": "2022-05-30T19:17:29+00:00"
         },
         {
+            "name": "vilochane/yii2-barcode-generator",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Vilochane/yii2-barcode-generator-8-types.git",
+                "reference": "b900ad0c26f6895deaa3d8ce88060d07c0d77fe6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Vilochane/yii2-barcode-generator-8-types/zipball/b900ad0c26f6895deaa3d8ce88060d07c0d77fe6",
+                "reference": "b900ad0c26f6895deaa3d8ce88060d07c0d77fe6",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "barcode\\barcode\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vilochane",
+                    "email": "vilochane@gmail.com"
+                }
+            ],
+            "description": "This extension based on Simple jQuery Based Barcode Generator Wrapper for BarCode Coder Library (BCC Library Version 2.0) by DEMONTE Jean-Baptiste, HOUREZ Jonathan.",
+            "homepage": "https://github.com/Vilochane/yii2-barcode-generator-8-types.git",
+            "keywords": [
+                " barcode-generator",
+                " barcode-generator-8-types",
+                "extension",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/Vilochane/yii2-barcode-generator-8-types/issues",
+                "source": "https://github.com/Vilochane/yii2-barcode-generator-8-types/tree/master"
+            },
+            "time": "2017-10-03T05:05:50+00:00"
+        },
+        {
             "name": "yiisoft/yii2",
             "version": "dev-master",
             "source": {
@@ -1993,12 +2038,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-symfonymailer.git",
-                "reference": "1a64cf981796866bcc7124e67ab8a1ef3ca1190a"
+                "reference": "1e826a5778b3f2b88a25b2d59936758ac8fc61cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-symfonymailer/zipball/1a64cf981796866bcc7124e67ab8a1ef3ca1190a",
-                "reference": "1a64cf981796866bcc7124e67ab8a1ef3ca1190a",
+                "url": "https://api.github.com/repos/yiisoft/yii2-symfonymailer/zipball/1e826a5778b3f2b88a25b2d59936758ac8fc61cf",
+                "reference": "1e826a5778b3f2b88a25b2d59936758ac8fc61cf",
                 "shasum": ""
             },
             "require": {
@@ -2061,7 +2106,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-22T08:27:45+00:00"
+            "time": "2022-08-10T21:08:11+00:00"
         }
     ],
     "packages-dev": [
@@ -6085,7 +6130,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "vilochane/yii2-barcode-generator": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

@@ -34,7 +34,7 @@ use yii\helpers\Html;
                         'items' => [
                             ['label' => 'Comunidad', 'url' => ['comunidad/index'], 'iconStyle' => 'far'],
                             ['label' => 'Llaves', 'url' => ['llave/index'], 'iconStyle' => 'far'],
-                            ['label' => 'Tipo Llave', 'url' => ['tipo_llave/index'], 'iconStyle' => 'far'],
+                            ['label' => 'Tipo Llave', 'url' => ['tipo-llave/index'], 'iconStyle' => 'far'],
                         ]
                     ],
                     ['label' => 'Registro',  'icon' => 'fas fa-edit', 'url' => ['registro/index']],

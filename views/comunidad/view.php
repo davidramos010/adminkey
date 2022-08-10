@@ -14,8 +14,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="comunidad-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-
     <div class="col-md-6">
         <!-- general form elements -->
         <div class="card card-primary">
@@ -43,18 +41,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
                     'class' => 'btn btn-danger',
                     'data' => [
-                        'confirm' => 'Esta seguro que desea eliminar esta comuni?',
+                        'confirm' => 'Esta seguro que desea eliminar el registro?',
                         'method' => 'post',
                     ],
                 ]) ?>
                 <?= Html::a(Yii::t('app', 'Volver a listado'), ['index'], ['class' => 'btn btn-default ']) ?>
             </div>
-
         </div>
-
     </div>
-
-
 </div>
-
-

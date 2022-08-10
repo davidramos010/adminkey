@@ -98,6 +98,7 @@
       <path value="$PROJECT_DIR$/vendor/yiisoft/yii2-bootstrap4" />
       <path value="$PROJECT_DIR$/vendor/hail812/yii2-adminlte3" />
       <path value="$PROJECT_DIR$/vendor/hail812/yii2-adminlte-widgets" />
+      <path value="$PROJECT_DIR$/vendor/vilochane/yii2-barcode-generator" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4">
