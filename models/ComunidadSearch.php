@@ -18,7 +18,7 @@ class ComunidadSearch extends Comunidad
     {
         return [
             [['id'], 'integer'],
-            [['nombre', 'dirección', 'telefono1', 'telefono2', 'contacto', 'nomenclatura'], 'safe'],
+            [['nombre', 'direccion', 'telefono1', 'telefono2', 'contacto', 'nomenclatura'], 'safe'],
         ];
     }
 
@@ -62,7 +62,7 @@ class ComunidadSearch extends Comunidad
         ]);
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre])
-            ->andFilterWhere(['like', 'dirección', $this->dirección])
+            ->andFilterWhere(['like', 'direccion', $this->direccion])
             ->andFilterWhere(['like', 'telefono1', $this->telefono1])
             ->andFilterWhere(['like', 'telefono2', $this->telefono2])
             ->andFilterWhere(['like', 'contacto', $this->contacto])
