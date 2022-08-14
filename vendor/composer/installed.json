@@ -293,12 +293,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "0ce6194b54e0099c10e0f6432fd80f9bfee32e27"
+                "reference": "b88014f3348c93f3df99dc6d0967b0dbfa804474"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/0ce6194b54e0099c10e0f6432fd80f9bfee32e27",
-                "reference": "0ce6194b54e0099c10e0f6432fd80f9bfee32e27",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/b88014f3348c93f3df99dc6d0967b0dbfa804474",
+                "reference": "b88014f3348c93f3df99dc6d0967b0dbfa804474",
                 "shasum": ""
             },
             "require": {
@@ -337,7 +337,7 @@
                 "stecman/symfony-console-completion": "For BASH autocompletion",
                 "symfony/phpunit-bridge": "For phpunit-bridge support"
             },
-            "time": "2022-08-08T07:17:42+00:00",
+            "time": "2022-08-13T13:28:25+00:00",
             "bin": [
                 "codecept"
             ],
@@ -345,7 +345,7 @@
             "extra": {
                 "branch-alias": []
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "files": [
                     "functions.php"
@@ -2351,12 +2351,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "c963204f63560a8b4e5913b8c39ed1fb8f60f8d2"
+                "reference": "83627ed9682037aa34a0d38a3307071393c85c1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c963204f63560a8b4e5913b8c39ed1fb8f60f8d2",
-                "reference": "c963204f63560a8b4e5913b8c39ed1fb8f60f8d2",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/83627ed9682037aa34a0d38a3307071393c85c1e",
+                "reference": "83627ed9682037aa34a0d38a3307071393c85c1e",
                 "shasum": ""
             },
             "require": {
@@ -2396,7 +2396,7 @@
                 "ext-soap": "*",
                 "ext-xdebug": "*"
             },
-            "time": "2022-08-05T06:10:58+00:00",
+            "time": "2022-08-13T08:08:46+00:00",
             "bin": [
                 "phpunit"
             ],
@@ -2406,7 +2406,7 @@
                     "dev-master": "9.5-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "files": [
                     "src/Framework/Assert/Functions.php"
@@ -5347,12 +5347,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "ef8914f48608e44899bd5a50428371543b3479c1"
+                "reference": "2fc515e512d721bf31ea76bd02fe23ada4640058"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/ef8914f48608e44899bd5a50428371543b3479c1",
-                "reference": "ef8914f48608e44899bd5a50428371543b3479c1",
+                "url": "https://api.github.com/repos/symfony/string/zipball/2fc515e512d721bf31ea76bd02fe23ada4640058",
+                "reference": "2fc515e512d721bf31ea76bd02fe23ada4640058",
                 "shasum": ""
             },
             "require": {
@@ -5372,9 +5372,9 @@
                 "symfony/translation-contracts": "^1.1|^2",
                 "symfony/var-exporter": "^4.4|^5.0|^6.0"
             },
-            "time": "2022-08-04T14:15:09+00:00",
+            "time": "2022-08-12T17:03:11+00:00",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "files": [
                     "Resources/functions.php"
