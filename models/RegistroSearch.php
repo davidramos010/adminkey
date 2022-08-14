@@ -41,10 +41,20 @@ class RegistroSearch extends Registro
     public function search($params)
     {
 
-        $query = Registro::find();
+        $query = Registro::find()->alias('r');
 
-        $query->leftJoin('llave ll','registro.id_llave = ll.id');
+        $query->select([
+            'r.*',
+            'co.nombre as comunidad',
+            'cm.nombre as comercial',
+            'll.codigo',
+            'u.username'
+        ]);
 
+        $query->leftJoin('llave ll','r.id_llave = ll.id');
+        $query->leftJoin('User u','r.id_user = u.id');
+        $query->leftJoin('comunidad co','ll.id_comunidad = co.id');
+        $query->leftJoin('comerciales cm','r.id_comercial = cm.id');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -67,6 +77,9 @@ class RegistroSearch extends Registro
             'entrada' => $this->entrada,
             'salida' => $this->salida,
             'll.codigo' => $this->codigo,
+            'u.username' => $this->username,
+            'co.nombre' => $this->comunidad,
+            'cm.nombre' => $this->comercial,
         ]);
 
         $query->andFilterWhere(['like', 'observacion', $this->observacion]);
