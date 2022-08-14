@@ -15,6 +15,7 @@ class LoginForm extends Model
 {
     public $username;
     public $password;
+    public $authkey;
     public $rememberMe = true;
 
     private $_user = false;
@@ -27,7 +28,8 @@ class LoginForm extends Model
     {
         return [
             // username and password are both required
-            [['username', 'password'], 'required'],
+            [['username', 'password'], 'string', 'max' => 255],
+            [['authkey'], 'integer',],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
@@ -59,6 +61,11 @@ class LoginForm extends Model
      */
     public function login()
     {
+        if(!empty($this->authkey))
+        {
+            $this->getAuthKey();
+        }
+
         if ($this->validate()) {
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
         }
@@ -77,5 +84,17 @@ class LoginForm extends Model
         }
 
         return $this->_user;
+    }
+
+    public function getAuthKey()
+    {
+        if (!empty($this->authkey)) {
+            $objUser = User::find()->where(['authkey'=>$this->authkey])->one();
+            $this->_user = false;
+            $this->username = (!empty($objUser))?$objUser->username:null;
+            $this->password = (!empty($objUser))?$objUser->password:null;
+        }
+
+        return (!empty($this->username));
     }
 }

@@ -21,7 +21,7 @@ class LlaveStatus extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'llavestatus';
+        return 'llave_status';
     }
 
     /**

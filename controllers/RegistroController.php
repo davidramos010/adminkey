@@ -2,11 +2,17 @@
 
 namespace app\controllers;
 
+use app\components\ValidadorCsv;
+use app\models\Comunidad;
+use app\models\Llave;
+use app\models\LlaveStatus;
 use app\models\Registro;
 use app\models\RegistroSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
+use Yii;
 
 /**
  * RegistroController implements the CRUD actions for Registro model.
@@ -23,9 +29,7 @@ class RegistroController extends Controller
             [
                 'verbs' => [
                     'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
-                    ],
+
                 ],
             ]
         );
@@ -144,5 +148,81 @@ class RegistroController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+
+    /**
+     * @return
+     */
+    public function actionAjaxAddKey()
+    {
+
+        $strCode = (!empty($this->request->get()) && isset($this->request->get()['code']))?(string) $this->request->get()['code']:null;
+
+        $strCode = str_replace("'","-",$strCode);
+
+        $arrModelLlave = Llave::find()->where(['codigo'=>$strCode])->asArray()->one();
+        $numId = $arrModelLlave['id'];
+        $arrModelStatus = LlaveStatus::find()->where(['id_llave'=>$numId])->orderBy(['id' => SORT_DESC])->asArray()->one();
+        $arrComunidadLlave = (!empty($arrModelLlave))?Comunidad::find()->where(['id'=>$arrModelLlave['id_comunidad']])->asArray()->one():null;
+        $strEstado = (empty($arrModelStatus))?'Salida':null;
+        if(!$strEstado){
+            $strEstado = ($arrModelStatus['status']=='S')?'Entrada':'Salida';
+        }
+
+        return json_encode( ['llave'=>$arrModelLlave,'status'=>$arrModelStatus, 'comunidad'=>$arrComunidadLlave, 'estado'=>$strEstado]);
+    }
+
+
+    public function actionAjaxRegMov()
+    {
+        $arrParam = $this->request->post();
+        $strObservacion = $arrParam['observacion'];
+        $idComercial = $arrParam['comercial'];
+        $arrKeysEntrada = $arrParam['listKeyEntrada'];
+        $arrKeysSalida = $arrParam['listKeySalida'];
+
+        if(count($arrKeysEntrada)){
+            foreach ($arrKeysEntrada as $value){
+
+                $arrModelStatus = LlaveStatus::find()->where(['id_llave'=>$value])->orderBy(['id' => SORT_DESC])->asArray()->one();
+                $newRegistro = new Registro();
+                $newRegistroStatus = new LlaveStatus();
+                $newRegistro->id_user = Yii::$app->user->id;
+                $newRegistro->id_llave = $value;
+                $newRegistro->observacion = $strObservacion;
+                $newRegistro->id_comercial = $idComercial;
+                $newRegistro->save();
+
+                $strEstado = 'Salida';
+                $newRegistro->salida = date('Y-m-d H:i:s');
+                $newRegistroStatus->id_llave = $value;
+                $newRegistroStatus->status = ($strEstado=='Entrada')?'E':'S';
+                $newRegistro->save();
+                $newRegistroStatus->save();
+            }
+        }
+
+        if(count($arrKeysSalida)){
+            foreach ($arrKeysSalida as $value){
+
+                $arrModelStatus = LlaveStatus::find()->where(['id_llave'=>$value])->orderBy(['id' => SORT_DESC])->asArray()->one();
+                $newRegistro = new Registro();
+                $newRegistroStatus = new LlaveStatus();
+                $newRegistro->id_user = Yii::$app->user->id;
+                $newRegistro->id_llave = $value;
+                $newRegistro->observacion = $strObservacion;
+                $newRegistro->id_comercial = $idComercial;
+                $newRegistro->save();
+
+                $strEstado = 'Entrada';
+                $newRegistro->entrada = date('Y-m-d H:i:s');
+                $newRegistroStatus->id_llave = $value;
+                $newRegistroStatus->status = ($strEstado=='Entrada')?'E':'S';
+                $newRegistro->save();
+                $newRegistroStatus->save();
+            }
+        }
+
+        return json_encode( ['result'=>'OK']);
     }
 }

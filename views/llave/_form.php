@@ -8,9 +8,7 @@ use yii\widgets\ActiveForm;
 /* @var $model app\models\Llave */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
 <div class="llave-form">
-
     <div class="col-md-6">
         <!-- general form elements -->
         <div class="card card-primary">
@@ -19,7 +17,6 @@ use yii\widgets\ActiveForm;
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-
             <?php $form = ActiveForm::begin(); ?>
             <div class="card-body">
                 <div class="form-group">
@@ -45,12 +42,7 @@ use yii\widgets\ActiveForm;
                     <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
                 </div>
             </div>
-
             <?php ActiveForm::end(); ?>
-
         </div>
-
     </div>
-
-
 </div>
