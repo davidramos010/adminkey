@@ -47,3 +47,8 @@ package-lock.json!/mysql/admin_key/!/mysql/admin_key/
 !/mysql/ibdata1
 /mysql/
 
+!assets/.gitignore
+protected/runtime/*
+!protected/runtime/.gitignore
+protected/data/*.db
+themes/classic/views/
