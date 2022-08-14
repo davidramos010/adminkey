@@ -18,7 +18,7 @@ class RegistroSearch extends Registro
     {
         return [
             [['id', 'id_user', 'id_llave'], 'integer'],
-            [['entrada', 'salida', 'observacion', 'codigo'], 'safe'],
+            [['entrada', 'salida', 'observacion', 'codigo', 'username','comunidad','comercial'], 'safe'],
         ];
     }
 
