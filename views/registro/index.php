@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
                         [
-                            'attribute' => 'id_user',
+                            'attribute' => 'username',
                             'label' => 'Usuario',
                             'format' => 'raw',
                             'value' => function($model){
@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             }
                         ],
                         [
-                            'attribute' => 'id_llave',
+                            'attribute' => 'comunidad',
                             'label' => 'Comunidad',
                             'format' => 'raw',
                             'value' => function($model){
@@ -80,11 +80,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             }
                         ],
                         [
-                            'attribute' => 'id_llave',
+                            'attribute' => 'comercial',
                             'label' => 'Comercial',
                             'format' => 'raw',
                             'value' => function($model){
-                                return (isset($model->comercial))?strtoupper($model->comercial->nombre):'No Encontrado' ;
+                                return (isset($model->comercial))?strtoupper($model->comercial):'No Encontrado' ;
                             }
                         ],
                         'entrada',
