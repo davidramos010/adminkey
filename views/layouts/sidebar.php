@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-
+$strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::$app->user->identity) && isset(Yii::$app->user->identity->username)) ? Yii::$app->user->identity->username:null;
 ?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
@@ -13,13 +13,13 @@ use yii\helpers\Html;
     <!-- Sidebar -->
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
-        <?php if(isset(Yii::$app->user->isGuest)): ?>
+        <?php if(empty(Yii::$app->user) && isset(Yii::$app->user) && !empty(Yii::$app->user->identity)): ?>
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
                     <?= Html::img('@web/img/user.png', ['width' => 160, 'alt' => 'User Image']); ?><br>
                 </div>
                 <div class="info">
-                    <a href="#" class="d-block"><?= Yii::$app->user->identity->username ?></a>
+                    <a href="#" class="d-block"><?= $strUserName ?></a>
                 </div>
             </div>
         <?php endif; ?>
@@ -37,8 +37,8 @@ use yii\helpers\Html;
                             ['label' => 'Tipo Llave', 'url' => ['tipo-llave/index'], 'iconStyle' => 'far'],
                         ]
                     ],
-                    ['label' => 'Registro',  'icon' => 'fas fa-edit', 'url' => ['registro/index']],
-                    ['label' => 'Reporte',  'icon' => 'fas fa-edit', 'url' => ['registro/reporte']],
+                    ['label' => 'Registro',  'icon' => 'fas fa-edit', 'url' => ['registro/create']],
+                    ['label' => 'Reporte',  'icon' => 'fas fa-edit', 'url' => ['registro/index']],
                     ['label' => 'Login', 'url' => ['site/login'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
                     ['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank'],
                     ['label' => 'Debug', 'icon' => 'bug', 'url' => ['/debug'], 'target' => '_blank'],

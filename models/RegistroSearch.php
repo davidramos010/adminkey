@@ -18,7 +18,7 @@ class RegistroSearch extends Registro
     {
         return [
             [['id', 'id_user', 'id_llave'], 'integer'],
-            [['entrada', 'salida', 'observacion'], 'safe'],
+            [['entrada', 'salida', 'observacion', 'codigo'], 'safe'],
         ];
     }
 
@@ -40,7 +40,10 @@ class RegistroSearch extends Registro
      */
     public function search($params)
     {
+
         $query = Registro::find();
+
+        $query->leftJoin('llave ll','registro.id_llave = ll.id');
 
         // add conditions that should always apply here
 
@@ -63,9 +66,11 @@ class RegistroSearch extends Registro
             'id_llave' => $this->id_llave,
             'entrada' => $this->entrada,
             'salida' => $this->salida,
+            'll.codigo' => $this->codigo,
         ]);
 
         $query->andFilterWhere(['like', 'observacion', $this->observacion]);
+        $query->orderBy('id DESC');
 
         return $dataProvider;
     }

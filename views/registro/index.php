@@ -15,36 +15,88 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="registro-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="ribbon_wrap" >
+        <div class="row">
+            <div class="col-md-10">
+                <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
+                    <?php
+                    echo Html::ul([
+                        'Listado de registro de entrada y salida de llaves'
+                    ], ['encode' => false]);
 
-    <p>
-        <?= Html::a('Create Registro', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+                    ?>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="d-flex justify-content-end">
 
-    <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+                </div>
+            </div>
+        </div>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'id_user',
-            'id_llave',
-            'entrada',
-            'salida',
-            //'observacion',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Registro $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
-            ],
-        ],
-    ]); ?>
-
-    <?php Pjax::end(); ?>
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title"><?= $this->title; ?></h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <?php Pjax::begin(); ?>
+                <?= GridView::widget([
+                    'dataProvider' => $dataProvider,
+                    'filterModel' => $searchModel,
+                    'formatter' => array('class' => 'yii\i18n\Formatter', 'nullDisplay' => ''),
+                    'columns' => [
+                        ['class' => 'yii\grid\SerialColumn'],
+                        [
+                            'attribute' => 'id_user',
+                            'label' => 'Usuario',
+                            'format' => 'raw',
+                            'value' => function($model){
+                                return (isset($model->user))?strtoupper($model->user->username):'No Encontrado' ;
+                            }
+                        ],
+                        [
+                            'attribute' => 'codigo',
+                            'label' => 'Codigo Llave',
+                            'format' => 'raw',
+                            'value' => function($model){
+                                return (isset($model->llave))?strtoupper($model->llave->codigo):'No Encontrado' ;
+                            }
+                        ],
+                        [
+                            'attribute' => 'id_llave',
+                            'label' => 'Descripcion',
+                            'format' => 'raw',
+                            'value' => function($model){
+                                return (isset($model->llave))?strtoupper($model->llave->descripcion):'No Encontrado' ;
+                            }
+                        ],
+                        [
+                            'attribute' => 'id_llave',
+                            'label' => 'Comunidad',
+                            'format' => 'raw',
+                            'value' => function($model){
+                                return (isset($model->llave))?strtoupper($model->llave->comunidad->nombre):'No Encontrado' ;
+                            }
+                        ],
+                        [
+                            'attribute' => 'id_llave',
+                            'label' => 'Comercial',
+                            'format' => 'raw',
+                            'value' => function($model){
+                                return (isset($model->comercial))?strtoupper($model->comercial->nombre):'No Encontrado' ;
+                            }
+                        ],
+                        'entrada',
+                        'salida',
+                    ],
+                ]); ?>
+                <?php Pjax::end(); ?>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer clearfix">
+            </div>
+        </div>
+    </div>
 
 </div>

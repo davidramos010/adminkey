@@ -17,15 +17,26 @@ $optionsArray = array(
     'elementId'=> 'showBarcode', /* div or canvas id*/
     'value'=> strtoupper($model->codigo),  /* value for EAN 13 be careful to set right values for each barcode type */
     'type'=>'code39',/*supported types  ean8, ean13, upc, std25, int25, code11, code39, code93, code128, codabar, msi, datamatrix*/
+    'settings'=>array(
+        'output'=>'css' /*css, bmp, canvas note- bmp and canvas incompatible wtih IE*/,
+        /*if the output setting canvas*/
+        'posX' => 10,
+        'posY' => 20,
+        /* */
+        'bgColor'=>'#FFF', /*background color*/
+        'color' => '#000000', /*"1" Bars color*/
+        'barWidth' => 2,
+        'barHeight' => 60,
+        /*-----------below settings only for datamatrix--------------------*/
+        'moduleSize' => 5,
+        'addQuietZone' => 0, /*Quiet Zone Modules */
+    ),
 
 );
 echo BarcodeGenerator::widget($optionsArray);
-
 $this->registerJsFile('@web/js/llave.js');
 
 ?>
-
-
 
 <div class="llave-view">
 
@@ -77,8 +88,8 @@ $this->registerJsFile('@web/js/llave.js');
                 ],
             ]) ?>
 
-            <div  style="padding: 15px 15px 15px 50px" >
-                <div id="showBarcode"></div>
+            <div  style="padding: 15px 15px; aling-items: center; justify-content: center" >
+                <div id="showBarcode" ></div>
             </div>
 
             <div  style="padding: 5px 5px 5px" >
