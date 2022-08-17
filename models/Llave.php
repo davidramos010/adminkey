@@ -133,4 +133,10 @@ class Llave extends \yii\db\ActiveRecord
         return ArrayHelper::map($result, 'id', 'descripcion');
     }
 
+    public function getNext() {
+
+        $next = $this->find()->where(['id_comunidad' => $this->id_comunidad])->count();
+        return (int)$next+1;
+    }
+
 }

@@ -41,7 +41,7 @@ class LlaveSearch extends Llave
     public function search($params)
     {
         $query = Llave::find();
-
+        $query->orderBy('id DESC');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -68,6 +68,8 @@ class LlaveSearch extends Llave
         $query->andFilterWhere(['like', 'codigo', $this->codigo])
             ->andFilterWhere(['like', 'descripcion', $this->descripcion])
             ->andFilterWhere(['like', 'observacion', $this->observacion]);
+
+
 
         return $dataProvider;
     }

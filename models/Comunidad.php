@@ -74,4 +74,9 @@ class Comunidad extends \yii\db\ActiveRecord
     {
         return new ComunidadQuery(get_called_class());
     }
+
+    public function getNext() {
+        $next = $this->find()->where(['>', 'id', 0])->orderBy('id desc')->one();
+        return (int)$next->id + 1;
+    }
 }

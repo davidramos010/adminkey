@@ -68,13 +68,13 @@ class ComunidadController extends Controller
     public function actionCreate()
     {
         $model = new Comunidad();
-
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             $model->loadDefaultValues();
+            $model->nomenclatura = 'C'.$model->getNext();
         }
 
         return $this->render('create', [
