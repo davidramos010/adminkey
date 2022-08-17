@@ -9,10 +9,10 @@ function addKey()
     var strTable = 'tblKeyEntrada';
     if(operacion=='E'){
         strTable = 'tblKeyEntrada';
-        strDiv = '<div class="alert alert-success alert-dismissible">Entrada</div>';
+        strDiv = '<div class="alert alert-success alert-dismissible"><i class="fas fa-plus"></i>';
     }else{
         strTable = 'tblKeySalida';
-        strDiv = '<div class="alert alert-danger alert-dismissible">Salida</div>';
+        strDiv = '<div class="alert alert-danger alert-dismissible"><i class="fas fa-plus"></i>';
     }
 
     $.ajax({
@@ -54,12 +54,10 @@ function addKey()
                 $('#'+strTable+' tbody') // select table tbody
                     .prepend('<tr id="tr_'+data.llave.id+'" />') // prepend table row
                     .children('tr:first') // select row we just created
-                    .append('<td>'+strDiv+'</td>\n' +
-                        '<td>'+data.llave.codigo+'</td>\n' +
+                    .append('<td>'+strDiv+' '+data.llave.codigo+'</div></td>\n' +
                         '<td>'+data.llave.descripcion+'</td>\n' +
                         '<td>'+data.comunidad.nombre+'</td>\n' +
-                        '<td><button type="button" class="btn btn-outline-danger btn-block btn-sm" onclick="delKey('+data.llave.id+')"><i\n' +
-                        ' className="fa fa-book"></i> Borrar</button> </td>') // append four table cells to the row we created
+                        '<td><button type="button" class="btn btn-outline-danger btn-block btn-sm" onclick="delKey('+data.llave.id+')"><i class="fas fa-times-circle"></i></button> </td>') // append four table cells to the row we created
 
 
                 if(operacion=='E'){
