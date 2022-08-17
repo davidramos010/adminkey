@@ -1,5 +1,6 @@
 <?php
-
+echo "-->".$model->id;
+die();
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
