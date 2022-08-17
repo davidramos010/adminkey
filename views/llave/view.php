@@ -26,7 +26,8 @@ $optionsArray = array(
         'bgColor'=>'#FFF', /*background color*/
         'color' => '#000000', /*"1" Bars color*/
         'barWidth' => 2,
-        'barHeight' => 60,
+        'barHeight' => 30,
+        'fontSize' => 14,
         /*-----------below settings only for datamatrix--------------------*/
         'moduleSize' => 5,
         'addQuietZone' => 0, /*Quiet Zone Modules */
@@ -88,8 +89,13 @@ $this->registerJsFile('@web/js/llave.js');
                 ],
             ]) ?>
 
-            <div  style="padding: 15px 15px; aling-items: center; justify-content: center" >
-                <div id="showBarcode" ></div>
+            <div id="showTableBarcode" style="padding: 15px 15px; aling-items: center; justify-content: center" >
+                <table class="table" style=" font-size: 10px; width: 230px; max-width: 230px;height: 170px; max-height: 170px;">
+                    <tr> <td style="text-align: center; height: 15px"><?= strtoupper($model->comunidad->nombre) ?></td></tr>
+                    <tr> <td style="text-align: center; height: 50px"><div id="showBarcode" ></div></td></tr>
+                    <tr> <td style="text-align: center; height: 50px"><?= strtoupper($model->descripcion) ?></td></tr>
+                    <tr> <td style="text-align: center; height: 10px; font-size: 9px;"><?= strtoupper(Yii::$app->params['contacto']) ?></td></tr>
+                </table>
             </div>
 
             <div  style="padding: 5px 5px 5px" >
