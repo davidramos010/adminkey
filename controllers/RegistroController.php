@@ -166,7 +166,7 @@ class RegistroController extends Controller
         $arrComunidadLlave = (!empty($arrModelLlave))?Comunidad::find()->where(['id'=>$arrModelLlave['id_comunidad']])->asArray()->one():null;
         $strEstado = (empty($arrModelStatus))?'Salida':null;
         if(!$strEstado){
-            $strEstado = ($arrModelStatus['status']=='S')?'Entrada':'Salida';
+            $strEstado = ($arrModelStatus['status']=='S')?'Salida':'Entrada';
         }
 
         return json_encode( ['llave'=>$arrModelLlave,'status'=>$arrModelStatus, 'comunidad'=>$arrComunidadLlave, 'estado'=>$strEstado]);
@@ -178,32 +178,11 @@ class RegistroController extends Controller
         $arrParam = $this->request->post();
         $strObservacion = $arrParam['observacion'];
         $idComercial = $arrParam['comercial'];
-        $arrKeysEntrada = $arrParam['listKeyEntrada'];
-        $arrKeysSalida = $arrParam['listKeySalida'];
+        $arrKeysEntrada = (empty($arrParam['listKeyEntrada']) || !isset($arrParam['listKeyEntrada']))?null:$arrParam['listKeyEntrada'];
+        $arrKeysSalida = (empty($arrParam['listKeySalida']) || !isset($arrParam['listKeySalida']))?null:$arrParam['listKeySalida'];
 
-        if(count($arrKeysEntrada)){
+        if(!empty($arrKeysEntrada)){
             foreach ($arrKeysEntrada as $value){
-
-                $arrModelStatus = LlaveStatus::find()->where(['id_llave'=>$value])->orderBy(['id' => SORT_DESC])->asArray()->one();
-                $newRegistro = new Registro();
-                $newRegistroStatus = new LlaveStatus();
-                $newRegistro->id_user = Yii::$app->user->id;
-                $newRegistro->id_llave = $value;
-                $newRegistro->observacion = $strObservacion;
-                $newRegistro->id_comercial = $idComercial;
-                $newRegistro->save();
-
-                $strEstado = 'Salida';
-                $newRegistro->salida = date('Y-m-d H:i:s');
-                $newRegistroStatus->id_llave = $value;
-                $newRegistroStatus->status = ($strEstado=='Entrada')?'E':'S';
-                $newRegistro->save();
-                $newRegistroStatus->save();
-            }
-        }
-
-        if(count($arrKeysSalida)){
-            foreach ($arrKeysSalida as $value){
 
                 $arrModelStatus = LlaveStatus::find()->where(['id_llave'=>$value])->orderBy(['id' => SORT_DESC])->asArray()->one();
                 $newRegistro = new Registro();
@@ -216,6 +195,27 @@ class RegistroController extends Controller
 
                 $strEstado = 'Entrada';
                 $newRegistro->entrada = date('Y-m-d H:i:s');
+                $newRegistroStatus->id_llave = $value;
+                $newRegistroStatus->status = ($strEstado=='Entrada')?'E':'S';
+                $newRegistro->save();
+                $newRegistroStatus->save();
+            }
+        }
+
+        if(!empty($arrKeysSalida)){
+            foreach ($arrKeysSalida as $value){
+
+                $arrModelStatus = LlaveStatus::find()->where(['id_llave'=>$value])->orderBy(['id' => SORT_DESC])->asArray()->one();
+                $newRegistro = new Registro();
+                $newRegistroStatus = new LlaveStatus();
+                $newRegistro->id_user = Yii::$app->user->id;
+                $newRegistro->id_llave = $value;
+                $newRegistro->observacion = $strObservacion;
+                $newRegistro->id_comercial = $idComercial;
+                $newRegistro->save();
+
+                $strEstado = 'Salida';
+                $newRegistro->salida = date('Y-m-d H:i:s');
                 $newRegistroStatus->id_llave = $value;
                 $newRegistroStatus->status = ($strEstado=='Entrada')?'E':'S';
                 $newRegistro->save();

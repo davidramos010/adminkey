@@ -3,7 +3,7 @@ var listKeySalida = [];
 
 function addKey()
 {
-    let url = 'http://localhost:81/index.php?r=registro/ajax-add-key';
+    let url = '/index.php?r=registro/ajax-add-key';
     let code = $('#id_llave').val();
     let operacion = $('#id_operacion').val();
     var strTable = 'tblKeyEntrada';
@@ -98,7 +98,7 @@ function delKey(id)
 
 function sendForm()
 {
-    let url = 'http://localhost:81/index.php?r=registro/ajax-reg-mov';
+    let url = '/index.php?r=registro/ajax-reg-mov';
     let observacion = $('#txt_observacion').val();
     let comercial = $('#id_comercial').val();
 

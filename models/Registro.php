@@ -22,6 +22,9 @@ use yii\helpers\ArrayHelper;
 class Registro extends \yii\db\ActiveRecord
 {
     public $codigo = null;
+    public $username = null;
+    public $comunidad = null;
+    public $comercial = null;
     /**
      * {@inheritdoc}
      */
@@ -38,7 +41,7 @@ class Registro extends \yii\db\ActiveRecord
         return [
             [['id_user', 'id_llave', 'id_comercial', 'id_comercial'], 'integer'],
             [['entrada', 'salida'], 'safe'],
-            [['observacion','codigo'], 'string', 'max' => 255],
+            [['observacion','codigo','username','comunidad','comercial'], 'string', 'max' => 255],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
             [['id_llave'], 'exist', 'skipOnError' => true, 'targetClass' => Llave::className(), 'targetAttribute' => ['id_llave' => 'id']],
         ];
