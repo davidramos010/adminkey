@@ -63,10 +63,10 @@ use yii\widgets\ActiveForm;
                 <div class="card-header p-0 pt-1">
                     <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="custom-tabs-entrada-tab" data-toggle="pill" href="#custom-tabs-entrada" role="tab" aria-controls="custom-tabs-entrada" aria-selected="true" onclick="fnSetOperacion('E')">Entrada</a>
+                            <a class="nav-link active" id="custom-tabs-entrada-tab" data-toggle="pill" href="#custom-tabs-entrada" role="tab" aria-controls="custom-tabs-entrada" aria-selected="true" onclick="fnSetOperacion('E')"><i class="fas fa-angle-double-up text-success"></i> Recoger LLave</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="custom-tabs-salida-tab" data-toggle="pill" href="#custom-tabs-salida" role="tab" aria-controls="custom-tabs-salida" aria-selected="false" onclick="fnSetOperacion('S')">Salida</a>
+                            <a class="nav-link" id="custom-tabs-salida-tab" data-toggle="pill" href="#custom-tabs-salida" role="tab" aria-controls="custom-tabs-salida" aria-selected="false" onclick="fnSetOperacion('S')"><i class="fas fa-angle-double-down text-danger"></i> Devolver Llave </a>
                         </li>
                     </ul>
                 </div>
@@ -76,11 +76,10 @@ use yii\widgets\ActiveForm;
                             <table id="tblKeyEntrada" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
-                                    <th style="width: 10%">Registro</th>
                                     <th style="width: 20%">Código</th>
-                                    <th style="width: 30%">Descripción</th>
-                                    <th style="width: 30%">Comunidad</th>
-                                    <th style="width: 10%">Acciones</th>
+                                    <th style="width: 40%">Descripción</th>
+                                    <th style="width: 35%">Comunidad</th>
+                                    <th style="width: 5%"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -97,11 +96,10 @@ use yii\widgets\ActiveForm;
                             <table id="tblKeySalida" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
-                                    <th style="width: 10%">Registro</th>
                                     <th style="width: 20%">Código</th>
-                                    <th style="width: 30%">Descripción</th>
-                                    <th style="width: 30%">Comunidad</th>
-                                    <th style="width: 10%">Acciones</th>
+                                    <th style="width: 40%">Descripción</th>
+                                    <th style="width: 35%">Comunidad</th>
+                                    <th style="width: 5%"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
