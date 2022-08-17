@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'yiisoft/yii2-app-basic',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'f442b9f038f65810b04265337fa9881668ec02ca',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -89,7 +89,7 @@
         'codeception/codeception' => array(
             'pretty_version' => '4.2.x-dev',
             'version' => '4.2.9999999.9999999-dev',
-            'reference' => '0ce6194b54e0099c10e0f6432fd80f9bfee32e27',
+            'reference' => 'b88014f3348c93f3df99dc6d0967b0dbfa804474',
             'type' => 'library',
             'install_path' => __DIR__ . '/../codeception/codeception',
             'aliases' => array(),
@@ -402,7 +402,7 @@
         'phpunit/phpunit' => array(
             'pretty_version' => '9.5.x-dev',
             'version' => '9.5.9999999.9999999-dev',
-            'reference' => 'c963204f63560a8b4e5913b8c39ed1fb8f60f8d2',
+            'reference' => '83627ed9682037aa34a0d38a3307071393c85c1e',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpunit/phpunit',
             'aliases' => array(),
@@ -834,7 +834,7 @@
         'symfony/string' => array(
             'pretty_version' => '5.4.x-dev',
             'version' => '5.4.9999999.9999999-dev',
-            'reference' => 'ef8914f48608e44899bd5a50428371543b3479c1',
+            'reference' => '2fc515e512d721bf31ea76bd02fe23ada4640058',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/string',
             'aliases' => array(),
@@ -890,9 +890,9 @@
             'dev_requirement' => false,
         ),
         'yiisoft/yii2-app-basic' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'f442b9f038f65810b04265337fa9881668ec02ca',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

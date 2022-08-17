@@ -8,8 +8,8 @@ $this->registerJsFile('@web/js/login.js');
 
     <div class="row"></div>
 
-    <div class="card-body login-card-body">
-        <p class="login-box-msg">Iniciar sesion.</p>
+    <div class="card-body login-card-body" style="background-color: #343a40">
+        <p class="login-box-msg" style="color: #FFFFFF">Iniciar sesion.</p>
 
         <?php $form = ActiveForm::begin(['id' => 'login-form']) ?>
 
@@ -26,7 +26,7 @@ $this->registerJsFile('@web/js/login.js');
                             ->label(false)
                             ->passwordInput(['placeholder' => $model->getAttributeLabel('Codigo Acceso')]) ?>
                         <p class="d-flex align-items-center justify-content-center">
-                            <?= Html::button('Iniciar', ['class' => 'btn btn-primary','onclick' => '(function ( $event ) { sendFormKey() })();' ]) ?>
+                            <?= Html::button('Iniciar', ['class' => 'btn btn-light','onclick' => '(function ( $event ) { sendFormKey() })();' ]) ?>
                         </p>
                     </div>
                     <div class="icon">
@@ -56,7 +56,7 @@ $this->registerJsFile('@web/js/login.js');
                             ->label(false)
                             ->passwordInput(['placeholder' => $model->getAttributeLabel('password')]) ?>
                         <p class="d-flex align-items-center justify-content-center">
-                            <?= Html::submitButton('Iniciar', ['class' => 'btn btn-primary btn-block']) ?>
+                            <?= Html::submitButton('Iniciar', ['class' => 'btn btn-light btn-block']) ?>
                         </p>
                     </div>
                     <div class="icon">

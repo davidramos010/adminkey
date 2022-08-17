@@ -11,7 +11,7 @@ use yii\helpers\Html;
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="<?=\yii\helpers\Url::home()?>" class="nav-link">Registros</a>
+            <a href="<?=\yii\helpers\Url::home()?>" class="nav-link">Inicio</a>
         </li>
     </ul>
 
@@ -25,24 +25,18 @@ use yii\helpers\Html;
                 <span class="badge badge-warning navbar-badge">15</span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <span class="dropdown-header">15 Notifications</span>
+                <span class="dropdown-header">15 Notificaciones</span>
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item">
-                    <i class="fas fa-envelope mr-2"></i> 4 new messages
-                    <span class="float-right text-muted text-sm">3 mins</span>
+                    <i class="fas fa-envelope mr-2"></i> 4 Mensajes
+                    <span class="float-right text-muted text-sm">4 mins</span>
                 </a>
-                <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item">
-                    <i class="fas fa-users mr-2"></i> 8 friend requests
-                    <span class="float-right text-muted text-sm">12 hours</span>
+                    <i class="fas fa-file mr-2"></i> 3 Reportes
+                    <span class="float-right text-muted text-sm">2 dias</span>
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-file mr-2"></i> 3 new reports
-                    <span class="float-right text-muted text-sm">2 days</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                <a href="#" class="dropdown-item dropdown-footer">Ver Todo</a>
             </div>
         </li>
         <li class="nav-item">

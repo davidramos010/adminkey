@@ -64,7 +64,11 @@ class SiteController extends Controller
         if (!Yii::$app->user->identity) {
             $model = new LoginForm();
             if ( $model->load(Yii::$app->request->post()) && $model->login()) {
-                return $this->goBack();
+                if(Yii::$app->user->identity->accessToken=='1234'){
+                    return $this->goBack();
+                }else{
+                    return $this->redirect('index.php?r=registro/create');
+                }
             }
             return $this->render('login', [
                 'model' => $model,
