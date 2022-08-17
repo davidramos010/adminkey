@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute' => 'comercial',
-                            'label' => 'Comercial',
+                            'label' => 'Empresa',
                             'format' => 'raw',
                             'value' => function($model){
                                 return (isset($model->comercial))?strtoupper($model->comercial):'No Encontrado' ;
