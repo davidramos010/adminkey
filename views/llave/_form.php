@@ -7,6 +7,7 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\Llave */
 /* @var $form yii\widgets\ActiveForm */
+
 ?>
 <div class="llave-form">
     <div class="col-md-6">
@@ -46,3 +47,9 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 </div>
+
+<?php $this->registerJs(
+    '$("#llave-id_comunidad").on("change", function() {
+            findCode();
+        });'
+); ?>

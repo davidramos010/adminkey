@@ -8,6 +8,7 @@ use yii\helpers\Html;
 $this->title = 'Registrar';
 $this->params['breadcrumbs'][] = ['label' => 'Llaves', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$this->registerJsFile('@web/js/llave.js');
 ?>
 <div class="llave-create">
 

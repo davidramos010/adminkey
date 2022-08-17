@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Llave;
 use app\models\LlaveSearch;
+use yii\helpers\UnsetArrayValue;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -71,6 +72,16 @@ class LlaveController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
+                if((int) $model->copia > 1){
+                    $numContador = 1;
+                    while ($model->copia>=$numContador){
+                        $modelClone = new Llave();
+                        $modelClone->attributes = $model->attributes;
+                        $modelClone->codigo .= $numContador;
+                        $modelClone->save();
+                        $numContador++;
+                    }
+                }
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -130,5 +141,16 @@ class LlaveController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+
+    public function actionAjaxFindCode()
+    {
+        $arrParam = $this->request->post();
+        $comunidad_id = $arrParam['comunidad'];
+
+        $model = new Llave();
+        $model->id_comunidad = (int) $comunidad_id;
+        return json_encode($model->getNext());
     }
 }
