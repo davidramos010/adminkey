@@ -124,7 +124,7 @@ use yii\widgets\ActiveForm;
             <div class="card-body">
                 <?php $form = ActiveForm::begin(); ?>
                     <div class="form-group">
-                        <?= $form->field($model, 'id_comercial')->dropDownList(Registro::getComercialesDropdownList(), ['id' => 'id_comercial','class' => 'form-control', 'prompt' => 'Seleccione Uno'])->label('Comerciales'); ?>
+                        <?= $form->field($model, 'id_comercial')->dropDownList(Registro::getComercialesDropdownList(), ['id' => 'id_comercial','class' => 'form-control', 'prompt' => 'Seleccione Uno'])->label('Empresa'); ?>
                         <?= $form->field($model, 'observacion')->textArea(['id' => 'txt_observacion', 'class' => 'form-control', 'style' => 'width:100%'])->label('Observaciones') ?>
                     </div>
                 <?php ActiveForm::end(); ?>
