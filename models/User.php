@@ -11,6 +11,7 @@ use yii\web\IdentityInterface;
  *
  * @property string $id
  * @property string $username
+ * @property string $name
  * @property string $password
  * @property string $authKey
  * @property string $accessToken
@@ -48,6 +49,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return [
             'id' => Yii::t('User', 'Id'),
             'username' => Yii::t('User', 'Usuario'),
+            'name' => Yii::t('User', 'Nombre'),
             'password' => Yii::t('User', 'Password'),
             'authKey' => Yii::t('User', 'AuthKey'),
             'accessToken' => Yii::t('User', 'AccessToken'),
@@ -58,7 +60,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return [
             [['username', 'password', 'authKey', 'accessToken'], 'required'],
-            [['username', 'password', 'authKey', 'accessToken'], 'string', 'max' => 255],
+            [['name','username', 'password', 'authKey', 'accessToken'], 'string', 'max' => 255],
             [['username'], 'unique'],
         ];
     }

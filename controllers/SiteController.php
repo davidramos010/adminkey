@@ -1,7 +1,8 @@
 <?php
-
 namespace app\controllers;
 
+use app\models\Perfiles;
+use app\models\PerfilesUsuario;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -9,6 +10,8 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\widgets\Alert;
+
 
 class SiteController extends Controller
 {
@@ -61,17 +64,29 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $srtNotificacion = NULL;
         if (!Yii::$app->user->identity) {
             $model = new LoginForm();
-            if ( $model->load(Yii::$app->request->post()) && $model->login()) {
-                if(Yii::$app->user->identity->accessToken=='1234'){
-                    return $this->goBack();
-                }else{
-                    return $this->redirect('index.php?r=registro/create');
+            if ($model->load(Yii::$app->request->post())) {
+                if($model->login()){
+                    $objPerfil = PerfilesUsuario::find()->where(['id_user'=>Yii::$app->user->identity->id ])->one();
+                    if(!empty($objPerfil)){
+                        if($objPerfil->id_perfil==1 && (int) $model->perfil==1 ){
+                            return $this->render('index');
+                        }
+                        if($objPerfil->id_perfil==2 && (int) $model->perfil==2){
+                            return $this->redirect('index.php?r=registro/create');
+                        }
+                    }
                 }
+                $srtNotificacion = "Validar los parámetros ingresados";
+                Yii::$app->user->logout();
+                Yii::$app->user->logout(true);
             }
+
             return $this->render('login', [
                 'model' => $model,
+                'notificacion' => $srtNotificacion
             ]);
         }
 
@@ -86,6 +101,7 @@ class SiteController extends Controller
     public function actionLogin()
     {
 
+        die('1111');
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }

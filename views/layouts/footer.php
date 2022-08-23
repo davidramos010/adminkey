@@ -1,4 +1,11 @@
-<footer class="main-footer">
+<?php
+$strAddStyle = "margin-left: 0 !important;";
+if (!empty(Yii::$app->user) && isset(Yii::$app->user) && !empty(Yii::$app->user->identity)):
+    $strAddStyle = "";
+endif;
+
+?>
+<footer class="main-footer" style="<?= $strAddStyle ?>">
     <strong>Copyright &copy; <?= date('Y') ?>.</strong>
     All rights reserved. AdminKeys
     <div class="float-right d-none d-sm-inline-block">

@@ -28,6 +28,11 @@ function addKey()
             //Validar que no exista
             var bolInserRow = true;
 
+            if(data.llave==null){
+                toastr.error('El codigo ingresado no es valido o esta deshabilitado.');
+                return true;
+            }
+
             if(operacion=='E'){
                 listKeyEntrada.forEach(function(key, index, object) {
                     if(parseInt(key) === parseInt(data.llave.id)){
@@ -35,7 +40,7 @@ function addKey()
                     }
                 });
                 if(data.estado=='Entrada'){
-                    alert('La llave tiene una entrada activa, no se puede volver a ingresar.');
+                    toastr.warning('La llave tiene una entrada activa, no se puede volver a ingresar.');
                     bolInserRow = false;
                 }
             }else{
@@ -45,7 +50,7 @@ function addKey()
                     }
                 });
                 if(data.estado=='Salida'){
-                    alert('La llave tiene una salida activa, no se pueden registrar mas salidas.');
+                    toastr.warning('La llave tiene una salida activa, no se pueden registrar mas salidas.');
                     bolInserRow = false;
                 }
             }
@@ -121,6 +126,8 @@ function sendForm()
                 $('#tr_'+index).remove();
             });
 
+            toastr.success('Registro almacenado correctamente.');
+
             $('#div_msm').show("slow");
             $('#div_info').hide();
 
@@ -128,7 +135,7 @@ function sendForm()
             $('#id_llave').attr('readonly', true);
             $('#btn_registrar').attr('readonly', true);
 
-            setTimeout("location.reload(true);",500);
+            setTimeout("location.reload(true);",600);
         }
     });
 }
