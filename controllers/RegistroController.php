@@ -156,7 +156,7 @@ class RegistroController extends Controller
     public function actionAjaxAddKey()
     {
 
-        $strCode = (!empty($this->request->get()) && isset($this->request->get()['code']))?(string) $this->request->get()['code']:null;
+        $strCode = (!empty($this->request->get()) && isset($this->request->get()['code']))?(string) trim($this->request->get()['code']):null;
         $strCode = str_replace("'","-",$strCode);
         $arrModelStatus = null;
         $arrComunidadLlave = null;
