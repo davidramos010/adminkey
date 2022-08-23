@@ -70,9 +70,9 @@ function addKey()
                 }else{
                     listKeySalida.push(data.llave.id);
                 }
-
-                $('#id_llave').val('');
             }
+
+            $('#id_llave').val('');
         }
     });
 }
