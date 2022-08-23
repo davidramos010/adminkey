@@ -95,7 +95,7 @@ $this->registerJsFile('@web/js/llave.js');
                     <tr>
                         <td style="text-align: center; vertical-align: top">
                             <?= strtoupper(trim($model->codigo.' - '.$model->descripcion)) ?><br>
-                            <span style="font-size: 8px; font-weight: bold"><?= strtoupper(trim(Yii::$app->params['contacto'])) ?></span>
+                            <div style="font-size: 6px; font-weight: bold; max-width: 150px;"><?= strtoupper(trim(Yii::$app->params['contacto'])) ?></div>
                         </td>
                     </tr>
                 </table>
