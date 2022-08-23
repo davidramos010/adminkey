@@ -157,16 +157,20 @@ class RegistroController extends Controller
     {
 
         $strCode = (!empty($this->request->get()) && isset($this->request->get()['code']))?(string) $this->request->get()['code']:null;
-
         $strCode = str_replace("'","-",$strCode);
+        $arrModelStatus = null;
+        $arrComunidadLlave = null;
+        $strEstado = null;
 
         $arrModelLlave = Llave::find()->where(['codigo'=>$strCode])->asArray()->one();
-        $numId = $arrModelLlave['id'];
-        $arrModelStatus = LlaveStatus::find()->where(['id_llave'=>$numId])->orderBy(['id' => SORT_DESC])->asArray()->one();
-        $arrComunidadLlave = (!empty($arrModelLlave))?Comunidad::find()->where(['id'=>$arrModelLlave['id_comunidad']])->asArray()->one():null;
-        $strEstado = (empty($arrModelStatus))?'Salida':null;
-        if(!$strEstado){
-            $strEstado = ($arrModelStatus['status']=='S')?'Salida':'Entrada';
+        if(!empty($arrModelLlave)){
+            $numId = $arrModelLlave['id'];
+            $arrModelStatus = LlaveStatus::find()->where(['id_llave'=>$numId])->orderBy(['id' => SORT_DESC])->asArray()->one();
+            $arrComunidadLlave = (!empty($arrModelLlave))?Comunidad::find()->where(['id'=>$arrModelLlave['id_comunidad']])->asArray()->one():null;
+            $strEstado = (empty($arrModelStatus))?'Salida':null;
+            if(!$strEstado){
+                $strEstado = ($arrModelStatus['status']=='S')?'Salida':'Entrada';
+            }
         }
 
         return json_encode( ['llave'=>$arrModelLlave,'status'=>$arrModelStatus, 'comunidad'=>$arrComunidadLlave, 'estado'=>$strEstado]);

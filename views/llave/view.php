@@ -15,24 +15,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $optionsArray = array(
     'elementId'=> 'showBarcode', /* div or canvas id*/
-    'value'=> strtoupper($model->codigo),  /* value for EAN 13 be careful to set right values for each barcode type */
+    'value'=> strtoupper(str_pad($model->codigo, 8, " ", STR_PAD_LEFT)),  /* value for EAN 13 be careful to set right values for each barcode type */
     'type'=>'code39',/*supported types  ean8, ean13, upc, std25, int25, code11, code39, code93, code128, codabar, msi, datamatrix*/
     'settings'=>array(
-        'output'=>'css' /*css, bmp, canvas note- bmp and canvas incompatible wtih IE*/,
+        'output'=>'bmp' /*css, bmp, canvas note- bmp and canvas incompatible wtih IE*/,
         /*if the output setting canvas*/
         'posX' => 10,
         'posY' => 20,
         /* */
-        'bgColor'=>'#FFF', /*background color*/
-        'color' => '#000000', /*"1" Bars color*/
-        'barWidth' => 2,
-        'barHeight' => 30,
-        'fontSize' => 14,
+        'bgColor'=>'1', /*background color*/
+        'color' => '1', /*"1" Bars color*/
+        'barWidth' => 1,
+        'barHeight' => 20,
+        'fontSize' => 10,
         /*-----------below settings only for datamatrix--------------------*/
-        'moduleSize' => 5,
+        'moduleSize' => 6,
         'addQuietZone' => 0, /*Quiet Zone Modules */
     ),
-
 );
 echo BarcodeGenerator::widget($optionsArray);
 $this->registerJsFile('@web/js/llave.js');
@@ -89,12 +88,16 @@ $this->registerJsFile('@web/js/llave.js');
                 ],
             ]) ?>
 
-            <div id="showTableBarcode" style="padding: 15px 15px; aling-items: center; justify-content: center" >
-                <table class="table" style=" font-size: 10px; width: 230px; max-width: 230px;height: 170px; max-height: 170px;">
-                    <tr> <td style="text-align: center; height: 15px"><?= strtoupper($model->comunidad->nombre) ?></td></tr>
-                    <tr> <td style="text-align: center; height: 50px"><div id="showBarcode" ></div></td></tr>
-                    <tr> <td style="text-align: center; height: 50px"><?= strtoupper($model->descripcion) ?></td></tr>
-                    <tr> <td style="text-align: center; height: 10px; font-size: 9px;"><?= strtoupper(Yii::$app->params['contacto']) ?></td></tr>
+            <div id="showTableBarcode" style=" max-width: 230px; max-height: 170px; aling-items: center; justify-content: center" class="border border-primary">
+                <table align="center"  style=" font-size: 10px; max-width: 200px; max-height: 170px;">
+                    <tr> <td style=" text-align: center; height: 15px"><?= strtoupper(trim($model->comunidad->nombre)) ?></td></tr>
+                    <tr> <td align="center" style="height: 26px"><div id="showBarcode" ></div></td></tr>
+                    <tr>
+                        <td style="text-align: center; vertical-align: top">
+                            <?= strtoupper(trim($model->codigo.' - '.$model->descripcion)) ?><br>
+                            <span style="font-size: 8px; font-weight: bold"><?= strtoupper(trim(Yii::$app->params['contacto'])) ?></span>
+                        </td>
+                    </tr>
                 </table>
             </div>
 

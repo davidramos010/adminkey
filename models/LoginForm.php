@@ -17,7 +17,7 @@ class LoginForm extends Model
     public $password;
     public $authkey;
     public $rememberMe = true;
-
+    public $perfil = 2;
     private $_user = false;
 
 
@@ -29,11 +29,13 @@ class LoginForm extends Model
         return [
             // username and password are both required
             [['username', 'password'], 'string', 'max' => 255],
-            [['authkey'], 'integer',],
+            [['authkey'], 'integer','message'=>'Codigo no validado.'],
+            [['perfil'], 'integer'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
+            ['authkey', 'validateAuthkey'],
         ];
     }
 
@@ -46,12 +48,22 @@ class LoginForm extends Model
      */
     public function validatePassword($attribute, $params)
     {
-        if (!$this->hasErrors()) {
+        if (!$this->hasErrors() && !empty($this->username) && !empty($this->password) ) {
             $user = $this->getUser();
-
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
+                $this->addError($attribute, 'usuario o password incorrectos.');
             }
+        }
+    }
+
+    public function validateAuthkey($attribute, $params)
+    {
+        if(empty($this->authkey)){
+           return true;
+        }
+
+        if(!is_numeric($this->authkey) && !self::getAuthKey()){
+            $this->addError($attribute, 'El codigo de acceso no es valido');
         }
     }
 
@@ -61,12 +73,14 @@ class LoginForm extends Model
      */
     public function login()
     {
-        if(!empty($this->authkey))
+        if(!empty($this->authkey) && (int) $this->perfil==2)
         {
+            $this->username = null;
+            $this->password = null;
             $this->getAuthKey();
         }
 
-        if ($this->validate()) {
+        if ($this->validate() && !empty($this->getUser())) {
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
         }
         return false;
@@ -90,11 +104,17 @@ class LoginForm extends Model
     {
         if (!empty($this->authkey)) {
             $objUser = User::find()->where(['authkey'=>$this->authkey])->one();
-            $this->_user = false;
-            $this->username = (!empty($objUser))?$objUser->username:null;
-            $this->password = (!empty($objUser))?$objUser->password:null;
+
+            if(!empty($objUser)){
+                $objUserPerfil = PerfilesUsuario::find()->where(['id_user'=>$objUser->id,'id_perfil'=>2])->one();
+                if(!empty($objUserPerfil)){
+                    $this->_user = false;
+                    $this->username = (!empty($objUser))?$objUser->username:null;
+                    $this->password = (!empty($objUser))?$objUser->password:null;
+                }
+            }
         }
 
-        return (!empty($this->username));
+        return (!empty($objUser));
     }
 }

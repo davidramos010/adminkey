@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
 
     <div id="div_info" class="callout callout-info" >
         <h5><i class="fas fa-info"></i> Note:</h5>
-        Este registro estara asociado al usuario en sesion <label class="exampleInputBorder">( <?= Yii::$app->user->identity->username ?> ) </label>.<br/>
+        Este registro estara asociado al usuario en sesion <label class="exampleInputBorder">( <?= Yii::$app->user->identity->name ?> ) </label>.<br/>
         Las llaves se irán registrando segun su último estado de disponibilidad.
     </div>
     <div class="col-md-12">

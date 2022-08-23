@@ -33,6 +33,7 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
                         'icon' => 'tachometer-alt',
                         'items' => [
                             ['label' => 'Comunidad', 'url' => ['comunidad/index'], 'iconStyle' => 'far'],
+                            ['label' => 'Empresa', 'url' => ['comerciales/index'], 'iconStyle' => 'far'],
                             ['label' => 'Llaves', 'url' => ['llave/index'], 'iconStyle' => 'far'],
                             ['label' => 'Tipo Llave', 'url' => ['tipo-llave/index'], 'iconStyle' => 'far'],
                         ],
