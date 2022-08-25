@@ -94,8 +94,8 @@ $this->registerJsFile('@web/js/llave.js');
                     <tr> <td align="center" style="height: 26px"><div id="showBarcode" ></div></td></tr>
                     <tr>
                         <td style="text-align: center; vertical-align: top">
-                            <div style="font-size: 12px; font-weight: bold; max-width: 150px;"><?= strtoupper(trim($model->codigo)) ?></div><br>
-                            <?= strtoupper(trim($model->descripcion)) ?>
+                            <div style="font-size: 10px; font-weight: bold; max-width: 150px;"><?= strtoupper(trim($model->codigo)) ?></div>
+                            <div style="font-size: 12px; max-width: 150px;"><?= strtoupper(trim($model->descripcion)) ?></div>
                         </td>
                     </tr>
                 </table>
