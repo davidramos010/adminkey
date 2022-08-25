@@ -90,7 +90,7 @@ $this->registerJsFile('@web/js/llave.js');
 
             <div id="showTableBarcode" style=" max-width: 230px; max-height: 170px; aling-items: center; justify-content: center" class="border border-primary">
                 <table align="center"  style=" font-size: 10px; max-width: 200px; max-height: 170px;">
-                    <tr> <td style=" text-align: center; height: 15px"><?= strtoupper(trim($model->comunidad->codigo)) ?></td></tr>
+                    <tr> <td style=" text-align: center; height: 15px"><?= strtoupper(trim($model->comunidad->nomenclatura)) ?></td></tr>
                     <tr> <td align="center" style="height: 26px"><div id="showBarcode" ></div></td></tr>
                     <tr>
                         <td style="text-align: center; vertical-align: top">
