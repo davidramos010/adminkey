@@ -47,7 +47,6 @@ $this->registerJsFile('@web/js/llave.js');
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-
             <?= DetailView::widget([
                 'model' => $model,
                 'attributes' => [
