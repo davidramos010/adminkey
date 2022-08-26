@@ -12,7 +12,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Llaves', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
-
 $optionsArray = array(
     'elementId'=> 'showBarcode', /* div or canvas id*/
     'value'=> strtoupper(str_pad($model->codigo, 8, " ", STR_PAD_LEFT)),  /* value for EAN 13 be careful to set right values for each barcode type */
