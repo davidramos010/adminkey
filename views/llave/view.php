@@ -37,7 +37,6 @@ $this->registerJsFile('@web/js/llave.js');
 ?>
 
 <div class="llave-view">
-
     <h1><?= Html::encode($this->title) ?></h1>
     <div class="col-md-6">
         <!-- general form elements -->
