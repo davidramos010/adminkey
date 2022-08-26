@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use barcode\barcode\BarcodeGenerator as BarcodeGenerator;
