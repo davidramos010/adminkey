@@ -127,4 +127,14 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return $this->password === $password;
     }
+
+    /**
+     * Gets query for [[User]].
+     *
+     * @return \yii\db\ActiveQuery|yii\db\ActiveQuery
+     */
+    public function getPerfil()
+    {
+        return $this->hasOne(PerfilesUsuario::className(), ['id_user' => 'id']);
+    }
 }

@@ -12,6 +12,13 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
+        'i18n' => [
+            'translations' => [
+                '*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+            ],
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '2L9wM8LTTuuRFuYI9ZJSDZv4YcIz4hyd',
@@ -70,6 +77,14 @@ if (YII_ENV_DEV) {
         // uncomment the following to add your IP if you are not connecting from localhost.
         //'allowedIPs' => ['127.0.0.1', '::1', 'http://localhost'],
         'allowedIPs' => ['*'],
+        'generators' => [ // here
+            'crud' => [ // generator name
+                'class' => 'yii\gii\generators\crud\Generator', // generator class
+                'templates' => [ // setting for our templates
+                    'yii2-adminlte3' => '@vendor/hail812/yii2-adminlte3/src/gii/generators/crud/default' // template name => path to template
+                ]
+            ]
+        ]
     ];
 }
 

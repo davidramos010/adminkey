@@ -18,10 +18,21 @@ services:
   web:
     image: yiisoftware/yii2-php:7.4-apache
     container_name: docker-php
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
       - ./:/app:delegated
+    environment:
+      - PHP_ENABLE_XDEBUG=1
+      - XDEBUG_CONFIG= "client_port=9003 start_with_request=yes idekey=PHPSTORM log_level=1 log=/tmp/xdebug.log discover_client_host=1"
+      - XDEBUG_MODE= "develop,debug"
+    extra_hosts:
+      - "host.docker.internal:127.0.0.1"
     ports:
       - '81:80'
+      - '9000:9000'
+      - '9003:9003'
     links:
-      - mysql      
+      - mysql
