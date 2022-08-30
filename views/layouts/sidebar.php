@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Html;
 $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::$app->user->identity) && isset(Yii::$app->user->identity->username)) ? Yii::$app->user->identity->username:null;
 ?>
@@ -36,6 +35,7 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
                             ['label' => 'Empresa', 'url' => ['comerciales/index'], 'iconStyle' => 'far'],
                             ['label' => 'Llaves', 'url' => ['llave/index'], 'iconStyle' => 'far'],
                             ['label' => 'Tipo Llave', 'url' => ['tipo-llave/index'], 'iconStyle' => 'far'],
+                            ['label' => 'Usuarios', 'url' => ['user/index'], 'iconStyle' => 'far'],
                         ],
                         'visible' => (Yii::$app->user->identity->accessToken=='1234')
                     ],

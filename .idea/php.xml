@@ -101,8 +101,138 @@
       <path value="$PROJECT_DIR$/vendor/vilochane/yii2-barcode-generator" />
     </include_path>
   </component>
+  <component name="PhpInterpreters">
+    <interpreters>
+      <interpreter id="f2b141d2-3f08-4b88-9dd3-ea99b692d208" name="web" home="docker-compose://DATA" debugger_id="php.debugger.XDebug">
+        <remote_data INTERPRETER_PATH="php" HELPERS_PATH="/opt/.phpstorm_helpers" INITIALIZED="false" VALID="true" RUN_AS_ROOT_VIA_SUDO="false" DOCKER_ACCOUNT_NAME="Docker" DOCKER_COMPOSE_SERVICE_NAME="web" DOCKER_REMOTE_PROJECT_PATH="/opt/project">
+          <type_data command="RUN" />
+          <dockerComposeConfigurationPaths>
+            <item value="$PROJECT_DIR$/docker-compose.yml" />
+          </dockerComposeConfigurationPaths>
+          <envs />
+        </remote_data>
+      </interpreter>
+    </interpreters>
+  </component>
+  <component name="PhpInterpretersPhpInfoCache">
+    <phpInfoCache>
+      <interpreter name="web">
+        <phpinfo binary_type="PHP" php_cli="/usr/local/bin/php" path_separator=":" version="7.4.30">
+          <additional_php_ini>/usr/local/etc/php/conf.d/base.ini, /usr/local/etc/php/conf.d/docker-php-ext-bcmath.ini, /usr/local/etc/php/conf.d/docker-php-ext-exif.ini, /usr/local/etc/php/conf.d/docker-php-ext-gd.ini, /usr/local/etc/php/conf.d/docker-php-ext-imagick.ini, /usr/local/etc/php/conf.d/docker-php-ext-intl.ini, /usr/local/etc/php/conf.d/docker-php-ext-mongodb.ini, /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini, /usr/local/etc/php/conf.d/docker-php-ext-pdo_mysql.ini, /usr/local/etc/php/conf.d/docker-php-ext-pdo_pgsql.ini, /usr/local/etc/php/conf.d/docker-php-ext-soap.ini, /usr/local/etc/php/conf.d/docker-php-ext-sodium.ini, /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini, /usr/local/etc/php/conf.d/docker-php-ext-zip.ini, /usr/local/etc/php/conf.d/xdebug.ini</additional_php_ini>
+          <configuration_file />
+          <configuration_options>
+            <configuration_option name="include_path" value=".:/usr/local/lib/php" />
+          </configuration_options>
+          <debuggers>
+            <debugger_info debugger="xdebug" debugger_version="3.1.5">
+              <debug_extensions />
+            </debugger_info>
+          </debuggers>
+          <loaded_extensions>
+            <extension name="Core" />
+            <extension name="PDO" />
+            <extension name="Phar" />
+            <extension name="Reflection" />
+            <extension name="SPL" />
+            <extension name="SimpleXML" />
+            <extension name="Zend OPcache" />
+            <extension name="bcmath" />
+            <extension name="ctype" />
+            <extension name="curl" />
+            <extension name="date" />
+            <extension name="dom" />
+            <extension name="exif" />
+            <extension name="fileinfo" />
+            <extension name="filter" />
+            <extension name="ftp" />
+            <extension name="gd" />
+            <extension name="hash" />
+            <extension name="iconv" />
+            <extension name="imagick" />
+            <extension name="intl" />
+            <extension name="json" />
+            <extension name="libxml" />
+            <extension name="mbstring" />
+            <extension name="mongodb" />
+            <extension name="mysqlnd" />
+            <extension name="openssl" />
+            <extension name="pcre" />
+            <extension name="pdo_mysql" />
+            <extension name="pdo_pgsql" />
+            <extension name="pdo_sqlite" />
+            <extension name="posix" />
+            <extension name="readline" />
+            <extension name="session" />
+            <extension name="soap" />
+            <extension name="sodium" />
+            <extension name="sqlite3" />
+            <extension name="standard" />
+            <extension name="tokenizer" />
+            <extension name="xdebug" />
+            <extension name="xml" />
+            <extension name="xmlreader" />
+            <extension name="xmlwriter" />
+            <extension name="zip" />
+            <extension name="zlib" />
+          </loaded_extensions>
+        </phpinfo>
+      </interpreter>
+    </phpInfoCache>
+  </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4">
     <option name="suggestChangeDefaultLanguageLevel" value="false" />
+  </component>
+  <component name="PhpRuntimeConfiguration">
+    <extensions>
+      <extension name="FFI" enabled="true" />
+      <extension name="LuaSandbox" enabled="true" />
+      <extension name="Parle" enabled="true" />
+      <extension name="SaxonC" enabled="true" />
+      <extension name="ZendCache" enabled="true" />
+      <extension name="aerospike" enabled="true" />
+      <extension name="ast" enabled="true" />
+      <extension name="blackfire" enabled="true" />
+      <extension name="com_dotnet" enabled="true" />
+      <extension name="couchbase_v2" enabled="true" />
+      <extension name="crypto" enabled="true" />
+      <extension name="ds" enabled="true" />
+      <extension name="eio" enabled="true" />
+      <extension name="event" enabled="true" />
+      <extension name="expect" enabled="true" />
+      <extension name="leveldb" enabled="true" />
+      <extension name="libvirt-php" enabled="true" />
+      <extension name="lua" enabled="true" />
+      <extension name="lzf" enabled="true" />
+      <extension name="mapscript" enabled="true" />
+      <extension name="meminfo" enabled="true" />
+      <extension name="msgpack" enabled="true" />
+      <extension name="parallel" enabled="true" />
+      <extension name="pcov" enabled="true" />
+      <extension name="phpdbg" enabled="true" />
+      <extension name="pq" enabled="true" />
+      <extension name="radius" enabled="true" />
+      <extension name="rdkafka" enabled="true" />
+      <extension name="rpminfo" enabled="true" />
+      <extension name="simple_kafka_client" enabled="true" />
+      <extension name="solr" enabled="true" />
+      <extension name="stats" enabled="true" />
+      <extension name="stomp" enabled="true" />
+      <extension name="svm" enabled="true" />
+      <extension name="swoole" enabled="true" />
+      <extension name="sync" enabled="true" />
+      <extension name="uopz" enabled="true" />
+      <extension name="uploadprogress" enabled="true" />
+      <extension name="uuid" enabled="true" />
+      <extension name="uv" enabled="true" />
+      <extension name="winbinder" enabled="true" />
+      <extension name="xcache" enabled="true" />
+      <extension name="xdiff" enabled="true" />
+      <extension name="xxtea" enabled="true" />
+      <extension name="yaf" enabled="true" />
+      <extension name="yar" enabled="true" />
+      <extension name="zookeeper" enabled="true" />
+      <extension name="zstd" enabled="true" />
+    </extensions>
   </component>
   <component name="PhpUnit">
     <phpunit_settings>
