@@ -2,6 +2,7 @@
 
 /* @var $this \yii\web\View */
 /* @var $content string */
+
 use yii\helpers\Html;
 
 \hail812\adminlte3\assets\FontAwesomeAsset::register($this);
@@ -25,7 +26,7 @@ $this->registerJsFile($publishedRes[1].'/control_sidebar.js', ['depends' => '\ha
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php $this->registerCsrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title>AdminKey::<?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
 <body class="hold-transition sidebar-mini">
@@ -42,6 +43,7 @@ $this->registerJsFile($publishedRes[1].'/control_sidebar.js', ['depends' => '\ha
     <?php if(isset(Yii::$app->user->isGuest) && !empty(Yii::$app->user->identity)): ?>
       <?= $this->render('sidebar', ['assetDir' => $assetDir]) ?>
     <?php endif; ?>
+
     <!-- Content Wrapper. Contains page content -->
     <?= $this->render('content', ['content' => $content, 'assetDir' => $assetDir]) ?>
     <!-- /.content-wrapper -->
@@ -55,6 +57,20 @@ $this->registerJsFile($publishedRes[1].'/control_sidebar.js', ['depends' => '\ha
     <!-- Main Footer -->
     <?= $this->render('footer') ?>
 </div>
+
+<?php
+// Impresión de alertas - Ejemplos
+//    Yii::$app->session->setFlash('error', 'This is the message');
+//    Yii::$app->session->setFlash('success', 'This is the message');
+//    Yii::$app->session->setFlash('warning', 'This is the message');
+//    Yii::$app->session->setFlash('info', 'This is the message');
+$flashMessages = Yii::$app->session->getAllFlashes();
+if ($flashMessages) {
+    foreach($flashMessages as $key => $message) {
+        $this->registerJs(" toastr.".$key."('".$message."'); ");
+    }
+}
+?>
 
 <?php $this->endBody() ?>
 </body>

@@ -1,4 +1,6 @@
 <?php
+
+use hail812\adminlte\widgets\Menu;
 use yii\helpers\Html;
 $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::$app->user->identity) && isset(Yii::$app->user->identity->username)) ? Yii::$app->user->identity->username:null;
 ?>
@@ -25,7 +27,7 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <?php
-            echo \hail812\adminlte\widgets\Menu::widget([
+            echo Menu::widget([
                 'items' => [
                     [
                         'label' => 'Administrador',
@@ -37,7 +39,7 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
                             ['label' => 'Tipo Llave', 'url' => ['tipo-llave/index'], 'iconStyle' => 'far'],
                             ['label' => 'Usuarios', 'url' => ['user/index'], 'iconStyle' => 'far'],
                         ],
-                        'visible' => (Yii::$app->user->identity->accessToken=='1234')
+                        'visible' => ((int) Yii::$app->user->identity->perfiluser->id_perfil==1)
                     ],
                     ['label' => 'Registro',  'icon' => 'fas fa-edit', 'url' => ['registro/create']],
                     ['label' => 'Reporte',  'icon' => 'fas fa-edit', 'url' => ['registro/index']],

@@ -3,10 +3,12 @@
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
 
-$this->title = 'Update User: ' . $model->name;
+use yii\helpers\Html;
+
+$this->title = 'Info General : '.$model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 
 <div class="container-fluid">
@@ -14,6 +16,7 @@ $this->params['breadcrumbs'][] = 'Update';
         <div class="card-body">
             <div class="row">
                 <div class="col-md-12">
+                    <h1><?= Html::encode($this->title) ?></h1>
                     <?=$this->render('_form', [
                         'model' => $model
                     ]) ?>

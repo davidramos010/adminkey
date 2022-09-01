@@ -101,14 +101,21 @@ class SiteController extends Controller
     public function actionLogin()
     {
 
-        die('1111');
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            $objPerfil = PerfilesUsuario::find()->where(['id_user'=>Yii::$app->user->identity->id ])->one();
+            if(!empty($objPerfil)){
+                if($objPerfil->id_perfil==1 && (int) $model->perfil==1 ){
+                    return $this->render('index');
+                }
+                if($objPerfil->id_perfil==2 && (int) $model->perfil==2){
+                    return $this->redirect('index.php?r=registro/create');
+                }
+            }
         }
 
         $model->password = '';
