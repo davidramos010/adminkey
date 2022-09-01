@@ -57,6 +57,20 @@ class Comunidad extends \yii\db\ActiveRecord
     }
 
     /**
+     *  @param string $insert Si este método llamó al insertar un registro. Si false, significa que se llama al método mientras se actualiza un registro.
+     * @return bool Si la inserción o actualización debe continuar. Si false, se cancelará la inserción o actualización.
+     */
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+        $this->nombre = trim(strtoupper($this->nombre));// Nombre en mayusculas
+        $this->contacto = trim(strtoupper($this->contacto));// contacto en mayusculas
+        return true;
+    }
+
+    /**
      * Gets query for [[Llaves]].
      *
      * @return \yii\db\ActiveQuery|LlaveQuery

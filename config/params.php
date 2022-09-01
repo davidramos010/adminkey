@@ -16,5 +16,6 @@ return [
                 'js' => ['toastr/toastr.min.js']
             ],
         ]
-    ]
+    ],
+    'bsDependencyEnabled' => false, // this will not load Bootstrap CSS and JS for all Krajee extensions
 ];

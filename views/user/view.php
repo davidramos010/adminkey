@@ -6,44 +6,70 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
 
-$this->title = $model->name;
+$this->title = 'Info General : '.$model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 
 <div class="container-fluid">
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <p>
-                        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-                        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-                            'class' => 'btn btn-danger',
-                            'data' => [
-                                'confirm' => 'Are you sure you want to delete this item?',
-                                'method' => 'post',
-                            ],
-                        ]) ?>
-                    </p>
-                    <?= DetailView::widget([
-                        'model' => $model,
-                        'attributes' => [
-                            'id',
-                            'username',
-                            'name',
-                            'password',
-                            'authKey',
-                            'accessToken',
-                        ],
-                    ]) ?>
-                </div>
-                <!--.col-md-12-->
+
+    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="col-md-6">
+        <!-- general form elements -->
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Usuario</h3>
             </div>
-            <!--.row-->
+
+            <?= DetailView::widget([
+                'model' => $model,
+                'attributes' => [
+                    'id',
+                    'username',
+                    'name',
+                    [
+                        'attribute' => 'id',
+                        'label' => Yii::t('app', 'Perfil'),
+                        'format' => 'raw',
+                        'value' => function($model){
+                            return (isset($model->perfiluser))?strtoupper($model->perfiluser->perfil->nombre):'No Encontrado' ;
+                        }
+                    ],
+                    [
+                        'attribute' => 'password',
+                        'label' => Yii::t('app', 'Password'),
+                        'format' => 'raw',
+                        'value' => '*****'
+                    ],
+                    [
+                        'attribute' => 'authKey',
+                        'label' => Yii::t('app', 'AuthKey'),
+                        'format' => 'raw',
+                        'value' => '*****'
+                    ],
+                    [
+                        'attribute' => 'accessToken',
+                        'label' => Yii::t('app', 'AccessToken'),
+                        'format' => 'raw',
+                        'value' => '*****'
+                    ],
+                ],
+            ]) ?>
+
+            <div style="padding: 5px 5px 5px" >
+                <?= Html::a(Yii::t('app', 'Eliminar'), ['delete', 'id' => $model->id], [
+                    'class' => 'btn btn-danger',
+                    'data' => [
+                        'confirm' => 'Esta seguro que desea eliminar el registro?',
+                        'method' => 'post',
+                    ],
+                ]) ?>
+                <?= Html::a(Yii::t('app', 'Modificar'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a(Yii::t('app', 'Volver a listado'), ['index'], ['class' => 'btn btn-default ']) ?>
+            </div>
         </div>
-        <!--.card-body-->
     </div>
+
     <!--.card-->
 </div>

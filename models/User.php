@@ -4,6 +4,7 @@ namespace app\models;
 
 use yii;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 
 /**
@@ -15,10 +16,19 @@ use yii\web\IdentityInterface;
  * @property string $password
  * @property string $authKey
  * @property string $accessToken
+ * @property int $idPerfil
+ * @property string $password_new
+ * @property string $authKey_new
+ *
+ * @property Perfiles $perfiles
+ * @property PerfilesUsuario $perfilesUsuario
  */
 
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
+    public $idPerfil = null;
+    public $password_new = null;
+    public $authKey_new = null;
 
     /**
      * @inheritdoc
@@ -27,22 +37,6 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return 'User';
     }
-    /*private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
-    ];*/
 
     public function attributeLabels()
     {
@@ -59,8 +53,9 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'password', 'authKey', 'accessToken'], 'required'],
-            [['name','username', 'password', 'authKey', 'accessToken'], 'string', 'max' => 255],
+            [['username', 'password_new', 'authKey_new'], 'required', 'message'=> Yii::t('yii',  '{attribute} no es valido')],
+            [['name','username', 'password', 'authKey', 'accessToken','password_new','authKey_new'], 'string', 'max' => 255],
+            [['idPerfil'], 'integer'],
             [['username'], 'unique'],
         ];
     }
@@ -129,12 +124,53 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     }
 
     /**
+     *  @param string $insert Si este método llamó al insertar un registro. Si false, significa que se llama al método mientras se actualiza un registro.
+     * @return bool Si la inserción o actualización debe continuar. Si false, se cancelará la inserción o actualización.
+     */
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+        // Validar edición del password
+        if(!empty($this->password_new)){
+            $this->password = util::hash($this->password_new);
+        }
+
+        return true;
+    }
+
+    /**
      * Gets query for [[User]].
      *
      * @return \yii\db\ActiveQuery|yii\db\ActiveQuery
      */
-    public function getPerfil()
+    public function getPerfiluser()
     {
         return $this->hasOne(PerfilesUsuario::className(), ['id_user' => 'id']);
+    }
+
+
+    /**
+     * Gets query for [[User_Info]].
+     *
+     * @return \yii\db\ActiveQuery|yii\db\ActiveQuery
+     */
+    public function getUserInfo()
+    {
+        return $this->hasOne(UserInfo::className(), ['id_user' => 'id']);
+    }
+
+    /**
+     * @return array
+     * @throws yii\db\Exception
+     */
+    public static function getPerfilesDropdownList()
+    {
+        $query = "SELECT id, UPPER(nombre) as nombre FROM perfiles order by nombre ASC";
+        $result = Yii::$app->db
+            ->createCommand($query)
+            ->queryAll();
+        return ArrayHelper::map($result, 'id', 'nombre');
     }
 }

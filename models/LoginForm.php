@@ -52,6 +52,7 @@ class LoginForm extends Model
             $user = $this->getUser();
             if (!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'usuario o password incorrectos.');
+                Yii::$app->session->setFlash('error', 'usuario o password incorrectos.');
             }
         }
     }
@@ -64,6 +65,7 @@ class LoginForm extends Model
 
         if(!is_numeric($this->authkey) && !self::getAuthKey()){
             $this->addError($attribute, 'El codigo de acceso no es valido');
+            Yii::$app->session->setFlash('error', 'El codigo de acceso no es valido');
         }
     }
 
@@ -78,6 +80,10 @@ class LoginForm extends Model
             $this->username = null;
             $this->password = null;
             $this->getAuthKey();
+        }else{
+            if(!empty($this->password)){
+                $this->password = util::hash($this->password);
+            }
         }
 
         if ($this->validate() && !empty($this->getUser())) {
@@ -100,10 +106,13 @@ class LoginForm extends Model
         return $this->_user;
     }
 
+    /**
+     * @return bool
+     */
     public function getAuthKey()
     {
         if (!empty($this->authkey)) {
-            $objUser = User::find()->where(['authkey'=>$this->authkey])->one();
+            $objUser = User::find()->where(['authkey'=> $this->authkey ])->one();
 
             if(!empty($objUser)){
                 $objUserPerfil = PerfilesUsuario::find()->where(['id_user'=>$objUser->id,'id_perfil'=>2])->one();

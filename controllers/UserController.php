@@ -2,12 +2,16 @@
 
 namespace app\controllers;
 
+use app\models\PerfilesUsuario;
+use app\models\UserInfo;
 use Yii;
 use app\models\User;
 use app\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use hail812\adminlte\widgets\Menu;
+use hail812\adminlte\widgets\FlashAlert;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -37,6 +41,7 @@ class UserController extends Controller
     {
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        //$n = (Yii::$app->user->identity->accessToken=='1234');
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -65,13 +70,36 @@ class UserController extends Controller
     public function actionCreate()
     {
         $model = new User();
+        $modelInfo = new UserInfo();
+        if(Yii::$app->request->post()){
+            $arrParam = Yii::$app->request->post();
+            $arrUser['User'] = $arrParam['User'];
+            $arrUser['User']['name'] = trim($arrParam['UserInfo']['nombres']. ' ' .$arrParam['UserInfo']['apellidos']);
+            $arrUser['User']['password'] = $arrUser['User']['password_new'];
+            $arrUser['User']['authKey'] = $arrUser['User']['authKey_new'];
+            $bolInserUser = ($model->load($arrUser) && $model->save());
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $arrUserInfo['UserInfo'] = $arrParam['UserInfo'];
+            $arrUserInfo['UserInfo']['id_user'] = $model->id;
+            $bolInserUserInfo = ($bolInserUser && $modelInfo->load($arrUserInfo) && $modelInfo->save());
+            $bolInserPerfil = false;
+            if($bolInserUser && $bolInserUserInfo){
+                $newPerfilUser = new PerfilesUsuario();
+                $newPerfilUser->id_user = (int) $model->id;
+                $newPerfilUser->id_perfil = (int) $model->idPerfil;
+                $bolInserPerfil = $newPerfilUser->save();
+            }
+
+            if($bolInserPerfil && $bolInserUser && $bolInserUserInfo){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
+
+        $modelInfo->estado=1; // Activo por defecto
 
         return $this->render('create', [
             'model' => $model,
+            'model_info' => $modelInfo,
         ]);
     }
 
