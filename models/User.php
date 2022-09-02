@@ -30,6 +30,12 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public $password_new = null;
     public $authKey_new = null;
 
+    public $nombres = null;
+    public $apellidos = null;
+    public $telefono = null;
+    public $perfil = null;
+    public $estado = null;
+
     /**
      * @inheritdoc
      */
@@ -53,7 +59,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'password_new', 'authKey_new'], 'required', 'message'=> Yii::t('yii',  '{attribute} no es valido')],
+            [['username', 'password', 'authKey'], 'required', 'message'=> Yii::t('yii',  '{attribute} no es valido')],
             [['name','username', 'password', 'authKey', 'accessToken','password_new','authKey_new'], 'string', 'max' => 255],
             [['idPerfil'], 'integer'],
             [['username'], 'unique'],

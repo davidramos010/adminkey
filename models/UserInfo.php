@@ -39,6 +39,7 @@ class UserInfo extends \yii\db\ActiveRecord
             [['id_user', 'estado'], 'integer'],
             [['created'], 'safe'],
             [['nombres', 'apellidos', 'direccion', 'email'], 'string', 'max' => 255],
+            [['nombres', 'apellidos'], 'required', 'message'=> Yii::t('yii',  '{attribute} no es valido')],
             [['telefono'], 'string', 'max' => 30],
             [['codigo'], 'string', 'max' => 100],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],

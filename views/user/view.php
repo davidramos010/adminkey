@@ -5,6 +5,8 @@ use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
+/* @var $model_info app\models\UserInfo */
+
 
 $this->title = 'Info General : '.$model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
@@ -25,9 +27,55 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= DetailView::widget([
                 'model' => $model,
                 'attributes' => [
-                    'id',
                     'username',
-                    'name',
+                    [
+                        'attribute' => 'id',
+                        'label' => Yii::t('app', 'Nombres'),
+                        'format' => 'raw',
+                        'value' => function($model){
+                            return (isset($model->userInfo->nombres))?strtoupper($model->userInfo->nombres):'' ;
+                        }
+                    ],
+                    [
+                        'attribute' => 'id',
+                        'label' => Yii::t('app', 'Apellidos'),
+                        'format' => 'raw',
+                        'value' => function($model){
+                            return (isset($model->userInfo->apellidos))?strtoupper($model->userInfo->apellidos):'' ;
+                        }
+                    ],
+                    [
+                        'attribute' => 'id',
+                        'label' => Yii::t('app', 'Teléfono'),
+                        'format' => 'raw',
+                        'value' => function($model){
+                            return (isset($model->userInfo->telefono))?$model->userInfo->telefono:'' ;
+                        }
+                    ],
+                    [
+                        'attribute' => 'id',
+                        'label' => Yii::t('app', 'Email'),
+                        'format' => 'raw',
+                        'value' => function($model){
+                            return (isset($model->userInfo->email))?$model->userInfo->email:'' ;
+                        }
+                    ],
+                    [
+                        'attribute' => 'id',
+                        'label' => Yii::t('app', 'Dirección'),
+                        'format' => 'raw',
+                        'value' => function($model){
+                            return (isset($model->userInfo->direccion))?strtoupper($model->userInfo->direccion):'' ;
+                        }
+                    ],
+                    [
+                        'attribute' => 'id',
+                        'label' => Yii::t('app', 'Estado'),
+                        'format' => 'raw',
+                        'value' => function($model){
+                            return (isset($model->userInfo->estado) && $model->userInfo->estado==1)?'Activo':'Inactivo';
+                        }
+                    ],
                     [
                         'attribute' => 'id',
                         'label' => Yii::t('app', 'Perfil'),
@@ -37,22 +85,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     ],
                     [
-                        'attribute' => 'password',
-                        'label' => Yii::t('app', 'Password'),
+                        'attribute' => 'id',
+                        'label' => Yii::t('app', 'Creado'),
                         'format' => 'raw',
-                        'value' => '*****'
-                    ],
-                    [
-                        'attribute' => 'authKey',
-                        'label' => Yii::t('app', 'AuthKey'),
-                        'format' => 'raw',
-                        'value' => '*****'
-                    ],
-                    [
-                        'attribute' => 'accessToken',
-                        'label' => Yii::t('app', 'AccessToken'),
-                        'format' => 'raw',
-                        'value' => '*****'
+                        'value' => function($model){
+                            return (isset($model->userInfo->created))? date("d/m/Y H:i", strtotime($model->userInfo->created)):'';
+                        }
                     ],
                 ],
             ]) ?>

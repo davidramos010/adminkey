@@ -2,6 +2,7 @@
 
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
+/* @var $model_info app\models\UserInfo */
 
 use yii\helpers\Html;
 
@@ -18,7 +19,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                 <div class="col-md-12">
                     <h1><?= Html::encode($this->title) ?></h1>
                     <?=$this->render('_form', [
-                        'model' => $model
+                        'model' => $model,'model_info' => $model_info
                     ]) ?>
                 </div>
             </div>
