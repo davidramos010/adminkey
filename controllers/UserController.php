@@ -41,7 +41,6 @@ class UserController extends Controller
     {
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        //$n = (Yii::$app->user->identity->accessToken=='1234');
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -59,6 +58,7 @@ class UserController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'model_info' => UserInfo::find()->where(['id_user'=>$id])->one(),
         ]);
     }
 
@@ -73,30 +73,59 @@ class UserController extends Controller
         $modelInfo = new UserInfo();
         if(Yii::$app->request->post()){
             $arrParam = Yii::$app->request->post();
+            $arrParam['UserInfo']['nombres'] = trim(strtoupper($arrParam['UserInfo']['nombres']));
+            $arrParam['UserInfo']['apellidos'] = trim(strtoupper($arrParam['UserInfo']['apellidos']));
             $arrUser['User'] = $arrParam['User'];
             $arrUser['User']['name'] = trim($arrParam['UserInfo']['nombres']. ' ' .$arrParam['UserInfo']['apellidos']);
             $arrUser['User']['password'] = $arrUser['User']['password_new'];
             $arrUser['User']['authKey'] = $arrUser['User']['authKey_new'];
+            $transaction = Yii::$app->db->beginTransaction();
             $bolInserUser = ($model->load($arrUser) && $model->save());
+            $bolInserPerfil = false;
+            // pintar errores
+            if(!$bolInserUser){
+                $arrError = $model->getErrors();
+                foreach ($arrError as $item){
+                    if(isset($item[0])){
+                        Yii::$app->session->setFlash('error', $item[0]);
+                    }
+                }
+            }
 
             $arrUserInfo['UserInfo'] = $arrParam['UserInfo'];
             $arrUserInfo['UserInfo']['id_user'] = $model->id;
             $bolInserUserInfo = ($bolInserUser && $modelInfo->load($arrUserInfo) && $modelInfo->save());
-            $bolInserPerfil = false;
+
+            // pintar errores
+            if($bolInserUser && !$bolInserUserInfo){
+                $arrError = $modelInfo->getErrors();
+                foreach ($arrError as $item){
+                    if(isset($item[0])){
+                        Yii::$app->session->setFlash('error', $item[0]);
+                    }
+                }
+            }
+
             if($bolInserUser && $bolInserUserInfo){
                 $newPerfilUser = new PerfilesUsuario();
                 $newPerfilUser->id_user = (int) $model->id;
                 $newPerfilUser->id_perfil = (int) $model->idPerfil;
                 $bolInserPerfil = $newPerfilUser->save();
+                if(!$bolInserPerfil){
+                    Yii::$app->session->setFlash('error', Yii::t('yii', 'El perfil no se asigna correctamente'));
+                }
             }
 
             if($bolInserPerfil && $bolInserUser && $bolInserUserInfo){
+                $transaction->commit();
                 return $this->redirect(['view', 'id' => $model->id]);
+            }else{
+                $transaction->rollBack();
+                Yii::$app->session->setFlash('error', Yii::t('yii', 'Error al guardar. Valide los datos y vuelva a intentar.'));
             }
         }
 
         $modelInfo->estado=1; // Activo por defecto
-
         return $this->render('create', [
             'model' => $model,
             'model_info' => $modelInfo,
@@ -113,13 +142,65 @@ class UserController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $modelInfo = UserInfo::find()->where(['id_user'=>$id])->one();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if(Yii::$app->request->post()){
+            $arrParam = Yii::$app->request->post();
+            $arrParam['UserInfo']['nombres'] = trim(strtoupper($arrParam['UserInfo']['nombres']));
+            $arrParam['UserInfo']['apellidos'] = trim(strtoupper($arrParam['UserInfo']['apellidos']));
+            $arrUser['User'] = $arrParam['User'];
+            $arrUser['User']['name'] = trim($arrParam['UserInfo']['nombres']. ' ' .$arrParam['UserInfo']['apellidos']);
+            //$arrUser['User']['password'] = $arrUser['User']['password_new'];
+            //$arrUser['User']['authKey'] = $arrUser['User']['authKey_new'];
+            $transaction = Yii::$app->db->beginTransaction();
+            $bolInserUser = ($model->load($arrUser) && $model->save());
+            $bolInserPerfil = false;
+            // pintar errores
+            if(!$bolInserUser){
+                $arrError = $model->getErrors();
+                foreach ($arrError as $item){
+                    if(isset($item[0])){
+                        Yii::$app->session->setFlash('error', $item[0]);
+                    }
+                }
+            }
+
+            $bolInserUserInfo = ($bolInserUser && $modelInfo->load( $arrParam ) && $modelInfo->save());
+
+            // pintar errores
+            if($bolInserUser && !$bolInserUserInfo){
+                $arrError = $modelInfo->getErrors();
+                foreach ($arrError as $item){
+                    if(isset($item[0])){
+                        Yii::$app->session->setFlash('error', $item[0]);
+                    }
+                }
+            }
+
+            if($bolInserUser && $bolInserUserInfo){
+                $newPerfilUser =  PerfilesUsuario::find()->where(['id_user'=>$id])->one();
+                $newPerfilUser = (empty($newPerfilUser))?new PerfilesUsuario():$newPerfilUser;
+                $newPerfilUser->id_user = (int) $model->id;
+                $newPerfilUser->id_perfil = (int) $model->idPerfil;
+                $bolInserPerfil = $newPerfilUser->save();
+                if(!$bolInserPerfil){
+                    Yii::$app->session->setFlash('error', Yii::t('yii', 'El perfil no se asigna correctamente'));
+                }
+            }
+
+            if($bolInserPerfil && $bolInserUser && $bolInserUserInfo){
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }else{
+                $transaction->rollBack();
+                Yii::$app->session->setFlash('error', Yii::t('yii', 'Error al guardar. Valide los datos y vuelva a intentar.'));
+            }
         }
+
 
         return $this->render('update', [
             'model' => $model,
+            'model_info' => $modelInfo
         ]);
     }
 
@@ -132,8 +213,9 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $objUserInfo = UserInfo::find()->where(['id_user'=>$id])->one();
+        $objUserInfo->estado=0;//Inactivo
+        $objUserInfo->save();
         return $this->redirect(['index']);
     }
 

@@ -18,7 +18,7 @@ class UserSearch extends User
     {
         return [
             [['id'], 'integer'],
-            [['username', 'name', 'password', 'authKey', 'accessToken'], 'safe'],
+            [['username', 'name', 'password', 'authKey', 'accessToken','nombres','apellidos','telefono','perfil','estado'], 'safe'],
         ];
     }
 
@@ -40,8 +40,19 @@ class UserSearch extends User
      */
     public function search($params)
     {
-        $query = User::find();
+        $query = User::find()->alias('us');
+        $query->select([
+            'us.*',
+            'in.nombres as nombres',
+            'in.apellidos as apellidos',
+            'in.telefono as telefono',
+            'in.estado as estado',
+            'UPPER(pf.nombre) as perfil',
+        ]);
 
+        $query->leftJoin('User_info in','in.id_user = us.id');
+        $query->leftJoin('perfiles_usuario pu','pu.id_user = us.id');
+        $query->leftJoin('perfiles pf','pf.id = pu.id_perfil');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -66,6 +77,16 @@ class UserSearch extends User
             ->andFilterWhere(['like', 'password', $this->password])
             ->andFilterWhere(['like', 'authKey', $this->authKey])
             ->andFilterWhere(['like', 'accessToken', $this->accessToken]);
+
+        $query->andFilterWhere([
+            'in.nombres' => $this->nombres,
+            'in.apellidos' => $this->apellidos,
+            'in.telefono' => $this->telefono,
+            'pf.nombre' => $this->perfil,
+        ]);
+
+        $query->andWhere(['in.estado'=> 1]);
+        $query->orderBy('us.name ASC');
 
         return $dataProvider;
     }

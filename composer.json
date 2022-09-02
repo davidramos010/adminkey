@@ -22,7 +22,9 @@
         "vilochane/yii2-barcode-generator": "dev-master",
         "kartik-v/yii2-widgets": "^3.4.1",
         "kartik-v/yii2-helpers": "1.3.7",
-        "kartik-v/yii2-widget-switchinput": "^v1.3.1"
+        "kartik-v/yii2-widget-switchinput": "^v1.3.1",
+        "kartik-v/yii2-export": "dev-master",
+        "kartik-v/yii2-bootstrap5-dropdown": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
@@ -71,6 +73,7 @@
             ]
         }
     },
+
     "repositories": [
         {
             "type": "composer",

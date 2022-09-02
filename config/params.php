@@ -5,6 +5,7 @@ return [
     'senderEmail' => 'noreply@example.com',
     'senderName' => 'Example.com mailer',
     'contacto' => 'Empresa Reparaciones SL - Telf. 123456789 - Palamos',
+    'bsVersion' => '5.x', // this will set globally `bsVersion` to Bootstrap 5.x for all Krajee Extensions
     'hail812/yii2-adminlte3' => [
         'pluginMap' => [
             'sweetalert2' => [

@@ -206,7 +206,7 @@
         'fakerphp/faker' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'eebc34ab379e7b7cb48f6d0e0f49378b00cafeff',
+            'reference' => '874e880a699face9acf3c87bb79fc1df2bc4b9f1',
             'type' => 'library',
             'install_path' => __DIR__ . '/../fakerphp/faker',
             'aliases' => array(
@@ -278,6 +278,61 @@
             ),
             'dev_requirement' => false,
         ),
+        'kartik-v/yii2-bootstrap5-dropdown' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '459e4c06c64e49f89ac372ce7c2cabb961f56ec9',
+            'type' => 'yii2-extension',
+            'install_path' => __DIR__ . '/../kartik-v/yii2-bootstrap5-dropdown',
+            'aliases' => array(
+                0 => '1.0.x-dev',
+            ),
+            'dev_requirement' => false,
+        ),
+        'kartik-v/yii2-dialog' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => 'de5d8335231e7023f21e93c06bfa163743443a19',
+            'type' => 'yii2-extension',
+            'install_path' => __DIR__ . '/../kartik-v/yii2-dialog',
+            'aliases' => array(
+                0 => '1.0.x-dev',
+            ),
+            'dev_requirement' => false,
+        ),
+        'kartik-v/yii2-dynagrid' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '02956ed5c753010e700bfdb63e67ef41606e1c2d',
+            'type' => 'yii2-extension',
+            'install_path' => __DIR__ . '/../kartik-v/yii2-dynagrid',
+            'aliases' => array(
+                0 => '1.5.x-dev',
+            ),
+            'dev_requirement' => false,
+        ),
+        'kartik-v/yii2-export' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => 'e720dcdd7df85b5af836a58178a72fc8e0942927',
+            'type' => 'yii2-extension',
+            'install_path' => __DIR__ . '/../kartik-v/yii2-export',
+            'aliases' => array(
+                0 => '1.4.x-dev',
+            ),
+            'dev_requirement' => false,
+        ),
+        'kartik-v/yii2-grid' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '6e02d25feeb19d8bab82354ea25dcdb9189c37c3',
+            'type' => 'yii2-extension',
+            'install_path' => __DIR__ . '/../kartik-v/yii2-grid',
+            'aliases' => array(
+                0 => '3.5.x-dev',
+            ),
+            'dev_requirement' => false,
+        ),
         'kartik-v/yii2-helpers' => array(
             'pretty_version' => 'v1.3.7',
             'version' => '1.3.7.0',
@@ -295,6 +350,26 @@
             'install_path' => __DIR__ . '/../kartik-v/yii2-krajee-base',
             'aliases' => array(
                 0 => '3.0.x-dev',
+            ),
+            'dev_requirement' => false,
+        ),
+        'kartik-v/yii2-mpdf' => array(
+            'pretty_version' => 'v1.0.1',
+            'version' => '1.0.1.0',
+            'reference' => '17fda1cb084c58fee6014026d35af5faf73316ef',
+            'type' => 'yii2-extension',
+            'install_path' => __DIR__ . '/../kartik-v/yii2-mpdf',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'kartik-v/yii2-sortable' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '5b1631ef2aa4d79e01867d83ef1d1e3f8d12a41d',
+            'type' => 'yii2-extension',
+            'install_path' => __DIR__ . '/../kartik-v/yii2-sortable',
+            'aliases' => array(
+                0 => '1.2.x-dev',
             ),
             'dev_requirement' => false,
         ),
@@ -503,6 +578,42 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'maennchen/zipstream-php' => array(
+            'pretty_version' => '2.2.1',
+            'version' => '2.2.1.0',
+            'reference' => '211e9ba1530ea5260b45d90c9ea252f56ec52729',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../maennchen/zipstream-php',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'markbaker/complex' => array(
+            'pretty_version' => '3.0.x-dev',
+            'version' => '3.0.9999999.9999999-dev',
+            'reference' => '131fb447889852a810b345e25efcb0b987f44e19',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../markbaker/complex',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'markbaker/matrix' => array(
+            'pretty_version' => '3.0.x-dev',
+            'version' => '3.0.9999999.9999999-dev',
+            'reference' => '5f6ec15acd6c2bfe36cf82b4062b781ebb0fb69a',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../markbaker/matrix',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'mpdf/mpdf' => array(
+            'pretty_version' => 'v6.1.3',
+            'version' => '6.1.3.0',
+            'reference' => '7f138bf7508eac895ac2c13d2509b056ac7e7e97',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../mpdf/mpdf',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'myclabs/deep-copy' => array(
             'pretty_version' => '1.x-dev',
             'version' => '1.9999999.9999999.9999999-dev',
@@ -511,6 +622,15 @@
             'install_path' => __DIR__ . '/../myclabs/deep-copy',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'myclabs/php-enum' => array(
+            'pretty_version' => '1.8.4',
+            'version' => '1.8.4.0',
+            'reference' => 'a867478eae49c9f59ece437ae7f9506bfaa27483',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../myclabs/php-enum',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'nikic/php-parser' => array(
             'pretty_version' => '4.x-dev',
@@ -561,6 +681,17 @@
             'aliases' => array(),
             'dev_requirement' => true,
         ),
+        'phpoffice/phpspreadsheet' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '4f8aa806bc8b95e9d2633e91aeb0a822f12eb89a',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../phpoffice/phpspreadsheet',
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
+            'dev_requirement' => false,
+        ),
         'phpspec/php-diff' => array(
             'pretty_version' => 'v1.1.3',
             'version' => '1.1.3.0',
@@ -573,7 +704,7 @@
         'phpunit/php-code-coverage' => array(
             'pretty_version' => '9.2.x-dev',
             'version' => '9.2.9999999.9999999-dev',
-            'reference' => 'aa94dc41e8661fe90c7316849907cba3007b10d8',
+            'reference' => '0ba23aa48d89c1b64f3aeadd01e24b15e4d78fad',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpunit/php-code-coverage',
             'aliases' => array(),
@@ -618,7 +749,7 @@
         'phpunit/phpunit' => array(
             'pretty_version' => '9.5.x-dev',
             'version' => '9.5.9999999.9999999-dev',
-            'reference' => 'a9665c86ed857524838c99f91c94e2e91dc28199',
+            'reference' => 'efcb2ae8f18a9a7f2b7b590a95c4e9501113e4e9',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpunit/phpunit',
             'aliases' => array(),
@@ -650,6 +781,17 @@
                 0 => '1.0',
             ),
         ),
+        'psr/http-client' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '22b2ef5687f43679481615605d7a15c557ce85b1',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../psr/http-client',
+            'aliases' => array(
+                0 => '1.0.x-dev',
+            ),
+            'dev_requirement' => false,
+        ),
         'psr/http-factory' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
@@ -659,7 +801,7 @@
             'aliases' => array(
                 0 => '1.0.x-dev',
             ),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'psr/http-factory-implementation' => array(
             'dev_requirement' => true,
@@ -676,7 +818,7 @@
             'aliases' => array(
                 0 => '1.0.x-dev',
             ),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'psr/http-message-implementation' => array(
             'dev_requirement' => true,
@@ -698,6 +840,15 @@
             'provided' => array(
                 0 => '1.0|2.0',
             ),
+        ),
+        'psr/simple-cache' => array(
+            'pretty_version' => '1.0.1',
+            'version' => '1.0.1.0',
+            'reference' => '408d5eafb83c57f6365a3ca330ff23aa4a5fa39b',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../psr/simple-cache',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'ralouphie/getallheaders' => array(
             'pretty_version' => '3.0.3',
@@ -839,7 +990,7 @@
         'sebastian/type' => array(
             'pretty_version' => '3.1.x-dev',
             'version' => '3.1.9999999.9999999-dev',
-            'reference' => 'fb44e1cc6e557418387ad815780360057e40753e',
+            'reference' => 'fcd2ed0d7605cbbfddc74c994160b834ba67c072',
             'type' => 'library',
             'install_path' => __DIR__ . '/../sebastian/type',
             'aliases' => array(),
@@ -863,6 +1014,15 @@
             'aliases' => array(
                 0 => '9999999-dev',
             ),
+            'dev_requirement' => false,
+        ),
+        'setasign/fpdi' => array(
+            'pretty_version' => '1.6.2',
+            'version' => '1.6.2.0',
+            'reference' => 'a6ad58897a6d97cc2d2cd2adaeda343b25a368ea',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../setasign/fpdi',
+            'aliases' => array(),
             'dev_requirement' => false,
         ),
         'symfony/browser-kit' => array(
@@ -955,7 +1115,7 @@
         'symfony/mime' => array(
             'pretty_version' => '5.4.x-dev',
             'version' => '5.4.9999999.9999999-dev',
-            'reference' => 'c5acc1d3360b18edb28d14dd206307c117e9f68d',
+            'reference' => 'bb2ccf759e2b967dcd11bdee5bdf30dddd2290bd',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/mime',
             'aliases' => array(),

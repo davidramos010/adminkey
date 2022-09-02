@@ -48,11 +48,19 @@ $this->title = 'Usuarios';
                     'filterModel' => $searchModel,
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
-                        'id',
                         'username',
-                        'name',
-                        'password',
-                        'authKey',
+                        'nombres',
+                        'apellidos',
+                        [
+                            'attribute' => 'telefono',
+                            'label' => 'Teléfono',
+                            'format' => 'raw',
+                        ],
+                        [
+                            'attribute' => 'perfil',
+                            'label' => 'Perfil',
+                            'format' => 'raw',
+                        ],
                         [
                             'class' => ActionColumn::className(),
                             'urlCreator' => function ($action, User $model, $key, $index, $column) {
