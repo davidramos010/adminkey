@@ -20,13 +20,21 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/site.css',
+        'css/app/layout.css',
+        'css/app/side-menu.css',
+        'css/app/main.css',
+        'css/app/animate-custom.css',
+        'css/app/materialize-colors.css',
     ];
+
     public $js = [
+        'js/app/classie.js',
+        'js/app/main.js',
+        'js/app/side-menu.js',
     ];
+
     public $depends = [
         'yii\web\YiiAsset',
-        'yii\bootstrap5\BootstrapAsset',
-        'yii\bootstrap5\BootstrapPluginAsset',
+        'yii\bootstrap\BootstrapAsset',
     ];
 }

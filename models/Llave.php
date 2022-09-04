@@ -16,6 +16,8 @@ use yii\helpers\ArrayHelper;
  * @property string|null $descripcion
  * @property string|null $observacion
  * @property int|null $activa
+ * @property int|null $alarma
+ * @property string|null $codigo_alarma
  *
  * @property Comunidad $comunidad
  * @property LlaveStatus[] $llaveStatuses
@@ -24,6 +26,9 @@ use yii\helpers\ArrayHelper;
  */
 class Llave extends \yii\db\ActiveRecord
 {
+
+    public $llaveLastStatus = null;
+
     /**
      * {@inheritdoc}
      */
@@ -38,9 +43,9 @@ class Llave extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_comunidad', 'id_tipo', 'copia', 'activa'], 'integer'],
+            [['id_comunidad', 'id_tipo', 'copia', 'activa','alarma'], 'integer'],
             [['codigo'], 'string', 'max' => 100],
-            [['descripcion', 'observacion'], 'string', 'max' => 255],
+            [['descripcion', 'observacion','codigo_alarma'], 'string', 'max' => 255],
             [['codigo'], 'unique'],
             [['id_comunidad'], 'exist', 'skipOnError' => true, 'targetClass' => Comunidad::className(), 'targetAttribute' => ['id_comunidad' => 'id']],
             [['id_tipo'], 'exist', 'skipOnError' => true, 'targetClass' => TipoLlave::className(), 'targetAttribute' => ['id_tipo' => 'id']],
@@ -82,6 +87,11 @@ class Llave extends \yii\db\ActiveRecord
     public function getLlaveStatuses()
     {
         return $this->hasMany(LlaveStatus::className(), ['id_llave' => 'id']);
+    }
+
+    public function getLlaveLastStatus()
+    {
+        return $this->hasOne(LlaveStatus::className(), ['id_llave' => 'id'])->orderBy(['id'=>SORT_DESC]);
     }
 
     /**
@@ -134,7 +144,6 @@ class Llave extends \yii\db\ActiveRecord
     }
 
     public function getNext() {
-
         $next = $this->find()->where(['id_comunidad' => $this->id_comunidad])->count();
         return (int)$next+1;
     }

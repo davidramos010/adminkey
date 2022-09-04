@@ -74,15 +74,25 @@ class RegistroSearch extends Registro
             'id' => $this->id,
             'id_user' => $this->id_user,
             'id_llave' => $this->id_llave,
-            'entrada' => $this->entrada,
-            'salida' => $this->salida,
-            'll.codigo' => $this->codigo,
             'u.username' => $this->username,
             'co.nombre' => $this->comunidad,
             'cm.nombre' => $this->comercial,
         ]);
 
+        if($this->salida){
+            $query->andFilterWhere([
+                'LIKE', 'salida', Date('Y-m-d', strtotime($this->salida))
+            ]);
+        }
+
+        if($this->entrada){
+            $query->andFilterWhere([
+                'LIKE', 'entrada', Date('Y-m-d', strtotime($this->entrada))
+            ]);
+        }
+
         $query->andFilterWhere(['like', 'observacion', $this->observacion]);
+        $query->andFilterWhere(['like', 'll.codigo', $this->codigo]);
         $query->orderBy('id DESC');
 
         return $dataProvider;
