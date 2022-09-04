@@ -1,55 +1,48 @@
 <?php
-
-declare(strict_types=1);
-
 namespace Codeception;
 
-use Closure;
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'shim.php';
+
 use Codeception\Stub\ConsecutiveMap;
 use Codeception\Stub\StubMarshaler;
-use Exception;
-use LogicException;
 use PHPUnit\Framework\MockObject\Generator;
-use PHPUnit\Framework\MockObject\MockObject as PHPUnitMockObject;
-use PHPUnit\Framework\MockObject\Rule\AnyInvokedCount;
+use PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
 use PHPUnit\Framework\MockObject\Stub\ConsecutiveCalls;
 use PHPUnit\Framework\MockObject\Stub\ReturnCallback;
 use PHPUnit\Framework\MockObject\Stub\ReturnStub;
-use PHPUnit\Framework\TestCase as PHPUnitTestCase;
-use PHPUnit\Runner\Version as PHPUnitVersion;
-use ReflectionClass;
-use ReflectionException;
-use RuntimeException;
 
 class Stub
 {
-    public static array $magicMethods = ['__isset', '__get', '__set'];
+    public static $magicMethods = ['__isset', '__get', '__set'];
 
     /**
      * Instantiates a class without executing a constructor.
      * Properties and methods can be set as a second parameter.
      * Even protected and private properties can be set.
      *
-     * ```php
+     * ``` php
      * <?php
      * Stub::make('User');
      * Stub::make('User', ['name' => 'davert']);
+     * ?>
      * ```
      *
      * Accepts either name of class or object of that class
      *
-     * ```php
+     * ``` php
      * <?php
      * Stub::make(new User, ['name' => 'davert']);
+     * ?>
      * ```
      *
      * To replace method provide it's name as a key in second parameter
      * and it's return value or callback function as parameter
      *
-     * ```php
+     * ``` php
      * <?php
      * Stub::make('User', ['save' => function () { return true; }]);
      * Stub::make('User', ['save' => true]);
+     * ?>
      * ```
      *
      * **To create a mock, pass current testcase name as last argument:**
@@ -61,26 +54,25 @@ class Stub
      * ], $this);
      * ```
      *
-     * @template RealInstanceType of object
-     * @param class-string<RealInstanceType>|RealInstanceType|callable(): class-string<RealInstanceType> $class - A class to be mocked
+     * @param mixed $class - A class to be mocked
      * @param array $params - properties and methods to set
-     * @param bool|PHPUnitTestCase $testCase
+     * @param bool|\PHPUnit\Framework\TestCase $testCase
      *
-     * @return PHPUnitMockObject&RealInstanceType - mock
-     * @throws RuntimeException when class does not exist
-     * @throws Exception
+     * @return object - mock
+     * @throws \RuntimeException when class does not exist
+     * @throws \Exception
      */
-    public static function make($class, array $params = [], $testCase = false)
+    public static function make($class, $params = [], $testCase = false)
     {
         $class = self::getClassname($class);
         if (!class_exists($class)) {
             if (interface_exists($class)) {
-                throw new RuntimeException("Stub::make can't mock interfaces, please use Stub::makeEmpty instead.");
+                throw new \RuntimeException("Stub::make can't mock interfaces, please use Stub::makeEmpty instead.");
             }
-            throw new RuntimeException("Stubbed class $class doesn't exist.");
+            throw new \RuntimeException("Stubbed class $class doesn't exist.");
         }
 
-        $reflection = new ReflectionClass($class);
+        $reflection = new \ReflectionClass($class);
         $callables = self::getMethodsToReplace($reflection, $params);
         if ($reflection->isAbstract()) {
             $arguments = empty($callables) ? [] : array_keys($callables);
@@ -97,8 +89,12 @@ class Stub
 
     /**
      * Set __mock flag, if at all possible
+     *
+     * @param object $mock
+     * @param \ReflectionClass $reflection
+     * @return object
      */
-    private static function markAsMock(object $mock, ReflectionClass $reflection): object
+    private static function markAsMock($mock, \ReflectionClass $reflection)
     {
         if (!$reflection->hasMethod('__set')) {
             $mock->__mocked = $reflection->getName();
@@ -110,9 +106,13 @@ class Stub
      * Creates $num instances of class through `Stub::make`.
      *
      * @param mixed $class
-     * @throws Exception
+     * @param int $num
+     * @param array $params
+     *
+     * @return array
+     * @throws \Exception
      */
-    public static function factory($class, int $num = 1, array $params = []): array
+    public static function factory($class, $num = 1, $params = [])
     {
         $objects = [];
         for ($i = 0; $i < $num; $i++) {
@@ -128,26 +128,29 @@ class Stub
      * Properties and methods can be replaced.
      * Even protected and private properties can be set.
      *
-     * ```php
+     * ``` php
      * <?php
      * Stub::makeEmptyExcept('User', 'save');
      * Stub::makeEmptyExcept('User', 'save', ['name' => 'davert']);
+     * ?>
      * ```
      *
      * Accepts either name of class or object of that class
      *
-     * ```php
+     * ``` php
      * <?php
      * * Stub::makeEmptyExcept(new User, 'save');
+     * ?>
      * ```
      *
      * To replace method provide it's name as a key in second parameter
      * and it's return value or callback function as parameter
      *
-     * ```php
+     * ``` php
      * <?php
      * Stub::makeEmptyExcept('User', 'save', ['isValid' => function () { return true; }]);
      * Stub::makeEmptyExcept('User', 'save', ['isValid' => true]);
+     * ?>
      * ```
      *
      * **To create a mock, pass current testcase name as last argument:**
@@ -158,18 +161,44 @@ class Stub
      *      'save' => \Codeception\Stub\Expected::once()
      * ], $this);
      * ```
-     * @template RealInstanceType of object
-     * @param class-string<RealInstanceType>|RealInstanceType|callable(): class-string<RealInstanceType> $class - A class to be mocked
+     *
+     * @param mixed $class
      * @param string $method
      * @param array $params
-     * @param bool|PHPUnitTestCase $testCase
+     * @param bool|\PHPUnit\Framework\TestCase $testCase
      *
-     * @return PHPUnitMockObject&RealInstanceType
-     * @throws Exception
+     * @return object
+     * @throws \Exception
      */
-    public static function makeEmptyExcept($class, string $method, array $params = [], $testCase = false)
+    public static function makeEmptyExcept($class, $method, $params = [], $testCase = false)
     {
-        [$class, $reflectionClass, $methods] = self::createEmpty($class, $method);
+        $class = self::getClassname($class);
+        $reflectionClass = new \ReflectionClass($class);
+
+        $methods = $reflectionClass->getMethods();
+
+        $methods = array_filter(
+            $methods,
+            function ($m) {
+                return !in_array($m->name, Stub::$magicMethods);
+            }
+        );
+
+        $methods = array_filter(
+            $methods,
+            function ($m) use ($method) {
+                return $method != $m->name;
+            }
+        );
+
+        $methods = array_map(
+            function ($m) {
+                return $m->name;
+            },
+            $methods
+        );
+
+        $methods = count($methods) ? $methods : null;
         $mock = self::generateMock($class, $methods, [], '', false, $testCase);
         self::bindParameters($mock, $params);
 
@@ -182,7 +211,7 @@ class Stub
      * Properties and methods can be set as a second parameter.
      * Even protected and private properties can be set.
      *
-     * ```php
+     * ``` php
      * <?php
      * Stub::makeEmpty('User');
      * Stub::makeEmpty('User', ['name' => 'davert']);
@@ -190,7 +219,7 @@ class Stub
      *
      * Accepts either name of class or object of that class
      *
-     * ```php
+     * ``` php
      * <?php
      * Stub::makeEmpty(new User, ['name' => 'davert']);
      * ```
@@ -198,10 +227,10 @@ class Stub
      * To replace method provide it's name as a key in second parameter
      * and it's return value or callback function as parameter
      *
-     * ```php
+     * ``` php
      * <?php
      * Stub::makeEmpty('User', ['save' => function () { return true; }]);
-     * Stub::makeEmpty('User', ['save' => true]);
+     * Stub::makeEmpty('User', ['save' => true));
      * ```
      *
      * **To create a mock, pass current testcase name as last argument:**
@@ -213,22 +242,24 @@ class Stub
      * ], $this);
      * ```
      *
-     * @template RealInstanceType of object
-     * @param class-string<RealInstanceType>|RealInstanceType|callable(): class-string<RealInstanceType> $class - A class to be mocked
-     * @param bool|PHPUnitTestCase $testCase
+     * @param mixed $class
+     * @param array $params
+     * @param bool|\PHPUnit\Framework\TestCase $testCase
      *
-     * @return PHPUnitMockObject&RealInstanceType
-     * @throws Exception
+     * @return object
+     * @throws \Exception
      */
-    public static function makeEmpty($class, array $params = [], $testCase = false)
+    public static function makeEmpty($class, $params = [], $testCase = false)
     {
         $class = self::getClassname($class);
-        $reflection = new ReflectionClass($class);
+        $reflection = new \ReflectionClass($class);
 
         $methods = get_class_methods($class);
         $methods = array_filter(
             $methods,
-            fn($i) => !in_array($i, Stub::$magicMethods)
+            function ($i) {
+                return !in_array($i, Stub::$magicMethods);
+            }
         );
         $mock = self::generateMock($class, $methods, [], '', false, $testCase);
         self::bindParameters($mock, $params);
@@ -241,10 +272,11 @@ class Stub
      *
      * @param       $obj
      * @param array $params
+     *
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
-    public static function copy($obj, array $params = [])
+    public static function copy($obj, $params = [])
     {
         $copy = clone($obj);
         self::bindParameters($copy, $params);
@@ -258,26 +290,29 @@ class Stub
      * Properties and methods can be set in third argument.
      * Even protected and private properties can be set.
      *
-     * ```php
+     * ``` php
      * <?php
      * Stub::construct('User', ['autosave' => false]);
      * Stub::construct('User', ['autosave' => false], ['name' => 'davert']);
+     * ?>
      * ```
      *
      * Accepts either name of class or object of that class
      *
-     * ```php
+     * ``` php
      * <?php
-     * Stub::construct(new User, ['autosave' => false], ['name' => 'davert']);
+     * Stub::construct(new User, ['autosave' => false), ['name' => 'davert']);
+     * ?>
      * ```
      *
      * To replace method provide it's name as a key in third parameter
      * and it's return value or callback function as parameter
      *
-     * ```php
+     * ``` php
      * <?php
      * Stub::construct('User', [], ['save' => function () { return true; }]);
      * Stub::construct('User', [], ['save' => true]);
+     * ?>
      * ```
      *
      * **To create a mock, pass current testcase name as last argument:**
@@ -289,17 +324,18 @@ class Stub
      * ], $this);
      * ```
      *
-     * @template RealInstanceType of object
-     * @param class-string<RealInstanceType>|RealInstanceType|callable(): class-string<RealInstanceType> $class - A class to be mocked
-     * @param bool|PHPUnitTestCase $testCase
+     * @param mixed $class
+     * @param array $constructorParams
+     * @param array $params
+     * @param bool|\PHPUnit\Framework\TestCase $testCase
      *
-     * @return PHPUnitMockObject&RealInstanceType
-     * @throws Exception
+     * @return object
+     * @throws \Exception
      */
-    public static function construct($class, array $constructorParams = [], array $params = [], $testCase = false)
+    public static function construct($class, $constructorParams = [], $params = [], $testCase = false)
     {
         $class = self::getClassname($class);
-        $reflection = new ReflectionClass($class);
+        $reflection = new \ReflectionClass($class);
 
         $callables = self::getMethodsToReplace($reflection, $params);
 
@@ -316,15 +352,15 @@ class Stub
      * Properties and methods can be set in third argument.
      * Even protected and private properties can be set.
      *
-     * ```php
+     * ``` php
      * <?php
      * Stub::constructEmpty('User', ['autosave' => false]);
-     * Stub::constructEmpty('User', ['autosave' => false], ['name' => 'davert']);
+     * Stub::constructEmpty('User', ['autosave' => false), ['name' => 'davert']);
      * ```
      *
      * Accepts either name of class or object of that class
      *
-     * ```php
+     * ``` php
      * <?php
      * Stub::constructEmpty(new User, ['autosave' => false], ['name' => 'davert']);
      * ```
@@ -332,7 +368,7 @@ class Stub
      * To replace method provide it's name as a key in third parameter
      * and it's return value or callback function as parameter
      *
-     * ```php
+     * ``` php
      * <?php
      * Stub::constructEmpty('User', [], ['save' => function () { return true; }]);
      * Stub::constructEmpty('User', [], ['save' => true]);
@@ -347,24 +383,24 @@ class Stub
      * ], $this);
      * ```
      *
-     * @template RealInstanceType of object
-     * @param class-string<RealInstanceType>|RealInstanceType|callable(): class-string<RealInstanceType> $class - A class to be mocked
+     * @param mixed $class
      * @param array $constructorParams
      * @param array $params
-     * @param bool|PHPUnitTestCase $testCase
+     * @param bool|\PHPUnit\Framework\TestCase $testCase
      *
-     * @return PHPUnitMockObject&RealInstanceType
-     * @throws ReflectionException
+     * @return object
      */
-    public static function constructEmpty($class, array $constructorParams = [], array $params = [], $testCase = false)
+    public static function constructEmpty($class, $constructorParams = [], $params = [], $testCase = false)
     {
         $class = self::getClassname($class);
-        $reflection = new ReflectionClass($class);
+        $reflection = new \ReflectionClass($class);
 
         $methods = get_class_methods($class);
         $methods = array_filter(
             $methods,
-            fn($i) => !in_array($i, Stub::$magicMethods)
+            function ($i) {
+                return !in_array($i, Stub::$magicMethods);
+            }
         );
         $mock = self::generateMock($class, $methods, $constructorParams, $testCase);
         self::bindParameters($mock, $params);
@@ -378,26 +414,29 @@ class Stub
      * Properties and methods can be set in third argument.
      * Even protected and private properties can be set.
      *
-     * ```php
+     * ``` php
      * <?php
      * Stub::constructEmptyExcept('User', 'save');
      * Stub::constructEmptyExcept('User', 'save', ['autosave' => false], ['name' => 'davert']);
+     * ?>
      * ```
      *
      * Accepts either name of class or object of that class
      *
-     * ```php
+     * ``` php
      * <?php
      * Stub::constructEmptyExcept(new User, 'save', ['autosave' => false], ['name' => 'davert']);
+     * ?>
      * ```
      *
      * To replace method provide it's name as a key in third parameter
      * and it's return value or callback function as parameter
      *
-     * ```php
+     * ``` php
      * <?php
      * Stub::constructEmptyExcept('User', 'save', [], ['save' => function () { return true; }]);
      * Stub::constructEmptyExcept('User', 'save', [], ['save' => true]);
+     * ?>
      * ```
      *
      * **To create a mock, pass current testcase name as last argument:**
@@ -409,21 +448,43 @@ class Stub
      * ], $this);
      * ```
      *
-     * @template RealInstanceType of object
-     * @param class-string<RealInstanceType>|RealInstanceType|callable(): class-string<RealInstanceType> $class - A class to be mocked
-     * @param bool|PHPUnitTestCase $testCase
+     * @param mixed $class
+     * @param string $method
+     * @param array $constructorParams
+     * @param array $params
+     * @param bool|\PHPUnit\Framework\TestCase $testCase
      *
-     * @return PHPUnitMockObject&RealInstanceType
-     * @throws ReflectionException
+     * @return object
      */
     public static function constructEmptyExcept(
         $class,
-        string $method,
-        array $constructorParams = [],
-        array $params = [],
+        $method,
+        $constructorParams = [],
+        $params = [],
         $testCase = false
     ) {
-        [$class, $reflectionClass, $methods] = self::createEmpty($class, $method);
+        $class = self::getClassname($class);
+        $reflectionClass = new \ReflectionClass($class);
+        $methods = $reflectionClass->getMethods();
+        $methods = array_filter(
+            $methods,
+            function ($m) {
+                return !in_array($m->name, Stub::$magicMethods);
+            }
+        );
+        $methods = array_filter(
+            $methods,
+            function ($m) use ($method) {
+                return $method != $m->name;
+            }
+        );
+        $methods = array_map(
+            function ($m) {
+                return $m->name;
+            },
+            $methods
+        );
+        $methods = count($methods) ? $methods : null;
         $mock = self::generateMock($class, $methods, $constructorParams, $testCase);
         self::bindParameters($mock, $params);
 
@@ -440,9 +501,10 @@ class Stub
      * methods of the class mocked. Concrete methods to mock can be specified with
      * the last parameter
      *
+     * @return object
      * @since  Method available since Release 1.0.0
      */
-    private static function generateMockForAbstractClass(): object
+    private static function generateMockForAbstractClass()
     {
         return self::doGenerateMock(func_get_args(), true);
     }
@@ -454,14 +516,14 @@ class Stub
         $generatorClass = new Generator;
 
         // using PHPUnit 5.4 mocks registration
-        if (version_compare(PHPUnitVersion::series(), '5.4', '>=')
-            && $testCase instanceof PHPUnitTestCase
+        if (version_compare(\PHPUnit\Runner\Version::series(), '5.4', '>=')
+            && $testCase instanceof \PHPUnit\Framework\TestCase
         ) {
             $mock = call_user_func_array([$generatorClass, $methodName], $args);
             $testCase->registerMockObject($mock);
             return $mock;
         }
-        if ($testCase instanceof PHPUnitTestCase) {
+        if ($testCase instanceof  \PHPUnit\Framework\TestCase) {
             $generatorClass = $testCase;
         }
         return call_user_func_array([$generatorClass, $methodName], $args);
@@ -480,27 +542,33 @@ class Stub
     /**
      * Replaces properties of current stub
      *
-     * @param PHPUnitMockObject|object $mock
+     * @param \PHPUnit\Framework\MockObject\MockObject $mock
      * @param array $params
-     * @return object
-     *@throws LogicException
+     *
+     * @return mixed
+     * @throws \LogicException
      */
-    public static function update(object $mock, array $params): object
+    public static function update($mock, array $params)
     {
+        //do not rely on __mocked property, check typ eof $mock
+        if (!$mock instanceof \PHPUnit\Framework\MockObject\MockObject) {
+            throw new \LogicException('You can update only stubbed objects');
+        }
+
         self::bindParameters($mock, $params);
 
         return $mock;
     }
 
     /**
-     * @param PHPUnitMockObject|object $mock
+     * @param \PHPUnit\Framework\MockObject\MockObject $mock
      * @param array $params
-     * @throws LogicException
+     * @throws \LogicException
      */
-    protected static function bindParameters($mock, array $params)
+    protected static function bindParameters($mock, $params)
     {
-        $reflectionClass = new ReflectionClass($mock);
-        if ($mock instanceof PHPUnitMockObject) {
+        $reflectionClass = new \ReflectionClass($mock);
+        if ($mock instanceof \PHPUnit\Framework\MockObject\MockObject) {
             $parentClass = $reflectionClass->getParentClass();
             if ($parentClass !== false) {
                 $reflectionClass = $reflectionClass->getParentClass();
@@ -516,7 +584,7 @@ class Stub
                         ->expects($marshaler->getMatcher())
                         ->method($param)
                         ->will(new ReturnCallback($marshaler->getValue()));
-                } elseif ($value instanceof Closure) {
+                } elseif ($value instanceof \Closure) {
                     $mock
                         ->expects(new AnyInvokedCount)
                         ->method($param)
@@ -537,31 +605,33 @@ class Stub
                 $reflectionProperty = $reflectionClass->getProperty($param);
                 $reflectionProperty->setAccessible(true);
                 $reflectionProperty->setValue($mock, $value);
+                continue;
             } else {
                 if ($reflectionClass->hasMethod('__set')) {
                     try {
                         $mock->{$param} = $value;
-                    } catch (Exception $exception) {
-                        throw new LogicException(
+                    } catch (\Exception $e) {
+                        throw new \LogicException(
                             sprintf(
                                 'Could not add property %1$s, class %2$s implements __set method, '
                                 . 'and no %1$s property exists',
                                 $param,
                                 $reflectionClass->getName()
                             ),
-                            $exception->getCode(),
-                            $exception
+                            $e->getCode(),
+                            $e
                         );
                     }
                 } else {
                     $mock->{$param} = $value;
                 }
+                continue;
             }
         }
     }
 
     /**
-     * @TO-DO Should be simplified
+     * @todo should be simplified
      */
     protected static function getClassname($object)
     {
@@ -576,7 +646,12 @@ class Stub
         return $object;
     }
 
-    protected static function getMethodsToReplace(ReflectionClass $reflection, array $params): array
+    /**
+     * @param \ReflectionClass $reflection
+     * @param $params
+     * @return array
+     */
+    protected static function getMethodsToReplace(\ReflectionClass $reflection, $params)
     {
         $callables = [];
         foreach ($params as $method => $value) {
@@ -592,47 +667,20 @@ class Stub
     /**
      * Stubbing a method call to return a list of values in the specified order.
      *
-     * ```php
+     * ``` php
      * <?php
-     * $user = Stub::make('User', ['getName' => Stub::consecutive('david', 'emma', 'sam', 'amy')]);
+     * $user = Stub::make('User', array('getName' => Stub::consecutive('david', 'emma', 'sam', 'amy')));
      * $user->getName(); //david
      * $user->getName(); //emma
      * $user->getName(); //sam
      * $user->getName(); //amy
+     * ?>
      * ```
+     *
+     * @return ConsecutiveMap
      */
-    public static function consecutive(): ConsecutiveMap
+    public static function consecutive()
     {
         return new ConsecutiveMap(func_get_args());
-    }
-
-    /**
-     * @param mixed $class
-     * @throws ReflectionException
-     */
-    private static function createEmpty($class, string $method): array
-    {
-        $class = self::getClassname($class);
-        $reflectionClass = new ReflectionClass($class);
-
-        $methods = $reflectionClass->getMethods();
-
-        $methods = array_filter(
-            $methods,
-            fn($m) => !in_array($m->name, Stub::$magicMethods)
-        );
-
-        $methods = array_filter(
-            $methods,
-            fn($m) => $method != $m->name
-        );
-
-        $methods = array_map(
-            fn($m) => $m->name,
-            $methods
-        );
-
-        $methods = count($methods) ? $methods : null;
-        return [$class, $reflectionClass, $methods];
     }
 }

@@ -3,8 +3,8 @@
 /**
  * @package   yii2-krajee-base
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2022
- * @version   3.0.5
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2018
+ * @version   1.9.9
  */
 
 namespace kartik\base;
@@ -15,6 +15,7 @@ use yii\web\AssetBundle;
  * Base asset bundle used for all Krajee extensions.
  *
  * @author Kartik Visweswaran <kartikv2@gmail.com>
+ * @since 1.0
  */
 class BaseAssetBundle extends AssetBundle
 {

@@ -13,7 +13,6 @@ use PhpOffice\PhpSpreadsheet\Chart\Legend;
 use PhpOffice\PhpSpreadsheet\Chart\PlotArea;
 use PhpOffice\PhpSpreadsheet\Chart\Properties;
 use PhpOffice\PhpSpreadsheet\Chart\Title;
-use PhpOffice\PhpSpreadsheet\Chart\TrendLine;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Style\Font;
 use SimpleXMLElement;
@@ -74,24 +73,8 @@ class Chart
         $xAxis = new Axis();
         $yAxis = new Axis();
         $autoTitleDeleted = null;
-        $chartNoFill = false;
-        $gradientArray = [];
-        $gradientLin = null;
-        $roundedCorners = false;
         foreach ($chartElementsC as $chartElementKey => $chartElement) {
             switch ($chartElementKey) {
-                case 'spPr':
-                    $possibleNoFill = $chartElementsC->spPr->children($this->aNamespace);
-                    if (isset($possibleNoFill->noFill)) {
-                        $chartNoFill = true;
-                    }
-
-                    break;
-                case 'roundedCorners':
-                    /** @var bool */
-                    $roundedCorners = self::getAttribute($chartElementsC->roundedCorners, 'val', 'boolean');
-
-                    break;
                 case 'chart':
                     foreach ($chartElement as $chartDetailsKey => $chartDetails) {
                         $chartDetailsC = $chartDetails->children($this->cNamespace);
@@ -112,40 +95,18 @@ class Chart
                                 $plotAreaLayout = $XaxisLabel = $YaxisLabel = null;
                                 $plotSeries = $plotAttributes = [];
                                 $catAxRead = false;
-                                $plotNoFill = false;
                                 foreach ($chartDetails as $chartDetailKey => $chartDetail) {
                                     switch ($chartDetailKey) {
-                                        case 'spPr':
-                                            $possibleNoFill = $chartDetails->spPr->children($this->aNamespace);
-                                            if (isset($possibleNoFill->noFill)) {
-                                                $plotNoFill = true;
-                                            }
-                                            if (isset($possibleNoFill->gradFill->gsLst)) {
-                                                foreach ($possibleNoFill->gradFill->gsLst->gs as $gradient) {
-                                                    /** @var float */
-                                                    $pos = self::getAttribute($gradient, 'pos', 'float');
-                                                    $gradientArray[] = [
-                                                        $pos / Properties::PERCENTAGE_MULTIPLIER,
-                                                        new ChartColor($this->readColor($gradient)),
-                                                    ];
-                                                }
-                                            }
-                                            if (isset($possibleNoFill->gradFill->lin)) {
-                                                $gradientLin = Properties::XmlToAngle((string) self::getAttribute($possibleNoFill->gradFill->lin, 'ang', 'string'));
-                                            }
-
-                                            break;
                                         case 'layout':
                                             $plotAreaLayout = $this->chartLayoutDetails($chartDetail);
 
                                             break;
-                                        case Axis::AXIS_TYPE_CATEGORY:
-                                        case Axis::AXIS_TYPE_DATE:
+                                        case 'catAx':
                                             $catAxRead = true;
                                             if (isset($chartDetail->title)) {
                                                 $XaxisLabel = $this->chartTitle($chartDetail->title->children($this->cNamespace));
                                             }
-                                            $xAxis->setAxisType($chartDetailKey);
+                                            $xAxis->setAxisType('catAx');
                                             $this->readEffects($chartDetail, $xAxis);
                                             if (isset($chartDetail->spPr)) {
                                                 $sppr = $chartDetail->spPr->children($this->aNamespace);
@@ -174,7 +135,13 @@ class Chart
                                             $this->setAxisProperties($chartDetail, $xAxis);
 
                                             break;
-                                        case Axis::AXIS_TYPE_VALUE:
+                                        case 'dateAx':
+                                            if (isset($chartDetail->title)) {
+                                                $XaxisLabel = $this->chartTitle($chartDetail->title->children($this->cNamespace));
+                                            }
+
+                                            break;
+                                        case 'valAx':
                                             $whichAxis = null;
                                             $axPos = null;
                                             if (isset($chartDetail->axPos)) {
@@ -321,12 +288,6 @@ class Chart
                                 }
                                 $plotArea = new PlotArea($plotAreaLayout, $plotSeries);
                                 $this->setChartAttributes($plotAreaLayout, $plotAttributes);
-                                if ($plotNoFill) {
-                                    $plotArea->setNoFill(true);
-                                }
-                                if (!empty($gradientArray)) {
-                                    $plotArea->setGradientFillProperties($gradientArray, $gradientLin);
-                                }
 
                                 break;
                             case 'plotVisOnly':
@@ -369,10 +330,6 @@ class Chart
             }
         }
         $chart = new \PhpOffice\PhpSpreadsheet\Chart\Chart($chartName, $title, $legend, $plotArea, $plotVisOnly, (string) $dispBlanksAs, $XaxisLabel, $YaxisLabel, $xAxis, $yAxis);
-        if ($chartNoFill) {
-            $chart->setNoFill(true);
-        }
-        $chart->setRoundedCorners($roundedCorners);
         if (is_bool($autoTitleDeleted)) {
             $chart->setAutoTitleDeleted($autoTitleDeleted);
         }
@@ -399,20 +356,12 @@ class Chart
         foreach ($titleDetails as $titleDetailKey => $chartDetail) {
             switch ($titleDetailKey) {
                 case 'tx':
-                    if (isset($chartDetail->rich)) {
-                        $titleDetails = $chartDetail->rich->children($this->aNamespace);
-                        foreach ($titleDetails as $titleKey => $titleDetail) {
-                            switch ($titleKey) {
-                                case 'p':
-                                    $titleDetailPart = $titleDetail->children($this->aNamespace);
-                                    $caption[] = $this->parseRichText($titleDetailPart);
-                            }
-                        }
-                    } elseif (isset($chartDetail->strRef->strCache)) {
-                        foreach ($chartDetail->strRef->strCache->pt as $pt) {
-                            if (isset($pt->v)) {
-                                $caption[] = (string) $pt->v;
-                            }
+                    $titleDetails = $chartDetail->rich->children($this->aNamespace);
+                    foreach ($titleDetails as $titleKey => $titleDetail) {
+                        switch ($titleKey) {
+                            case 'p':
+                                $titleDetailPart = $titleDetail->children($this->aNamespace);
+                                $caption[] = $this->parseRichText($titleDetailPart);
                         }
                     }
 
@@ -469,7 +418,6 @@ class Chart
                     $markerBorderColor = null;
                     $lineStyle = null;
                     $labelLayout = null;
-                    $trendLines = [];
                     foreach ($seriesDetails as $seriesKey => $seriesDetail) {
                         switch ($seriesKey) {
                             case 'idx':
@@ -516,41 +464,6 @@ class Chart
                                         $dptColors[$dptIdx] = new ChartColor($arrayColors);
                                     }
                                 }
-
-                                break;
-                            case 'trendline':
-                                $trendLine = new TrendLine();
-                                $this->readLineStyle($seriesDetail, $trendLine);
-                                /** @var ?string */
-                                $trendLineType = self::getAttribute($seriesDetail->trendlineType, 'val', 'string');
-                                /** @var ?bool */
-                                $dispRSqr = self::getAttribute($seriesDetail->dispRSqr, 'val', 'boolean');
-                                /** @var ?bool */
-                                $dispEq = self::getAttribute($seriesDetail->dispEq, 'val', 'boolean');
-                                /** @var ?int */
-                                $order = self::getAttribute($seriesDetail->order, 'val', 'integer');
-                                /** @var ?int */
-                                $period = self::getAttribute($seriesDetail->period, 'val', 'integer');
-                                /** @var ?float */
-                                $forward = self::getAttribute($seriesDetail->forward, 'val', 'float');
-                                /** @var ?float */
-                                $backward = self::getAttribute($seriesDetail->backward, 'val', 'float');
-                                /** @var ?float */
-                                $intercept = self::getAttribute($seriesDetail->intercept, 'val', 'float');
-                                /** @var ?string */
-                                $name = (string) $seriesDetail->name;
-                                $trendLine->setTrendLineProperties(
-                                    $trendLineType,
-                                    $order,
-                                    $period,
-                                    $dispRSqr,
-                                    $dispEq,
-                                    $backward,
-                                    $forward,
-                                    $intercept,
-                                    $name
-                                );
-                                $trendLines[] = $trendLine;
 
                                 break;
                             case 'marker':
@@ -688,17 +601,6 @@ class Chart
                         }
                         if (isset($seriesValues[$seriesIndex])) {
                             $seriesValues[$seriesIndex]->setSmoothLine(true);
-                        }
-                    }
-                    if (!empty($trendLines)) {
-                        if (isset($seriesLabel[$seriesIndex])) {
-                            $seriesLabel[$seriesIndex]->setTrendLines($trendLines);
-                        }
-                        if (isset($seriesCategory[$seriesIndex])) {
-                            $seriesCategory[$seriesIndex]->setTrendLines($trendLines);
-                        }
-                        if (isset($seriesValues[$seriesIndex])) {
-                            $seriesValues[$seriesIndex]->setTrendLines($trendLines);
                         }
                     }
             }
@@ -1245,7 +1147,6 @@ class Chart
             'type' => null,
             'value' => null,
             'alpha' => null,
-            'brightness' => null,
         ];
         foreach (ChartColor::EXCEL_COLOR_TYPES as $type) {
             if (isset($colorXml->$type)) {
@@ -1256,13 +1157,6 @@ class Chart
                     $alpha = self::getAttribute($colorXml->$type->alpha, 'val', 'string');
                     if (is_numeric($alpha)) {
                         $result['alpha'] = ChartColor::alphaFromXml($alpha);
-                    }
-                }
-                if (isset($colorXml->$type->lumMod)) {
-                    /** @var string */
-                    $brightness = self::getAttribute($colorXml->$type->lumMod, 'val', 'string');
-                    if (is_numeric($brightness)) {
-                        $result['brightness'] = ChartColor::alphaFromXml($brightness);
                     }
                 }
 
@@ -1342,9 +1236,6 @@ class Chart
         if (!isset($whichAxis)) {
             return;
         }
-        if (isset($chartDetail->delete)) {
-            $whichAxis->setAxisOption('hidden', (string) self::getAttribute($chartDetail->delete, 'val', 'string'));
-        }
         if (isset($chartDetail->numFmt)) {
             $whichAxis->setAxisNumberProperties(
                 (string) self::getAttribute($chartDetail->numFmt, 'formatCode', 'string'),
@@ -1387,15 +1278,6 @@ class Chart
         }
         if (isset($chartDetail->minorUnit)) {
             $whichAxis->setAxisOption('minor_unit', (string) self::getAttribute($chartDetail->minorUnit, 'val', 'string'));
-        }
-        if (isset($chartDetail->baseTimeUnit)) {
-            $whichAxis->setAxisOption('baseTimeUnit', (string) self::getAttribute($chartDetail->baseTimeUnit, 'val', 'string'));
-        }
-        if (isset($chartDetail->majorTimeUnit)) {
-            $whichAxis->setAxisOption('majorTimeUnit', (string) self::getAttribute($chartDetail->majorTimeUnit, 'val', 'string'));
-        }
-        if (isset($chartDetail->minorTimeUnit)) {
-            $whichAxis->setAxisOption('minorTimeUnit', (string) self::getAttribute($chartDetail->minorTimeUnit, 'val', 'string'));
         }
         if (isset($chartDetail->txPr)) {
             $children = $chartDetail->txPr->children($this->aNamespace);

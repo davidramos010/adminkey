@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2021
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2018
  * @package yii2-widgets
  * @subpackage yii2-widget-datepicker
- * @version 1.4.8
+ * @version 1.4.6
  */
 
 namespace kartik\date;
@@ -25,7 +25,7 @@ class DatePickerAsset extends AssetBundle
     public function init()
     {
         $this->setSourcePath(__DIR__ . '/assets');
-        $bsCss = 'bootstrap-datepicker' . ($this->isBs(3) ? '3' : '4');
+        $bsCss = 'bootstrap-datepicker' . ($this->isBs4() ? '4' : '3');
         $this->setupAssets('css', ['css/' . $bsCss, 'css/datepicker-kv']);
         $this->setupAssets('js', ['js/bootstrap-datepicker', 'js/datepicker-kv']);
         parent::init();

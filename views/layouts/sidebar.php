@@ -7,7 +7,7 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
-        <img src="<?=$assetDir?>/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <img src="<?= $assetDir?>/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">AdminKeys</span>
     </a>
 
@@ -34,10 +34,11 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
                         'icon' => 'tachometer-alt',
                         'items' => [
                             ['label' => 'Comunidad', 'url' => ['comunidad/index'], 'iconStyle' => 'far'],
-                            ['label' => 'Empresa', 'url' => ['comerciales/index'], 'iconStyle' => 'far'],
+                            ['label' => 'Proveedor', 'url' => ['comerciales/index'], 'iconStyle' => 'far'],
                             ['label' => 'Llaves', 'url' => ['llave/index'], 'iconStyle' => 'far'],
                             ['label' => 'Tipo Llave', 'url' => ['tipo-llave/index'], 'iconStyle' => 'far'],
                             ['label' => 'Usuarios', 'url' => ['user/index'], 'iconStyle' => 'far'],
+                            ['label' => 'Propietarios', 'url' => ['user/index'], 'iconStyle' => 'far'],
                         ],
                         'visible' => ((int) Yii::$app->user->identity->perfiluser->id_perfil==1)
                     ],

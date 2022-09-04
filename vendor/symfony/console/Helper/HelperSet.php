@@ -18,12 +18,12 @@ use Symfony\Component\Console\Exception\InvalidArgumentException;
  * HelperSet represents a set of helpers to be used with a command.
  *
  * @author Fabien Potencier <fabien@symfony.com>
- *
- * @implements \IteratorAggregate<string, Helper>
  */
 class HelperSet implements \IteratorAggregate
 {
-    /** @var array<string, Helper> */
+    /**
+     * @var Helper[]
+     */
     private $helpers = [];
     private $command;
 
@@ -37,7 +37,12 @@ class HelperSet implements \IteratorAggregate
         }
     }
 
-    public function set(HelperInterface $helper, string $alias = null)
+    /**
+     * Sets a helper.
+     *
+     * @param string $alias An alias
+     */
+    public function set(HelperInterface $helper, $alias = null)
     {
         $this->helpers[$helper->getName()] = $helper;
         if (null !== $alias) {
@@ -50,9 +55,11 @@ class HelperSet implements \IteratorAggregate
     /**
      * Returns true if the helper if defined.
      *
-     * @return bool
+     * @param string $name The helper name
+     *
+     * @return bool true if the helper is defined, false otherwise
      */
-    public function has(string $name)
+    public function has($name)
     {
         return isset($this->helpers[$name]);
     }
@@ -60,11 +67,13 @@ class HelperSet implements \IteratorAggregate
     /**
      * Gets a helper value.
      *
-     * @return HelperInterface
+     * @param string $name The helper name
+     *
+     * @return HelperInterface The helper instance
      *
      * @throws InvalidArgumentException if the helper is not defined
      */
-    public function get(string $name)
+    public function get($name)
     {
         if (!$this->has($name)) {
             throw new InvalidArgumentException(sprintf('The helper "%s" is not defined.', $name));
@@ -73,32 +82,23 @@ class HelperSet implements \IteratorAggregate
         return $this->helpers[$name];
     }
 
-    /**
-     * @deprecated since Symfony 5.4
-     */
     public function setCommand(Command $command = null)
     {
-        trigger_deprecation('symfony/console', '5.4', 'Method "%s()" is deprecated.', __METHOD__);
-
         $this->command = $command;
     }
 
     /**
      * Gets the command associated with this helper set.
      *
-     * @return Command
-     *
-     * @deprecated since Symfony 5.4
+     * @return Command A Command instance
      */
     public function getCommand()
     {
-        trigger_deprecation('symfony/console', '5.4', 'Method "%s()" is deprecated.', __METHOD__);
-
         return $this->command;
     }
 
     /**
-     * @return \Traversable<string, Helper>
+     * @return \Traversable<Helper>
      */
     #[\ReturnTypeWillChange]
     public function getIterator()

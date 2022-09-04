@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /*
  * This file is part of PHPUnit.
  *
@@ -9,16 +9,10 @@
  */
 namespace PHPUnit\Util;
 
-use const DIRECTORY_SEPARATOR;
-use function array_diff;
-use function array_keys;
-use function fopen;
-use function get_defined_vars;
-use function sprintf;
-use function stream_resolve_include_path;
+use PHPUnit\Framework\Exception;
 
 /**
- * @internal This class is not covered by the backward compatibility promise for PHPUnit
+ * Utility methods to load PHP sourcefiles.
  */
 final class FileLoader
 {
@@ -34,15 +28,17 @@ final class FileLoader
      */
     public static function checkAndLoad(string $filename): string
     {
-        $includePathFilename = stream_resolve_include_path($filename);
+        $includePathFilename = \stream_resolve_include_path($filename);
+        $localFile           = __DIR__ . \DIRECTORY_SEPARATOR . $filename;
 
-        $localFile = __DIR__ . DIRECTORY_SEPARATOR . $filename;
+        /**
+         * @see https://github.com/sebastianbergmann/phpunit/pull/2751
+         */
+        $isReadable = @\fopen($includePathFilename, 'r') !== false;
 
-        if (!$includePathFilename ||
-            $includePathFilename === $localFile ||
-            !self::isReadable($includePathFilename)) {
+        if (!$includePathFilename || !$isReadable || $includePathFilename === $localFile) {
             throw new Exception(
-                sprintf('Cannot open file "%s".' . "\n", $filename)
+                \sprintf('Cannot open file "%s".' . "\n", $filename)
             );
         }
 
@@ -56,29 +52,17 @@ final class FileLoader
      */
     public static function load(string $filename): void
     {
-        $oldVariableNames = array_keys(get_defined_vars());
+        $oldVariableNames = \array_keys(\get_defined_vars());
 
-        /**
-         * @noinspection PhpIncludeInspection
-         *
-         * @psalm-suppress UnresolvableInclude
-         */
         include_once $filename;
 
-        $newVariables = get_defined_vars();
+        $newVariables     = \get_defined_vars();
+        $newVariableNames = \array_diff(\array_keys($newVariables), $oldVariableNames);
 
-        foreach (array_diff(array_keys($newVariables), $oldVariableNames) as $variableName) {
+        foreach ($newVariableNames as $variableName) {
             if ($variableName !== 'oldVariableNames') {
                 $GLOBALS[$variableName] = $newVariables[$variableName];
             }
         }
-    }
-
-    /**
-     * @see https://github.com/sebastianbergmann/phpunit/pull/2751
-     */
-    private static function isReadable(string $filename): bool
-    {
-        return @fopen($filename, 'r') !== false;
     }
 }

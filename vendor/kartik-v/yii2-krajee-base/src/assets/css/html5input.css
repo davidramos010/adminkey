@@ -2,8 +2,8 @@
  * @package    yii2-krajee-base
  * @subpackage yii2-widget-activeform
  * @author     Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright  Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2022
- * @version    3.0.5
+ * @copyright  Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2018
+ * @version    1.9.5
  *
  * HTML 5 input styling for [Bootstrap 3.x](http://getbootstrap.com)
  * Covers color and range inputs with embedded input group addons.
@@ -30,6 +30,18 @@
 
 .input-group-sm input[type="color"] {
     height: 14px !important;
+}
+
+.input-group-html5 .input-group-addon + .input-group-addon {
+    border-left: 0 !important;
+}
+
+.input-group-html5 .input-group-addon + .form-control {
+    border-left: 0 !important;
+}
+
+.input-group-html5 .input-group-addon:first-child {
+    border-right: 1px solid #ccc !important;
 }
 
 .input-group-html5 input[disabled] {
@@ -73,9 +85,7 @@
 }
 
 .kv-type-range.kv-range-vertical.is-bs4 input.form-control,
-.kv-type-range.kv-range-vertical.is-bs4 input[type=range],
-.kv-type-range.kv-range-vertical.is-bs5 input.form-control,
-.kv-type-range.kv-range-vertical.is-bs5 input[type=range] {
+.kv-type-range.kv-range-vertical.is-bs4 input[type=range] {
     width: 10px;
 }
 

@@ -1,14 +1,14 @@
 /*!
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2022
- * @version   3.5.1
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2019
+ * @version   3.3.4
  *
  * Grid Export Validation Module for Yii's Gridview. Supports export of
  * grid data as CSV, HTML, or Excel.
  *
  * Author: Kartik Visweswaran
- * Copyright: 2014 - 2022, Kartik Visweswaran, Krajee.com
+ * Copyright: 2014 - 2019, Kartik Visweswaran, Krajee.com
  * For more JQuery plugins visit http://plugins.krajee.com
  * For more Yii related demos visit http://demos.krajee.com
  */
@@ -114,7 +114,7 @@
             } else {
                 $table.find('thead tr th').each(function (i) {
                     var str = $(this).text().trim(), slugStr = $h.slug(str);
-                    head[i] = (!self.config.slugColHeads || $h.isEmpty(slugStr)) ? 'col_' + i : slugStr;
+                    head[i] = (!self.config.$h.slugColHeads || $h.isEmpty(slugStr)) ? 'col_' + i : slugStr;
                 });
             }
             $table.find('tbody tr:has("td")').each(function (i) {

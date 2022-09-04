@@ -2,8 +2,8 @@
  * @package    yii2-krajee-base
  * @subpackage yii2-widget-activeform
  * @author     Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright  Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2022
- * @version    3.0.5
+ * @copyright  Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2018
+ * @version    1.9.5
  *
  * Common client validation file for all Krajee widgets.
  *

@@ -6,9 +6,9 @@
     yii2-widget-select2
     <hr>
     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DTP3NZQ6G2AYU"
-       title="Donate via Paypal" target="_blank"><img height="60" src="https://kartik-v.github.io/bootstrap-fileinput-samples/samples/donate.png" alt="Donate"/></a>
-    &nbsp; &nbsp; &nbsp;
-    <a href="https://www.buymeacoffee.com/kartikv" title="Buy me a coffee" ><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="60" alt="kartikv" /></a>
+       title="Donate via Paypal" target="_blank">
+        <img src="http://kartik-v.github.io/bootstrap-fileinput-samples/samples/donate.png" alt="Donate"/>
+    </a>
 </h1>
 
 <div align="center">
@@ -67,7 +67,7 @@ Enhancements with release v2.0:
 
 ## Documentation and Demo
 
-You can refer detailed [documentation and demos](http://demos.krajee.com/widget-details/select2) and [API Code Documentation](https://docs.krajee.com/kartik-select2-select2) on usage of the extension.
+You can refer detailed [documentation and demos](http://demos.krajee.com/widget-details/select2) on usage of the extension.
 
 ## Usage
 

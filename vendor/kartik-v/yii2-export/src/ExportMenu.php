@@ -3,14 +3,13 @@
 /**
  * @package   yii2-export
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2021
- * @version   1.4.3
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2019
+ * @version   1.4.0
  */
 
 namespace kartik\export;
 
 use Closure;
-use Exception;
 use kartik\base\TranslationTrait;
 use kartik\dialog\Dialog;
 use kartik\dynagrid\Dynagrid;
@@ -30,7 +29,6 @@ use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\base\Widget;
 use yii\data\ActiveDataProvider;
-use yii\data\ArrayDataProvider;
 use yii\data\BaseDataProvider;
 use yii\db\ActiveQueryInterface;
 use yii\db\QueryInterface;
@@ -149,8 +147,7 @@ class ExportMenu extends GridView
      * @var array the HTML attributes for the export button menu. Applicable only if [[asDropdown]] is set to `true`.
      * The following special options are available:
      * - `label`: _string_, defaults to empty string
-     * - `icon`: _string_, defaults to `<i class="glyphicon glyphicon-export"></i>` for BS3 and
-     * `<i class="fas fa-external-link-alt"></i>` for BS4
+     * - `icon`: _string_, defaults to `<i class="glyphicon glyphicon-export"></i>`
      * - `title`: _string_, defaults to `Export data in selected format`.
      * - `menuOptions`: _array_, the HTML attributes for the dropdown menu.
      * - `itemsBefore`: _array_, any additional items that will be merged/prepended before with the export dropdown list.
@@ -192,8 +189,7 @@ class ExportMenu extends GridView
      * @var array the HTML attributes for the column selector dropdown button. The following special options are
      * recognized:
      * - `label`: _string_, defaults to empty string.
-     * - `icon`: _string_, defaults to `<i class="glyphicon glyphicon-list"></i>` for BS3 and
-     * `<i class="fas fa-list"></i>` for BS4
+     * - `icon`: _string_, defaults to `<i class="glyphicon glyphicon-list"></i>`
      * - `title`: _string_, defaults to `Select columns for export`.
      */
     public $columnSelectorOptions = [];
@@ -207,7 +203,7 @@ class ExportMenu extends GridView
      * @var array the settings for the toggle all checkbox to check / uncheck the columns as a batch. Should be setup as
      * an associative array which can have the following keys:
      * - `show`: _boolean_, whether the batch toggle checkbox is to be shown. Defaults to `true`.
-     * - `label`: _string_, the label to be displayed for toggle all. Defaults to `Select Columns`.
+     * - `label`: _string_, the label to be displayed for toggle all. Defaults to `Toggle All`.
      * - `options`: _array_, the HTML attributes for the toggle label text. Defaults to `['class'=>'kv-toggle-all']`
      */
     public $columnBatchToggleSettings = [];
@@ -691,19 +687,19 @@ class ExportMenu extends GridView
     /**
      * @var string the data output format type. Defaults to `ExportMenu::FORMAT_EXCEL_X`.
      */
-    protected $_exportType;
+    private $_exportType;
 
     /**
      * @var boolean private flag that will use $_POST [[exportRequestParam]] setting if available or use the
      * [[triggerDownload]] setting
      */
-    protected $_triggerDownload;
+    private $_triggerDownload;
 
     /**
      * Appends slash to path if it does not exist
      *
-     * @param  string  $path
-     * @param  string  $s  the path separator
+     * @param string $path
+     * @param string $s the path separator
      *
      * @return string
      */
@@ -713,14 +709,13 @@ class ExportMenu extends GridView
         if (substr($path, -1) !== $s) {
             $path .= $s;
         }
-
         return $path;
     }
 
     /**
      * Returns an excel column name.
      *
-     * @param  integer  $index  the column index number
+     * @param integer $index the column index number
      *
      * @return string
      */
@@ -731,9 +726,8 @@ class ExportMenu extends GridView
             return chr(ord('A') + $i);
         }
         if ($i > 25) {
-            return (self::columnName($i / 26)).(self::columnName($i % 26 + 1));
+            return (self::columnName($i / 26)) . (self::columnName($i % 26 + 1));
         }
-
         return 'A';
     }
 
@@ -758,7 +752,6 @@ class ExportMenu extends GridView
         if (!$this->_triggerDownload) {
             $this->registerAssets();
             echo $this->renderExportMenu();
-
             return;
         }
         if ($this->timeout >= 0) {
@@ -803,8 +796,8 @@ class ExportMenu extends GridView
                 "Invalid permissions to write to '{$this->folder}' as set in `ExportMenu::folder` property."
             );
         }
-        $filename = static::sanitize($this->filename);
-        $file = self::slash($this->folder).$filename.'.'.$config['extension'];
+        $filename = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $this->filename);
+        $file = self::slash($this->folder) . $filename . '.' . $config['extension'];
         if ($this->stream) {
             $this->clearOutputBuffers();
         }
@@ -822,14 +815,14 @@ class ExportMenu extends GridView
                 $config = ArrayHelper::getValue($this->exportConfig, $this->_exportType, []);
                 if (!empty($config)) {
                     $l = $this->linkFileName;
-                    $fileName = (!isset($l) || $l === '' ? $this->filename : $l).'.'.$config['extension'];
+                    $fileName = (!isset($l) || $l === '' ? $this->filename : $l) . '.' . $config['extension'];
                     echo $this->render(
                         $this->afterSaveView,
                         [
-                            'notBs3' => !$this->isBs(3),
+                            'isBs4' => $this->isBs4(),
                             'file' => $fileName,
                             'icon' => $config['icon'],
-                            'href' => Url::to([self::slash($this->linkPath, '/').$fileName]),
+                            'href' => Url::to([self::slash($this->linkPath, '/') . $fileName]),
                         ]
                     );
                 }
@@ -849,7 +842,7 @@ class ExportMenu extends GridView
             $this->options['id'] = $this->getId();
         }
         if (empty($this->exportRequestParam)) {
-            $this->exportRequestParam = 'exportFull_'.$this->options['id'];
+            $this->exportRequestParam = 'exportFull_' . $this->options['id'];
         }
         $path = '@vendor/kartik-v/yii2-export/src/views';
         if (!isset($this->exportColumnsView)) {
@@ -860,13 +853,8 @@ class ExportMenu extends GridView
         }
         $this->_columnSelectorEnabled = $this->showColumnSelector && $this->asDropdown;
         $request = Yii::$app->request;
-        if ($request instanceof \yii\web\Request) {
-          $this->_triggerDownload = $request->post($this->exportRequestParam, $this->triggerDownload);
-          $this->_exportType = $request->post($this->exportTypeParam, $this->exportType);
-        } else {
-            $this->_triggerDownload = $this->triggerDownload;
-            $this->_exportType = $this->exportType;
-        }
+        $this->_triggerDownload = $request->post($this->exportRequestParam, $this->triggerDownload);
+        $this->_exportType = $request->post($this->exportTypeParam, $this->exportType);
         if (!$this->stream) {
             $this->target = self::TARGET_SELF;
         }
@@ -874,9 +862,7 @@ class ExportMenu extends GridView
             if ($this->stream) {
                 Yii::$app->controller->layout = false;
             }
-            $this->_columnSelectorEnabled = $request instanceof \yii\web\Request ?
-                $request->post($this->colSelFlagParam, $this->_columnSelectorEnabled) :
-                $this->_columnSelectorEnabled;
+            $this->_columnSelectorEnabled = $request->post($this->colSelFlagParam, $this->_columnSelectorEnabled);
             $this->initSelectedColumns();
         }
         if ($this->dynagrid) {
@@ -913,7 +899,7 @@ class ExportMenu extends GridView
             // generate body
             $index = 2;
             foreach ($sheetData as $key => $value) {
-                $sheet->setCellValue('A'.$index, $key)->setCellValue('B'.$index++, $value);
+                $sheet->setCellValue('A' . $index, $key)->setCellValue('B' . $index++, $value);
             }
         }
     }
@@ -921,9 +907,9 @@ class ExportMenu extends GridView
     /**
      * Excel Data Validation (dropDownList in excel). Requires `supplementSheets`.
      *
-     * @param  string  $sheetName
-     * @param  int|string  $cell
-     * @param  int  $length
+     * @param string $sheetName
+     * @param int|string $cell
+     * @param int $length
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function setDataValidation($sheetName, $cell, $length)
@@ -942,7 +928,7 @@ class ExportMenu extends GridView
             ->setError(Yii::t('kvexport', 'Value is not in list.'))
             ->setPromptTitle(Yii::t('kvexport', 'Pick from list'))
             ->setPrompt(Yii::t('kvexport', 'Please pick a value from the drop-down list.'))
-            ->setFormula1($sheetName.'!$B$2:$B$'.($length + 1));
+            ->setFormula1($sheetName . '!$B$2:$B$' . ($length + 1));
     }
 
     /**
@@ -952,13 +938,9 @@ class ExportMenu extends GridView
     {
         $this->_provider = clone($this->dataProvider);
         if ($this->batchSize && $this->_provider->pagination) {
+            /** @noinspection PhpUndefinedFieldInspection */
             $this->_provider->pagination = clone($this->dataProvider->pagination);
             $this->_provider->pagination->pageSize = $this->batchSize;
-            $this->_provider->refresh();
-            if (Yii::$app->request->getBodyParam('exportFull_export')) {
-                $this->_provider->pagination->page = null;
-                Yii::$app->request->setQueryParams([$this->_provider->pagination->pageParam => 1]);
-            }
         } else {
             $this->_provider->pagination = false;
         }
@@ -975,7 +957,7 @@ class ExportMenu extends GridView
         }
         Html::addCssClass($this->exportFormOptions, 'kv-export-full-form');
         if (!isset($this->exportFormOptions['id'])) {
-            $this->exportFormOptions['id'] = $this->options['id'].'-export-form';
+            $this->exportFormOptions['id'] = $this->options['id'] . '-export-form';
         }
     }
 
@@ -984,12 +966,12 @@ class ExportMenu extends GridView
      *
      * @return string the export menu markup
      * @throws InvalidConfigException
-     * @throws Exception
+     * @throws \Exception
      */
     public function renderExportMenu()
     {
         $items = $this->asDropdown ? [] : '';
-        $notBs3 = !$this->isBs(3);
+        $isBs4 = $this->isBs4();
         Html::addCssClass($this->dropdownOptions, ['btn', $this->getDefaultBtnCss()]);
         foreach ($this->exportConfig as $format => $settings) {
             if (!isset($settings) || $settings === false) {
@@ -999,14 +981,14 @@ class ExportMenu extends GridView
             if (isset($settings['icon'])) {
                 $iconOptions = ArrayHelper::getValue($settings, 'iconOptions', []);
                 Html::addCssClass($iconOptions, $settings['icon']);
-                $label = Html::tag('i', '', $iconOptions).' ';
+                $label = Html::tag('i', '', $iconOptions) . ' ';
             }
             if (isset($settings['label'])) {
                 $label .= $settings['label'];
             }
             $fmt = strtolower($format);
             $linkOptions = ArrayHelper::getValue($settings, 'linkOptions', []);
-            $linkOptions['id'] = $this->options['id'].'-'.$fmt;
+            $linkOptions['id'] = $this->options['id'] . '-' . $fmt;
             $linkOptions['data-format'] = $format;
             $options = ArrayHelper::getValue($settings, 'options', []);
             Html::addCssClass($linkOptions, "export-full-{$fmt}");
@@ -1026,11 +1008,11 @@ class ExportMenu extends GridView
                 }
             }
         }
-        $iconCss = $notBs3 ? 'fas fa-external-link-alt' : 'glyphicon glyphicon-export';
+        $iconCss = $isBs4 ? 'fas fa-external-link-alt' : 'glyphicon glyphicon-export';
         if ($this->asDropdown) {
-            $icon = ArrayHelper::remove($this->dropdownOptions, 'icon', '<i class="'.$iconCss.'"></i>');
-            $label = ArrayHelper::remove($this->dropdownOptions, 'label');
-            $label = $label === null ? $icon : $icon.' '.$label;
+            $icon = ArrayHelper::remove($this->dropdownOptions, 'icon', '<i class="' . $iconCss . '"></i>');
+            $label = ArrayHelper::remove($this->dropdownOptions, 'label', null);
+            $label = $label === null ? $icon : $icon . ' ' . $label;
             if (!isset($this->dropdownOptions['title'])) {
                 $this->dropdownOptions['title'] = Yii::t('kvexport', 'Export data in selected format');
             }
@@ -1050,8 +1032,11 @@ class ExportMenu extends GridView
             /**
              * @var Widget $class
              */
-            $class = $this->getDropdownClass(true);
-            if ($notBs3) {
+            $class = $isBs4 ? 'kartik\bs4dropdown\ButtonDropdown' : 'yii\bootstrap\ButtonDropdown';
+            if (!class_exists($class)) {
+                throw new InvalidConfigException("The '{$class}' does not exist and must be installed for dropdown rendering when 'ExportMenu::asDropdown' is set to 'true'.");
+            }
+            if ($isBs4) {
                 $opts['buttonOptions'] = $this->dropdownOptions;
                 $opts['renderContainer'] = false;
                 $out = Html::tag('div', $class::widget($opts), $this->exportContainer);
@@ -1062,7 +1047,6 @@ class ExportMenu extends GridView
             }
             $replacePairs = ['{menu}' => $out, '{columns}' => $this->renderColumnSelector()];
             $content = strtr($this->template, $replacePairs);
-
             return Html::tag('div', $content, $this->container);
         } else {
             return $items;
@@ -1073,20 +1057,17 @@ class ExportMenu extends GridView
      * Renders the columns selector
      *
      * @return string the column selector markup
-     * @throws Exception
+     * @throws InvalidConfigException
      */
     public function renderColumnSelector()
     {
         if (!$this->_columnSelectorEnabled) {
             return '';
         }
-
         return $this->render(
             $this->exportColumnsView,
             [
-                'id' => $this->options['id'],
-                'notBs3' => !$this->isBs(3),
-                'isBs4' => $this->isBs(4),
+                'isBs4' => $this->isBs4(),
                 'options' => $this->columnSelectorOptions,
                 'menuOptions' => $this->columnSelectorMenuOptions,
                 'columnSelector' => $this->columnSelector,
@@ -1112,6 +1093,7 @@ class ExportMenu extends GridView
         $lastModifiedBy = 'krajee';
         extract($this->docProperties);
         $properties = $this->_objSpreadsheet->getProperties();
+        /** @noinspection PhpParamsInspection */
         $properties->setCreator($creator)
             ->setTitle($title)
             ->setSubject($subject)
@@ -1128,7 +1110,7 @@ class ExportMenu extends GridView
     /**
      * Initializes PhpSpreadsheet Writer Object Instance
      *
-     * @param  string  $type  the writer type as set in export config
+     * @param string $type the writer type as set in export config
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function initPhpSpreadsheetWriter($type)
@@ -1143,7 +1125,7 @@ class ExportMenu extends GridView
             /**
              * @var ExportWriterPdf $writer
              */
-            $writer->filename = $this->filename.'.'.ArrayHelper::getValue($cfg, 'extension', 'pdf');
+            $writer->filename = $this->filename . '.' . ArrayHelper::getValue($cfg, 'extension', 'pdf');
             $writer->pdfConfig = ArrayHelper::getValue($cfg, 'pdfConfig', []);
         }
         /**
@@ -1161,6 +1143,7 @@ class ExportMenu extends GridView
 
     /**
      * Initializes PhpSpreadsheet Worksheet Instance
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function initPhpSpreadsheetWorksheet()
     {
@@ -1177,10 +1160,10 @@ class ExportMenu extends GridView
         $colFirst = self::columnName(1);
         $sheet = $this->_objWorksheet;
         foreach ($this->contentBefore as $contentBefore) {
-            $format = ArrayHelper::getValue($contentBefore, 'cellFormat');
-            $this->setOutCellValue($sheet, $colFirst.$this->_beginRow, $contentBefore['value'], $format);
+            $format = ArrayHelper::getValue($contentBefore, 'cellFormat', null);
+            $this->setOutCellValue($sheet, $colFirst . $this->_beginRow, $contentBefore['value'], $format);
             $opts = $this->getStyleOpts($contentBefore);
-            $sheet->getStyle($colFirst.$this->_beginRow)->applyFromArray($opts);
+            $sheet->getStyle($colFirst . $this->_beginRow)->applyFromArray($opts);
             $this->_beginRow += 1;
         }
     }
@@ -1204,11 +1187,11 @@ class ExportMenu extends GridView
             $opts = $styleOpts;
             $this->_endCol++;
             /**
-             * @var DataColumn $column
+             * @var \kartik\grid\DataColumn $column
              */
             $head = ($column instanceof DataColumn) ? $this->getColumnHeader($column) : $column->header;
-            $id = self::columnName($this->_endCol).$this->_beginRow;
-            $format = ArrayHelper::remove($column->headerOptions, 'cellFormat');
+            $id = self::columnName($this->_endCol) . $this->_beginRow;
+            $format = ArrayHelper::remove($column->headerOptions, 'cellFormat', null);
             $cell = $this->setOutCellValue($sheet, $id, $head, $format);
             if (isset($column->hAlign) && !isset($opts['alignment']['horizontal'])) {
                 $opts['alignment']['horizontal'] = $column->hAlign;
@@ -1221,11 +1204,11 @@ class ExportMenu extends GridView
             $this->raiseEvent('onRenderHeaderCell', [$cell, $head, $this]);
         }
         for ($i = $this->_headerBeginRow; $i < ($this->_beginRow); $i++) {
-            $sheet->mergeCells($colFirst.$i.':'.self::columnName($this->_endCol).$i);
+            $sheet->mergeCells($colFirst . $i . ':' . self::columnName($this->_endCol) . $i);
         }
 
         // Freeze the top row
-        $sheet->freezePane($colFirst.($this->_beginRow + 1));
+        $sheet->freezePane($colFirst . ($this->_beginRow + 1));
     }
 
     /**
@@ -1238,7 +1221,6 @@ class ExportMenu extends GridView
         if (!isset($this->_visibleColumns)) {
             $this->setVisibleColumns();
         }
-
         return $this->_visibleColumns;
     }
 
@@ -1265,19 +1247,9 @@ class ExportMenu extends GridView
     }
 
     /**
-     * Gets the currently selected export type
-     *
-     * @return string
-     */
-    public function getExportType()
-    {
-        return $this->_exportType;
-    }
-
-    /**
      * Gets the column header content
      *
-     * @param  DataColumn  $col
+     * @param DataColumn $col
      *
      * @return string
      */
@@ -1289,7 +1261,9 @@ class ExportMenu extends GridView
         $provider = $this->dataProvider;
         if ($col->label === null) {
             if ($provider instanceof ActiveDataProvider && $provider->query instanceof ActiveQueryInterface) {
-                /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+                /**
+                 * @var \yii\db\ActiveRecord $model
+                 */
                 $model = new $provider->query->modelClass;
                 $label = $model->getAttributeLabel($col->attribute);
             } else {
@@ -1303,7 +1277,6 @@ class ExportMenu extends GridView
         } else {
             $label = $col->label;
         }
-
         return $label;
     }
 
@@ -1322,7 +1295,6 @@ class ExportMenu extends GridView
             $cell = $this->setOutCellValue($this->_objWorksheet, 'A1', $this->emptyText);
             $model = reset($models);
             $this->raiseEvent('onRenderDataCell', [$cell, $this->emptyText, $model, null, 0, $this]);
-
             return 0;
         }
         // do not execute multiple COUNT(*) queries
@@ -1330,9 +1302,6 @@ class ExportMenu extends GridView
         $this->findGroupedColumn();
         while (count($models) > 0) {
             $keys = $this->_provider->getKeys();
-            if ($this->_provider instanceof ArrayDataProvider) {
-                $models = array_values($models);
-            }
             foreach ($models as $index => $model) {
                 $key = $keys[$index];
                 $this->generateRow($model, $key, $this->_endRow);
@@ -1345,8 +1314,8 @@ class ExportMenu extends GridView
                 }
                 if (!is_null($this->_groupedRow)) {
                     $this->_endRow++;
-                    $this->_objWorksheet->fromArray($this->_groupedRow, null, 'A'.($this->_endRow + 1), true);
-                    $cell = 'A'.($this->_endRow + 1).':'.self::columnName(count($columns)).($this->_endRow + 1);
+                    $this->_objWorksheet->fromArray($this->_groupedRow, null, 'A' . ($this->_endRow + 1), true);
+                    $cell = 'A' . ($this->_endRow + 1) . ':' . self::columnName(count($columns)) . ($this->_endRow + 1);
                     $this->_objWorksheet->getStyle($cell)->applyFromArray($this->groupedRowStyle);
                     $this->_groupedRow = null;
                 }
@@ -1361,16 +1330,15 @@ class ExportMenu extends GridView
             }
         }
         $this->generateBox();
-
         return $this->_endRow;
     }
 
     /**
      * Generates an output data row with the given data model and key.
      *
-     * @param  mixed  $model  the data model to be rendered
-     * @param  mixed  $key  the key associated with the data model
-     * @param  integer  $index  the zero-based index of the data model among the model array returned by [[dataProvider]].
+     * @param mixed $model the data model to be rendered
+     * @param mixed $key the key associated with the data model
+     * @param integer $index the zero-based index of the data model among the model array returned by [[dataProvider]].
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function generateRow($model, $key, $index)
@@ -1401,22 +1369,10 @@ class ExportMenu extends GridView
             } else {
                 $value = '';
             }
-            $contentOptions = $column->contentOptions;
-            if (is_callable($contentOptions)) {
-                /** @noinspection PhpUnusedLocalVariableInspection */
-                $contentOptions = $contentOptions($model, $key, $index, $column);
-            }
-
-            //20201026 Scott: To avoid 'Closure object cannot have properties' error 
-            try {
-                $format = ArrayHelper::getValue($column->contentOptions, 'cellFormat');
-            } catch (Exception $e) {
-                $format = null;
-            }
-
+            $format = ArrayHelper::remove($column->contentOptions, 'cellFormat', null);
             $cell = $this->setOutCellValue(
                 $this->_objWorksheet,
-                self::columnName($this->_endCol).($index + $this->_beginRow + 1),
+                self::columnName($this->_endCol) . ($index + $this->_beginRow + 1),
                 $value,
                 $format
             );
@@ -1442,15 +1398,15 @@ class ExportMenu extends GridView
             return 0;
         }
         $this->_endCol = 0;
-        foreach ($this->getVisibleColumns() as $column) {
+        foreach ($this->getVisibleColumns() as $n => $column) {
             $this->_endCol = $this->_endCol + 1;
             if ($column->footer) {
                 $footerExists = true;
                 $footer = trim($column->footer) !== '' ? $column->footer : $column->grid->blankDisplay;
-                $format = ArrayHelper::remove($column->footerOptions, 'cellFormat');
+                $format = ArrayHelper::remove($column->footerOptions, 'cellFormat', null);
                 $cell = $this->setOutCellValue(
                     $this->_objSpreadsheet->getActiveSheet(),
-                    self::columnName($this->_endCol).($row + 1),
+                    self::columnName($this->_endCol) . ($row + 1),
                     $footer,
                     $format
                 );
@@ -1460,14 +1416,13 @@ class ExportMenu extends GridView
         if ($footerExists) {
             $row++;
         }
-
         return $row;
     }
 
     /**
      * Generates the after content at the bottom of the exported sheet
      *
-     * @param  integer  $row  the row number after which the content is to be generated
+     * @param integer $row the row number after which the content is to be generated
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function generateAfterContent($row)
@@ -1477,21 +1432,21 @@ class ExportMenu extends GridView
         $afterContentBeginRow = $row;
         $sheet = $this->_objWorksheet;
         foreach ($this->contentAfter as $contentAfter) {
-            $format = ArrayHelper::getValue($contentAfter, 'cellFormat');
-            $this->setOutCellValue($sheet, $colFirst.$row, $contentAfter['value'], $format);
+            $format = ArrayHelper::getValue($contentAfter, 'cellFormat', null);
+            $this->setOutCellValue($sheet, $colFirst . $row, $contentAfter['value'], $format);
             $opts = $this->getStyleOpts($contentAfter);
-            $sheet->getStyle($colFirst.$row)->applyFromArray($opts);
+            $sheet->getStyle($colFirst . $row)->applyFromArray($opts);
             $row += 1;
         }
         for ($i = $afterContentBeginRow; $i < $row; $i++) {
-            $sheet->mergeCells($colFirst.$i.':'.self::columnName($this->_endCol).$i);
+            $sheet->mergeCells($colFirst . $i . ':' . self::columnName($this->_endCol) . $i);
         }
     }
 
     /**
      * Gets the PhpSpreadsheet object
      *
-     * @return Spreadsheet the current \PhpOffice\PhpSpreadsheet\Spreadsheet object instance
+     * @return \PhpOffice\PhpSpreadsheet\Spreadsheet the current \PhpOffice\PhpSpreadsheet\Spreadsheet object instance
      */
     public function getPhpSpreadsheet()
     {
@@ -1501,7 +1456,7 @@ class ExportMenu extends GridView
     /**
      * Gets the PhpSpreadsheet writer object
      *
-     * @return BaseWriter the current \PhpOffice\PhpSpreadsheet\Writer\BaseWriter object instance
+     * @return \PhpOffice\PhpSpreadsheet\Writer\BaseWriter the current \PhpOffice\PhpSpreadsheet\Writer\BaseWriter object instance
      */
     public function getPhpSpreadsheetWriter()
     {
@@ -1511,7 +1466,7 @@ class ExportMenu extends GridView
     /**
      * Gets the PhpSpreadsheet sheet object
      *
-     * @return Worksheet the current \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet object instance
+     * @return \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet the current \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet object instance
      */
     public function getPhpSpreadsheetWorksheet()
     {
@@ -1521,9 +1476,9 @@ class ExportMenu extends GridView
     /**
      * Sets the PhpSpreadsheet object
      *
-     * @param $obj Spreadsheet the \PhpOffice\PhpSpreadsheet\Spreadsheet object instance
+     * @param $obj \PhpOffice\PhpSpreadsheet\Spreadsheet the \PhpOffice\PhpSpreadsheet\Spreadsheet object instance
      */
-    public function setPhpSpreadsheet(Spreadsheet $obj)
+    public function setPhpSpreadsheet($obj)
     {
         $this->_objSpreadsheet = $obj;
     }
@@ -1531,7 +1486,7 @@ class ExportMenu extends GridView
     /**
      * Sets the PhpSpreadsheet writer object
      *
-     * @param $obj BaseWriter the \PhpOffice\PhpSpreadsheet\Writer\BaseWriter object instance
+     * @param $obj \PhpOffice\PhpSpreadsheet\Writer\BaseWriter the \PhpOffice\PhpSpreadsheet\Writer\BaseWriter object instance
      */
     public function setPhpSpreadsheetWriter($obj)
     {
@@ -1541,7 +1496,7 @@ class ExportMenu extends GridView
     /**
      * Sets the PhpSpreadsheet sheet object
      *
-     * @param $obj Worksheet the \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet object instance
+     * @param $obj \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet the \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet object instance
      */
     public function setPhpSpreadsheetWorksheet($obj)
     {
@@ -1562,7 +1517,7 @@ class ExportMenu extends GridView
     /**
      * Sets default styles
      *
-     * @param  string  $section  the php spreadsheet section
+     * @param string $section the php spreadsheet section
      */
     protected function setDefaultStyles($section)
     {
@@ -1618,12 +1573,13 @@ class ExportMenu extends GridView
 
     /**
      * Generates the box
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function generateBox()
     {
         // Set autofilter on
-        $from = self::columnName(1).$this->_beginRow;
-        $to = self::columnName($this->_endCol).($this->_endRow + $this->_beginRow);
+        $from = self::columnName(1) . $this->_beginRow;
+        $to = self::columnName($this->_endCol) . ($this->_endRow + $this->_beginRow);
         $box = "{$from}:{$to}";
         $this->_objWorksheet->setAutoFilter($box);
         if (isset($this->boxStyleOptions[$this->_exportType])) {
@@ -1631,7 +1587,7 @@ class ExportMenu extends GridView
         }
 
         if (isset($this->headerStyleOptions[$this->_exportType])) {
-            $to = self::columnName($this->_endCol).$this->_beginRow;
+            $to = self::columnName($this->_endCol) . $this->_beginRow;
             $box = "{$from}:{$to}";
             $this->_objWorksheet->getStyle($box)->applyFromArray($this->headerStyleOptions[$this->_exportType]);
         }
@@ -1640,12 +1596,12 @@ class ExportMenu extends GridView
     /**
      * Autoformats a cell by auto detecting the grid column alignment and format
      *
-     * @param  mixed  $model  the data model to be rendered
-     * @param  mixed  $key  the key associated with the data model
-     * @param  integer  $index  the zero-based index of the data model among the model array returned by [[dataProvider]].
-     * @param  Column  $column
-     * @param  Cell  $cell
-     * @throws \PhpOffice\PhpSpreadsheet\Exception|Exception
+     * @param mixed $model the data model to be rendered
+     * @param mixed $key the key associated with the data model
+     * @param integer $index the zero-based index of the data model among the model array returned by [[dataProvider]].
+     * @param Column $column
+     * @param Cell $cell
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function autoFormat($model, $key, $index, $column, $cell)
     {
@@ -1673,13 +1629,13 @@ class ExportMenu extends GridView
             } elseif ($f === 'percent' || $f === 'decimal' || $f === 'currency') {
                 $code = '';
                 if ($f === 'currency') {
-                    $code = ArrayHelper::getValue($fmt, 1, $this->formatter->currencyCode).' ';
+                    $code = ArrayHelper::getValue($fmt, 1, $this->formatter->currencyCode) . ' ';
                 }
                 $decimals = ArrayHelper::getValue($fmt, 1, ($f === 'percent' ? 0 : 2));
                 $d = intval($decimals);
-                $code .= '#'.$this->formatter->thousandSeparator.'##0';
+                $code .= '#' . $this->formatter->thousandSeparator . '##0';
                 if ($d > 0) {
-                    $code .= $this->formatter->decimalSeparator.str_repeat('0', $d);
+                    $code .= $this->formatter->decimalSeparator . str_repeat('0', $d);
                 }
                 if ($f === 'percent') {
                     $code .= '%';
@@ -1695,16 +1651,14 @@ class ExportMenu extends GridView
     /**
      * Gets the setting property value for the current export format
      *
-     * @param  string  $key  the setting property key for the current export format
-     * @param  string  $default  the default value for the property
+     * @param string $key the setting property key for the current export format
+     * @param string $default the default value for the property
      *
      * @return mixed
-     * @throws Exception
      */
     protected function getSetting($key, $default = null)
     {
         $settings = ArrayHelper::getValue($this->exportConfig, $this->_exportType, []);
-
         return ArrayHelper::getValue($settings, $key, $default);
     }
 
@@ -1746,25 +1700,24 @@ class ExportMenu extends GridView
         Html::addCssClass($this->columnSelectorOptions, ['btn', $this->getDefaultBtnCss(), 'dropdown-toggle']);
         $header = ArrayHelper::getValue($this->columnSelectorOptions, 'header', Yii::t('kvexport', 'Select Columns'));
         $this->columnSelectorOptions['header'] = (!isset($header) || $header === false) ? '' :
-            '<li class="dropdown-header">'.$header.'</li><li class="kv-divider"></li>';
-        $id = $this->options['id'].'-cols';
+            '<li class="dropdown-header">' . $header . '</li><li class="kv-divider"></li>';
+        $id = $this->options['id'] . '-cols';
         Html::addCssClass($this->columnSelectorMenuOptions, 'dropdown-menu kv-checkbox-list');
         $this->columnSelectorMenuOptions = array_replace_recursive(
             [
-                'id' => $id.'-list',
+                'id' => $id . '-list',
                 'role' => 'menu',
                 'aria-labelledby' => $id,
             ],
             $this->columnSelectorMenuOptions
         );
-        $dataToggle = 'data-'.($this->isBs(5) ? 'bs-' : '').'toggle';
         $this->columnSelectorOptions = array_replace_recursive(
             [
                 'id' => $id,
-                'icon' => !$this->isBs(3) ? '<i class="fas fa-list"></i>' : '<i class="glyphicon glyphicon-list"></i>',
+                'icon' => '<i class="glyphicon glyphicon-list"></i>',
                 'title' => Yii::t('kvexport', 'Select columns to export'),
                 'type' => 'button',
-                $dataToggle => 'dropdown',
+                'data-toggle' => 'dropdown',
                 'aria-haspopup' => 'true',
                 'aria-expanded' => 'false',
             ],
@@ -1783,15 +1736,15 @@ class ExportMenu extends GridView
     /**
      * Fetches the column label
      *
-     * @param  integer  $key
-     * @param  Column  $column
+     * @param integer $key
+     * @param Column $column
      *
      * @return string
      */
     protected function getColumnLabel($key, $column)
     {
         $key++;
-        $label = Yii::t('kvexport', 'Column').' '.$key;
+        $label = Yii::t('kvexport', 'Column') . ' ' . $key;
         if (isset($column->label)) {
             $label = $column->label;
         } elseif (isset($column->header)) {
@@ -1802,14 +1755,13 @@ class ExportMenu extends GridView
             $class = explode('\\', get_class($column));
             $label = Inflector::camel2words(end($class));
         }
-
         return trim(strip_tags(str_replace(['<br>', '<br/>'], ' ', $label)));
     }
 
     /**
      * Generates the attribute label
      *
-     * @param  string  $attribute
+     * @param string $attribute
      *
      * @return string
      */
@@ -1820,10 +1772,9 @@ class ExportMenu extends GridView
          */
         $provider = $this->dataProvider;
         if ($provider instanceof ActiveDataProvider && $provider->query instanceof ActiveQueryInterface) {
-            /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+            /* @var $modelClass Model */
             $modelClass = $provider->query->modelClass;
             $model = $modelClass::instance();
-
             return $model->getAttributeLabel($attribute);
         } elseif ($provider instanceof ActiveDataProvider && $provider->query instanceof QueryInterface) {
             return Inflector::camel2words($attribute);
@@ -1839,16 +1790,16 @@ class ExportMenu extends GridView
 
     /**
      * Sets the default export configuration
-     * @throws InvalidConfigException|Exception
+     * @throws InvalidConfigException
      */
     protected function setDefaultExportConfig()
     {
         $isFa = $this->fontAwesome;
-        $notBs3 = !$this->isBs(3);
+        $isBs4 = $this->isBs4();
         $this->_defaultExportConfig = [
             self::FORMAT_HTML => [
                 'label' => Yii::t('kvexport', 'HTML'),
-                'icon' => $notBs3 ? 'fas fa-file-alt' : ($isFa ? 'fa fa-file-text' : 'glyphicon glyphicon-save'),
+                'icon' => $isBs4 ? 'fas fa-file-alt' : ($isFa ? 'fa fa-file-text' : 'glyphicon glyphicon-save'),
                 'iconOptions' => ['class' => 'text-info'],
                 'linkOptions' => [],
                 'options' => ['title' => Yii::t('kvexport', 'Hyper Text Markup Language')],
@@ -1859,7 +1810,7 @@ class ExportMenu extends GridView
             ],
             self::FORMAT_CSV => [
                 'label' => Yii::t('kvexport', 'CSV'),
-                'icon' => $notBs3 ? 'fas fa-file-code' : ($isFa ? 'fa fa-file-code-o' : 'glyphicon glyphicon-floppy-open'),
+                'icon' => $isBs4 ? 'fas fa-file-code' : ($isFa ? 'fa fa-file-code-o' : 'glyphicon glyphicon-floppy-open'),
                 'iconOptions' => ['class' => 'text-primary'],
                 'linkOptions' => [],
                 'options' => ['title' => Yii::t('kvexport', 'Comma Separated Values')],
@@ -1870,7 +1821,7 @@ class ExportMenu extends GridView
             ],
             self::FORMAT_TEXT => [
                 'label' => Yii::t('kvexport', 'Text'),
-                'icon' => $notBs3 ? 'far fa-file-alt' : ($isFa ? 'fa fa-file-text-o' : 'glyphicon glyphicon-floppy-save'),
+                'icon' => $isBs4 ? 'far fa-file-alt' : ($isFa ? 'fa fa-file-text-o' : 'glyphicon glyphicon-floppy-save'),
                 'iconOptions' => ['class' => 'text-muted'],
                 'linkOptions' => [],
                 'options' => ['title' => Yii::t('kvexport', 'Tab Delimited Text')],
@@ -1882,7 +1833,7 @@ class ExportMenu extends GridView
             ],
             self::FORMAT_PDF => [
                 'label' => Yii::t('kvexport', 'PDF'),
-                'icon' => $notBs3 ? 'far fa-file-pdf' : ($isFa ? 'fa fa-file-pdf-o' : 'glyphicon glyphicon-floppy-disk'),
+                'icon' => $isBs4 ? 'far fa-file-pdf' : ($isFa ? 'fa fa-file-pdf-o' : 'glyphicon glyphicon-floppy-disk'),
                 'iconOptions' => ['class' => 'text-danger'],
                 'linkOptions' => [],
                 'options' => ['title' => Yii::t('kvexport', 'Portable Document Format')],
@@ -1895,7 +1846,7 @@ class ExportMenu extends GridView
             ],
             self::FORMAT_EXCEL => [
                 'label' => Yii::t('kvexport', 'Excel 95 +'),
-                'icon' => $notBs3 ? 'far fa-file-excel' : ($isFa ? 'fa fa-file-excel-o' : 'glyphicon glyphicon-floppy-remove'),
+                'icon' => $isBs4 ? 'far fa-file-excel' : ($isFa ? 'fa fa-file-excel-o' : 'glyphicon glyphicon-floppy-remove'),
                 'iconOptions' => ['class' => 'text-success'],
                 'linkOptions' => [],
                 'options' => ['title' => Yii::t('kvexport', 'Microsoft Excel 95+ (xls)')],
@@ -1906,7 +1857,7 @@ class ExportMenu extends GridView
             ],
             self::FORMAT_EXCEL_X => [
                 'label' => Yii::t('kvexport', 'Excel 2007+'),
-                'icon' => $notBs3 ? 'fas fa-file-excel' : ($isFa ? 'fa fa-file-excel-o' : 'glyphicon glyphicon-floppy-remove'),
+                'icon' => $isBs4 ? 'fas fa-file-excel' : ($isFa ? 'fa fa-file-excel-o' : 'glyphicon glyphicon-floppy-remove'),
                 'iconOptions' => ['class' => 'text-success'],
                 'linkOptions' => [],
                 'options' => ['title' => Yii::t('kvexport', 'Microsoft Excel 2007+ (xlsx)')],
@@ -1920,7 +1871,7 @@ class ExportMenu extends GridView
 
     /**
      * Registers client assets needed for Export Menu widget
-     * @throws Exception
+     * @throws \Exception
      */
     protected function registerAssets()
     {
@@ -1957,14 +1908,14 @@ class ExportMenu extends GridView
             $options['colSelId'] = $this->columnSelectorOptions['id'];
         }
         $options = Json::encode($options);
-        $menu = 'kvexpmenu_'.hash('crc32', $options);
+        $menu = 'kvexpmenu_' . hash('crc32', $options);
         $view->registerJs("var {$menu} = {$options};\n", View::POS_HEAD);
         $script = '';
         foreach ($this->exportConfig as $format => $setting) {
             if (!isset($setting) || $setting === false) {
                 continue;
             }
-            $id = $this->options['id'].'-'.strtolower($format);
+            $id = $this->options['id'] . '-' . strtolower($format);
             $options = Json::encode([
                 'settings' => new JsExpression($menu),
                 'alertMsg' => $setting['alertMsg'],
@@ -1987,8 +1938,8 @@ class ExportMenu extends GridView
     /**
      * Raises a callable event
      *
-     * @param  string  $event  the event name
-     * @param  array  $params  the parameters to the callable function
+     * @param string $event the event name
+     * @param array $params the parameters to the callable function
      *
      * @return mixed
      */
@@ -1997,22 +1948,19 @@ class ExportMenu extends GridView
         if (isset($this->$event) && is_callable($this->$event)) {
             return call_user_func_array($this->$event, $params);
         }
-
         return true;
     }
 
     /**
      * Parses and returns the style options for `contentBefore` or `contentAfter`
      *
-     * @param  array  $settings  the settings to parse (for `contentBefore` or `contentAfter`)
+     * @param array $settings the settings to parse (for `contentBefore` or `contentAfter`)
      *
      * @return array
-     * @throws Exception
      */
     protected function getStyleOpts($settings = [])
     {
         $styleOpts = ArrayHelper::getValue($settings, 'styleOptions', []);
-
         return ArrayHelper::getValue($styleOpts, $this->_exportType, []);
     }
 
@@ -2035,10 +1983,10 @@ class ExportMenu extends GridView
     /**
      * Validates a grouped row
      *
-     * @param  Model|array  $model  the data model
-     * @param  Model|array  $nextModel  the next data model
-     * @param  integer  $key  the key associated with the data model
-     * @param  integer  $index  the zero-based index of the data model among the model array returned by
+     * @param Model|array $model the data model
+     * @param Model|array $nextModel the next data model
+     * @param integer $key the key associated with the data model
+     * @param integer $index the zero-based index of the data model among the model array returned by
      * [[dataProvider]].
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
@@ -2063,7 +2011,7 @@ class ExportMenu extends GridView
                     $this->_groupedColumn[$endCol]['firstLine'] = $index;
                 }
                 if ($this->_groupedColumn[$endCol]['value'] != $nextValue) {
-                    $groupFooter = $column->groupFooter ?? null;
+                    $groupFooter = isset($column->groupFooter) ? $column->groupFooter : null;
                     if ($groupFooter instanceof Closure) {
                         $groupFooter = call_user_func($groupFooter, $model, $key, $index, $this);
                     }
@@ -2081,8 +2029,8 @@ class ExportMenu extends GridView
     /**
      * Generate a grouped row
      *
-     * @param  array  $groupFooter  footer row
-     * @param  integer  $groupedCol  the zero-based index of grouped column
+     * @param array $groupFooter footer row
+     * @param integer $groupedCol the zero-based index of grouped column
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function generateGroupedRow($groupFooter, $groupedCol)
@@ -2095,9 +2043,9 @@ class ExportMenu extends GridView
         $endLine = $this->_endRow + 1;
         list($endLine, $firstLine) = ($endLine > $firstLine) ? [$endLine, $firstLine] : [$firstLine, $endLine];
         foreach ($this->getVisibleColumns() as $key => $column) {
-            $value = $groupFooter[$key] ?? '';
+            $value = isset($groupFooter[$key]) ? $groupFooter[$key] : '';
             $endGroupedCol++;
-            $groupedRange = self::columnName($key + 1).$firstLine.':'.self::columnName($key + 1).$endLine;
+            $groupedRange = self::columnName($key + 1) . $firstLine . ':' . self::columnName($key + 1) . $endLine;
             //$lastCell = self::columnName($key + 1) . $endLine - 1;
             if (isset($column->group) && $column->group) {
                 $this->_objWorksheet->mergeCells($groupedRange);
@@ -2107,7 +2055,7 @@ class ExportMenu extends GridView
                     $value = "=sum($groupedRange)";
                     break;
                 case self::F_COUNT:
-                    $value = '=countif('.$groupedRange.',"*")';
+                    $value = '=countif(' . $groupedRange . ',"*")';
                     break;
                 case self::F_AVG:
                     $value = "=AVERAGE($groupedRange)";
@@ -2119,7 +2067,7 @@ class ExportMenu extends GridView
                     $value = "=min($groupedRange)";
                     break;
             }
-            if ($value instanceof Closure) {
+            if ($value instanceof \Closure) {
                 $value = call_user_func($value, $groupedRange, $this);
             }
             $this->_groupedRow[] = !isset($value) || $value === '' ? '' : strip_tags($value);
@@ -2133,11 +2081,11 @@ class ExportMenu extends GridView
     {
         $config = ArrayHelper::getValue($this->exportConfig, $this->_exportType, []);
         $extension = ArrayHelper::getValue($config, 'extension', 'xlsx');
-        $mime = ArrayHelper::getValue($config, 'mime');
+        $mime = ArrayHelper::getValue($config, 'mime', null);
         header('Cache-Control: public, must-revalidate, max-age=0');
         header('Pragma: public');
         header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
-        header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
         if (!empty($mime)) {
             header("Content-Type: {$mime}; charset={$this->encoding}");
         }
@@ -2147,35 +2095,34 @@ class ExportMenu extends GridView
     /**
      * Parses format and sets the value of a PHP Spreadsheet Cell
      *
-     * @param  Worksheet  $sheet
-     * @param  string  $index  coordinate of the cell, eg: 'A1'
-     * @param  mixed  $value  value of the cell
-     * @param  string|null  $format  the explicit cell format to apply (should be one of the
+     * @param Worksheet $sheet
+     * @param string $index coordinate of the cell, eg: 'A1'
+     * @param mixed $value value of the cell
+     * @param string|null $format the explicit cell format to apply (should be one of the
      *        `PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_` constants)
      * @return Cell
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function setOutCellValue($sheet, $index, $value, $format = null)
     {
-        $value = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
         if ($this->stripHtml) {
             $value = strip_tags($value);
         }
+        $value = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
         $cell = $sheet->getCell($index);
         if ($format === null) {
             $cell->setValue($value);
         } else {
             $cell->setValueExplicit($value, $format);
         }
-
         return $cell;
     }
 
     /**
      * Cleans up the export file and current object instance
      *
-     * @param  string  $file  the file exported
-     * @param  array  $config  the export configuration
+     * @param string $file the file exported
+     * @param array $config the export configuration
      */
     protected function cleanup($file, $config)
     {
@@ -2186,26 +2133,5 @@ class ExportMenu extends GridView
             @unlink($file);
         }
         $this->destroyPhpSpreadsheet();
-    }
-
-    /**
-     * Sanitizes file name
-     * @param  string  $string
-     * @return string
-     */
-    public static function sanitize($string)
-    {
-        $reserved = array_merge(
-            array_map('chr', range(0, 31)),
-            ['?', '[', ']', '/', '\\', '=', '<', '>', ':', ';', ',', "'", '"', '&', '$', '#'],
-            ['*', '(', ')', '|', '~', '`', '!', '{', '}', '%', '+', '’', '«', '»', '”', '“']
-        );
-
-        $string = str_replace($reserved, '-', trim($string));
-        $string = preg_replace_callback('/[^\x20-\x7f]/', function ($match) {
-            return strtolower(str_replace('%', '', urlencode($match[0])));
-        }, $string);
-
-        return trim($string, ' -');
     }
 }

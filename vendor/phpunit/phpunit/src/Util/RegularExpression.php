@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /*
  * This file is part of PHPUnit.
  *
@@ -9,23 +9,19 @@
  */
 namespace PHPUnit\Util;
 
-use function preg_match;
-
-/**
- * @internal This class is not covered by the backward compatibility promise for PHPUnit
- */
 final class RegularExpression
 {
     /**
+     * @throws \Exception
+     *
      * @return false|int
      */
-    public static function safeMatch(string $pattern, string $subject)
+    public static function safeMatch(string $pattern, string $subject, ?array $matches = null, int $flags = 0, int $offset = 0)
     {
-        return ErrorHandler::invokeIgnoringWarnings(
-            static function () use ($pattern, $subject)
-            {
-                return preg_match($pattern, $subject);
-            }
-        );
+        $handler_terminator = ErrorHandler::handleErrorOnce();
+        $match              = \preg_match($pattern, $subject, $matches, $flags, $offset);
+        $handler_terminator();
+
+        return $match;
     }
 }

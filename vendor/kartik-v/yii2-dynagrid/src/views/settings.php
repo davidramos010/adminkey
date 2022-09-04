@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2022
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2019
  * @package yii2-dynagrid
- * @version 1.5.4
+ * @version 1.5.1
  */
 
 use kartik\base\Config;
@@ -14,11 +14,11 @@ use yii\helpers\Html;
 
 /**
  * @var DynaGridSettings $model
- * @var Module $module
- * @var string $moduleId
- * @var string $requestSubmit
- * @var string $iconConfirm
- * @var string $iconRemove
+ * @var Module           $module
+ * @var string           $moduleId
+ * @var string           $requestSubmit
+ * @var string           $iconConfirm
+ * @var string           $iconRemove
  */
 /** @noinspection PhpUnhandledExceptionInspection */
 $module = Config::getModule($moduleId, Module::class);
@@ -37,27 +37,26 @@ $hint = Yii::t(
     $params
 );
 if ($model->storage === DynaGrid::TYPE_DB && $model->dbUpdateNameOnly) {
-    $hint .= ' <em>'.Yii::t(
+    $hint .= ' <em>' . Yii::t(
             'kvdynagrid',
             'NOTE: When editing an existing record, only the {category} name will be modified (and not the settings).',
             $params
-        ).'</em>';
+        ) . '</em>';
 } else {
-    $hint .= ' <em>'.Yii::t(
+    $hint .= ' <em>' . Yii::t(
             'kvdynagrid',
             'NOTE: When editing an existing record, both the {category} name and its settings will be modified.',
             $params
-        ).'</em>';
+        ) . '</em>';
 }
 /** @noinspection PhpUnhandledExceptionInspection */
-echo $form->field($model, 'name', [
-    'addon' => [
+echo $form->field($model, 'name', ['addon' => [
         'append' => [
             'asButton' => true,
             'content' => Html::button(
                     $iconConfirm,
                     ['title' => Yii::t('kvdynagrid', 'Save'), 'class' => 'dynagrid-detail-save btn btn-primary']
-                ).
+                ) .
                 Html::button(
                     $iconRemove,
                     ['title' => Yii::t('kvdynagrid', 'Delete'), 'class' => 'dynagrid-detail-delete btn btn-danger']
@@ -81,5 +80,5 @@ echo Html::activeHiddenInput($model, 'dbUpdateNameOnly', ['id' => "dbUpdateNameO
 echo Html::hiddenInput('deleteDetailFlag', 0);
 echo Html::hiddenInput('configHashData', $model->getHashSignature());
 echo Html::hiddenInput($requestSubmit, 1);
-echo Html::tag('span', '', ['id' => $model->key, 'class' => 'hide '.$model->category.'-marker']);
+echo Html::tag('span', '', ['id' => $model->key, 'class' => 'hide ' . $model->category . '-marker']);
 ActiveForm::end();

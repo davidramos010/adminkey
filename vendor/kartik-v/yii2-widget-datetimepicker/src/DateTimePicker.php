@@ -1,17 +1,15 @@
 <?php
 
 /**
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2022
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2018
  * @package yii2-widgets
  * @subpackage yii2-widget-datetimepicker
- * @version 1.5.1
+ * @version 1.4.7
  */
 
 namespace kartik\datetime;
 
-use Exception;
 use kartik\base\InputWidget;
-use ReflectionException;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
@@ -20,24 +18,6 @@ use yii\helpers\Html;
 /**
  * DateTimePicker widget is a Yii2 wrapper for the Bootstrap DateTimePicker plugin by smalot. This is a fork of the
  * DatePicker plugin by @eternicode and adds the time functionality.
- *
- * For example,
- *
- * ```php
- * use kartik\datetime\DateTimePicker;
- *
- * echo '<label>Start Date/Time</label>';
- * echo DateTimePicker::widget([
- *     'name' => 'datetime_10',
- *     'options' => ['placeholder' => 'Select operating time ...'],
- *     'convertFormat' => true,
- *     'pluginOptions' => [
- *         'format' => 'd-M-Y g:i A',
- *         'startDate' => '01-Mar-2014 12:00 AM',
- *         'todayHighlight' => true
- *     ]
- * ]);
- * ```
  *
  * @author Kartik Visweswaran <kartikv2@gmail.com>
  * @since 1.0
@@ -101,7 +81,6 @@ class DateTimePicker extends InputWidget
      * - `['class'=>'btn btn-secondary']` for [[bsVersion]] = '4.x'
      * The following special options are recognized:
      * - 'label': string the button label. Defaults to the [[pickerIcon]] setting.
-     * @deprecated since v1.5.0
      */
     public $buttonOptions = [];
 
@@ -112,14 +91,13 @@ class DateTimePicker extends InputWidget
 
     /**
      * @var string the layout template to display the buttons (applicable only  when [[type]] is one of
-     * [[TYPE_COMPONENT_PREPEND]] or [[TYPE_COMPONENT_APPEND]]) or [[TYPE_BUTTON]]. The following tokens will be parsed and replaced:
+     * [[TYPE_COMPONENT_PREPEND]] or [[TYPE_COMPONENT_APPEND]]). The following tokens will be parsed and replaced:
      * - `{picker}`: will be replaced with the date picker button (rendered as a bootstrap input group addon).
      * - `{remove}`: will be replaced with the date clear/remove button (rendered as a bootstrap input group addon).
      * - `{input}`: will be replaced with the HTML input markup that stores the datetime.
      * The [[layout]] property defaults to the following value if not set:
      * - `{picker}{remove}{input}` for TYPE_COMPONENT_PREPEND
      * - `{input}{remove}{picker}` for TYPE_COMPONENT_APPEND
-     * - `{picker}{input}` for TYPE_BUTTON
      */
     public $layout;
 
@@ -165,7 +143,7 @@ class DateTimePicker extends InputWidget
     /**
      * @inheritdoc
      * @throws InvalidConfigException
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function init()
     {
@@ -180,15 +158,19 @@ class DateTimePicker extends InputWidget
         if ($this->autoDefaultTimezone && empty($this->pluginOptions['timezone']) && !empty(Yii::$app->getTimeZone())) {
             $this->pluginOptions['timezone'] = Yii::$app->getTimeZone();
         }
-        
-        $notBs3 = !$this->isBs(3);
+        $isBs4 = $this->isBs4();
+        if ($this->type == self::TYPE_INLINE) {
+            $this->pluginOptions['linkField'] = $this->options['id'];
+            if (!empty($this->pluginOptions['format'])) {
+                $this->pluginOptions['linkFormat'] = $this->pluginOptions['format'];
+            }
+        }
         $this->pluginOptions = array_replace_recursive([
-            'bootcssVer' => 3,
-            'icontype' => $notBs3 ? 'fas' : 'glyphicon',
-            'fontAwesome' => $notBs3,
+            'icontype' => $isBs4 ? 'fas' : 'glyphicon',
+            'fontAwesome' => $isBs4,
             'icons' => [
-                'leftArrow' => $notBs3 ? 'fa-arrow-left' : 'glyphicon-arrow-left',
-                'rightArrow' => $notBs3 ? 'fa-arrow-right' : 'glyphicon-arrow-right',
+                'leftArrow' => $isBs4 ? 'fa-arrow-left' : 'glyphicon-arrow-left',
+                'rightArrow' => $isBs4 ? 'fa-arrow-right' : 'glyphicon-arrow-right',
             ],
         ], $this->pluginOptions);
         $this->renderDateTimePicker();
@@ -197,7 +179,7 @@ class DateTimePicker extends InputWidget
     /**
      * Renders the date time picker widget.
      * @throws InvalidConfigException
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     protected function renderDateTimePicker()
     {
@@ -205,27 +187,19 @@ class DateTimePicker extends InputWidget
         $this->initIcon('remove', 'remove', 'times');
         $s = DIRECTORY_SEPARATOR;
         $this->initI18N(__DIR__);
-        $this->setLanguage('bootstrap-datetimepicker.', __DIR__ . "{$s}assets{$s}");
+        $this->setLanguage('bootstrap-datetimepicker.', __DIR__ . "{$s}assets{$s}", null, '.js');
         $this->parseDateFormat('datetime');
         if (empty($this->_container['id'])) {
             $this->_container['id'] = $this->options['id'] . '-datetime';
         }
         if (empty($this->layout)) {
-            $btns1 = '{picker}{remove}';
-            $btns2 = '{remove}{picker}';
             if ($this->type == self::TYPE_COMPONENT_PREPEND) {
-                $this->layout = ($this->pickerButton === false ? $btns2 : $btns1) . '{input}';
+                $this->layout = '{picker}{remove}{input}';
             }
             if ($this->type == self::TYPE_COMPONENT_APPEND) {
-                $this->layout = '{input}' . ($this->pickerButton === false ? $btns1 : $btns2);
-            }
-            if ($this->type == self::TYPE_BUTTON) {
-                $this->layout = '{picker}{input}';
+                $this->layout = '{input}{remove}{picker}';
             }
         }
-        $this->options['data-datetimepicker-source'] = $this->type === self::TYPE_INPUT ? $this->options['id'] :
-            $this->_container['id'];
-        $this->options['data-datetimepicker-type'] = $this->type;
         $this->registerAssets();
         echo $this->renderInput();
     }
@@ -244,14 +218,11 @@ class DateTimePicker extends InputWidget
         } else {
             DateTimePickerAsset::registerBundle($view, $this->bsVersion);
         }
-        if ($this->type == self::TYPE_INLINE) {
-            $this->pluginOptions['linkField'] = $this->options['id'];
-            if (!empty($this->pluginOptions['format'])) {
-                $this->pluginOptions['linkFormat'] = $this->pluginOptions['format'];
-            }
+        if ($this->type == self::TYPE_INPUT) {
+            $this->registerPlugin($this->pluginName);
+        } else {
+            $this->registerPlugin($this->pluginName, 'jQuery("#' . $this->_container['id'] . '")');
         }
-        $el = "jQuery('#" . $this->options['data-datetimepicker-source'] . "')";
-        $this->registerPlugin($this->pluginName, $el);
     }
 
     /**
@@ -259,11 +230,11 @@ class DateTimePicker extends InputWidget
      * @param string $type the icon type 'picker' or 'remove'
      * @param string $bs3Icon the icon suffix name for Bootstrap 3 version
      * @param string $bs4Icon the icon suffix name for Bootstrap 4 version
-     * @throws InvalidConfigException|Exception
+     * @throws InvalidConfigException
      */
     protected function initIcon($type, $bs3Icon, $bs4Icon)
     {
-        $css = !$this->isBs(3) ? "fas fa-{$bs4Icon}" : "glyphicon glyphicon-{$bs3Icon}";
+        $css = $this->isBs4() ? "fas fa-{$bs4Icon}" : "glyphicon glyphicon-{$bs3Icon}";
         $icon = $type . 'Icon';
         if (!isset($this->$icon)) {
             $this->$icon = Html::tag('i', '', ['class' => $css . ' kv-dp-icon']);
@@ -277,14 +248,14 @@ class DateTimePicker extends InputWidget
      */
     protected function renderInput()
     {
-        if ($this->type === self::TYPE_INLINE) {
+        if ($this->type == self::TYPE_INLINE) {
             if (!isset($this->options['readonly'])) {
                 $this->options['readonly'] = true;
             }
             if (!isset($this->options['class'])) {
                 $this->options['class'] = 'form-control text-center';
             }
-        } elseif ($this->type !== self::TYPE_BUTTON) {
+        } else {
             Html::addCssClass($this->options, 'form-control');
         }
         $input = $this->type == self::TYPE_BUTTON ? 'hiddenInput' : 'textInput';
@@ -292,28 +263,25 @@ class DateTimePicker extends InputWidget
     }
 
     /**
-     * Returns the button to render
+     * Returns the addon to render
      *
-     * @param array $options the HTML attributes for the button
-     * @param string $type whether the button is picker or remove
-     * @param boolean $addon whether this is an input group addon
+     * @param array $options the HTML attributes for the addon
+     * @param string $type whether the addon is the picker or remove
      *
      * @return string
-     * @throws InvalidConfigException|Exception
+     * @throws InvalidConfigException
      */
-    protected function renderButton(&$options, $type = 'picker', $addon = true)
+    protected function renderAddon(&$options, $type = 'picker')
     {
         $isPicker = $type === 'picker';
-        if ($options === false) {
+        if ($options === false || (!$isPicker && $type !== 'remove')) {
             return '';
         }
         if (is_string($options)) {
             return $options;
         }
-        if ($addon) {
-            Html::addCssClass($options, !$this->isBs(3) ? 'input-group-text' : 'input-group-addon');
-        }
-        Html::addCssClass($options, "kv-datetime-{$type}");
+        $css = $this->isBs4() ? 'input-group-text' : 'input-group-addon';
+        Html::addCssClass($options, [$css, "kv-datetime-{$type}"]);
         $iconType = "{$type}Icon";
         $icon = ArrayHelper::remove($options, 'label', $this->$iconType);
         $title = ArrayHelper::getValue($options, 'title', '');
@@ -335,8 +303,7 @@ class DateTimePicker extends InputWidget
     {
         $disabled = $this->disabled ? 'disabled' : '';
         $size = isset($this->size) ? "input-{$this->size} " : '';
-        $notBs3 = !$this->isBs(3);
-        $isBs5 = $this->isBs(5);
+        $isBs4 = $this->isBs4();
         switch ($this->type) {
             case self::TYPE_INPUT:
             case self::TYPE_INLINE:
@@ -347,16 +314,11 @@ class DateTimePicker extends InputWidget
                 $size = isset($this->size) ? "input-group-{$this->size}" : '';
                 Html::addCssClass($this->_container, ['input-group', $size, 'date']);
                 $position = $this->type === self::TYPE_COMPONENT_APPEND ? 'append' : 'prepend';
-                $pickerButton = is_array($this->pickerButton) ? $this->pickerButton : [];
-                $removeButton = is_array($this->pickerButton) ? $this->pickerButton : [];
-                if ($this->pickerButton === false) {
-                    Html::addCssStyle($pickerButton, ['display' => 'none']);
-                }
-                $pickerPos = ArrayHelper::remove($pickerButton, 'position', $position);
-                $removePos = ArrayHelper::remove($removeButton, 'position', $position);
-                $picker = $this->renderButton($pickerButton);
-                $remove = $this->renderButton($this->removeButton, 'remove');
-                if ($notBs3 && !$isBs5) {
+                $pickerPos = ArrayHelper::remove($this->pickerButton, 'position', $position);
+                $removePos = ArrayHelper::remove($this->removeButton, 'position', $position);
+                $picker = $this->renderAddon($this->pickerButton);
+                $remove = $this->renderAddon($this->removeButton, 'remove');
+                if ($isBs4) {
                     $picker = Html::tag('div', $picker, ['class' => 'input-group-' . $pickerPos]);
                     $remove = Html::tag('div', $remove, ['class' => 'input-group-' . $removePos]);
                 }
@@ -368,29 +330,16 @@ class DateTimePicker extends InputWidget
                 return Html::tag('div', $out, $this->_container);
             case self::TYPE_BUTTON:
                 Html::addCssClass($this->_container, ['date', $disabled]);
-                $pickerButton = $this->pickerButton;
-                if (!empty($this->buttonOptions)) { // buttonOptions is deprecated since v1.5.1
-                    $pickerButton = is_array($pickerButton) ? $pickerButton : [];
-                    $pickerButton = array_replace_recursive($pickerButton, $this->buttonOptions);
+                $label = ArrayHelper::remove($this->buttonOptions, 'label', $this->pickerIcon);
+                if (!isset($this->buttonOptions['disabled'])) {
+                    $this->buttonOptions['disabled'] = $this->disabled;
                 }
-                if (!isset($pickerButton['disabled'])) {
-                    $pickerButton['disabled'] = $this->disabled;
+                if (empty($this->buttonOptions['class'])) {
+                    $this->buttonOptions['class'] = 'btn btn-' . ($isBs4 ? 'secondary' : 'default');
                 }
-                if (empty($pickerButton['class'])) {
-                    $pickerButton['class'] = 'btn btn-' . ($notBs3 ? 'secondary' : 'default');
-                }
-                if (empty($this->removeButton['class'])) {
-                    $this->removeButton['class'] = 'btn btn-' . ($notBs3 ? 'secondary' : 'default');
-                }
-                $picker = $this->renderButton($pickerButton, 'picker', false);
-                $remove = $this->renderButton($this->removeButton, 'remove', false);
+                $button = Html::button($label, $this->buttonOptions);
                 Html::addCssStyle($this->_container, 'display:block');
-                $out = strtr($this->layout, [
-                    '{picker}' => $picker,
-                    '{remove}' => $remove,
-                    '{input}' => $input,
-                ]);
-                return Html::tag('div', $out, $this->_container);
+                return Html::tag('span', "{$input}{$button}", $this->_container);
             default:
                 return '';
         }

@@ -12,6 +12,7 @@ class JsonType extends \PHPUnit\Framework\Constraint\Constraint
 
     public function __construct(array $jsonType, $match = true)
     {
+        parent::__construct();
         $this->jsonType = $jsonType;
         $this->match = $match;
     }

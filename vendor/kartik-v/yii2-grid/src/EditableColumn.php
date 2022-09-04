@@ -3,8 +3,8 @@
 /**
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2022
- * @version   3.5.1
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2019
+ * @version   3.3.4
  */
 
 namespace kartik\grid;
@@ -26,7 +26,7 @@ use kartik\base\Config;
  * 'columns' => [
  *     // ...
  *     [
- *         'class' => EditableColumn::class,
+ *         'class' => EditableColumn::className(),
  *         // you may configure additional properties here
  *     ],
  * ]
@@ -154,7 +154,7 @@ class EditableColumn extends DataColumn
             $id = $this->grid->options['id'];
             $this->_view->registerJs("kvRefreshEC('{$id}','{$this->_css}');");
         }
-        $editableClass = ArrayHelper::remove($this->_editableOptions, 'class', Editable::class);
+        $editableClass = ArrayHelper::remove($this->_editableOptions, 'class', Editable::className());
         if (!isset($this->_editableOptions['inlineSettings']['options'])) {
             $this->_editableOptions['inlineSettings']['options']['class'] = 'skip-export';
         } else {

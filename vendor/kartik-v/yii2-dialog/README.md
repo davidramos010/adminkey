@@ -1,15 +1,5 @@
-<h1 align="center">
-    <a href="http://demos.krajee.com" title="Krajee Demos" target="_blank">
-        <img src="http://kartik-v.github.io/bootstrap-fileinput-samples/samples/krajee-logo-b.png" alt="Krajee Logo"/>
-    </a>
-    <br>
-    yii2-dialog
-    <hr>
-    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DTP3NZQ6G2AYU"
-       title="Donate via Paypal" target="_blank">
-        <img src="http://kartik-v.github.io/bootstrap-fileinput-samples/samples/donate.png" alt="Donate"/>
-    </a>
-</h1>
+yii2-dialog
+===========
 
 [![Stable Version](https://poser.pugx.org/kartik-v/yii2-dialog/v/stable)](https://packagist.org/packages/kartik-v/yii2-dialog)
 [![Unstable Version](https://poser.pugx.org/kartik-v/yii2-dialog/v/unstable)](https://packagist.org/packages/kartik-v/yii2-dialog)
@@ -18,11 +8,7 @@
 [![Monthly Downloads](https://poser.pugx.org/kartik-v/yii2-dialog/d/monthly)](https://packagist.org/packages/kartik-v/yii2-dialog)
 [![Daily Downloads](https://poser.pugx.org/kartik-v/yii2-dialog/d/daily)](https://packagist.org/packages/kartik-v/yii2-dialog)
 
-A widget component for Yii Framework 2.0 to easily configure and initialize popup notification dialog boxes. It provides a polyfill for 
-the native javascript alert, confirm, and prompt dialog boxes. It includes inbuilt support for rendering rich dialog boxes via a customized 
-plugin by Krajee based on and enhanced from [bootstrap3-dialog](http://nakupanda.github.io/bootstrap3-dialog/). This plugin makes using Bootstrap's 
-modal more monkey-friendly. The Krajee enhancements also includes enhanced support for Bootstrap 5.x, 4.x and 3.x. The key features provided by 
-the library are:
+A widget component for Yii Framework 2.0 to easily configure and initialize popup notification dialog boxes. It provides a polyfill for the native javascript alert, confirm, and prompt dialog boxes. It includes inbuilt support for rendering rich dialog boxes via [bootstrap3-dialog](http://nakupanda.github.io/bootstrap3-dialog/) which makes using Bootstrap's modal more monkey-friendly. The key features provided by the library are:
 
 - Control how you want to render JAVASCRIPT dialogs. Inbuilt quick support for following dialog types:
     - ALERT dialog
@@ -42,7 +28,7 @@ Refer this [git workflow for contributors](.github/GIT-WORKFLOW.md).
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
 
 ### Pre-requisites
-> Note: Check the [composer.json](https://github.com/kartik-v/yii2-dialog/blob/master/composer.json) for this extension's requirements and dependencies. 
+> Note: Check the [composer.json](https://github.com/kartik-v/yii2-dropdown-x/blob/master/composer.json) for this extension's requirements and dependencies. 
 You must set the `minimum-stability` to `dev` in the **composer.json** file in your application root folder before installation of this extension OR
 if your `minimum-stability` is set to any other value other than `dev`, then set the following in the require section of your composer.json file
 
@@ -51,9 +37,6 @@ kartik-v/yii2-dialog: "@dev"
 ```
 
 Read this [web tip /wiki](http://webtips.krajee.com/setting-composer-minimum-stability-application/) on setting the `minimum-stability` settings for your application's composer.json.
-
-### Release Changes
-Refer the [CHANGE LOG](https://github.com/kartik-v/yii2-dialog/blob/master/CHANGE.md) for details of various releases.
 
 ### Install
 

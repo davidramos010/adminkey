@@ -1,28 +1,6 @@
 Change Log: `yii2-dynagrid`
 ===========================
 
-## Version 1.5.4
-
-**Date:** 29-Apr-2022
-
-- (enh #240): Enhance compatibility for PHP 8.1.
-
-## Version 1.5.3
-
-**Date:** 04-Mar-2022
-
-- Enhance compatibility for PHP 8.1.
-
-## Version 1.5.2
-
-**Date:** 03-Sep-2021
-
-- (enh #228): Enhancements to support Bootstrap v5.x.
-- (enh #227): Correct grid pagination assignment.
-- (enh #206): Update Spanish Translations.
-- (enh #205): Update Italian translations.
-- (enh #204): Correct namespace.
-
 ## Version 1.5.1
 
 **Date:** 24-Feb-2019

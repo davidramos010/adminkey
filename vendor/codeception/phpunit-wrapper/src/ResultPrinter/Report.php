@@ -47,7 +47,7 @@ class Report extends ResultPrinter implements ConsolePrinter
     {
     }
 
-    public function printResult(\PHPUnit\Framework\TestResult $result): void
+    public function printResult(\PHPUnit\Framework\TestResult $result)
     {
         $this->write("\nCodeception Results\n");
         $this->write(sprintf(

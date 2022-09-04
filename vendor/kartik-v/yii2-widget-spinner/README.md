@@ -1,24 +1,21 @@
-<h1 align="center">
-    <a href="http://demos.krajee.com" title="Krajee Demos" target="_blank">
-        <img src="http://kartik-v.github.io/bootstrap-fileinput-samples/samples/krajee-logo-b.png" alt="Krajee Logo"/>
-    </a>
-    <br>
-    yii2-widget-spinner
-    <hr>
-    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DTP3NZQ6G2AYU"
-       title="Donate via Paypal" target="_blank">
-        <img src="http://kartik-v.github.io/bootstrap-fileinput-samples/samples/donate.png" alt="Donate"/>
-    </a>
-</h1>
+yii2-widget-spinner
+===================
 
-[![Stable Version](https://poser.pugx.org/kartik-v/yii2-widget-spinner/v/stable)](https://packagist.org/packages/kartik-v/yii2-widget-spinner)
-[![Unstable Version](https://poser.pugx.org/kartik-v/yii2-widget-spinner/v/unstable)](https://packagist.org/packages/kartik-v/yii2-widget-spinner)
-[![License](https://poser.pugx.org/kartik-v/yii2-widget-spinner/license)](https://packagist.org/packages/kartik-v/yii2-widget-spinner)
-[![Total Downloads](https://poser.pugx.org/kartik-v/yii2-widget-spinner/downloads)](https://packagist.org/packages/kartik-v/yii2-widget-spinner)
-[![Monthly Downloads](https://poser.pugx.org/kartik-v/yii2-widget-spinner/d/monthly)](https://packagist.org/packages/kartik-v/yii2-widget-spinner)
-[![Daily Downloads](https://poser.pugx.org/kartik-v/yii2-widget-spinner/d/daily)](https://packagist.org/packages/kartik-v/yii2-widget-spinner)
+The Spinner widget is a wrapper for the [spin.js](http://fgnass.github.io/spin.js). It enables you to add an animated CSS3 loading spinner which allows VML fallback for IE.
+Since, its not image based, it allows you to configure the spinner style, size, color, and other CSS attributes. The major advantage of using the CSS3 based spinner, is
+that the animation can be made visible to user for non-ajax based scenarios. For example on  events like window.load or window.unload (thereby enabling you to show a 
+page loading progress without using ajax).
 
-The Spinner widget is a wrapper for the [spin.js](http://fgnass.github.io/spin.js). It enables you to add an animated CSS3 loading spinner which allows VML fallback for IE. Since, its not image based, it allows you to configure the spinner style, size, color, and other CSS attributes. The major advantage of using the CSS3 based spinner, is that the animation can be made visible to user for non-ajax based scenarios. For example on  events like window.load or window.unload (thereby enabling you to show a page loading progress without using ajax).
+- **Sidebar Menu:** Displays the scrollspy/spinner navigation menu as a sidebar, and/or
+- **Main Body:** Displays the main body sections based on the section & subsection headings and content passed.
+
+> **Note:**
+> If you have the `header` section fixed to the top, you must add a CSS class `kv-header` to the header container. Similarly, for a fixed footer you must add the class `kv-footer` to your footer container. This will ensure a correct positioning of the spinner widget on the page.
+
+The parameters to pass are:
+
+- `type` The spinner content type. Must be either `menu` or `body`. Defaults to `menu`
+- `items`: The spinner content items as an array. Check the [spinner combined usage](http://demos.krajee.com/widget-details/spinner#spinner-menu-body) for a detailed example.
 
 > NOTE: This extension is a sub repo split of [yii2-widgets](https://github.com/kartik-v/yii2-widgets). The split has been done since 08-Nov-2014 to allow developers to install this specific widget in isolation if needed. One can also use the extension the previous way with the whole suite of [yii2-widgets](http://demos.krajee.com/widgets).
 
@@ -29,20 +26,20 @@ The preferred way to install this extension is through [composer](http://getcomp
 To install, either run
 
 ```
-$ php composer.phar require kartik-v/yii2-widget-spinner "@dev"
+$ php composer.phar require kartik-v/yii2-widget-spinner "*"
 ```
 
 or add
 
 ```
-"kartik-v/yii2-widget-spinner": "@dev"
+"kartik-v/yii2-widget-spinner": "*"
 ```
 
 to the ```require``` section of your `composer.json` file.
 
 ## Latest Release
 
-> Refer the [CHANGE LOG](https://github.com/kartik-v/yii2-widget-spinner/blob/master/CHANGE.md) for details on changes to various releases.
+> NOTE: The latest version of the module is v1.0.0 released on 08-Nov-2014. Refer the [CHANGE LOG](https://github.com/kartik-v/yii2-widget-spinner/blob/master/CHANGE.md) for details.
 
 ## Demo
 
@@ -63,4 +60,4 @@ use kartik\spinner\Spinner;
 
 ## License
 
-**yii2-widget-spinner** is released under the BSD-3-Clause License. See the bundled `LICENSE.md` for details.
+**yii2-widget-spinner** is released under the BSD 3-Clause License. See the bundled `LICENSE.md` for details.

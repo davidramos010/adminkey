@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2021
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2018
  * @package yii2-widgets
  * @subpackage yii2-widget-touchspin
- * @version 1.2.4
+ * @version 1.2.3
  */
 
 namespace kartik\touchspin;
@@ -28,6 +28,7 @@ class TouchSpin extends InputWidget
 
     /**
      * @inheritdoc
+     * @throws \yii\base\InvalidConfigException
      */
     public function run()
     {
@@ -39,6 +40,7 @@ class TouchSpin extends InputWidget
 
     /**
      * Set the plugin options
+     * @throws \yii\base\InvalidConfigException
      */
     protected function setPluginOptions()
     {
@@ -48,7 +50,6 @@ class TouchSpin extends InputWidget
             $css .= ' disabled';
         }
         $defaultPluginOptions = [
-            'bsVersion' => $this->getBsVer(),
             'buttonup_class' => $css,
             'buttondown_class' => $css,
             'buttonup_txt' => "<i class='{$iconPrefix}forward'></i>",

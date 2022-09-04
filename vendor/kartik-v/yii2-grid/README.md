@@ -6,9 +6,9 @@
     yii2-grid
     <hr>
     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DTP3NZQ6G2AYU"
-       title="Donate via Paypal" target="_blank"><img height="60" src="https://kartik-v.github.io/bootstrap-fileinput-samples/samples/donate.png" alt="Donate"/></a>
-    &nbsp; &nbsp; &nbsp;
-    <a href="https://www.buymeacoffee.com/kartikv" title="Buy me a coffee" ><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="60" alt="kartikv" /></a>
+       title="Donate via Paypal" target="_blank">
+        <img src="http://kartik-v.github.io/bootstrap-fileinput-samples/samples/donate.png" alt="Donate"/>
+    </a>
 </h1>
 
 <div align="center">
@@ -29,33 +29,28 @@ Refer [detailed documentation](http://demos.krajee.com/grid) and/or a [complete 
 
 ![GridView Screenshot](https://lh4.googleusercontent.com/-4x-CdyyZAsY/VNxLPmaaAXI/AAAAAAAAAQ8/XYYxTiQZvJk/w868-h516-no/krajee-yii2-grid.jpg)
 
-### Docs & Demo
-
-You can see detailed [documentation](http://demos.krajee.com/grid), [demonstration](http://demos.krajee.com/grid-demo)
-and API [code documentation](https://docs.krajee.com/kartik-grid-gridview) on usage of the extension. You can also view the [grid grouping demo here](http://demos.krajee.com/group-grid).
+### Documentation and Demo
+You can see detailed [documentation](http://demos.krajee.com/grid) and [demonstration](http://demos.krajee.com/grid-demo) on usage of the extension. You can also view the [grid grouping demo here](http://demos.krajee.com/group-grid).
 
 ## Installation
 
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
-Read this [web tip /wiki](http://webtips.krajee.com/setting-composer-minimum-stability-application/) on setting the `minimum-stability` settings for your application's composer.json.
 
 ### Pre-requisites
-
-Install the necessary pre-requisite (Krajee Dropdown Extension) based on your bootstrap version:
-
-- For Bootstrap v5.x install the extension `kartik-v/yii2-bootstrap5-dropdown`
-- For Bootstrap v4.x install the extension `kartik-v/yii2-bootstrap4-dropdown`
-- For Bootstrap v3.x install the extension `kartik-v/yii2-dropdown-x`
-
-For example if you are using the Bootstrap v5.x add the following to the `require` section of your `composer.json` file:
+> Note: Check the [composer.json](https://github.com/kartik-v/yii2-dropdown-x/blob/master/composer.json) for this extension's requirements and dependencies. 
+You must set the `minimum-stability` to `dev` in the **composer.json** file in your application root folder before installation of this extension OR
+if your `minimum-stability` is set to any other value other than `dev`, then set the following in the require section of your composer.json file
 
 ```
-"kartik-v/yii2-bootstrap5-dropdown": "@dev"
+kartik-v/yii2-grid: "@dev",
+kartik-v/yii2-krajee-base: "@dev"
 ```
+
+Read this [web tip /wiki](http://webtips.krajee.com/setting-composer-minimum-stability-application/) on setting the `minimum-stability` settings for your application's composer.json.
 
 ### Install
 
-Either run:
+Either run
 
 ```
 $ php composer.phar require kartik-v/yii2-grid "@dev"

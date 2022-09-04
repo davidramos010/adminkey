@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2022
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2021
  * @package yii2-widgets
  * @subpackage yii2-widget-select2
- * @version 2.2.4
+ * @version 2.2.1
  */
 
 namespace kartik\select2;
@@ -12,7 +12,7 @@ namespace kartik\select2;
 use kartik\base\AssetBundle;
 
 /**
- * Asset bundle for [[Select2]] Widget. Includes assets from the select2 plugin library.
+ * Asset bundle for [[Select2]] Widget. Includes assets from select2 plugin library.
  *
  * @author Kartik Visweswaran <kartikv2@gmail.com>
  * @since 1.0

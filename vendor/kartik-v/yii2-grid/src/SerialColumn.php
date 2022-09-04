@@ -3,8 +3,8 @@
 /**
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2022
- * @version   3.5.1
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2019
+ * @version   3.3.4
  */
 
 namespace kartik\grid;
@@ -23,7 +23,7 @@ use yii\helpers\Html;
  * 'columns' => [
  *     // ...
  *     [
- *         'class' => SerialColumn::class,
+ *         'class' => SerialColumn::className(),
  *         // you may configure additional properties here
  *     ],
  * ]

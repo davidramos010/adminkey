@@ -6,12 +6,10 @@
     yii2-export
     <hr>
     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DTP3NZQ6G2AYU"
-       title="Donate via Paypal" target="_blank"><img height="60" src="https://kartik-v.github.io/bootstrap-fileinput-samples/samples/donate.png" alt="Donate"/></a>
-    &nbsp; &nbsp; &nbsp;
-    <a href="https://www.buymeacoffee.com/kartikv" title="Buy me a coffee" ><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="60" alt="kartikv" /></a>
+       title="Donate via Paypal" target="_blank">
+        <img src="http://kartik-v.github.io/bootstrap-fileinput-samples/samples/donate.png" alt="Donate"/>
+    </a>
 </h1>
-
-<div align="center">
 
 [![Stable Version](https://poser.pugx.org/kartik-v/yii2-export/v/stable)](https://packagist.org/packages/kartik-v/yii2-export)
 [![Unstable Version](https://poser.pugx.org/kartik-v/yii2-export/v/unstable)](https://packagist.org/packages/kartik-v/yii2-export)
@@ -19,8 +17,6 @@
 [![Total Downloads](https://poser.pugx.org/kartik-v/yii2-export/downloads)](https://packagist.org/packages/kartik-v/yii2-export)
 [![Monthly Downloads](https://poser.pugx.org/kartik-v/yii2-export/d/monthly)](https://packagist.org/packages/kartik-v/yii2-export)
 [![Daily Downloads](https://poser.pugx.org/kartik-v/yii2-export/d/daily)](https://packagist.org/packages/kartik-v/yii2-export)
-
-</div>
 
 A library to export server/db data in various formats (e.g. excel, html, pdf, csv etc.) using the [PhpSpreadsheet](https://github.com/PHPOffice/phpspreadsheet) library. The widget allows you to configure the dataProvider, columns just like a yii\grid\GridView. However, it just displays the export actions in form of a ButtonDropdown menu, for embedding into any of your GridView or other components.
 
@@ -55,23 +51,7 @@ The preferred way to install this extension is through [composer](http://getcomp
 
 > Note: Read this [web tip /wiki](http://webtips.krajee.com/setting-composer-minimum-stability-application/) on setting the `minimum-stability` settings for your application's composer.json.
 
-### Pre-requisites
-
-Install the necessary pre-requisite (Krajee Dropdown Extension) based on your bootstrap version:
-
-- For Bootstrap v5.x install the extension `kartik-v/yii2-bootstrap5-dropdown`
-- For Bootstrap v4.x install the extension `kartik-v/yii2-bootstrap4-dropdown`
-- For Bootstrap v3.x install the extension `kartik-v/yii2-dropdown-x`
-
-For example if you are using the Bootstrap v5.x add the following to the `require` section of your `composer.json` file:
-
-```
-"kartik-v/yii2-bootstrap5-dropdown": "@dev"
-```
-
-### Install
-
-Either run:
+Either run
 
 ```
 $ php composer.phar require kartik-v/yii2-export "@dev"
@@ -119,8 +99,7 @@ $gridColumns = [
 // Renders a export dropdown menu
 echo ExportMenu::widget([
     'dataProvider' => $dataProvider,
-    'columns' => $gridColumns,
-    'clearBuffers' => true, //optional
+    'columns' => $gridColumns
 ]);
 
 // You can choose to render your own GridView separately
@@ -130,36 +109,6 @@ echo \kartik\grid\GridView::widget([
     'columns' => $gridColumns
 ]);
 ```
-
-## Contributors
-
-### Code Contributors
-
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/kartik-v/yii2-export/graphs/contributors"><img src="https://opencollective.com/yii2-export/contributors.svg?width=890&button=false" /></a>
-
-### Financial Contributors
-
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/yii2-export/contribute)]
-
-#### Individuals
-
-<a href="https://opencollective.com/yii2-export"><img src="https://opencollective.com/yii2-export/individuals.svg?width=890"></a>
-
-#### Organizations
-
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/yii2-export/contribute)]
-
-<a href="https://opencollective.com/yii2-export/organization/0/website"><img src="https://opencollective.com/yii2-export/organization/0/avatar.svg"></a>
-<a href="https://opencollective.com/yii2-export/organization/1/website"><img src="https://opencollective.com/yii2-export/organization/1/avatar.svg"></a>
-<a href="https://opencollective.com/yii2-export/organization/2/website"><img src="https://opencollective.com/yii2-export/organization/2/avatar.svg"></a>
-<a href="https://opencollective.com/yii2-export/organization/3/website"><img src="https://opencollective.com/yii2-export/organization/3/avatar.svg"></a>
-<a href="https://opencollective.com/yii2-export/organization/4/website"><img src="https://opencollective.com/yii2-export/organization/4/avatar.svg"></a>
-<a href="https://opencollective.com/yii2-export/organization/5/website"><img src="https://opencollective.com/yii2-export/organization/5/avatar.svg"></a>
-<a href="https://opencollective.com/yii2-export/organization/6/website"><img src="https://opencollective.com/yii2-export/organization/6/avatar.svg"></a>
-<a href="https://opencollective.com/yii2-export/organization/7/website"><img src="https://opencollective.com/yii2-export/organization/7/avatar.svg"></a>
-<a href="https://opencollective.com/yii2-export/organization/8/website"><img src="https://opencollective.com/yii2-export/organization/8/avatar.svg"></a>
-<a href="https://opencollective.com/yii2-export/organization/9/website"><img src="https://opencollective.com/yii2-export/organization/9/avatar.svg"></a>
 
 ## License
 

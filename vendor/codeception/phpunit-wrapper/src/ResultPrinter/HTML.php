@@ -8,8 +8,6 @@ use Codeception\Test\Descriptor;
 use Codeception\Test\Interfaces\ScenarioDriven;
 use Codeception\TestInterface;
 use Codeception\Util\PathResolver;
-use PHPUnit\Framework\TestResult;
-use SebastianBergmann\Template\Template;
 
 class HTML extends CodeceptionResultPrinter
 {
@@ -120,14 +118,14 @@ class HTML extends CodeceptionResultPrinter
             }
         }
 
-        $scenarioTemplate = new Template(
+        $scenarioTemplate = new \Text_Template(
             $this->templatePath . 'scenario.html'
         );
 
         $failures = '';
         $name = Descriptor::getTestSignatureUnique($test);
         if (isset($this->failures[$name])) {
-            $failTemplate = new Template(
+            $failTemplate = new \Text_Template(
                 $this->templatePath . 'fail.html'
             );
             foreach ($this->failures[$name] as $failure) {
@@ -175,7 +173,7 @@ class HTML extends CodeceptionResultPrinter
 
     public function startTestSuite(\PHPUnit\Framework\TestSuite $suite) : void
     {
-        $suiteTemplate = new Template(
+        $suiteTemplate = new \Text_Template(
             $this->templatePath . 'suite.html'
         );
         if (!$suite->getName()) {
@@ -192,7 +190,7 @@ class HTML extends CodeceptionResultPrinter
      */
     protected function endRun():void
     {
-        $scenarioHeaderTemplate = new Template(
+        $scenarioHeaderTemplate = new \Text_Template(
             $this->templatePath . 'scenario_header.html'
         );
 
@@ -211,7 +209,7 @@ class HTML extends CodeceptionResultPrinter
 
         $header = $scenarioHeaderTemplate->render();
 
-        $scenariosTemplate = new Template(
+        $scenariosTemplate = new \Text_Template(
             $this->templatePath . 'scenarios.html'
         );
 
@@ -280,7 +278,7 @@ class HTML extends CodeceptionResultPrinter
      */
     protected function renderStep(Step $step)
     {
-        $stepTemplate = new Template($this->templatePath . 'step.html');
+        $stepTemplate = new \Text_Template($this->templatePath . 'step.html');
         $stepTemplate->setVar(['action' => $step->getHtml(), 'error' => $step->hasFailed() ? 'failedStep' : '']);
         return $stepTemplate->render();
     }
@@ -292,7 +290,7 @@ class HTML extends CodeceptionResultPrinter
      */
     protected function renderSubsteps(Meta $metaStep, $substepsBuffer)
     {
-        $metaTemplate = new Template($this->templatePath . 'substeps.html');
+        $metaTemplate = new \Text_Template($this->templatePath . 'substeps.html');
         $metaTemplate->setVar(['metaStep' => $metaStep->getHtml(), 'error' => $metaStep->hasFailed() ? 'failedStep' : '', 'steps' => $substepsBuffer, 'id' => uniqid()]);
         return $metaTemplate->render();
     }
@@ -305,9 +303,5 @@ class HTML extends CodeceptionResultPrinter
         }
         $msg = str_replace(['<info>','</info>','<bold>','</bold>'], ['','','',''], $msg);
         return htmlentities($msg);
-    }
-
-    public function printResult(TestResult $result): void
-    {
     }
 }

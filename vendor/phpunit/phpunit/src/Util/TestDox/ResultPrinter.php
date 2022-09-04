@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /*
  * This file is part of PHPUnit.
  *
@@ -9,24 +9,20 @@
  */
 namespace PHPUnit\Util\TestDox;
 
-use function get_class;
-use function in_array;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\ErrorTestCase;
 use PHPUnit\Framework\Test;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\TestListener;
 use PHPUnit\Framework\TestSuite;
 use PHPUnit\Framework\Warning;
 use PHPUnit\Framework\WarningTestCase;
 use PHPUnit\Runner\BaseTestRunner;
-use PHPUnit\TextUI\ResultPrinter as ResultPrinterInterface;
 use PHPUnit\Util\Printer;
-use Throwable;
 
 /**
- * @internal This class is not covered by the backward compatibility promise for PHPUnit
+ * Base class for printers of TestDox documentation.
  */
-abstract class ResultPrinter extends Printer implements ResultPrinterInterface
+abstract class ResultPrinter extends Printer implements TestListener
 {
     /**
      * @var NamePrettifier
@@ -128,7 +124,7 @@ abstract class ResultPrinter extends Printer implements ResultPrinterInterface
     /**
      * An error occurred.
      */
-    public function addError(Test $test, Throwable $t, float $time): void
+    public function addError(Test $test, \Throwable $t, float $time): void
     {
         if (!$this->isOfInterest($test)) {
             return;
@@ -167,7 +163,7 @@ abstract class ResultPrinter extends Printer implements ResultPrinterInterface
     /**
      * Incomplete test.
      */
-    public function addIncompleteTest(Test $test, Throwable $t, float $time): void
+    public function addIncompleteTest(Test $test, \Throwable $t, float $time): void
     {
         if (!$this->isOfInterest($test)) {
             return;
@@ -180,7 +176,7 @@ abstract class ResultPrinter extends Printer implements ResultPrinterInterface
     /**
      * Risky test.
      */
-    public function addRiskyTest(Test $test, Throwable $t, float $time): void
+    public function addRiskyTest(Test $test, \Throwable $t, float $time): void
     {
         if (!$this->isOfInterest($test)) {
             return;
@@ -193,7 +189,7 @@ abstract class ResultPrinter extends Printer implements ResultPrinterInterface
     /**
      * Skipped test.
      */
-    public function addSkippedTest(Test $test, Throwable $t, float $time): void
+    public function addSkippedTest(Test $test, \Throwable $t, float $time): void
     {
         if (!$this->isOfInterest($test)) {
             return;
@@ -228,7 +224,7 @@ abstract class ResultPrinter extends Printer implements ResultPrinterInterface
             return;
         }
 
-        $class = get_class($test);
+        $class = \get_class($test);
 
         if ($this->testClass !== $class) {
             if ($this->testClass !== '') {
@@ -290,7 +286,7 @@ abstract class ResultPrinter extends Printer implements ResultPrinterInterface
     /**
      * Handler for 'on test' event.
      */
-    protected function onTest(string $name, bool $success = true): void
+    protected function onTest($name, bool $success = true): void
     {
     }
 
@@ -314,13 +310,13 @@ abstract class ResultPrinter extends Printer implements ResultPrinterInterface
             return false;
         }
 
-        if ($test instanceof ErrorTestCase || $test instanceof WarningTestCase) {
+        if ($test instanceof WarningTestCase) {
             return false;
         }
 
         if (!empty($this->groups)) {
             foreach ($test->getGroups() as $group) {
-                if (in_array($group, $this->groups, true)) {
+                if (\in_array($group, $this->groups)) {
                     return true;
                 }
             }
@@ -330,7 +326,7 @@ abstract class ResultPrinter extends Printer implements ResultPrinterInterface
 
         if (!empty($this->excludeGroups)) {
             foreach ($test->getGroups() as $group) {
-                if (in_array($group, $this->excludeGroups, true)) {
+                if (\in_array($group, $this->excludeGroups)) {
                     return false;
                 }
             }

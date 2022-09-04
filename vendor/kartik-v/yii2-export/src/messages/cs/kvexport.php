@@ -17,6 +17,14 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Download exported file' => '',
+    'Exported File' => '',
+    'Input error' => '',
+    'Key' => '',
+    'Pick from list' => '',
+    'Please pick a value from the drop-down list.' => '',
+    'Value' => '',
+    'Value is not in list.' => '',
     'CSV' => 'CSV',
     'Column' => 'Sloupec',
     'Comma Separated Values' => 'Hodnoty oddělené čárkou',
@@ -44,14 +52,6 @@ return [
     'The HTML export file will be generated for download.' => 'Soubor HTML bude vygenerován a stažen.',
     'The PDF export file will be generated for download.' => 'Soubor PDF bude vygenerován a stažen.',
     'The TEXT export file will be generated for download.' => 'Soubor Text bude vygenerován a stažen.',
+    'Toggle All' => 'Vybrat vše',
     'grid-export' => 'export',
-    'Download exported file' => '',
-    'Exported File' => '',
-    'Input error' => '',
-    'Key' => '',
-    'Pick from list' => '',
-    'Please pick a value from the drop-down list.' => '',
-    'Value' => '',
-    'Value is not in list.' => '',
-    'Toggle All' => '@@Vybrat vše@@',
 ];

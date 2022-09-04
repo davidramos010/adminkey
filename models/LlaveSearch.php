@@ -17,8 +17,8 @@ class LlaveSearch extends Llave
     public function rules()
     {
         return [
-            [['id', 'id_comunidad', 'id_tipo', 'copia', 'activa'], 'integer'],
-            [['codigo', 'descripcion', 'observacion'], 'safe'],
+            [['id', 'id_comunidad', 'id_tipo', 'copia', 'activa','alarma'], 'integer'],
+            [['codigo', 'descripcion', 'observacion','codigo_alarma','llaveLastStatus'], 'safe'],
         ];
     }
 
@@ -40,9 +40,18 @@ class LlaveSearch extends Llave
      */
     public function search($params)
     {
-        $query = Llave::find();
-        $query->orderBy('id DESC');
+        $query = Llave::find()->alias('ll');
+        $query->orderBy('ll.id DESC');
         // add conditions that should always apply here
+        $query->select([
+            "ll.*",
+            "ls.status as llaveLastStatus"
+        ]);
+        $query->leftJoin('llave_status ls','ls.id_llave = ll.id and ls.id = (
+           SELECT MAX(id) 
+           FROM llave_status cm 
+           WHERE ls.id_llave = ll.id
+        )');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -58,18 +67,28 @@ class LlaveSearch extends Llave
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'id_comunidad' => $this->id_comunidad,
-            'id_tipo' => $this->id_tipo,
-            'copia' => $this->copia,
-            'activa' => $this->activa,
+            'll.id' => $this->id,
+            'll.id_comunidad' => $this->id_comunidad,
+            'll.id_tipo' => $this->id_tipo,
+            'll.copia' => $this->copia,
+            'll.activa' => $this->activa,
+            'll.alarma' => $this->alarma,
         ]);
 
-        $query->andFilterWhere(['like', 'codigo', $this->codigo])
-            ->andFilterWhere(['like', 'descripcion', $this->descripcion])
-            ->andFilterWhere(['like', 'observacion', $this->observacion]);
+        $query->andFilterWhere(['like', 'll.codigo', $this->codigo])
+            ->andFilterWhere(['like', 'll.descripcion', $this->descripcion])
+            ->andFilterWhere(['like', 'll.observacion', $this->observacion]);
 
+        // find satatus
+        if($this->llaveLastStatus=='E'){
+            $query->andWhere(['or',
+                ['ls.status'=> $this->llaveLastStatus],
+                ['IS', 'ls.status', NULL]]);
+        }
 
+        if($this->llaveLastStatus=='S'){
+            $query->andFilterWhere(['ls.status'=> $this->llaveLastStatus]);
+        }
 
         return $dataProvider;
     }

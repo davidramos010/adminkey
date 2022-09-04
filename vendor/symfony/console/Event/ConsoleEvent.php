@@ -14,7 +14,7 @@ namespace Symfony\Component\Console\Event;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Contracts\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Allows to inspect input and output of a command.
@@ -38,7 +38,7 @@ class ConsoleEvent extends Event
     /**
      * Gets the command that is executed.
      *
-     * @return Command|null
+     * @return Command|null A Command instance
      */
     public function getCommand()
     {
@@ -48,7 +48,7 @@ class ConsoleEvent extends Event
     /**
      * Gets the input instance.
      *
-     * @return InputInterface
+     * @return InputInterface An InputInterface instance
      */
     public function getInput()
     {
@@ -58,7 +58,7 @@ class ConsoleEvent extends Event
     /**
      * Gets the output instance.
      *
-     * @return OutputInterface
+     * @return OutputInterface An OutputInterface instance
      */
     public function getOutput()
     {

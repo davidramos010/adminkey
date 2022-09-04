@@ -1,40 +1,64 @@
-<?php declare(strict_types = 1);
+<?php
 /*
  * This file is part of PharIo\Manifest.
  *
- * Copyright (c) Arne Blankerts <arne@blankerts.de>, Sebastian Heuer <sebastian@phpeople.de>, Sebastian Bergmann <sebastian@phpunit.de> and contributors
+ * (c) Arne Blankerts <arne@blankerts.de>, Sebastian Heuer <sebastian@phpeople.de>, Sebastian Bergmann <sebastian@phpunit.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
  */
+
 namespace PharIo\Manifest;
 
-use function preg_match;
-use function sprintf;
-
 class ApplicationName {
-    /** @var string */
+    /**
+     * @var string
+     */
     private $name;
 
-    public function __construct(string $name) {
+    /**
+     * ApplicationName constructor.
+     *
+     * @param string $name
+     *
+     * @throws InvalidApplicationNameException
+     */
+    public function __construct($name) {
+        $this->ensureIsString($name);
         $this->ensureValidFormat($name);
         $this->name = $name;
     }
 
-    public function asString(): string {
+    /**
+     * @return string
+     */
+    public function __toString() {
         return $this->name;
     }
 
-    public function isEqual(ApplicationName $name): bool {
+    public function isEqual(ApplicationName $name) {
         return $this->name === $name->name;
     }
 
-    private function ensureValidFormat(string $name): void {
+    /**
+     * @param string $name
+     *
+     * @throws InvalidApplicationNameException
+     */
+    private function ensureValidFormat($name) {
         if (!preg_match('#\w/\w#', $name)) {
             throw new InvalidApplicationNameException(
                 sprintf('Format of name "%s" is not valid - expected: vendor/packagename', $name),
                 InvalidApplicationNameException::InvalidFormat
+            );
+        }
+    }
+
+    private function ensureIsString($name) {
+        if (!is_string($name)) {
+            throw new InvalidApplicationNameException(
+                'Name must be a string',
+                InvalidApplicationNameException::NotAString
             );
         }
     }

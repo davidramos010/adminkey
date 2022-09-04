@@ -6,7 +6,7 @@ use Codeception\Test\Interfaces\Reported;
 use Codeception\Test\Test;
 use PHPUnit\Framework\TestCase;
 
-class JUnit extends \Codeception\PHPUnit\NonFinal\JUnit
+class JUnit extends \PHPUnit\Util\Log\JUnit
 {
     protected $strictAttributes = ['file', 'name', 'class'];
 

@@ -2,15 +2,7 @@
 
 NuGet Update -self
 REM remove package content folder
-echo Deleting existing content directory if available.
-if exist content (
-    rmdir /s /q content
-    echo Content directory deleted.
-) else (
-    echo Content directory not found.
-)
-
-echo Creating content directory.
+rmdir /s /q content
 
 REM create new package content folder
 mkdir content

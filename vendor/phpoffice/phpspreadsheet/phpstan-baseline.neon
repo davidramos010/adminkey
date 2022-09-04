@@ -516,6 +516,11 @@ parameters:
 			path: src/PhpSpreadsheet/Calculation/FormulaParser.php
 
 		-
+			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Calculation/FormulaParser.php
+
+		-
 			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Calculation\\\\Functions\\:\\:ifCondition\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/PhpSpreadsheet/Calculation/Functions.php
@@ -1061,6 +1066,11 @@ parameters:
 			path: src/PhpSpreadsheet/Calculation/TextData/Text.php
 
 		-
+			message: "#^Elseif branch is unreachable because previous condition is always true\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Cell/Cell.php
+
+		-
 			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Cell\\\\Cell\\:\\:getFormulaAttributes\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/PhpSpreadsheet/Cell/Cell.php
@@ -1099,6 +1109,11 @@ parameters:
 			message: "#^Parameter \\#5 \\$endRow of static method PhpOffice\\\\PhpSpreadsheet\\\\Cell\\\\Coordinate\\:\\:validateRange\\(\\) expects int, string given\\.$#"
 			count: 1
 			path: src/PhpSpreadsheet/Cell/Coordinate.php
+
+		-
+			message: "#^Property PhpOffice\\\\PhpSpreadsheet\\\\Collection\\\\Memory\\:\\:\\$cache has no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Collection/Memory.php
 
 		-
 			message: "#^Parameter \\#1 \\$namedRange of method PhpOffice\\\\PhpSpreadsheet\\\\Spreadsheet\\:\\:addNamedRange\\(\\) expects PhpOffice\\\\PhpSpreadsheet\\\\NamedRange, \\$this\\(PhpOffice\\\\PhpSpreadsheet\\\\DefinedName\\) given\\.$#"
@@ -2256,6 +2271,51 @@ parameters:
 			path: src/PhpSpreadsheet/Shared/Escher/DggContainer/BstoreContainer/BSE.php
 
 		-
+			message: "#^Cannot access offset 0 on array\\|false\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Shared/Font.php
+
+		-
+			message: "#^Cannot access offset 2 on array\\|false\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Shared/Font.php
+
+		-
+			message: "#^Cannot access offset 4 on array\\|false\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Shared/Font.php
+
+		-
+			message: "#^Cannot access offset 6 on array\\|false\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Shared/Font.php
+
+		-
+			message: "#^Parameter \\#1 \\$size of function imagettfbbox expects float, float\\|null given\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Shared/Font.php
+
+		-
+			message: "#^Parameter \\#2 \\$defaultFont of static method PhpOffice\\\\PhpSpreadsheet\\\\Shared\\\\Drawing\\:\\:pixelsToCellDimension\\(\\) expects PhpOffice\\\\PhpSpreadsheet\\\\Style\\\\Font, PhpOffice\\\\PhpSpreadsheet\\\\Style\\\\Font\\|null given\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Shared/Font.php
+
+		-
+			message: "#^Property PhpOffice\\\\PhpSpreadsheet\\\\Shared\\\\Font\\:\\:\\$autoSizeMethods has no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Shared/Font.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Shared/Font.php
+
+		-
+			message: "#^Variable \\$cellText on left side of \\?\\? always exists and is not nullable\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Shared/Font.php
+
+		-
 			message: "#^Property PhpOffice\\\\PhpSpreadsheet\\\\Shared\\\\JAMA\\\\EigenvalueDecomposition\\:\\:\\$cdivi has no type specified\\.$#"
 			count: 1
 			path: src/PhpSpreadsheet/Shared/JAMA/EigenvalueDecomposition.php
@@ -2274,6 +2334,11 @@ parameters:
 			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Shared\\\\JAMA\\\\LUDecomposition\\:\\:getDoublePivot\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/PhpSpreadsheet/Shared/JAMA/LUDecomposition.php
+
+		-
+			message: "#^Call to function is_string\\(\\) with float\\|int will always evaluate to false\\.$#"
+			count: 5
+			path: src/PhpSpreadsheet/Shared/JAMA/Matrix.php
 
 		-
 			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Shared\\\\JAMA\\\\Matrix\\:\\:__construct\\(\\) has parameter \\$args with no type specified\\.$#"
@@ -2353,6 +2418,11 @@ parameters:
 		-
 			message: "#^Parameter \\#3 \\$c of method PhpOffice\\\\PhpSpreadsheet\\\\Shared\\\\JAMA\\\\Matrix\\:\\:set\\(\\) expects float\\|int\\|null, string given\\.$#"
 			count: 2
+			path: src/PhpSpreadsheet/Shared/JAMA/Matrix.php
+
+		-
+			message: "#^Result of && is always false\\.$#"
+			count: 10
 			path: src/PhpSpreadsheet/Shared/JAMA/Matrix.php
 
 		-
@@ -2791,6 +2861,11 @@ parameters:
 			path: src/PhpSpreadsheet/Spreadsheet.php
 
 		-
+			message: "#^Comparison operation \"\\<\\=\" between int\\<min, \\-1\\> and 1000 is always true\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Spreadsheet.php
+
+		-
 			message: "#^Parameter \\#1 \\$worksheet of method PhpOffice\\\\PhpSpreadsheet\\\\Spreadsheet\\:\\:getIndex\\(\\) expects PhpOffice\\\\PhpSpreadsheet\\\\Worksheet\\\\Worksheet, PhpOffice\\\\PhpSpreadsheet\\\\Worksheet\\\\Worksheet\\|null given\\.$#"
 			count: 1
 			path: src/PhpSpreadsheet/Spreadsheet.php
@@ -2801,7 +2876,17 @@ parameters:
 			path: src/PhpSpreadsheet/Spreadsheet.php
 
 		-
+			message: "#^Result of \\|\\| is always true\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Spreadsheet.php
+
+		-
 			message: "#^Strict comparison using \\=\\=\\= between PhpOffice\\\\PhpSpreadsheet\\\\Spreadsheet and null will always evaluate to false\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Spreadsheet.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
 			count: 1
 			path: src/PhpSpreadsheet/Spreadsheet.php
 
@@ -3156,6 +3241,316 @@ parameters:
 			path: src/PhpSpreadsheet/Worksheet/Worksheet.php
 
 		-
+			message: "#^Call to function array_key_exists\\(\\) with int and array\\{none\\: 'none', dashDot\\: '1px dashed', dashDotDot\\: '1px dotted', dashed\\: '1px dashed', dotted\\: '1px dotted', double\\: '3px double', hair\\: '1px solid', medium\\: '2px solid', \\.\\.\\.\\} will always evaluate to false\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Cannot access offset 'mime' on array\\|false\\.$#"
+			count: 2
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Cannot access offset 0 on array\\|false\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Cannot access offset 1 on array\\|false\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Cannot call method getSubscript\\(\\) on PhpOffice\\\\PhpSpreadsheet\\\\Style\\\\Font\\|null\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Cannot call method getSuperscript\\(\\) on PhpOffice\\\\PhpSpreadsheet\\\\Style\\\\Font\\|null\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:calculateSpansOmitRows\\(\\) has parameter \\$candidateSpannedRow with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:calculateSpansOmitRows\\(\\) has parameter \\$sheet with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:calculateSpansOmitRows\\(\\) has parameter \\$sheetIndex with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateHTMLFooter\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateMeta\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateMeta\\(\\) has parameter \\$desc with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateMeta\\(\\) has parameter \\$val with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowCellCss\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowCellCss\\(\\) has parameter \\$cellAddress with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowCellCss\\(\\) has parameter \\$columnNumber with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowCellCss\\(\\) has parameter \\$row with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowCellData\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowCellData\\(\\) has parameter \\$cell with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowCellData\\(\\) has parameter \\$cellType with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowCellData\\(\\) has parameter \\$cssClass with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowCellDataValue\\(\\) has parameter \\$cell with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowCellDataValue\\(\\) has parameter \\$cellData with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowCellDataValueRich\\(\\) has parameter \\$cell with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowCellDataValueRich\\(\\) has parameter \\$cellData with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowIncludeCharts\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowIncludeCharts\\(\\) has parameter \\$coordinate with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowSpans\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowSpans\\(\\) has parameter \\$colSpan with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowSpans\\(\\) has parameter \\$html with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowSpans\\(\\) has parameter \\$rowSpan with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowWriteCell\\(\\) has parameter \\$cellData with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowWriteCell\\(\\) has parameter \\$cellType with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowWriteCell\\(\\) has parameter \\$colNum with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowWriteCell\\(\\) has parameter \\$colSpan with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowWriteCell\\(\\) has parameter \\$coordinate with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowWriteCell\\(\\) has parameter \\$cssClass with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowWriteCell\\(\\) has parameter \\$html with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowWriteCell\\(\\) has parameter \\$row with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowWriteCell\\(\\) has parameter \\$rowSpan with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateRowWriteCell\\(\\) has parameter \\$sheetIndex with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateSheetPrep\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateSheetStarts\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateSheetStarts\\(\\) has parameter \\$rowMin with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateSheetStarts\\(\\) has parameter \\$sheet with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateSheetTags\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateSheetTags\\(\\) has parameter \\$row with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateSheetTags\\(\\) has parameter \\$tbodyStart with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateSheetTags\\(\\) has parameter \\$theadEnd with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateSheetTags\\(\\) has parameter \\$theadStart with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateTableFooter\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateTableTag\\(\\) has parameter \\$html with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateTableTag\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateTableTag\\(\\) has parameter \\$sheetIndex with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateTableTagInline\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:generateTableTagInline\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Parameter \\#1 \\$borderStyle of method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:mapBorderStyle\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Parameter \\#1 \\$font of method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:createCSSStyleFont\\(\\) expects PhpOffice\\\\PhpSpreadsheet\\\\Style\\\\Font, PhpOffice\\\\PhpSpreadsheet\\\\Style\\\\Font\\|null given\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Parameter \\#1 \\$hAlign of method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:mapHAlign\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Parameter \\#1 \\$vAlign of method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Html\\:\\:mapVAlign\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Parameter \\#2 \\$length of function fread expects int\\<0, max\\>, int\\<0, max\\>\\|false given\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
+			message: "#^Parameter \\#3 \\$use_include_path of function fopen expects bool, int given\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Html.php
+
+		-
 			message: "#^Negated boolean expression is always false\\.$#"
 			count: 1
 			path: src/PhpSpreadsheet/Writer/Ods.php
@@ -3501,9 +3896,29 @@ parameters:
 			path: src/PhpSpreadsheet/Writer/Xlsx.php
 
 		-
+			message: "#^Parameter \\#1 \\$string of function substr expects string, int given\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Xlsx/Comments.php
+
+		-
+			message: "#^Parameter \\#2 \\$content of method XMLWriter\\:\\:writeElement\\(\\) expects string\\|null, int given\\.$#"
+			count: 2
+			path: src/PhpSpreadsheet/Writer/Xlsx/Comments.php
+
+		-
 			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
 			count: 1
 			path: src/PhpSpreadsheet/Writer/Xlsx/DefinedNames.php
+
+		-
+			message: "#^Parameter \\#2 \\$content of method XMLWriter\\:\\:writeElement\\(\\) expects string\\|null, int given\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Xlsx/DocProps.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method XMLWriter\\:\\:writeAttribute\\(\\) expects string, int given\\.$#"
+			count: 2
+			path: src/PhpSpreadsheet/Writer/Xlsx/DocProps.php
 
 		-
 			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Xlsx\\\\Rels\\:\\:writeUnparsedRelationship\\(\\) has parameter \\$relationship with no type specified\\.$#"
@@ -3669,3 +4084,74 @@ parameters:
 			message: "#^Result of \\|\\| is always true\\.$#"
 			count: 1
 			path: src/PhpSpreadsheet/Writer/Xlsx/Style.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method XMLWriter\\:\\:writeAttribute\\(\\) expects string, int given\\.$#"
+			count: 7
+			path: src/PhpSpreadsheet/Writer/Xlsx/Workbook.php
+
+		-
+			message: "#^Expression on left side of \\?\\? is not nullable\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 6
+			path: src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Xlsx\\\\Worksheet\\:\\:writeAttributeIf\\(\\) has parameter \\$condition with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Xlsx\\\\Worksheet\\:\\:writeDataBarElements\\(\\) has parameter \\$dataBar with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php
+
+		-
+			message: "#^Method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Xlsx\\\\Worksheet\\:\\:writeElementIf\\(\\) has parameter \\$condition with no type specified\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php
+
+		-
+			message: "#^Parameter \\#2 \\$content of method XMLWriter\\:\\:writeElement\\(\\) expects string\\|null, int\\|string given\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method XMLWriter\\:\\:writeAttribute\\(\\) expects string, int given\\.$#"
+			count: 15
+			path: src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method XMLWriter\\:\\:writeAttribute\\(\\) expects string, int\\<0, max\\> given\\.$#"
+			count: 3
+			path: src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method XMLWriter\\:\\:writeAttribute\\(\\) expects string, int\\<1, max\\> given\\.$#"
+			count: 9
+			path: src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method XMLWriter\\:\\:writeAttribute\\(\\) expects string, int\\|null given\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php
+
+		-
+			message: "#^Parameter \\#2 \\$value of method XMLWriter\\:\\:writeAttribute\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php
+
+		-
+			message: "#^Parameter \\#3 \\$stringTable of method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Xlsx\\\\Worksheet\\:\\:writeSheetData\\(\\) expects array\\<string\\>, array\\<string\\>\\|null given\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php
+
+		-
+			message: "#^Parameter \\#4 \\$val of static method PhpOffice\\\\PhpSpreadsheet\\\\Writer\\\\Xlsx\\\\Worksheet\\:\\:writeAttributeIf\\(\\) expects string, int given\\.$#"
+			count: 1
+			path: src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php
+

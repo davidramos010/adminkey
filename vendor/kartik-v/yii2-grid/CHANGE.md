@@ -1,61 +1,6 @@
 Change Log: `yii2-grid`
 =======================
 
-## Version 3.5.1
-
-**Date:** 17-Jun-2022
-
-- (bug #1037): Correct resizable columns persist resize.
-- (bug #1036): Correct usage of `layout` property in `GridView`.
-- (enh #1031, #1032, #1033, #1034): Update Uzbek Translations.
-- (enh #1019): Update Arabic Translations.
-
-## Version 3.5.0
-
-**Date:** 25-Feb-2022
-
-### BC Breaking new major release
-
-- (enh #1017): PHP 8.1 enhancements for native functions.
-- Enhance & standardize php docs for new website https://docs.krajee.com.
-- (bug #1011): Correct GridView initialization for `toggleData` set to `false`.
-- (enh #1010): Enhance sorter link rendering to include customizable sorter icons.
-- (enh #1009): (BC Breaking) Enhancements to float header, footer, and page summary.
-    - floating the header, footer, or page summary is possible and will use the CSS *sticky* property supported in new browsers
-    - floatThead plugin is obsoleted
-    - properties `floatHeaderOptions` and `floatOverflowContainer` are deprecated and not used anymore
-- (enh #1006): Reorganize main widget code into trait and interface.
-- (bug #1005): (BC Breaking) Remove *requires* dependency on `yii2-bootstrap4-dropdown` & `yii2-bootstrap5-dropdown` and move it to *suggests*.
-- (enh #1004): Enhancements to Boolean Column and its filter styling.
-- (enh #1003): NEW: Edited Highlighted Row Functionality.
-- (enh #996, #997): Fix compatibility with old php version.
-- (bug #995): Correct expand row behavior for nested grid views when used with grid grouping.
-- (bug #991, enh #912): Enhancements and fixes to ExpandRowColumn.
-
-## Version 3.3.6
-
-**Date:** 02-Sep-2021
-
-- (enh #993): Enhancements to support Bootstrap v5.x.
-- (enh #971): Correct `kv-grid-group.js` version.
-- (enh #969): Update Fontawesome CDN version.
-- (enh #968): Update Ukraine Translations.
-- (bug #959): Correct `filterOptions` column seq setting in ColumnTrait.
-- (bug #958): Correct ExpandRowColumn expand all & collapse all.
-- (enh #956): Update Portugese Brazilian Translations.
-
-## Version 3.3.5
-
-**Date:** 27-Mar-2020
-
-- (enh #948): New property `ExpandRowColumn::msgDetailLoading`.
-- (enh #947): Enhance behavior for initial rows expanded set via GridView::ROW_EXPANDED.
-- (enh #940): Set dependency on `kartik-v/yii2-bootstrap4-dropdown`.
-- (enh #934, #938): Correct ternary operator for PHP 7.4 support.
-- (enh #932): Correct Expand Row container parsing for nested expand row columns.
-- (enh #929): Enhance Expand Row Column plugin and correct expand one only.
-- (bug #911): Correct `slugColHeads` usage in JSON export script.
-
 ## Version 3.3.4
 
 **Date:** 26-Aug-2019

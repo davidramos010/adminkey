@@ -1,27 +1,6 @@
 Change Log: `yii2-widget-typeahead`
 ===================================
 
-## Version 1.0.5
-
-**Date:** 21-Dec-2021
-
-- (enh #47): Update handlebars JS to latest release.
-- (enh #46): Correct CSS styling for input readonly.
-
-## Version 1.0.4
-
-**Date:** 29-May-2019
-
-- (enh #37): Allow empty local array.
-- (enh #32): Remove enforcement on empty arrays for widget.
-- Implement stale bot
-
-## Version 1.0.3
-
-**Date:** 09-Oct-2018
-
-- Bump composer dependencies.
-
 ## Version 1.0.2
 
 **Date:** 05-Aug-2018

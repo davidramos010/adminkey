@@ -88,9 +88,6 @@ class DataSeriesValues extends Properties
     /** @var ?Layout */
     private $labelLayout;
 
-    /** @var TrendLine[] */
-    private $trendLines = [];
-
     /**
      * Create a new DataSeriesValues object.
      *
@@ -539,7 +536,7 @@ class DataSeriesValues extends Properties
     }
 
     /**
-     * Smooth Line. Must be specified for both DataSeries and DataSeriesValues.
+     * Smooth Line.
      *
      * @var bool
      */
@@ -579,17 +576,5 @@ class DataSeriesValues extends Properties
         $this->labelLayout = $labelLayout;
 
         return $this;
-    }
-
-    public function setTrendLines(array $trendLines): self
-    {
-        $this->trendLines = $trendLines;
-
-        return $this;
-    }
-
-    public function getTrendLines(): array
-    {
-        return $this->trendLines;
     }
 }

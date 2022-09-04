@@ -3,13 +3,14 @@
 /**
  * @package   yii2-krajee-base
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2022
- * @version   3.0.5
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2018
+ * @version   1.9.9
  */
 
 namespace kartik\base;
 
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 
@@ -17,6 +18,7 @@ use yii\helpers\ArrayHelper;
  * Html5Input widget is a widget encapsulating the HTML 5 inputs.
  *
  * @author Kartik Visweswaran <kartikv2@gmail.com>
+ * @since 1.0
  * @see http://twitter.github.com/typeahead.js/examples
  */
 class Html5Input extends InputWidget
@@ -62,8 +64,29 @@ class Html5Input extends InputWidget
     public $size;
 
     /**
+     * @var array the addon content configuration. The following array keys can be configured:
+     *
+     * - `prepend `: _array|_string_, the prepend addon content. If set as a _string_, will be rendered raw as is without
+     *    HTML encoding. If set as an _array_, the following options can be set:
+     *   - `content `: _string_, the prepend addon content
+     *   - `asButton `: _boolean_, whether the addon is a button
+     *   - `options `: _array the HTML attributes for the prepend addon
+     * - `append `: _array_|_string_, the append addon content.If set as a _string_, will be rendered raw as is without
+     *    HTML encoding. If set as an _array_, the following options can be set:
+     *   - `content `: _string_, the append addon content
+     *   - `asButton `: _boolean_, whether the addon is a button
+     *   - `options `: _array the HTML attributes for the append addon
+     * - `preCaption `: _array_|_string_, the addon content placed before the caption.If set as a _string_, will be
+     *    rendered raw as is without HTML encoding. If set as an _array_, the following options can be set:
+     *   - `content `: _string_, the append addon content
+     *   - `asButton `: _boolean_, whether the addon is a button
+     *   - `options `: _array the HTML attributes for the append addon
+     */
+    public $addon = [];
+
+    /**
      * @var string the width in 'px' or '%' of the HTML5 input container. This property is DEPRECATED since
-     * v1.9.4 and will not cause any change to behaviors. One can directly set the width and other CSS styles
+     * v1.9.9 and will not cause any change to behaviors. One can directly set the width and other CSS styles
      * via the [[html5Container]] property.
      */
     public $width;
@@ -80,6 +103,7 @@ class Html5Input extends InputWidget
 
     /**
      * @inheritdoc
+     * @throws InvalidConfigException
      */
     public function run()
     {
@@ -88,6 +112,7 @@ class Html5Input extends InputWidget
 
     /**
      * Initializes the input.
+     * @throws InvalidConfigException
      */
     protected function initInput()
     {
@@ -119,31 +144,32 @@ class Html5Input extends InputWidget
 
     /**
      * Renders the special HTML5 input. Mainly useful for the color and range inputs
+     * @throws InvalidConfigException
      */
     protected function renderInput()
     {
         Html::addCssClass($this->options, 'form-control');
-        $isBs3 = $this->isBs(3);
-        $n = $isBs3 ? 3 : 4;
+        $css = $this->isBs4() ? 'is-bs4' : 'is-bs3';
         Html::addCssClass($this->containerOptions,
-            ['input-group', 'input-group-html5', "kv-type-{$this->type}", "is-bs{$n}"]);
+            ['input-group', 'input-group-html5', 'kv-type-' . $this->type, $css]);
         if (!empty($this->size)) {
             Html::addCssClass($this->containerOptions, "input-group-{$this->size}");
         }
-        $prepend = $this->getAddonContent('prepend');
-        $preCaption = $this->getAddonContent('preCaption');
-        $append = $this->getAddonContent('append');
+        $isBs4 = $this->isBs4();
+        $prepend = $this->getAddonContent('prepend', $isBs4);
+        $preCaption = $this->getAddonContent('preCaption', $isBs4);
+        $append = $this->getAddonContent('append', $isBs4);
         $caption = $this->getInput('textInput');
         $value = $this->hasModel() ? Html::getAttributeValue($this->model, $this->attribute) : $this->value;
         Html::addCssClass($this->html5Options, 'form-control-' . $this->type);
         $input = Html::input($this->type, $this->html5Options['id'], $value, $this->html5Options);
-        if ($isBs3) {
-            Html::addCssClass($this->html5Container, ['input-group-addon']);
-            $prepend .= Html::tag('span', $input, $this->html5Container);
-        } else {
+        if ($this->isBs4()) {
             Html::addCssClass($this->html5Container, 'input-group-text');
             $out = Html::tag('span', $input, $this->html5Container);
-            $prepend .= $this->isBs(4) ? Html::tag('span', $out, ['class' => 'input-group-prepend']) : $out;
+            $prepend .= Html::tag('span', $out, ['class' => 'input-group-prepend']);
+        } else {
+            Html::addCssClass($this->html5Container, ['input-group-addon']);
+            $prepend .= Html::tag('span', $input, $this->html5Container);
         }
         $content = Html::tag('div', $prepend . $preCaption . $caption . $append, $this->containerOptions);
         Html::addCssClass($this->noSupportOptions, 'alert alert-warning');

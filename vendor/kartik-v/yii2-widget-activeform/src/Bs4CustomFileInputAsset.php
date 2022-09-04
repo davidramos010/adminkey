@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @copyright  Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2022
+ * @copyright  Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2021
  * @package    yii2-widgets
  * @subpackage yii2-widget-activeform
- * @version    1.6.2
+ * @version    1.5.9
  */
 
 namespace kartik\form;
@@ -12,7 +12,7 @@ namespace kartik\form;
 use kartik\base\PluginAssetBundle;
 
 /**
- * Asset bundle for the custom file input animation for bootstrap 4.x.
+ * Asset bundle for the custom file input animation for bootstrap 4.
  *
  * @author Kartik Visweswaran <kartikv2@gmail.com>
  * @since  1.0

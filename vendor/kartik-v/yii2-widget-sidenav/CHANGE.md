@@ -1,13 +1,3 @@
-Change Log: `yii2-widget-sidenav`
-=================================
-
-version 1.0.2
-=============
-
-**Date:** 07-Sep-2021
-
-- (enh #11): Enhancements to support Bootstrap v5.x.
-
 version 1.0.1
 =============
 

@@ -1,28 +1,6 @@
 Change Log: `yii2-widget-activeform`
 ====================================
 
-## Version 1.6.2
-
-**Date**: 27-Feb-2022
-
-- PHP 8.1 enhancements for native functions.
-- (enh #135): Backward compatibility for PHP 5.6.
-
-## Version 1.6.1
-
-**Date**: 13-Feb-2022
-
-- (enh #134): Correct form label required star styling for BS 5.x.
-- (enh #131): Enhance hint block styling.
-- (enh #130): Support isset validation for older PHP versions.
-- (enh #129): Enhance radioList and checkboxList styles.
-
-## Version 1.6.0
-
-**Date**: 01-Sep-2021
-
-- (enh #128): Enhancements to support Bootstrap v5.x. 
-
 ## Version 1.5.9
 
 **Date**: 01-Sep-2021

@@ -54,7 +54,7 @@ class Html extends BaseWriter
      *
      * @var bool
      */
-    protected $embedImages = false;
+    private $embedImages = false;
 
     /**
      * Use inline CSS?
@@ -125,13 +125,6 @@ class Html extends BaseWriter
      * @var bool
      */
     protected $isPdf = false;
-
-    /**
-     * Is the current writer creating mPDF?
-     *
-     * @var bool
-     */
-    protected $isMPdf = false;
 
     /**
      * Generate the Navigation block.
@@ -287,7 +280,7 @@ class Html extends BaseWriter
     /**
      * Map border style.
      *
-     * @param int|string $borderStyle Sheet index
+     * @param int $borderStyle Sheet index
      *
      * @return string
      */
@@ -354,7 +347,7 @@ class Html extends BaseWriter
         return $this;
     }
 
-    private static function generateMeta(?string $val, string $desc): string
+    private static function generateMeta($val, $desc)
     {
         return $val
             ? ('      <meta name="' . $desc . '" content="' . htmlspecialchars($val, Settings::htmlEntityFlags()) . '" />' . PHP_EOL)
@@ -398,7 +391,7 @@ class Html extends BaseWriter
         return $html;
     }
 
-    private function generateSheetPrep(): array
+    private function generateSheetPrep()
     {
         // Ensure that Spans have been calculated?
         $this->calculateSpans();
@@ -413,7 +406,7 @@ class Html extends BaseWriter
         return $sheets;
     }
 
-    private function generateSheetStarts(Worksheet $sheet, int $rowMin): array
+    private function generateSheetStarts($sheet, $rowMin)
     {
         // calculate start of <tbody>, <thead>
         $tbodyStart = $rowMin;
@@ -432,7 +425,7 @@ class Html extends BaseWriter
         return [$theadStart, $theadEnd, $tbodyStart];
     }
 
-    private function generateSheetTags(int $row, int $theadStart, int $theadEnd, int $tbodyStart): array
+    private function generateSheetTags($row, $theadStart, $theadEnd, $tbodyStart)
     {
         // <thead> ?
         $startTag = ($row == $theadStart) ? ('        <thead>' . PHP_EOL) : '';
@@ -551,10 +544,15 @@ class Html extends BaseWriter
      * Extend Row if chart is placed after nominal end of row.
      * This code should be exercised by sample:
      * Chart/32_Chart_read_write_PDF.php.
+     * However, that test is suppressed due to out-of-date
+     * Jpgraph code issuing warnings. So, don't measure
+     * code coverage for this function till that is fixed.
      *
      * @param int $row Row to check for charts
      *
      * @return array
+     *
+     * @codeCoverageIgnore
      */
     private function extendRowsForCharts(Worksheet $worksheet, int $row)
     {
@@ -630,12 +628,11 @@ class Html extends BaseWriter
      *
      * @return string
      */
-    public static function winFileToUrl($filename, bool $mpdf = false)
+    public static function winFileToUrl($filename)
     {
         // Windows filename
         if (substr($filename, 1, 2) === ':\\') {
-            $protocol = $mpdf ? '' : 'file:///';
-            $filename = $protocol . str_replace('\\', '/', $filename);
+            $filename = 'file:///' . str_replace('\\', '/', $filename);
         }
 
         return $filename;
@@ -677,12 +674,12 @@ class Html extends BaseWriter
                 $filename = htmlspecialchars($filename, Settings::htmlEntityFlags());
 
                 $html .= PHP_EOL;
-                $imageData = self::winFileToUrl($filename, $this->isMPdf);
+                $imageData = self::winFileToUrl($filename);
 
-                if ($this->embedImages || substr($imageData, 0, 6) === 'zip://') {
+                if (($this->embedImages && !$this->isPdf) || substr($imageData, 0, 6) === 'zip://') {
                     $picture = @file_get_contents($filename);
                     if ($picture !== false) {
-                        $imageDetails = getimagesize($filename) ?: [];
+                        $imageDetails = getimagesize($filename);
                         // base64 encode the binary data
                         $base64 = base64_encode($picture);
                         $imageData = 'data:' . $imageDetails['mime'] . ';base64,' . $base64;
@@ -697,10 +694,12 @@ class Html extends BaseWriter
                 $imageResource = $drawing->getImageResource();
                 if ($imageResource) {
                     ob_start(); //  Let's start output buffering.
+                    // @phpstan-ignore-next-line
                     imagepng($imageResource); //  This will normally output the image, but because of ob_start(), it won't.
-                    $contents = (string) ob_get_contents(); //  Instead, output above is saved to $contents
+                    $contents = ob_get_contents(); //  Instead, output above is saved to $contents
                     ob_end_clean(); //  End the output buffer.
 
+                    /** @phpstan-ignore-next-line */
                     $dataUri = 'data:image/png;base64,' . base64_encode($contents);
 
                     //  Because of the nature of tables, width is more important than height.
@@ -719,6 +718,11 @@ class Html extends BaseWriter
      * Generate chart tag in cell.
      * This code should be exercised by sample:
      * Chart/32_Chart_read_write_PDF.php.
+     * However, that test is suppressed due to out-of-date
+     * Jpgraph code issuing warnings. So, don't measure
+     * code coverage for this function till that is fixed.
+     *
+     * @codeCoverageIgnore
      */
     private function writeChartInCell(Worksheet $worksheet, string $coordinates): string
     {
@@ -736,18 +740,21 @@ class Html extends BaseWriter
                     }
 
                     $html .= PHP_EOL;
-                    $imageDetails = getimagesize($chartFileName) ?: [];
+                    $imageDetails = getimagesize($chartFileName);
                     $filedesc = $chart->getTitle();
                     $filedesc = $filedesc ? $filedesc->getCaptionText() : '';
                     $filedesc = $filedesc ? htmlspecialchars($filedesc, ENT_QUOTES) : 'Embedded chart';
-                    $picture = file_get_contents($chartFileName);
-                    if ($picture !== false) {
+                    if ($fp = fopen($chartFileName, 'rb', 0)) {
+                        $picture = fread($fp, filesize($chartFileName));
+                        fclose($fp);
+                        /** @phpstan-ignore-next-line */
                         $base64 = base64_encode($picture);
                         $imageData = 'data:' . $imageDetails['mime'] . ';base64,' . $base64;
 
                         $html .= '<img style="position: absolute; z-index: 1; left: ' . $chartCoordinates['xOffset'] . 'px; top: ' . $chartCoordinates['yOffset'] . 'px; width: ' . $imageDetails[0] . 'px; height: ' . $imageDetails[1] . 'px;" src="' . $imageData . '" alt="' . $filedesc . '" />' . PHP_EOL;
+
+                        unlink($chartFileName);
                     }
-                    unlink($chartFileName);
                 }
             }
         }
@@ -935,8 +942,8 @@ class Html extends BaseWriter
 
         // Calculate cell style hashes
         foreach ($this->spreadsheet->getCellXfCollection() as $index => $style) {
-            $css['td.style' . $index . ', th.style' . $index] = $this->createCSSStyle($style);
-            //$css['th.style' . $index] = $this->createCSSStyle($style);
+            $css['td.style' . $index] = $this->createCSSStyle($style);
+            $css['th.style' . $index] = $this->createCSSStyle($style);
         }
 
         // Fetch sheets
@@ -988,20 +995,12 @@ class Html extends BaseWriter
         $css = [];
 
         // Create CSS
-        $css['vertical-align'] = $this->mapVAlign($alignment->getVertical() ?? '');
-        $textAlign = $this->mapHAlign($alignment->getHorizontal() ?? '');
+        $css['vertical-align'] = $this->mapVAlign($alignment->getVertical());
+        $textAlign = $this->mapHAlign($alignment->getHorizontal());
         if ($textAlign) {
             $css['text-align'] = $textAlign;
             if (in_array($textAlign, ['left', 'right'])) {
                 $css['padding-' . $textAlign] = (string) ((int) $alignment->getIndent() * 9) . 'px';
-            }
-        }
-        $rotation = $alignment->getTextRotation();
-        if ($rotation !== 0 && $rotation !== Alignment::TEXTROTATION_STACK_PHPSPREADSHEET) {
-            if ($this->isMPdf) {
-                $css['text-rotate'] = "$rotation";
-            } else {
-                $css['transform'] = "rotate({$rotation}deg)";
             }
         }
 
@@ -1065,8 +1064,10 @@ class Html extends BaseWriter
      * Create CSS style.
      *
      * @param Border $border Border
+     *
+     * @return string
      */
-    private function createCSSStyleBorder(Border $border): string
+    private function createCSSStyleBorder(Border $border)
     {
         //    Create CSS - add !important to non-none border styles for merged cells
         $borderStyle = $this->mapBorderStyle($border->getBorderStyle());
@@ -1087,11 +1088,9 @@ class Html extends BaseWriter
         $css = [];
 
         // Create CSS
-        if ($fill->getFillType() !== Fill::FILL_NONE) {
-            $value = $fill->getFillType() == Fill::FILL_NONE ?
-                'white' : '#' . $fill->getStartColor()->getRGB();
-            $css['background-color'] = $value;
-        }
+        $value = $fill->getFillType() == Fill::FILL_NONE ?
+            'white' : '#' . $fill->getStartColor()->getRGB();
+        $css['background-color'] = $value;
 
         return $css;
     }
@@ -1099,7 +1098,7 @@ class Html extends BaseWriter
     /**
      * Generate HTML footer.
      */
-    public function generateHTMLFooter(): string
+    public function generateHTMLFooter()
     {
         // Construct HTML
         $html = '';
@@ -1109,7 +1108,7 @@ class Html extends BaseWriter
         return $html;
     }
 
-    private function generateTableTagInline(Worksheet $worksheet, string $id): string
+    private function generateTableTagInline(Worksheet $worksheet, $id)
     {
         $style = isset($this->cssStyles['table']) ?
             $this->assembleCSS($this->cssStyles['table']) : '';
@@ -1129,7 +1128,7 @@ class Html extends BaseWriter
         return $html;
     }
 
-    private function generateTableTag(Worksheet $worksheet, string $id, string &$html, int $sheetIndex): void
+    private function generateTableTag(Worksheet $worksheet, $id, &$html, $sheetIndex): void
     {
         if (!$this->useInlineCss) {
             $gridlines = $worksheet->getShowGridlines() ? ' gridlines' : '';
@@ -1156,9 +1155,9 @@ class Html extends BaseWriter
         $html = '';
         $id = $showid ? "id='sheet$sheetIndex'" : '';
         if ($showid) {
-            $html .= "<div style='page: page$sheetIndex'>" . PHP_EOL;
+            $html .= "<div style='page: page$sheetIndex'>\n";
         } else {
-            $html .= "<div style='page: page$sheetIndex' class='scrpgbrk'>" . PHP_EOL;
+            $html .= "<div style='page: page$sheetIndex' class='scrpgbrk'>\n";
         }
 
         $this->generateTableTag($worksheet, $id, $html, $sheetIndex);
@@ -1182,7 +1181,7 @@ class Html extends BaseWriter
     /**
      * Generate table footer.
      */
-    private function generateTableFooter(): string
+    private function generateTableFooter()
     {
         return '    </tbody></table>' . PHP_EOL . '</div>' . PHP_EOL;
     }
@@ -1228,7 +1227,7 @@ class Html extends BaseWriter
         return $html;
     }
 
-    private function generateRowCellCss(Worksheet $worksheet, string $cellAddress, int $row, int $columnNumber): array
+    private function generateRowCellCss(Worksheet $worksheet, $cellAddress, $row, $columnNumber)
     {
         $cell = ($cellAddress > '') ? $worksheet->getCellCollection()->get($cellAddress) : '';
         $coordinate = Coordinate::stringFromColumnIndex($columnNumber + 1) . ($row + 1);
@@ -1254,24 +1253,22 @@ class Html extends BaseWriter
         return [$cell, $cssClass, $coordinate];
     }
 
-    private function generateRowCellDataValueRich(Cell $cell, string &$cellData): void
+    private function generateRowCellDataValueRich($cell, &$cellData): void
     {
         // Loop through rich text elements
         $elements = $cell->getValue()->getRichTextElements();
         foreach ($elements as $element) {
             // Rich text start?
             if ($element instanceof Run) {
-                $cellEnd = '';
-                if ($element->getFont() !== null) {
-                    $cellData .= '<span style="' . $this->assembleCSS($this->createCSSStyleFont($element->getFont())) . '">';
+                $cellData .= '<span style="' . $this->assembleCSS($this->createCSSStyleFont($element->getFont())) . '">';
 
-                    if ($element->getFont()->getSuperscript()) {
-                        $cellData .= '<sup>';
-                        $cellEnd = '</sup>';
-                    } elseif ($element->getFont()->getSubscript()) {
-                        $cellData .= '<sub>';
-                        $cellEnd = '</sub>';
-                    }
+                $cellEnd = '';
+                if ($element->getFont()->getSuperscript()) {
+                    $cellData .= '<sup>';
+                    $cellEnd = '</sup>';
+                } elseif ($element->getFont()->getSubscript()) {
+                    $cellData .= '<sub>';
+                    $cellEnd = '</sub>';
                 }
 
                 // Convert UTF8 data to PCDATA
@@ -1289,7 +1286,7 @@ class Html extends BaseWriter
         }
     }
 
-    private function generateRowCellDataValue(Worksheet $worksheet, Cell $cell, ?string &$cellData): void
+    private function generateRowCellDataValue(Worksheet $worksheet, $cell, &$cellData): void
     {
         if ($cell->getValue() instanceof RichText) {
             $this->generateRowCellDataValueRich($cell, $cellData);
@@ -1315,11 +1312,7 @@ class Html extends BaseWriter
         }
     }
 
-    /**
-     * @param null|Cell|string $cell
-     * @param array|string $cssClass
-     */
-    private function generateRowCellData(Worksheet $worksheet, $cell, &$cssClass, string $cellType): string
+    private function generateRowCellData(Worksheet $worksheet, $cell, &$cssClass, $cellType)
     {
         $cellData = '&nbsp;';
         if ($cell instanceof Cell) {
@@ -1339,10 +1332,10 @@ class Html extends BaseWriter
             $cellData = nl2br($cellData);
 
             // Extend CSS class?
-            if (!$this->useInlineCss && is_string($cssClass)) {
+            if (!$this->useInlineCss) {
                 $cssClass .= ' style' . $cell->getXfIndex();
                 $cssClass .= ' ' . $cell->getDataType();
-            } elseif (is_array($cssClass)) {
+            } else {
                 if ($cellType == 'th') {
                     if (isset($this->cssStyles['th.style' . $cell->getXfIndex()])) {
                         $cssClass = array_merge($cssClass, $this->cssStyles['th.style' . $cell->getXfIndex()]);
@@ -1372,12 +1365,12 @@ class Html extends BaseWriter
         return $cellData;
     }
 
-    private function generateRowIncludeCharts(Worksheet $worksheet, string $coordinate): string
+    private function generateRowIncludeCharts(Worksheet $worksheet, $coordinate)
     {
         return $this->includeCharts ? $this->writeChartInCell($worksheet, $coordinate) : '';
     }
 
-    private function generateRowSpans(string $html, int $rowSpan, int $colSpan): string
+    private function generateRowSpans($html, $rowSpan, $colSpan)
     {
         $html .= ($colSpan > 1) ? (' colspan="' . $colSpan . '"') : '';
         $html .= ($rowSpan > 1) ? (' rowspan="' . $rowSpan . '"') : '';
@@ -1385,10 +1378,7 @@ class Html extends BaseWriter
         return $html;
     }
 
-    /**
-     * @param array|string $cssClass
-     */
-    private function generateRowWriteCell(string &$html, Worksheet $worksheet, string $coordinate, string $cellType, string $cellData, int $colSpan, int $rowSpan, $cssClass, int $colNum, int $sheetIndex, int $row): void
+    private function generateRowWriteCell(&$html, Worksheet $worksheet, $coordinate, $cellType, $cellData, $colSpan, $rowSpan, $cssClass, $colNum, $sheetIndex, $row): void
     {
         // Image?
         $htmlx = $this->writeImageInCell($worksheet, $coordinate);
@@ -1396,7 +1386,7 @@ class Html extends BaseWriter
         $htmlx .= $this->generateRowIncludeCharts($worksheet, $coordinate);
         // Column start
         $html .= '            <' . $cellType;
-        if (!$this->useInlineCss && !$this->isPdf && is_string($cssClass)) {
+        if (!$this->useInlineCss && !$this->isPdf) {
             $html .= ' class="' . $cssClass . '"';
             if ($htmlx) {
                 $html .= " style='position: relative;'";
@@ -1406,11 +1396,9 @@ class Html extends BaseWriter
             // We must explicitly write the width of the <td> element because TCPDF
             // does not recognize e.g. <col style="width:42pt">
             if ($this->useInlineCss) {
-                $xcssClass = is_array($cssClass) ? $cssClass : [];
+                $xcssClass = $cssClass;
             } else {
-                if (is_string($cssClass)) {
-                    $html .= ' class="' . $cssClass . '"';
-                }
+                $html .= ' class="' . $cssClass . '"';
                 $xcssClass = [];
             }
             $width = 0;
@@ -1421,7 +1409,8 @@ class Html extends BaseWriter
                     $width += $this->columnWidths[$sheetIndex][$i];
                 }
             }
-            $xcssClass['width'] = (string) $width . 'pt';
+            $xcssClass['width'] = $width . 'pt';
+
             // We must also explicitly write the height of the <td> element because TCPDF
             // does not recognize e.g. <tr style="height:50pt">
             if (isset($this->cssStyles['table.sheet' . $sheetIndex . ' tr.row' . $row]['height'])) {
@@ -1463,10 +1452,6 @@ class Html extends BaseWriter
         // Sheet index
         $sheetIndex = $worksheet->getParent()->getIndex($worksheet);
         $html = $this->generateRowStart($worksheet, $sheetIndex, $row);
-        $generateDiv = $this->isMPdf && $worksheet->getRowDimension($row + 1)->getVisible() === false;
-        if ($generateDiv) {
-            $html .= '<div style="visibility:hidden; display:none;">' . PHP_EOL;
-        }
 
         // Write cells
         $colNum = 0;
@@ -1514,9 +1499,6 @@ class Html extends BaseWriter
         }
 
         // Write row end
-        if ($generateDiv) {
-            $html .= '</div>' . PHP_EOL;
-        }
         $html .= '          </tr>' . PHP_EOL;
 
         // Return
@@ -1740,7 +1722,7 @@ class Html extends BaseWriter
         $this->spansAreCalculated = true;
     }
 
-    private function calculateSpansOmitRows(Worksheet $sheet, int $sheetIndex, array $candidateSpannedRow): void
+    private function calculateSpansOmitRows($sheet, $sheetIndex, $candidateSpannedRow): void
     {
         // Identify which rows should be omitted in HTML. These are the rows where all the cells
         //   participate in a merge and the where base cells are somewhere above.
@@ -1847,26 +1829,26 @@ class Html extends BaseWriter
             } elseif ($orientation === \PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_PORTRAIT) {
                 $htmlPage .= 'size: portrait; ';
             }
-            $htmlPage .= '}' . PHP_EOL;
+            $htmlPage .= "}\n";
             ++$sheetId;
         }
-        $htmlPage .= implode(PHP_EOL, [
-            '.navigation {page-break-after: always;}',
-            '.scrpgbrk, div + div {page-break-before: always;}',
-            '@media screen {',
-            '  .gridlines td {border: 1px solid black;}',
-            '  .gridlines th {border: 1px solid black;}',
-            '  body>div {margin-top: 5px;}',
-            '  body>div:first-child {margin-top: 0;}',
-            '  .scrpgbrk {margin-top: 1px;}',
-            '}',
-            '@media print {',
-            '  .gridlinesp td {border: 1px solid black;}',
-            '  .gridlinesp th {border: 1px solid black;}',
-            '  .navigation {display: none;}',
-            '}',
-            '',
-        ]);
+        $htmlPage .= <<<EOF
+.navigation {page-break-after: always;}
+.scrpgbrk, div + div {page-break-before: always;}
+@media screen {
+  .gridlines td {border: 1px solid black;}
+  .gridlines th {border: 1px solid black;}
+  body>div {margin-top: 5px;}
+  body>div:first-child {margin-top: 0;}
+  .scrpgbrk {margin-top: 1px;}
+}
+@media print {
+  .gridlinesp td {border: 1px solid black;}
+  .gridlinesp th {border: 1px solid black;}
+  .navigation {display: none;}
+}
+
+EOF;
         $htmlPage .= $generateSurroundingHTML ? ('</style>' . PHP_EOL) : '';
 
         return $htmlPage;

@@ -3,8 +3,8 @@
 /**
  * @package   yii2-dynagrid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2022
- * @version   1.5.4
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2019
+ * @version   1.5.1
  */
 
 namespace kartik\dynagrid;

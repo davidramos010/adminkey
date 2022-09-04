@@ -1,19 +1,7 @@
 Change Log: `yii2-widget-touchspin`
 ===================================
 
-## Version 1.2.4
-
-**Date:** 02-Sep-2021
-
-- (enh #12): Enhancements to support Bootstrap v5.x.
-
 ## Version 1.2.3
-
-**Date:** 05-Sep-2018
-
-- (enh #10): Correct `btn-vertical` bootstrap markup styling.
-
-## Version 1.2.4
 
 **Date:** 05-Sep-2018
 

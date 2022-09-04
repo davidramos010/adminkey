@@ -17,6 +17,6 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Clear field' => 'Limpar campo',
-    'Select date & time' => 'Selecione data e hora',
+    'Clear field' => '',
+    'Select date & time' => '',
 ];

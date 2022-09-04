@@ -6,6 +6,7 @@ use kartik\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\Pjax;
 use yii\data\ArrayDataProvider;
+use app\models\util;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\RegistroSearch */
@@ -46,8 +47,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
                 $gridColumns = [
-                    ['class' => 'kartik\grid\SerialColumn'],
-                    'id',
+                    [
+                        'attribute' => 'id',
+                        'label' => 'ID',
+                        'headerOptions' => ['style' => 'width: 5%'],
+                    ],
                     [
                         'attribute' => 'id_user',
                         'label' => 'Usuario',
@@ -80,8 +84,52 @@ $this->params['breadcrumbs'][] = $this->title;
                             return (isset($model->llave))?strtoupper($model->llave->comunidad->nombre):'No Encontrado' ;
                         }
                     ],
-                    'entrada',
-                    'salida'
+                    [
+                        'attribute' => 'entrada',
+                        'headerOptions' => ['style' => 'width: 20%'],
+                        'value' => function ($model) {
+                            return (isset($model->entrada))? util::getDateTimeFormatedSqlToUser($model->entrada) :'' ;
+                        },
+                        'filterType' => GridView::FILTER_DATE,
+                        'filterWidgetOptions' => [
+                            'pluginOptions' => [
+                                'autoclose' => true,
+                                'format' => 'dd-mm-yyyy'
+                            ],
+
+                        ],
+                        'filterInputOptions' => [
+                            'class' => 'form-control',
+                            'placeholder' => Yii::t('app', 'Fecha Entrada'),
+                        ],
+                        'label' => Yii::t('app', 'Fecha Entrada'),
+                        'headerOptions' => ['class' => 'col-xs-2'],
+                        'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; ']
+                    ],
+                    [
+                        'attribute' => 'salida',
+                        'headerOptions' => ['style' => 'width: 10%'],
+                        'value' => function ($model) {
+                            return (isset($model->salida))? util::getDateTimeFormatedSqlToUser($model->salida) :'' ;
+                        },
+                        'filterType' => GridView::FILTER_DATE,
+                        'filterWidgetOptions' => [
+                            'pluginOptions' => [
+                                'autoclose' => true,
+                                'format' => 'dd-mm-yyyy',
+                                'showButtonPanel'=>'true',
+                                'showTodayButton' => 'true'
+                            ],
+
+                        ],
+                        'filterInputOptions' => [
+                            'class' => 'form-control',
+                            'placeholder' => Yii::t('app', 'Fecha Salida'),
+                        ],
+                        'label' => Yii::t('app', 'Fecha Salida'),
+                        'headerOptions' => ['class' => 'col-xs-2'],
+                        'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; ']
+                    ]
                 ];
 
                 // Renders a export dropdown menu
@@ -90,8 +138,25 @@ $this->params['breadcrumbs'][] = $this->title;
                     'columns' => $gridColumns,
                     'dropdownOptions' => [
                         'label' => 'Export All',
-                        'class' => 'btn btn-secondary'
-                    ]
+                        'class' => 'btn btn-default'
+                    ],
+                    'showConfirmAlert'=>false,
+                    'exportContainer' => [
+                        'class' => 'btn-group mr-2'
+                    ],
+                    'filename'        => Yii::t('app', 'ReportMovimientos'),
+                    'exportConfig' => [
+                        ExportMenu::FORMAT_HTML => false,
+                        ExportMenu::FORMAT_EXCEL => false,
+                        ExportMenu::FORMAT_TEXT => false,
+                        ExportMenu::FORMAT_PDF => false,
+                        ExportMenu::FORMAT_CSV   => [
+                            'label'           => Yii::t('app', 'CSV'),
+                        ],
+                        ExportMenu::FORMAT_EXCEL_X => [
+                            'label'           => Yii::t('app', 'Excel'),
+                        ],
+                    ],
                 ]);
 
                 // You can choose to render your own GridView separately

@@ -1,50 +1,12 @@
 /*!
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2022
- * @version   3.5.1
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2019
+ * @version   3.3.4
  *
  * Yii2 Gridview widget styling and enhancements for Bootstrap.
  *
  */
-
-/**
- * Table header and footer styling including floating header and footer
- */
-.kv-table-header, .kv-table-footer {
-    background: #fff;
-}
-
-.kv-table-footer {
-    font-weight: bold;
-    background: linear-gradient(to top, #fff 0%, #eee 100%);
-}
-
-.kv-table-header {
-    background: linear-gradient(to bottom, #fff 0%, #eee 100%);
-}
-
-.table-bordered > thead.kv-table-header > tr, .table-bordered > thead.kv-table-header > tr > th,
-.table-bordered > thead.kv-table-header > tr > td, .kv-table-header > tr, .kv-table-header > tr > th,
-.kv-table-header > tr > td {
-    border-bottom: none;
-    border-top: none;
-}
-
-.kv-float-header, .kv-float-footer {
-    position: sticky;
-}
-
-.kv-float-header {
-    inset-block-start: 0;
-    box-shadow: inset 0 -1px 0 #ccc;
-}
-
-.kv-float-footer {
-    inset-block-end: 0;
-    box-shadow: inset 0 2px 0 #ccc;
-}
-
 .kv-grid-container {
     position: relative;
 }
@@ -57,41 +19,42 @@
  * Table column heading sort styles for BS4
  */
 .kv-grid-bs4 .card .kv-grid-table {
-    margin: 0;
+    margin: 0
 }
 
-.kv-grid-bs4 .card .kv-grid-table fthfoot,
-.kv-grid-bs4 .card .kv-grid-table fthfoot * {
-    font-size: 0;
-    line-height: 0;
-    padding: 0;
-    margin: 0;
-    border: 0;
+.kv-grid-bs4 a.asc:after,
+.kv-grid-bs4 a.desc:after {
+    /*noinspection CssNoGenericFontName*/
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
 }
 
-.kv-sort-link.asc:after, .kv-sort-link.desc:after {
-    content: "";
+.kv-grid-bs4 a.asc:after {
+    content: "\f15e";
 }
 
-.kv-sort-link .kv-sort-icon {
-    text-decoration: none;
-    margin-left: 5px;
+.kv-grid-bs4 a.desc:after {
+    content: "\f15d";
+}
+
+.kv-grid-bs4 .sort-numerical a.asc:after {
+    content: "\f163";
+}
+
+.kv-grid-bs4 .sort-numerical a.desc:after {
+    content: "\f162";
 }
 
 /**
  * Panel Styles
  */
 .kv-panel-pager {
-    height: 34px;
+    min-height: 34px;
 }
 
 .kv-panel-pager .pagination {
-    margin: 0 -5px;
+    margin: 0 0 -5px 0;
     padding: 0;
-}
-
-.kv-grid-bs4 .kv-panel-pager .pagination {
-    margin: -3px -9px;
 }
 
 .kv-panel-before {
@@ -142,9 +105,14 @@
     border-bottom-width: 2px;
 }
 
-.kv-page-summary-container {
+.kv-page-summary {
+    border-top: 4px double #ddd;
     font-weight: bold;
-    border-top: 2px solid #ccc;
+}
+
+.kv-table-footer {
+    border-top: 4px double #ddd;
+    font-weight: bold;
 }
 
 .kv-table-caption {
@@ -384,16 +352,7 @@
  * RadioColumn styles
  */
 .kv-clear-radio {
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 1.35em;
-    text-shadow: 0 1px 0 #fff;
-}
-
-.kv-clear-radio:focus,
-.kv-clear-radio:hover {
-    color: #245269;
-    text-decoration: none;
+    float: none;
 }
 
 /**
@@ -432,7 +391,7 @@ td.kv-group-odd {
 .kv-grid-wrapper {
     position: relative;
     overflow: auto;
-    height: 320px;
+    height: 300px;
 }
 
 /**
@@ -442,11 +401,4 @@ td.kv-group-odd {
     .hide-resize .rc-handle-container {
         overflow: hidden;
     }
-}
-
-/**
- * Boolean column Select2 filter
- */
-.select2-results__option--highlighted .kv-bool-icon > * {
-    color: inherit !important;
 }

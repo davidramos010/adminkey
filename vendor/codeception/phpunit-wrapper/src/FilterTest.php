@@ -1,7 +1,6 @@
 <?php
 namespace Codeception\PHPUnit;
 
-use Codeception\PHPUnit\NonFinal\NameFilterIterator;
 use Codeception\Test\Descriptor;
 
 /**
@@ -10,7 +9,7 @@ use Codeception\Test\Descriptor;
  * Class FilterTest
  * @package Codeception\PHPUnit
  */
-class FilterTest extends NameFilterIterator
+class FilterTest extends \PHPUnit\Runner\Filter\NameFilterIterator
 {
     public function accept():bool
     {

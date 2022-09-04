@@ -17,6 +17,13 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Input error' => '',
+    'Key' => '',
+    'Pick from list' => '',
+    'Please pick a value from the drop-down list.' => '',
+    'Value' => '',
+    'Value is not in list.' => '',
+    'grid-export' => '',
     'CSV' => 'CSV',
     'Column' => 'Сповпець',
     'Comma Separated Values' => 'Розділені комами значення',
@@ -46,12 +53,5 @@ return [
     'The HTML export file will be generated for download.' => 'Згенерується файл у форматі HTML.',
     'The PDF export file will be generated for download.' => 'Згенерується файл у форматі PDF.',
     'The TEXT export file will be generated for download.' => 'Згенерується файл у форматі TEXT.',
-    'Input error' => '',
-    'Key' => '',
-    'Pick from list' => '',
-    'Please pick a value from the drop-down list.' => '',
-    'Value' => '',
-    'Value is not in list.' => '',
-    'grid-export' => '',
-    'Toggle All' => '@@Усі@@',
+    'Toggle All' => 'Усі',
 ];
