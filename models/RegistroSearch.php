@@ -18,7 +18,7 @@ class RegistroSearch extends Registro
     {
         return [
             [['id', 'id_user', 'id_llave'], 'integer'],
-            [['entrada', 'salida', 'observacion', 'codigo', 'username','comunidad','comercial'], 'safe'],
+            [['entrada', 'salida', 'observacion', 'codigo', 'username','comunidad','comercial','nombre_propietario'], 'safe'],
         ];
     }
 
@@ -48,13 +48,19 @@ class RegistroSearch extends Registro
             'co.nombre as comunidad',
             'cm.nombre as comercial',
             'll.codigo',
-            'u.username'
+            'u.username',
+            "(CASE
+                WHEN pp.nombre_propietario IS NOT NULL THEN pp.nombre_propietario
+                WHEN pp.nombre_representante IS NOT NULL THEN pp.nombre_representante
+                ELSE NULL
+            END) as nombre_propietario"
         ]);
 
         $query->leftJoin('llave ll','r.id_llave = ll.id');
         $query->leftJoin('User u','r.id_user = u.id');
         $query->leftJoin('comunidad co','ll.id_comunidad = co.id');
         $query->leftJoin('comerciales cm','r.id_comercial = cm.id');
+        $query->leftJoin('propietarios pp','ll.id_propietario = pp.id');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -89,6 +95,14 @@ class RegistroSearch extends Registro
             $query->andFilterWhere([
                 'LIKE', 'entrada', Date('Y-m-d', strtotime($this->entrada))
             ]);
+        }
+
+        // ======================================================
+        // Propietarios
+        if(!empty($this->nombre_propietario)){
+            $query->andWhere(['or',
+                ['like', 'pp.nombre_propietario', $this->nombre_propietario],
+                ['like', 'pp.nombre_representante', $this->nombre_propietario]]);
         }
 
         $query->andFilterWhere(['like', 'observacion', $this->observacion]);

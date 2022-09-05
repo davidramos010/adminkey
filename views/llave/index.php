@@ -49,6 +49,15 @@ $this->title = 'Llaves';
                 <?php
 
                 $gridColumns = [
+                     [
+                        'attribute' => 'nombre_propietario',
+                        'label' => 'Propietario',
+                        'headerOptions' => ['style' => 'width: 15%'],
+                        'format' => 'raw',
+                        'value' => function($model){
+                            return (isset($model->nombre_propietario))?strtoupper($model->nombre_propietario):'' ;
+                        }
+                    ],
                     [
                         'attribute' => 'id_comunidad',
                         'label' => 'Comunidad',
@@ -61,7 +70,7 @@ $this->title = 'Llaves';
                     [
                         'attribute' => 'id_tipo',
                         'label' => 'Tipo Llave',
-                        'headerOptions' => ['style' => 'width: 15%'],
+                        'headerOptions' => ['style' => 'width: 5%'],
                         'value' => function ($model) {
                             $strLabel = (isset($model->tipo))?strtoupper($model->tipo->descripcion):'No Encontrado' ;
                             switch ($model->id_tipo){

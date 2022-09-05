@@ -1,3 +1,6 @@
+function activeCodAlarma(){
+
+}
 
 function findCode()
 {
@@ -11,9 +14,9 @@ function findCode()
         data: {
             "comunidad": comunidad,
         },
-
         success: function (data) {
-            $('#llave-codigo').val(data);
+            $('#llave-codigo').val(data.id);
+            $('#llave-nomenclatura').val(data.nomenclatura);
         }
     });
 }

@@ -151,6 +151,8 @@ class RegistroController extends Controller
     }
 
     /**
+     * Salida: Entrega/Salida de llave
+     * Entrada: Devolución de llave
      * @return
      */
     public function actionAjaxAddKey()
@@ -165,12 +167,9 @@ class RegistroController extends Controller
         $arrModelLlave = Llave::find()->where(['codigo'=>$strCode])->asArray()->one();
         if(!empty($arrModelLlave)){
             $numId = $arrModelLlave['id'];
-            $arrModelStatus = LlaveStatus::find()->where(['id_llave'=>$numId])->orderBy(['id' => SORT_DESC])->asArray()->one();
+            $arrModelStatus = (object) LlaveStatus::find()->where(['id_llave'=>$numId])->orderBy(['id' => SORT_DESC])->asArray()->one();
             $arrComunidadLlave = (!empty($arrModelLlave))?Comunidad::find()->where(['id'=>$arrModelLlave['id_comunidad']])->asArray()->one():null;
-            $strEstado = (empty($arrModelStatus))?'Salida':null;
-            if(!$strEstado){
-                $strEstado = ($arrModelStatus['status']=='S')?'Salida':'Entrada';
-            }
+            $strEstado = (empty($arrModelStatus))?'S':$arrModelStatus->status;
         }
 
         return json_encode( ['llave'=>$arrModelLlave,'status'=>$arrModelStatus, 'comunidad'=>$arrComunidadLlave, 'estado'=>$strEstado]);
@@ -185,10 +184,10 @@ class RegistroController extends Controller
         $arrKeysEntrada = (empty($arrParam['listKeyEntrada']) || !isset($arrParam['listKeyEntrada']))?null:$arrParam['listKeyEntrada'];
         $arrKeysSalida = (empty($arrParam['listKeySalida']) || !isset($arrParam['listKeySalida']))?null:$arrParam['listKeySalida'];
 
+        //Entrada: Devolución de llave
         if(!empty($arrKeysEntrada)){
             foreach ($arrKeysEntrada as $value){
 
-                $arrModelStatus = LlaveStatus::find()->where(['id_llave'=>$value])->orderBy(['id' => SORT_DESC])->asArray()->one();
                 $newRegistro = new Registro();
                 $newRegistroStatus = new LlaveStatus();
                 $newRegistro->id_user = Yii::$app->user->id;
@@ -206,10 +205,10 @@ class RegistroController extends Controller
             }
         }
 
+        //Salida: Entrega de llave
         if(!empty($arrKeysSalida)){
             foreach ($arrKeysSalida as $value){
 
-                $arrModelStatus = LlaveStatus::find()->where(['id_llave'=>$value])->orderBy(['id' => SORT_DESC])->asArray()->one();
                 $newRegistro = new Registro();
                 $newRegistroStatus = new LlaveStatus();
                 $newRegistro->id_user = Yii::$app->user->id;

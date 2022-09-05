@@ -17,8 +17,8 @@ class LlaveSearch extends Llave
     public function rules()
     {
         return [
-            [['id', 'id_comunidad', 'id_tipo', 'copia', 'activa','alarma'], 'integer'],
-            [['codigo', 'descripcion', 'observacion','codigo_alarma','llaveLastStatus'], 'safe'],
+            [['id', 'id_comunidad', 'id_tipo', 'copia', 'activa','alarma','id_propietario'], 'integer'],
+            [['codigo', 'descripcion', 'observacion','codigo_alarma','llaveLastStatus','nombre_propietario'], 'safe'],
         ];
     }
 
@@ -45,13 +45,20 @@ class LlaveSearch extends Llave
         // add conditions that should always apply here
         $query->select([
             "ll.*",
-            "ls.status as llaveLastStatus"
+            "ls.status as llaveLastStatus",
+            "(CASE
+                WHEN pp.nombre_propietario IS NOT NULL THEN pp.nombre_propietario
+                WHEN pp.nombre_representante IS NOT NULL THEN pp.nombre_representante
+                ELSE NULL
+            END) as nombre_propietario"
         ]);
         $query->leftJoin('llave_status ls','ls.id_llave = ll.id and ls.id = (
            SELECT MAX(id) 
            FROM llave_status cm 
            WHERE ls.id_llave = ll.id
         )');
+
+        $query->leftJoin('propietarios pp','ll.id_propietario = pp.id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -79,6 +86,7 @@ class LlaveSearch extends Llave
             ->andFilterWhere(['like', 'll.descripcion', $this->descripcion])
             ->andFilterWhere(['like', 'll.observacion', $this->observacion]);
 
+        // ======================================================
         // find satatus
         if($this->llaveLastStatus=='E'){
             $query->andWhere(['or',
@@ -88,6 +96,14 @@ class LlaveSearch extends Llave
 
         if($this->llaveLastStatus=='S'){
             $query->andFilterWhere(['ls.status'=> $this->llaveLastStatus]);
+        }
+
+        // ======================================================
+        // Propietarios
+        if(!empty($this->nombre_propietario)){
+            $query->andWhere(['or',
+                ['like', 'pp.nombre_propietario', $this->nombre_propietario],
+                ['like', 'pp.nombre_representante', $this->nombre_propietario]]);
         }
 
         return $dataProvider;

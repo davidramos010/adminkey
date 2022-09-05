@@ -45,7 +45,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php Pjax::begin(); ?>
                 <?php
 
-
                 $gridColumns = [
                     [
                         'attribute' => 'id',
@@ -54,10 +53,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     [
                         'attribute' => 'id_user',
-                        'label' => 'Usuario',
+                        'label' => 'Usuario Sistema',
                         'format' => 'raw',
                         'value' => function($model){
                             return (isset($model->user))?strtoupper($model->user->username):'No Encontrado' ;
+                        }
+                    ],
+                    [
+                        'attribute' => 'comercial',
+                        'label' => 'Empresa/Responsable',
+                        'format' => 'raw',
+                        'value' => function($model){
+                            return (isset($model->comercial))?strtoupper($model->comercial):'' ;
                         }
                     ],
                     [
@@ -77,34 +84,20 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     ],
                     [
-                        'attribute' => 'id_llave',
-                        'label' => 'Comunidad',
+                        'attribute' => 'nombre_propietario',
+                        'label' => 'Propietario',
                         'format' => 'raw',
                         'value' => function($model){
-                            return (isset($model->llave))?strtoupper($model->llave->comunidad->nombre):'No Encontrado' ;
+                            return (isset($model->nombre_propietario))?strtoupper($model->nombre_propietario):'' ;
                         }
                     ],
                     [
-                        'attribute' => 'entrada',
-                        'headerOptions' => ['style' => 'width: 20%'],
-                        'value' => function ($model) {
-                            return (isset($model->entrada))? util::getDateTimeFormatedSqlToUser($model->entrada) :'' ;
-                        },
-                        'filterType' => GridView::FILTER_DATE,
-                        'filterWidgetOptions' => [
-                            'pluginOptions' => [
-                                'autoclose' => true,
-                                'format' => 'dd-mm-yyyy'
-                            ],
-
-                        ],
-                        'filterInputOptions' => [
-                            'class' => 'form-control',
-                            'placeholder' => Yii::t('app', 'Fecha Entrada'),
-                        ],
-                        'label' => Yii::t('app', 'Fecha Entrada'),
-                        'headerOptions' => ['class' => 'col-xs-2'],
-                        'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; ']
+                        'attribute' => 'comunidad',
+                        'label' => 'Comunidad',
+                        'format' => 'raw',
+                        'value' => function($model){
+                            return (isset($model->llave))?strtoupper($model->comunidad):'' ;
+                        }
                     ],
                     [
                         'attribute' => 'salida',
@@ -129,7 +122,30 @@ $this->params['breadcrumbs'][] = $this->title;
                         'label' => Yii::t('app', 'Fecha Salida'),
                         'headerOptions' => ['class' => 'col-xs-2'],
                         'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; ']
-                    ]
+                    ],
+                    [
+                        'attribute' => 'entrada',
+                        'headerOptions' => ['style' => 'width: 20%'],
+                        'value' => function ($model) {
+                            return (isset($model->entrada))? util::getDateTimeFormatedSqlToUser($model->entrada) :'' ;
+                        },
+                        'filterType' => GridView::FILTER_DATE,
+                        'filterWidgetOptions' => [
+                            'pluginOptions' => [
+                                'autoclose' => true,
+                                'format' => 'dd-mm-yyyy'
+                            ],
+
+                        ],
+                        'filterInputOptions' => [
+                            'class' => 'form-control',
+                            'placeholder' => Yii::t('app', 'Fecha Devolución'),
+                        ],
+                        'label' => Yii::t('app', 'Fecha Devolución'),
+                        'headerOptions' => ['class' => 'col-xs-2'],
+                        'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; ']
+                    ],
+
                 ];
 
                 // Renders a export dropdown menu

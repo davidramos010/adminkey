@@ -1,6 +1,9 @@
 var listKeyEntrada = [];
 var listKeySalida = [];
 
+/**
+ *
+ */
 function addKey()
 {
     let url = '/index.php?r=registro/ajax-add-key';
@@ -9,10 +12,10 @@ function addKey()
     var strTable = 'tblKeyEntrada';
     if(operacion=='E'){
         strTable = 'tblKeyEntrada';
-        strDiv = '<div class="alert alert-success alert-dismissible"><i class="fas fa-plus"></i>';
+        strDiv = '<div class="alert alert-danger alert-dismissible"><i class="fas fa-plus"></i>';
     }else{
         strTable = 'tblKeySalida';
-        strDiv = '<div class="alert alert-danger alert-dismissible"><i class="fas fa-plus"></i>';
+        strDiv = '<div class="alert alert-success alert-dismissible"><i class="fas fa-plus"></i>';
     }
 
     $.ajax({
@@ -39,7 +42,7 @@ function addKey()
                         bolInserRow = false;
                     }
                 });
-                if(data.estado=='Entrada'){
+                if(data.estado=='E'){
                     toastr.warning('La llave tiene una entrada activa, no se puede volver a ingresar.');
                     bolInserRow = false;
                 }
@@ -49,7 +52,7 @@ function addKey()
                         bolInserRow = false;
                     }
                 });
-                if(data.estado=='Salida'){
+                if(data.estado=='S'){
                     toastr.warning('La llave tiene una salida activa, no se pueden registrar mas salidas.');
                     bolInserRow = false;
                 }
@@ -77,6 +80,10 @@ function addKey()
     });
 }
 
+/**
+ * Eliminar fila del resgitro
+ * @param id
+ */
 function delKey(id)
 {
     let operacion = $('#id_operacion').val();
@@ -95,10 +102,11 @@ function delKey(id)
             }
         });
     }
-
-
 }
 
+/**
+ * Envio de formulario
+ */
 function sendForm()
 {
     let url = '/index.php?r=registro/ajax-reg-mov';
@@ -140,6 +148,10 @@ function sendForm()
     });
 }
 
+/**
+ * Identificador de la operacion que se esta ejecutando E/S
+ * @param strOperacion
+ */
 function fnSetOperacion(strOperacion){
     $('#id_operacion').val(strOperacion);
 }
