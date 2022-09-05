@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Comunidad;
 use app\models\Llave;
 use app\models\LlaveSearch;
 use yii\helpers\UnsetArrayValue;
@@ -71,15 +72,19 @@ class LlaveController extends Controller
         $model = new Llave();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($model->load($this->request->post()) && $model->validate()) {
+                $model->codigo = $strCodBase = $model->nomenclatura.'-'.$model->codigo;
+                $model->codigo .= ($model->copia>1)?'.1':'';
+                $model->save();
+
                 if((int) $model->copia > 1){
                     $numContador = 1;
-                    while ($model->copia>=$numContador){
+                    while ((int) $model->copia>$numContador){
+                        $numContador++;
                         $modelClone = new Llave();
                         $modelClone->attributes = $model->attributes;
-                        $modelClone->codigo .= $numContador;
+                        $modelClone->codigo = $strCodBase.'.'.$numContador;
                         $modelClone->save();
-                        $numContador++;
                     }
                 }
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -148,9 +153,11 @@ class LlaveController extends Controller
     {
         $arrParam = $this->request->post();
         $comunidad_id = $arrParam['comunidad'];
-
+        $objComunidad = Comunidad::findOne(['id'=>$comunidad_id]);
         $model = new Llave();
         $model->id_comunidad = (int) $comunidad_id;
-        return json_encode($model->getNext());
+        $arrInfo['id'] = (string) $model->getNext();
+        $arrInfo['nomenclatura'] = $objComunidad->nomenclatura;
+        return json_encode( $arrInfo);
     }
 }

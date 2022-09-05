@@ -9,7 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property int|null $id_llave
- * @property string|null $status Entrasa/Salida
+ * @property string|null $status Entrada/Salida
  * @property string|null $fecha
  *
  * @property Llave $llave
@@ -45,7 +45,7 @@ class LlaveStatus extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'id_llave' => 'Id Llave',
-            'status' => 'Entrasa/Salida',
+            'status' => 'Entrada/Salida',
             'fecha' => 'Fecha',
         ];
     }

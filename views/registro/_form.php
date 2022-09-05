@@ -43,7 +43,7 @@ use yii\widgets\ActiveForm;
                         <div class="row">
                             <div class="col-md-5">
                                 <?= Html::textInput('id_llave', '', ['id'=>'id_llave','class'=>'form-control']); ?>
-                                <?= Html::hiddenInput('id_operacion', 'E', ['id'=>'id_operacion','class'=>'form-control']); ?>
+                                <?= Html::hiddenInput('id_operacion', 'S', ['id'=>'id_operacion','class'=>'form-control']); ?>
                             </div>
                             <div class="col-md-7">
                                 <?= Html::button('Adicionar', [ 'class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { addKey() })();' ]); ?>
@@ -63,36 +63,17 @@ use yii\widgets\ActiveForm;
                 <div class="card-header p-0 pt-1">
                     <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="custom-tabs-entrada-tab" data-toggle="pill" href="#custom-tabs-entrada" role="tab" aria-controls="custom-tabs-entrada" aria-selected="true" onclick="fnSetOperacion('E')"><i class="fas fa-angle-double-up text-success"></i> Recoger LLave</a>
+                            <a class="nav-link active" id="custom-tabs-salida-tab" data-toggle="pill" href="#custom-tabs-salida" role="tab" aria-controls="custom-tabs-salida" aria-selected="false" onclick="fnSetOperacion('S')"><i class="fas fa-angle-double-up text-success"></i> Entrega/Salida de Llave </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="custom-tabs-salida-tab" data-toggle="pill" href="#custom-tabs-salida" role="tab" aria-controls="custom-tabs-salida" aria-selected="false" onclick="fnSetOperacion('S')"><i class="fas fa-angle-double-down text-danger"></i> Devolver Llave </a>
+                            <a class="nav-link" id="custom-tabs-entrada-tab" data-toggle="pill" href="#custom-tabs-entrada" role="tab" aria-controls="custom-tabs-entrada" aria-selected="true" onclick="fnSetOperacion('E')"><i class="fas fa-angle-double-down text-danger"></i> Devolución de LLave </a>
                         </li>
                     </ul>
                 </div>
                 <div class="card-body">
                     <div class="tab-content" id="custom-tabs-one-tabContent">
-                        <div class="tab-pane fade show active" id="custom-tabs-entrada" role="tabpanel" aria-labelledby="custom-tabs-entrada-tab">
-                            <table id="tblKeyEntrada" class="table table-bordered table-striped">
-                                <thead>
-                                <tr>
-                                    <th style="width: 20%">Código</th>
-                                    <th style="width: 40%">Descripción</th>
-                                    <th style="width: 35%">Comunidad</th>
-                                    <th style="width: 5%"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <!-- Cuerpo -->
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <th colspan="5">Registro de Entrada de llaves</th>
-                                </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="custom-tabs-salida" role="tabpanel" aria-labelledby="custom-tabs-salida-tab">
+
+                        <div class="tab-pane fade show active" id="custom-tabs-salida" role="tabpanel" aria-labelledby="custom-tabs-salida-tab">
                             <table id="tblKeySalida" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
@@ -107,7 +88,27 @@ use yii\widgets\ActiveForm;
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <th colspan="5">Registro de Salidda de llaves</th>
+                                    <th colspan="5"><?= Yii::t('app', 'Registro de Salida de llaves de la empresa.') ?></th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="custom-tabs-entrada" role="tabpanel" aria-labelledby="custom-tabs-entrada-tab">
+                            <table id="tblKeyEntrada" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th style="width: 20%">Código</th>
+                                    <th style="width: 40%">Descripción</th>
+                                    <th style="width: 35%">Comunidad</th>
+                                    <th style="width: 5%"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!-- Cuerpo -->
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th colspan="5"><?= Yii::t('app', 'Registrar Devolución de llaves a la empresa.') ?></th>
                                 </tr>
                                 </tfoot>
                             </table>

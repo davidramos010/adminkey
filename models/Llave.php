@@ -11,6 +11,8 @@ use yii\helpers\ArrayHelper;
  * @property int $id
  * @property int|null $id_comunidad
  * @property int|null $id_tipo
+ * @property int|null $id_propietario
+ * @property int|null $id_ubicacion
  * @property int|null $copia
  * @property string|null $codigo
  * @property string|null $descripcion
@@ -18,16 +20,21 @@ use yii\helpers\ArrayHelper;
  * @property int|null $activa
  * @property int|null $alarma
  * @property string|null $codigo_alarma
+ * @property string|null $nomenclatura
  *
  * @property Comunidad $comunidad
  * @property LlaveStatus[] $llaveStatuses
  * @property Registro[] $registros
  * @property TipoLlave $tipo
+ * @property Propietarios $propietarios
+ * @property LlaveUbicaciones $llaveUbicaciones
  */
 class Llave extends \yii\db\ActiveRecord
 {
 
     public $llaveLastStatus = null;
+    public $nombre_propietario = null;
+    public $nomenclatura = null;
 
     /**
      * {@inheritdoc}
@@ -43,12 +50,14 @@ class Llave extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_comunidad', 'id_tipo', 'copia', 'activa','alarma'], 'integer'],
-            [['codigo'], 'string', 'max' => 100],
+            [['codigo', 'id_llave_ubicacion', 'id_tipo','descripcion'], 'required', 'message'=> Yii::t('yii',  '{attribute} es requerido')],
+            [['id_comunidad', 'id_tipo', 'id_propietario', 'id_llave_ubicacion','copia', 'activa','alarma'], 'integer'],
+            [['codigo','nombre_propietario','nomenclatura'], 'string', 'max' => 100],
             [['descripcion', 'observacion','codigo_alarma'], 'string', 'max' => 255],
-            [['codigo'], 'unique'],
+            /*[['codigo'], 'unique'],*/
             [['id_comunidad'], 'exist', 'skipOnError' => true, 'targetClass' => Comunidad::className(), 'targetAttribute' => ['id_comunidad' => 'id']],
             [['id_tipo'], 'exist', 'skipOnError' => true, 'targetClass' => TipoLlave::className(), 'targetAttribute' => ['id_tipo' => 'id']],
+            [['id_propietario'], 'exist', 'skipOnError' => true, 'targetClass' => Propietarios::className(), 'targetAttribute' => ['id_propietario' => 'id']],
         ];
     }
 
@@ -115,6 +124,16 @@ class Llave extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Propietario]].
+     *
+     * @return \yii\db\ActiveQuery|Propietarios
+     */
+    public function getPropietarios()
+    {
+        return $this->hasOne(Propietarios::className(), ['id' => 'id_propietario']);
+    }
+
+    /**
      * {@inheritdoc}
      * @return LlaveQuery the active query used by this AR class.
      */
@@ -141,6 +160,29 @@ class Llave extends \yii\db\ActiveRecord
             ->createCommand($query)
             ->queryAll();
         return ArrayHelper::map($result, 'id', 'descripcion');
+    }
+
+    public static function getUbicacionDropdownList()
+    {
+        $query = "SELECT id, CONCAT(tipo_almacen, ' ', descripcion_almacen) as descripcion_almacen FROM llave_ubicaciones order by descripcion_almacen ASC";
+        $result = Yii::$app->db
+            ->createCommand($query)
+            ->queryAll();
+        return ArrayHelper::map($result, 'id', 'descripcion_almacen');
+    }
+
+    public static function getPropietariosDropdownList()
+    {
+        $query = "SELECT pp.id, (CASE
+                                    WHEN pp.nombre_propietario IS NOT NULL THEN pp.nombre_propietario
+                                    WHEN pp.nombre_representante IS NOT NULL THEN pp.nombre_representante
+                                    ELSE NULL
+                                END) as nombre_propietario 
+                    FROM propietarios pp ORDER BY nombre_propietario ASC, nombre_representante ASC ";
+        $result = Yii::$app->db
+            ->createCommand($query)
+            ->queryAll();
+        return ArrayHelper::map($result, 'id', 'nombre_propietario');
     }
 
     public function getNext() {
