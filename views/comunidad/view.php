@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\models\Comunidad */
 
 $this->title = 'Info General : '.$model->nombre;
-$this->params['breadcrumbs'][] = ['label' => 'Comunidades', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Clientes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <!-- general form elements -->
         <div class="card card-primary">
             <div class="card-header">
-                <h3 class="card-title">Comunidad</h3>
+                <h3 class="card-title">Cliente</h3>
             </div>
             <!-- /.card-header -->
             <!-- form start -->

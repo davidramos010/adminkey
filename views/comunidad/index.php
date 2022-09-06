@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\ComunidadSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Comunidades';
+$this->title = 'Clientes';
 ?>
 <div class="comunidad-index">
     <div class="ribbon_wrap" >

@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $model app\models\Comunidad */
 
 $this->title = 'Registrar';
-$this->params['breadcrumbs'][] = ['label' => 'Comunidades', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Clientes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="comunidad-create">

@@ -79,7 +79,7 @@ use yii\widgets\ActiveForm;
                                 <tr>
                                     <th style="width: 20%">Código</th>
                                     <th style="width: 40%">Descripción</th>
-                                    <th style="width: 35%">Comunidad</th>
+                                    <th style="width: 35%">Cliente</th>
                                     <th style="width: 5%"></th>
                                 </tr>
                                 </thead>
@@ -99,7 +99,7 @@ use yii\widgets\ActiveForm;
                                 <tr>
                                     <th style="width: 20%">Código</th>
                                     <th style="width: 40%">Descripción</th>
-                                    <th style="width: 35%">Comunidad</th>
+                                    <th style="width: 35%">Cliente</th>
                                     <th style="width: 5%"></th>
                                 </tr>
                                 </thead>

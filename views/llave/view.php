@@ -52,7 +52,7 @@ $this->registerJsFile('@web/js/llave.js');
                     'id',
                     [
                         'attribute' => 'id_comunidad',
-                        'label' => 'Comunidad',
+                        'label' => 'Cliente',
                         'format' => 'raw',
                         'value' => function($model){
                             return (isset($model->comunidad))?strtoupper($model->comunidad->nombre):'No Encontrado' ;
