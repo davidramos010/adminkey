@@ -53,3 +53,4 @@ protected/runtime/*
 protected/data/*.db
 themes/classic/views/
 !/config/db.php
+
