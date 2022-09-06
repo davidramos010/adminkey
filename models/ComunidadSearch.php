@@ -17,8 +17,8 @@ class ComunidadSearch extends Comunidad
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['nombre', 'direccion', 'telefono1', 'telefono2', 'contacto', 'nomenclatura'], 'safe'],
+            [['id','estado'], 'integer'],
+            [['nombre','cod_postal','poblacion', 'direccion', 'documento', 'telefono1', 'telefono2', 'contacto', 'nomenclatura'], 'safe'],
         ];
     }
 
@@ -57,16 +57,20 @@ class ComunidadSearch extends Comunidad
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-        ]);
+        $query->andFilterWhere(['id' => $this->id])
+            ->andFilterWhere(['estado' => $this->estado ]);
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre])
             ->andFilterWhere(['like', 'direccion', $this->direccion])
             ->andFilterWhere(['like', 'telefono1', $this->telefono1])
             ->andFilterWhere(['like', 'telefono2', $this->telefono2])
             ->andFilterWhere(['like', 'contacto', $this->contacto])
+            ->andFilterWhere(['like', 'documento', $this->documento])
+            ->andFilterWhere(['like', 'cod_postal', $this->cod_postal])
+            ->andFilterWhere(['like', 'poblacion', $this->poblacion])
             ->andFilterWhere(['like', 'nomenclatura', $this->nomenclatura]);
+
+        $query->orderBy(['nombre'=>SORT_DESC]);
 
         return $dataProvider;
     }

@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Comunidad;
 use app\models\ComunidadSearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -69,8 +70,14 @@ class ComunidadController extends Controller
     {
         $model = new Comunidad();
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post()) && $model->validate()) {
+                if($model->save()){
+                    Yii::$app->session->setFlash('success', Yii::t('yii', 'Almacenado Correctamente'));
+                }else{
+                    Yii::$app->session->setFlash('error', Yii::t('yii', 'No se puede almacenar. Valide el formulario he intente nuevamente.'));
+                }
+
+                return $this->redirect(['update', 'id' => $model->id]);
             }
         } else {
             $model->loadDefaultValues();
@@ -111,7 +118,13 @@ class ComunidadController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->estado=0;
+        if($model->save()){
+            Yii::$app->session->setFlash('success', Yii::t('yii', 'Deshabilitado Correctamente'));
+        }else{
+            Yii::$app->session->setFlash('error', Yii::t('yii', 'No se puede actualizar el estado. Valide el formulario he intente nuevamente.'));
+        }
 
         return $this->redirect(['index']);
     }
