@@ -86,8 +86,8 @@ $this->title = 'Clientes';
                         ],
                         [
                             'attribute' => 'estado',
-                            'label' => 'Móvil',
-                            'headerOptions' => ['style' => 'width: 10%'],
+                            'label' => 'Estado',
+                            'headerOptions' => ['style' => 'width: 5%'],
                             'value' => function ($model) {
                                 return ($model->estado==1)?'<span class="float-none badge bg-success">ACTIVO</span>':'<span class="float-none badge bg-danger">INACTIVO</span>' ;
                             },
