@@ -19,8 +19,8 @@ $this->title = 'Clientes';
                 <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
                     <?php
                     echo Html::ul([
-                        'En cada formulario el sistema validara que no se repitan los campos:',
-                        'En caso que esta combinación ya exista, el sistema recomienda editar el registro existente para no crear un nuevo registro.'
+                        'En cada formulario el sistema validará la nomenclatura asignada, pues ésta debe ser única en cada cliente.',
+                        'En caso de que nomenclatura ya exista, el sistema recomienda editar el registro existente para no crear un nuevo registro.'
                     ], ['encode' => false]);
 
                     ?>
