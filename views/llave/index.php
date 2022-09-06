@@ -60,7 +60,7 @@ $this->title = 'Llaves';
                     ],
                     [
                         'attribute' => 'id_comunidad',
-                        'label' => 'Comunidad',
+                        'label' => 'Cliente',
                         'headerOptions' => ['style' => 'width: 20%'],
                         'format' => 'raw',
                         'value' => function($model){

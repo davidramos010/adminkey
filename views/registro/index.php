@@ -93,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     [
                         'attribute' => 'comunidad',
-                        'label' => 'Comunidad',
+                        'label' => 'Cliente',
                         'format' => 'raw',
                         'value' => function($model){
                             return (isset($model->llave))?strtoupper($model->comunidad):'' ;

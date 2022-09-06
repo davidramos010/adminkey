@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <!-- general form elements -->
         <div class="card card-primary">
             <div class="card-header">
-                <h3 class="card-title">Comunidad</h3>
+                <h3 class="card-title">Cliente</h3>
             </div>
             <!-- /.card-header -->
             <!-- form start -->

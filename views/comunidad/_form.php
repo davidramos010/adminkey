@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
         <!-- general form elements -->
         <div class="card card-primary">
             <div class="card-header">
-                <h3 class="card-title">Comunidad</h3>
+                <h3 class="card-title">Cliente</h3>
             </div>
             <!-- /.card-header -->
             <!-- form start -->
@@ -40,7 +40,7 @@ use yii\widgets\ActiveForm;
                         <?= $form->field($model, 'nomenclatura')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Nomenclatura/Codigo') ?>
                     </div>
                     <div  style="padding-top: 15px" >
-                        <?= Html::submitButton('Guardar Comunidad', ['class' => 'btn btn-success ']) ?>
+                        <?= Html::submitButton(Yii::t('app', 'Guardar Cliente'), ['class' => 'btn btn-success ']) ?>
                         <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
                     </div>
                 </div>
