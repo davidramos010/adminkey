@@ -29,7 +29,7 @@ $this->registerJsFile('@web/js/propietarios.js');
                 <div class="row">
                     <div class="col-md-12 " >
                         <div class="line"></div>
-                        <?= $form->field($model, 'nombre_propietario')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Nombre Propietario') ?>
+                        <?= $form->field($model, 'nombre_propietario')->textInput(['maxlength' => true,'class'=>'form-control','style'=>'text-transform: uppercase'])->label('Nombre Propietario') ?>
                     </div>
                 </div>
                 <div class="row">
@@ -45,7 +45,7 @@ $this->registerJsFile('@web/js/propietarios.js');
                 <div class="row">
                     <div class="col-md-12 " >
                         <div class="line"></div>
-                        <?= $form->field($model, 'nombre_representante')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Nombre Representante') ?>
+                        <?= $form->field($model, 'nombre_representante')->textInput(['maxlength' => true,'class'=>'form-control','style'=>'text-transform: uppercase'])->label('Nombre Representante') ?>
                     </div>
                 </div>
                 <div class="row">
@@ -99,7 +99,7 @@ $this->registerJsFile('@web/js/propietarios.js');
                         <?= $form->field($model, 'telefono')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Teléfono') ?>
                     </div>
                     <div class="col-md-6 "  >
-                        <?= $form->field($model, 'movil')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Movil') ?>
+                        <?= $form->field($model, 'movil')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Móvil') ?>
                     </div>
                 </div>
                 <div class="row">

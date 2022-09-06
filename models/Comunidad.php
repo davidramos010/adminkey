@@ -8,17 +8,25 @@ use Yii;
  * This is the model class for table "comunidad".
  *
  * @property int $id
+ * @property int $id_tipo_documento
+ * @property string|null $documento
  * @property string|null $nombre
+ * @property string|null $cod_postal
+ * @property string|null $poblacion
  * @property string|null $direccion
  * @property string|null $telefono1
  * @property string|null $telefono2
  * @property string|null $contacto
  * @property string|null $nomenclatura
+ * @property string|null $email
+ * @property int $estado
+ * @property string|null $created
  *
  * @property Llave[] $llaves
  */
 class Comunidad extends \yii\db\ActiveRecord
 {
+    public $arrTipoDocumentos = [1=>'NIF',2=>'NIE',3=>'PASS',4=>'OTROS'];
     /**
      * {@inheritdoc}
      */
@@ -33,10 +41,15 @@ class Comunidad extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'direccion'], 'string', 'max' => 255],
-            [['telefono1', 'telefono2', 'contacto'], 'string', 'max' => 100],
+            [['id_tipo_documento', 'estado'], 'integer'],
+            [['created'], 'safe'],
+            [['nombre', 'direccion','poblacion','email'], 'string', 'max' => 255],
+            [['telefono1', 'telefono2', 'contacto','documento'], 'string', 'max' => 100],
+            [['cod_postal'], 'string', 'max' => 10],
             [['nomenclatura'], 'string', 'max' => 6],
             [['nomenclatura'], 'unique'],
+            [['email'], 'email','message'=> Yii::t('yii',  '{attribute} no es valido')],
+            [['nombre','direccion'], 'required', 'message'=> Yii::t('yii',  '{attribute} es requerido')],
         ];
     }
 
@@ -67,6 +80,7 @@ class Comunidad extends \yii\db\ActiveRecord
         }
         $this->nombre = trim(strtoupper($this->nombre));// Nombre en mayusculas
         $this->contacto = trim(strtoupper($this->contacto));// contacto en mayusculas
+        $this->direccion = trim(strtoupper($this->direccion));// direccion en mayusculas
         return true;
     }
 

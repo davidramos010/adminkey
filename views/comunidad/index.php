@@ -1,11 +1,15 @@
 <?php
 
 use app\models\Comunidad;
+use kartik\export\ExportMenu;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
-use yii\grid\GridView;
 use yii\widgets\Pjax;
+use kartik\grid\GridView;
+use kartik\icons\Icon;
+use kartik\widgets\Select2;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ComunidadSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -42,26 +46,104 @@ $this->title = 'Clientes';
             <!-- /.card-header -->
             <div class="card-body">
                 <?php Pjax::begin(); ?>
-                <?= GridView::widget([
-                    'dataProvider' => $dataProvider,
-                    'filterModel' => $searchModel,
-                    'formatter' => array('class' => 'yii\i18n\Formatter', 'nullDisplay' => ''),
-                    'columns' => [
+                <?php
+                    $gridColumns = [
                         ['class' => 'yii\grid\SerialColumn'],
-                        //'id',
-                        'nombre',
-                        'direccion',
-                        'telefono1',
-                        'telefono2',
-                        'contacto',
-                        //'nomenclatura',
+                        [
+                            'attribute' => 'nombre',
+                            'label' => 'Nombre/Razón Social',
+                            'headerOptions' => ['style' => 'width: 20%'],
+                        ],
+                        [
+                            'attribute' => 'cod_postal',
+                            'label' => 'CP',
+                            'headerOptions' => ['style' => 'width: 5%'],
+                        ],
+                        [
+                            'attribute' => 'poblacion',
+                            'label' => 'Población',
+                            'headerOptions' => ['style' => 'width: 10%'],
+                        ],
+                        [
+                            'attribute' => 'direccion',
+                            'label' => 'Dirección',
+                            'headerOptions' => ['style' => 'width: 20%'],
+                        ],
+                        [
+                            'attribute' => 'telefono1',
+                            'label' => 'Teléfono',
+                            'headerOptions' => ['style' => 'width: 10%'],
+                        ],
+                        [
+                            'attribute' => 'telefono2',
+                            'label' => 'Móvil',
+                            'headerOptions' => ['style' => 'width: 10%'],
+                        ],
+                        [
+                            'attribute' => 'contacto',
+                            'label' => 'Responsable',
+                            'headerOptions' => ['style' => 'width: 10%'],
+                        ],
+                        [
+                            'attribute' => 'estado',
+                            'label' => 'Móvil',
+                            'headerOptions' => ['style' => 'width: 10%'],
+                            'value' => function ($model) {
+                                return ($model->estado==1)?'<span class="float-none badge bg-success">ACTIVO</span>':'<span class="float-none badge bg-danger">INACTIVO</span>' ;
+                            },
+                            'format' => 'raw',
+                            'filterType' => GridView::FILTER_SELECT2,
+                            'filter' => [ '1' => 'ACTIVO', '0' => 'INACTIVO'],
+                            'filterWidgetOptions' => [
+                                'theme' => Select2::THEME_BOOTSTRAP,
+                                'size' => Select2::SMALL,
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                    'placeholder' => 'Todos',
+                                ]
+                            ],
+                        ],
                         [
                             'class' => ActionColumn::className(),
+                            'template'=>'{update}{delete} ',
                             'urlCreator' => function ($action, Comunidad $model, $key, $index, $column) {
                                 return Url::toRoute([$action, 'id' => $model->id]);
                             }
                         ],
+                    ];
+                ?>
+                <?= // Renders a export dropdown menu
+                ExportMenu::widget([
+                    'dataProvider' => $dataProvider,
+                    'columns' => $gridColumns,
+                    'dropdownOptions' => [
+                        'label' => 'Export All',
+                        'class' => 'btn btn-default',
                     ],
+                    'showConfirmAlert'=>false,
+                    'exportContainer' => [
+                        'class' => 'btn-group mr-2'
+                    ],
+                    'filename'        => Yii::t('app', 'ReportClientes'),
+                    'exportConfig' => [
+                        ExportMenu::FORMAT_HTML => false,
+                        ExportMenu::FORMAT_EXCEL => false,
+                        ExportMenu::FORMAT_TEXT => false,
+                        ExportMenu::FORMAT_PDF => false,
+                        ExportMenu::FORMAT_CSV   => [
+                            'label'           => Yii::t('app', 'CSV'),
+                        ],
+                        ExportMenu::FORMAT_EXCEL_X => [
+                            'label'           => Yii::t('app', 'Excel'),
+                        ],
+                    ],
+                ]);
+                ?>
+                <?= GridView::widget([
+                    'dataProvider' => $dataProvider,
+                    'filterModel' => $searchModel,
+                    'formatter' => array('class' => 'yii\i18n\Formatter', 'nullDisplay' => ''),
+                    'columns' => $gridColumns,
                 ]); ?>
                 <?php Pjax::end(); ?>
             </div>
