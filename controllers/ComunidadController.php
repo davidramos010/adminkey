@@ -100,8 +100,12 @@ class ComunidadController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->validate()) {
+            if($model->save()){
+                Yii::$app->session->setFlash('success', Yii::t('yii', 'Actualizado Correctamente'));
+            }else{
+                Yii::$app->session->setFlash('error', Yii::t('yii', 'No se puede actualizar. Valide los datos he intente nuevamente.'));
+            }
         }
 
         return $this->render('update', [
