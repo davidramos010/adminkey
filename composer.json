@@ -59,7 +59,6 @@
         "econea/nusoap": "^0.9.8",
         "kartik-v/yii2-date-range": "1.6.9",
         "dompdf/dompdf": "^0.8.5",
-        "wsdl2phpgenerator/wsdl2phpgenerator": "^3.4",
         "2amigos/yii2-tinymce-widget" : "~1.1",
         "kartik-v/yii2-number": "1.0.3",
         "kartik-v/yii2-tabs-x": "1.2.7",
