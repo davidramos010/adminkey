@@ -1,0 +1,38 @@
+{
+    "name": "yii2mod/yii2-sweet-alert",
+    "description": "Alert widget based on SweetAlert extension {@link http://tristanedwards.me/sweetalert)",
+    "type": "yii2-extension",
+    "keywords": [
+        "yii2",
+        "yii2 sweet alert",
+        "yii2 alert"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Igor Chepurnoi",
+            "email": "chepurnoi.igor@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "yiisoft/yii2": "*",
+        "yiisoft/yii2-bootstrap": "*",
+        "bower-asset/sweetalert" : "1.1.3"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "~2.0",
+        "phpunit/phpunit": "~6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "yii2mod\\alert\\": ""
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
+}

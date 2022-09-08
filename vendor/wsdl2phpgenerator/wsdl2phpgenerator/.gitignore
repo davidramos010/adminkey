@@ -1,0 +1,6 @@
+/build/
+/wsdl2phpgenerator*.phar
+/vendor/
+TAG_MESSAGE
+/.phpunit.result.cache
+/.php_cs.cache

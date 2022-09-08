@@ -1,0 +1,9 @@
+/*!
+ * @package   yii2-export
+ * @author    Kartik Visweswaran <kartikv2@gmail.com>
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2019
+ * @version   1.4.0
+ *
+ * Export Columns Selector Style Sheet
+ *
+ */.dropdown-menu.kv-checkbox-list{max-height:360px;min-width:240px;overflow:auto}.kv-checkbox-list .checkbox{padding:0 20px}.kv-checkbox-list label{width:100%}.kv-checkbox-list label.disabled{cursor:not-allowed;filter:alpha(opacity=65);opacity:.65}.kv-toggle-all{font-style:italic;color:#337ab7}.kv-toggle-all:hover{color:#286090}

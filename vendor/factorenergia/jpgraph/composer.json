@@ -1,0 +1,50 @@
+{
+  "name": "factorenergia/jpgraph",
+  "type": "library",
+  "description": "jpGraph, library to make graphs and charts",
+  "version": "4.0.3",
+  "keywords": [
+    "graph",
+    "chart",
+    "pie",
+    "jpgraph",
+    "data"
+  ],
+  "homepage": "http://jpgraph.net/",
+  "license": "QPL-1.0",
+  "support": {
+    "issues": "https://github.com/huasofoundries/jpgraph/issues"
+  },
+  "require": {
+    "php": ">=7.0.0",
+    "ext-gd": "*"
+  },
+  "require-dev": {
+    "kint-php/kint": "^3.3",
+    "symfony/event-dispatcher": "~4.2",
+    "symfony/yaml": "4.*",
+    "codeception/codeception": "^4.0",
+    "codeception/module-asserts": "^1.1",
+    "squizlabs/php_codesniffer": "^3.5",
+    "symfony/dotenv": "~4.2.0",
+    "monolog/monolog": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "factorenergia\\JpGraph\\UnitTest\\": "tests",
+      "factorenergia\\JpGraph\\": "src/",
+      "factorenergia\\JpGraph\\Graph\\": "src/graph",
+      "factorenergia\\JpGraph\\Graph\\Scale\\": "src/graph/scale",
+      "factorenergia\\JpGraph\\Graph\\Tick\\": "src/graph/tick",
+      "factorenergia\\JpGraph\\Graph\\Axis\\": "src/graph/axis",
+      "factorenergia\\JpGraph\\Image\\": "src/image",
+      "factorenergia\\JpGraph\\Plot\\": "src/plot",
+      "factorenergia\\JpGraph\\Text\\": "src/text",
+      "factorenergia\\JpGraph\\Themes\\": "src/themes",
+      "factorenergia\\JpGraph\\Util\\": "src/util"
+    }
+  },
+  "scripts": {
+    "start": "php -S localhost:8000 -t Examples"
+  }
+}
