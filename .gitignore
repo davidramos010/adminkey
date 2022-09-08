@@ -54,3 +54,7 @@ protected/data/*.db
 themes/classic/views/
 !/config/db.php
 
+!/vendor/
+!/config/db.php
+!/composer.lock
+!/tests/
