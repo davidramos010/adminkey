@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Mpdf\Tag\U;
 use yii;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
@@ -135,6 +136,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public function beforeSave($insert)
     {
+        $objFindAuthKey = null;
         if (!parent::beforeSave($insert)) {
             return false;
         }
@@ -143,6 +145,20 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             $this->password = util::hash($this->password_new);
         }
 
+        // Validar que el authKey es unico para los gestores
+        if(!empty($this->authKey_new)){
+            if($this->isNewRecord)
+               $objFindAuthKey = User::find()->where(['authKey'=>$this->authKey_new])->one();
+
+            if(!$this->isNewRecord)
+               $objFindAuthKey = User::find()->where(['authKey'=>$this->authKey_new])->andWhere(['<>','id',$this->id]) ->one();
+
+            if(!empty($objFindAuthKey)){
+                $this->addError('authKey', 'El authKey ingresado no es valido.');
+                //Yii::$app->session->setFlash('error', 'El authKey ingresado no es valido.');
+                return false;
+            }
+        }
         return true;
     }
 
