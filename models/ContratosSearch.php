@@ -43,7 +43,6 @@ class ContratosSearch extends Contratos
         $query = Contratos::find();
 
         // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -60,11 +59,21 @@ class ContratosSearch extends Contratos
         $query->andFilterWhere([
             'id' => $this->id,
             'estado' => $this->estado,
-            'fecha_ini' => $this->fecha_ini,
-            'fecha_fin' => $this->fecha_fin,
             'id_user' => $this->id_user,
             'created' => $this->created,
         ]);
+
+        if($this->fecha_ini){
+            $query->andFilterWhere([
+                'LIKE', 'fecha_ini', Date('Y-m-d', strtotime($this->fecha_ini))
+            ]);
+        }
+
+        if($this->fecha_fin){
+            $query->andFilterWhere([
+                'LIKE', 'fecha_fin', Date('Y-m-d', strtotime($this->fecha_fin))
+            ]);
+        }
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre])
             ->andFilterWhere(['like', 'descripcion', $this->descripcion]);
