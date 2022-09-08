@@ -10,6 +10,7 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+        /*'@plantillas' => "@web/plantillas"*/
     ],
     'components' => [
         'i18n' => [
