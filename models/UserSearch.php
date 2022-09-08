@@ -82,10 +82,10 @@ class UserSearch extends User
             'in.nombres' => $this->nombres,
             'in.apellidos' => $this->apellidos,
             'in.telefono' => $this->telefono,
-            'pf.nombre' => $this->perfil,
+            'pf.id' => $this->perfil,
         ]);
 
-        $query->andWhere(['in.estado'=> 1]);
+        //$query->andWhere(['in.estado'=> 1]);
         $query->orderBy('us.name ASC');
 
         return $dataProvider;
