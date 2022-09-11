@@ -1,11 +1,15 @@
 <?php
 
 use app\models\Comerciales;
+use kartik\grid\ActionColumn;
+use kartik\grid\GridView;
+use kartik\widgets\Select2;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\grid\ActionColumn;
-use yii\grid\GridView;
+use kartik\export\ExportMenu;
 use yii\widgets\Pjax;
+
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ComercialesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -48,13 +52,48 @@ $this->title = 'Comerciales';
                     'formatter' => array('class' => 'yii\i18n\Formatter', 'nullDisplay' => ''),
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
-                        //'id',
-                        'nombre',
-                        'telefono',
-                        'contacto',
-                        //'nomenclatura',
                         [
-                            'class' => ActionColumn::className(),
+                            'attribute' => 'nombre',
+                            'label' => 'Nombre',
+                            'headerOptions' => ['style' => 'width: 20%']
+                        ],
+                        [
+                            'attribute' => 'contacto',
+                            'label' => 'Persona/Contacto',
+                            'headerOptions' => ['style' => 'width: 20%']
+                        ],
+                        [
+                            'attribute' => 'telefono',
+                            'label' => 'Teléfono',
+                            'headerOptions' => ['style' => 'width: 20%']
+                        ],
+                        [
+                            'attribute' => 'direccion',
+                            'label' => 'Dirección',
+                            'headerOptions' => ['style' => 'width: 20%']
+                        ],
+                        [
+                            'attribute' => 'estado',
+                            'label' => 'Estado',
+                            'headerOptions' => ['style' => 'width: 10%'],
+                            'value' => function ($model) {
+                                return ($model->estado==1)?'<span class="float-none badge bg-success">ACTIVO</span>':'<span class="float-none badge bg-danger">INACTIVO</span>' ;
+                            },
+                            'format' => 'raw',
+                            'filterType' => GridView::FILTER_SELECT2,
+                            'filter' => [ '1' => 'ACTIVO', '0' => 'INACTIVO'],
+                            'filterWidgetOptions' => [
+                                'theme' => Select2::THEME_BOOTSTRAP,
+                                'size' => Select2::SMALL,
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                    'placeholder' => 'Todos',
+                                ]
+                            ],
+                        ],
+                        [
+                            'class' => ActionColumn::class,
+                            'template'=>'{update}{delete} ',
                             'urlCreator' => function ($action, Comerciales $model, $key, $index, $column) {
                                 return Url::toRoute([$action, 'id' => $model->id]);
                             }

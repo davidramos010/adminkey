@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Comerciales;
 use app\models\ComercialesSearch;
+use yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -24,7 +25,7 @@ class ComercialesController extends Controller
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
-                        'delete' => ['POST'],
+                        //'delete' => ['POST'],
                     ],
                 ],
             ]
@@ -70,8 +71,13 @@ class ComercialesController extends Controller
         $model = new Comerciales();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post()) && $model->validate()) {
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('success', Yii::t('yii', 'Almacenado Correctamente'));
+                } else {
+                    Yii::$app->session->setFlash('error', Yii::t('yii', 'No se puede almacenar. Valide el formulario he intente nuevamente.'));
+                }
+                return $this->redirect(['update', 'id' => $model->id]);
             }
         } else {
             $model->loadDefaultValues();
@@ -93,8 +99,13 @@ class ComercialesController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->validate()) {
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', Yii::t('yii', 'Almacenado Correctamente'));
+            } else {
+                Yii::$app->session->setFlash('error', Yii::t('yii', 'No se puede almacenar. Valide el formulario he intente nuevamente.'));
+            }
+            return $this->redirect(['update', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -111,8 +122,13 @@ class ComercialesController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
+        $model->estado=0;
+        if($model->save()){
+            Yii::$app->session->setFlash('success', Yii::t('yii', 'Deshabilitado Correctamente'));
+        }else{
+            Yii::$app->session->setFlash('error', Yii::t('yii', 'No se puede actualizar el estado. Valide el formulario he intente nuevamente.'));
+        }
         return $this->redirect(['index']);
     }
 
