@@ -14,7 +14,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\ComercialesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Comerciales';
+$this->title = 'Proveedores';
 ?>
 <div class="comerciales-index">
     <div class="ribbon_wrap" >
