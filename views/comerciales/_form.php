@@ -11,6 +11,9 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\Comerciales */
 /* @var $form yii\widgets\ActiveForm */
+
+$this->registerJsFile('@web/js/comerciales.js');
+
 ?>
 
 <div class="comerciales-form">
