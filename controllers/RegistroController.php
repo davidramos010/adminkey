@@ -169,7 +169,7 @@ class RegistroController extends Controller
             $numId = $arrModelLlave['id'];
             $arrModelStatus = (object) LlaveStatus::find()->where(['id_llave'=>$numId])->orderBy(['id' => SORT_DESC])->asArray()->one();
             $arrComunidadLlave = (!empty($arrModelLlave))?Comunidad::find()->where(['id'=>$arrModelLlave['id_comunidad']])->asArray()->one():null;
-            $strEstado = (empty($arrModelStatus))?'S':$arrModelStatus->status;
+            $strEstado = (empty($arrModelStatus) || !isset($arrModelStatus->status))?'E':$arrModelStatus->status;
         }
 
         return json_encode( ['llave'=>$arrModelLlave,'status'=>$arrModelStatus, 'comunidad'=>$arrComunidadLlave, 'estado'=>$strEstado]);

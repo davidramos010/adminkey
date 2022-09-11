@@ -45,6 +45,7 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
                     ],
                     ['label' => 'Registro',  'icon' => 'fas fa-edit', 'url' => ['registro/create']],
                     ['label' => 'Reporte',  'icon' => 'fas fa-edit', 'url' => ['registro/index']],
+                    /*['label' => 'Contratos',  'icon' => 'file-code', 'url' => ['contratos/generar-list']],*/
                     ['label' => 'Login', 'url' => ['site/login'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
                     /*['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank'],
                     ['label' => 'Debug', 'icon' => 'bug', 'url' => ['/debug'], 'target' => '_blank'],*/

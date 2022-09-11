@@ -2,6 +2,10 @@
 
 namespace app\controllers;
 
+use app\models\Codipostal;
+use app\models\ContratosLog;
+use app\models\Llave;
+use app\models\LlaveSearch;
 use Yii;
 use app\models\Contratos;
 use app\models\ContratosSearch;
@@ -40,6 +44,41 @@ class ContratosController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all Contratos models.
+     * @return mixed
+     */
+    public function actionGenerarList()
+    {
+        $searchModel = new ContratosSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('generar_list', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all Contratos models.
+     * @return mixed
+     */
+    public function actionCreateContrato()
+    {
+        $model = new Contratos();
+        $modelLog = new ContratosLog();
+
+        $searchModel = new LlaveSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        return $this->render('generar', [
+            'model' => $model,
+            'model_log' => $modelLog,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -91,6 +130,16 @@ class ContratosController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * @return void
+     */
+    public function actionAjaxConsultarLlaves($q = false)
+    {
+        $rows = Llave::find()->select('id,codigo')->distinct()
+            ->where(['like', 'codigo', $q])->asArray()->all();
+        return json_encode($rows);
     }
 
     /**

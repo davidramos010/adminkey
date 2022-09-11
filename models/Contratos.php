@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "contratos".
@@ -82,4 +83,24 @@ class Contratos extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'id_user']);
     }
+
+    /**
+     * Lista de contratos activos
+     * @return array
+     * @throws \yii\db\Exception
+     */
+    public static function getContratosDropdownList()
+    {
+        $strFechaAct = date('Y-m-d');
+        $query = "SELECT id, CONCAT(UPPER(nombre), ' ', SUBSTRING(descripcion,1,100)) as descripcion 
+                    FROM contratos 
+                    WHERE estado=1 AND fecha_ini<='".$strFechaAct."' 
+                    AND (fecha_fin>='".$strFechaAct."' OR fecha_fin IS NULL )
+                    ORDER BY nombre ASC";
+        $result = Yii::$app->db
+            ->createCommand($query)
+            ->queryAll();
+        return ArrayHelper::map($result, 'id', 'descripcion');
+    }
+
 }

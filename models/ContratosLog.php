@@ -14,7 +14,7 @@ use Yii;
  * @property int|null $id_usuario
  * @property string|null $copia_firma
  *
- * @property Contrato $contrato
+ * @property Contratos $contrato
  * @property User $usuario
  */
 class ContratosLog extends \yii\db\ActiveRecord
@@ -39,7 +39,7 @@ class ContratosLog extends \yii\db\ActiveRecord
             [['parametros', 'copia_firma'], 'string', 'max' => 255],
             [['id'], 'unique'],
             [['id_usuario'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_usuario' => 'id']],
-            [['id_contrato'], 'exist', 'skipOnError' => true, 'targetClass' => Contrato::className(), 'targetAttribute' => ['id_contrato' => 'id']],
+            [['id_contrato'], 'exist', 'skipOnError' => true, 'targetClass' => Contratos::className(), 'targetAttribute' => ['id_contrato' => 'id']],
         ];
     }
 
@@ -65,7 +65,7 @@ class ContratosLog extends \yii\db\ActiveRecord
      */
     public function getContrato()
     {
-        return $this->hasOne(Contrato::className(), ['id' => 'id_contrato']);
+        return $this->hasOne(Contratos::className(), ['id' => 'id_contrato']);
     }
 
     /**
