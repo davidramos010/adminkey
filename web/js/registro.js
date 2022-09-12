@@ -43,7 +43,7 @@ function addKey()
                     }
                 });
                 if(data.estado=='E'){
-                    toastr.warning('La llave tiene una entrada activa y se encuentra en almacén, no se puede registrar la devolución.');
+                    toastr.warning('La llave tiene una entrada activa, no se puede volver a ingresar.');
                     bolInserRow = false;
                 }
             }else{
@@ -53,7 +53,7 @@ function addKey()
                     }
                 });
                 if(data.estado=='S'){
-                    toastr.warning('La llave tiene una entrega/salida activa y no se encuentra en almacén, no se pueden registrar mas salidas.');
+                    toastr.warning('La llave tiene una salida activa, no se pueden registrar mas salidas.');
                     bolInserRow = false;
                 }
             }

@@ -132,15 +132,7 @@ class ContratosController extends Controller
         ]);
     }
 
-    /**
-     * @return void
-     */
-    public function actionAjaxConsultarLlaves($q = false)
-    {
-        $rows = Llave::find()->select('id,codigo')->distinct()
-            ->where(['like', 'codigo', $q])->asArray()->all();
-        return json_encode($rows);
-    }
+
 
     /**
      * Updates an existing Contratos model.
@@ -219,6 +211,50 @@ class ContratosController extends Controller
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
 
+
+    /**
+     * @return void
+     */
+    public function actionAjaxConsultarLlaves($q = false)
+    {
+        $rows = Llave::find()->select('id,codigo')->distinct()
+            ->where(['like', 'codigo', $q])->asArray()->all();
+        return json_encode($rows);
+    }
+
+    /**
+     * buscar informacion general de una llave por id
+     * @return void
+     */
+    public function actionAjaxFindLlave()
+    {
+        $arrParam = $this->request->post();
+        $numId = $arrParam['id'];
+
+        $query = Llave::find()->alias('ll');
+        // add conditions that should always apply here
+        $query->select([
+            "ll.*",
+            "ls.status as llaveLastStatus",
+            "lu.descripcion_almacen as ubicacion",
+            "c.nombre as comunidad",
+            "(CASE
+                WHEN pp.nombre_propietario IS NOT NULL THEN pp.nombre_propietario
+                WHEN pp.nombre_representante IS NOT NULL THEN pp.nombre_representante
+                ELSE NULL
+            END) as nombre_propietario",
+            "tl.descripcion as tipo"
+        ]);
+        $query->leftJoin('llave_status ls','ls.id_llave = ll.id and ls.id = ( SELECT MAX(id) FROM llave_status cm WHERE ls.id_llave = ll.id )');
+        $query->leftJoin('propietarios pp','ll.id_propietario = pp.id');
+        $query->leftJoin('tipo_llave tl','ll.id_tipo = tl.id');
+        $query->leftJoin('llave_ubicaciones lu','ll.id_llave_ubicacion = lu.id');
+        $query->leftJoin('comunidad c','ll.id_comunidad = c.id');
+        $query->where(['ll.id'=>$numId]);
+        $arrLlave = $query->asArray()->all();
+        return json_encode($arrLlave[0]);
+
+    }
 
 
 }

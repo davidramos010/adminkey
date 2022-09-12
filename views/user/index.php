@@ -88,7 +88,7 @@ $this->title = 'Usuarios';
                                )
                            ),
                        ],
-                       array(
+                       [
                            'attribute' => 'estado',
                            'label' => 'Estado',
                            'headerOptions' => array('style' => 'width: 10%'),
@@ -106,7 +106,7 @@ $this->title = 'Usuarios';
                                    'placeholder' => 'Todos',
                                )
                            ),
-                       ),
+                       ],
                        [
                            'class' => '\kartik\grid\ActionColumn',
                            'header' => '',

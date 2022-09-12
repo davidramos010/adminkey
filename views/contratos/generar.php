@@ -4,6 +4,7 @@ use app\models\Contratos;
 use app\models\Llave;
 use kartik\grid\GridView;
 use kartik\widgets\Select2;
+use rmrevin\yii\fontawesome\component\Icon;
 use yii\helpers\Html;
 
 use kartik\widgets\DatePicker;
@@ -22,7 +23,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\LlaveSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->registerJsFile('@web/js/contratos.js');
+$this->registerJsFile('@web/js/generar.js');
 
 $this->title = Yii::t('app', 'Generar Contratos');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Contratos'), 'url' => ['index']];
@@ -47,154 +48,218 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                         </div>
                     </div>
-                    <?php $form = ActiveForm::begin([
-                        'id' => 'generar-form', 'options' => ['enctype' => 'multipart/form-data']
-                    ]); ?>
+
                     <div class="card-body">
+                        <?php $form = ActiveForm::begin(['id' => 'generar-form', 'options' => ['enctype' => 'multipart/form-data'] ]); ?>
+                        <?= $form->field($model_log, 'parametros')->hiddenInput(['id'=>'parametros'])->label(false); ?>
                         <div class="row">
                             <div class="col-md-6 " >
                                 <?= $form->field($model_log, 'id_contrato')->dropDownList( Contratos::getContratosDropdownList()  , ['class'=>'form-control', 'prompt' => 'Seleccione Uno' ])->label('Contrato'); ?>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6" >
-                                <?=
-                                     $form->field($model_log, 'parametros')->widget(Select2::classname(), [
-                                        'data' => [$model_log->parametros => $model_log->parametros],
-                                        'options' => ['multiple'=>true, 'placeholder' => 'Seleccionar Llave ...'],
-                                        'pluginOptions' => [
-                                            'allowClear' => true,
-                                            'minimumInputLength' => 3,
-                                            'language' => [
-                                                'errorLoading' => new JsExpression("function () { return 'Buscando resultados...'; }"),
-                                            ],
-                                            'ajax' => [
-                                                'url' => Url::to(['contratos/ajax-consultar-llaves']),
-                                                'dataType' => 'json',
-                                                'processResults' => new JsExpression('(data) => procesarResultadosLlave(data)'),
-                                                'data' => new JsExpression('function(params) { return {q:params.term}; }')
-                                            ],
-                                            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                                            'templateResult' => new JsExpression('function(llave) { console.log(llave); return llave.codigo; }'),
-                                            'templateSelection' => new JsExpression('function (llave) { return llave.codigo; }'),
-                                        ],
-                                    ])->label('llaves');
-
-                                ?>
+                            <div class="col-md-12 " >
+                                <?= $form->field($model_log, 'observacion')->textArea(['id' => 'observaciones', 'class' => 'form-control', 'style' => 'width:100%'])->label('Notas/Observaciones') ?>
+                            </div>
+                        </div>
+                        <?php ActiveForm::end(); ?>
+                        <br/>
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title"> <?= Yii::t('app', 'Selección de llaves') ?> </h3>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 " >
-                                <?php Pjax::begin(); ?>
+                            <div class="col-md-8" >
                                 <?php
+                                    Pjax::begin(['id'=>'llaves']);
+                                    $gridColumns = [
+                                        [
+                                            'attribute' => 'nombre_propietario',
+                                            'label' => 'Propietario',
+                                            'headerOptions' => ['style' => 'width: 20%'],
+                                            'format' => 'raw',
+                                            'value' => function($model){
+                                                return (isset($model->nombre_propietario))?strtoupper($model->nombre_propietario):'' ;
+                                            }
+                                        ],
+                                        [
+                                            'attribute' => 'id_comunidad',
+                                            'label' => 'Cliente',
+                                            'headerOptions' => ['style' => 'width: 20%'],
+                                            'format' => 'raw',
+                                            'value' => function($model){
+                                                return (isset($model->comunidad))?strtoupper($model->comunidad->nombre):'No Encontrado' ;
+                                            }
+                                        ],
+                                        [
+                                            'attribute' => 'id_tipo',
+                                            'label' => 'Tipo Llave',
+                                            'headerOptions' => ['style' => 'width: 10%'],
+                                            'value' => function ($model) {
+                                                $strLabel = (isset($model->tipo))?strtoupper($model->tipo->descripcion):'No Encontrado' ;
+                                                switch ($model->id_tipo){
+                                                    case 1:
+                                                        $class = 'bg-success';
+                                                        break;
+                                                    case 2:
+                                                        $class = 'bg-info';
+                                                        break;
+                                                    case 3:
+                                                        $class = 'bg-primary';
+                                                        break;
+                                                    default:
+                                                        $class = 'bg-muted';
+                                                }
+                                                return '<span class="float-none badge '.$class.'">'.$strLabel.'</span>';
+                                            },
+                                            'format' => 'raw',
+                                            'filterType' => GridView::FILTER_SELECT2,
+                                            'filter' => Llave::getTipoLlaveDropdownList(),
+                                            'filterWidgetOptions' => [
+                                                'theme' => Select2::THEME_BOOTSTRAP,
+                                                'size' => Select2::SMALL,
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                    'placeholder' => '',
+                                                ]
+                                            ],
+                                        ],
+                                        [
+                                            'attribute' => 'codigo',
+                                            'label' => 'Código',
+                                            'headerOptions' => ['style' => 'width: 10%'],
+                                        ],
+                                        [
+                                            'attribute' => 'descripcion',
+                                            'label' => 'Descripción',
+                                            'headerOptions' => ['style' => 'width: 30%'],
+                                        ],
+                                        [
+                                            'attribute' => 'llaveLastStatus',
+                                            'label' => 'Estado',
+                                            'headerOptions' => ['style' => 'width: 5%'],
+                                            'value' => function ($model) {
+                                                return ($model->llaveLastStatus=='S')?'<span class="float-none badge bg-danger">Prestada</span>':'<span class="float-none badge bg-success">Almacenada</span>' ;
+                                            },
+                                            'format' => 'raw',
+                                            'filterType' => GridView::FILTER_SELECT2,
+                                            'filter' => ['S' => 'Prestada', 'E' => 'Almacenada'],
+                                            'filterWidgetOptions' => [
+                                                'theme' => Select2::THEME_BOOTSTRAP,
+                                                'size' => Select2::SMALL,
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                    'placeholder' => '',
+                                                ]
+                                            ],
+                                        ],
+                                        [
+                                            'class' => '\kartik\grid\ActionColumn',
+                                            'header' => '',
+                                            'mergeHeader' => false,
+                                            'template' => ' {add}',
+                                            'vAlign'=>GridView::ALIGN_MIDDLE,
+                                            'hAlign'=>GridView::ALIGN_LEFT,
+                                            'buttons' => [
+                                                'add' => function ($url, $model) {
+                                                    $viewButton = Html::button(
+                                                        '<i class="fas fa-plus"></i>',
+                                                        [
+                                                            'type' => 'button',
+                                                            'class' => 'btn btn-primary btn-xs',
+                                                            'data' => [
+                                                                'js-id' => $model->id,
+                                                            ]
+                                                        ]
+                                                    );
+                                                    return $viewButton;
+                                                },
+                                            ]
+                                        ]
 
-                                $gridColumns = [
-                                    [
-                                        'class' => '\kartik\grid\CheckboxColumn',
-                                        'checkboxOptions' =>
-                                            function($model) {
-                                                return ['id'=>'grid_chk_'.$model->id, 'value' => $model->id, 'class' => 'checkbox-row'];
-                                            }
-                                    ],
-                                    [
-                                        'attribute' => 'nombre_propietario',
-                                        'label' => 'Propietario',
-                                        'headerOptions' => ['style' => 'width: 15%'],
-                                        'format' => 'raw',
-                                        'value' => function($model){
-                                            return (isset($model->nombre_propietario))?strtoupper($model->nombre_propietario):'' ;
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'id_comunidad',
-                                        'label' => 'Cliente',
-                                        'headerOptions' => ['style' => 'width: 20%'],
-                                        'format' => 'raw',
-                                        'value' => function($model){
-                                            return (isset($model->comunidad))?strtoupper($model->comunidad->nombre):'No Encontrado' ;
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'id_tipo',
-                                        'label' => 'Tipo Llave',
-                                        'headerOptions' => ['style' => 'width: 5%'],
-                                        'value' => function ($model) {
-                                            $strLabel = (isset($model->tipo))?strtoupper($model->tipo->descripcion):'No Encontrado' ;
-                                            switch ($model->id_tipo){
-                                                case 1:
-                                                    $class = 'bg-success';
-                                                    break;
-                                                case 2:
-                                                    $class = 'bg-info';
-                                                    break;
-                                                case 3:
-                                                    $class = 'bg-primary';
-                                                    break;
-                                                default:
-                                                    $class = 'bg-muted';
-                                            }
-                                            return '<span class="float-none badge '.$class.'">'.$strLabel.'</span>';
-                                        },
-                                        'format' => 'raw',
-                                        'filterType' => GridView::FILTER_SELECT2,
-                                        'filter' => Llave::getTipoLlaveDropdownList(),
-                                        'filterWidgetOptions' => [
-                                            'theme' => Select2::THEME_BOOTSTRAP,
-                                            'size' => Select2::SMALL,
-                                            'pluginOptions' => [
-                                                'allowClear' => true,
-                                                'placeholder' => '',
+                                    ]; ?>
+                                    <?= GridView::widget([
+                                        'id' => 'pestana-llaves',
+                                        'dataProvider' => $dataProvider,
+                                        'filterModel' => $searchModel,
+                                        'resizableColumns' => false,
+                                        'condensed' => true,
+                                        'floatHeader' => false,
+                                        'pjax' => true,
+                                        'pjaxSettings' => [
+                                            'options' => [
+                                                'timeout' => false,
+                                                'enablePushState' => false,
+                                                'clientOptions' => ['method' => 'GET']
                                             ]
                                         ],
-                                    ],
-                                    [
-                                        'attribute' => 'codigo',
-                                        'label' => 'Código',
-                                        'headerOptions' => ['style' => 'width: 5%'],
-                                    ],
-                                    [
-                                        'attribute' => 'descripcion',
-                                        'label' => 'Descripción',
-                                        'headerOptions' => ['style' => 'width: 15%'],
-                                    ],
-                                    [
-                                        'attribute' => 'llaveLastStatus',
-                                        'label' => 'Estado',
-                                        'headerOptions' => ['style' => 'width: 5%'],
-                                        'value' => function ($model) {
-                                            return ($model->llaveLastStatus=='S')?'<span class="float-none badge bg-danger">Prestada</span>':'<span class="float-none badge bg-success">Almacenada</span>' ;
-                                        },
-                                        'format' => 'raw',
-                                        'filterType' => GridView::FILTER_SELECT2,
-                                        'filter' => ['S' => 'Prestada', 'E' => 'Almacenada'],
-                                        'filterWidgetOptions' => [
-                                            'theme' => Select2::THEME_BOOTSTRAP,
-                                            'size' => Select2::SMALL,
-                                            'pluginOptions' => [
-                                                'allowClear' => true,
-                                                'placeholder' => '',
-                                            ]
-                                        ],
-                                    ],
-
-                                ]; ?>
-                                <?= GridView::widget([
-                                    'id' => 'grid_llaves',
-                                    'dataProvider' => $dataProvider,
-                                    'filterModel' => $searchModel,
-                                    'formatter' => array('class' => 'yii\i18n\Formatter', 'nullDisplay' => ''),
-                                    'columns' => $gridColumns,
-                                ]); ?>
-                                <?php Pjax::end(); ?>
+                                        'toolbar' => false,
+                                        'columns' => $gridColumns,
+                                    ]); ?>
+                                    <?php Pjax::end(); ?>
+                            </div>
+                            <div class="col-md-4" style="padding-top: 23px">
+                                <table id="tblKeyCheck" class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 35%">Codigo</th>
+                                        <th style="width: 60%">Descripción</th>
+                                        <th style="width: 5%"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- Cuerpo -->
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th colspan="3"><?= Yii::t('app', 'Relación de llaves seleccionadas para impresion de contrato.') ?></th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
                             </div>
                         </div>
                         <div  style="padding-top: 15px" >
-                            <?= Html::submitButton('Guardar Contrato', ['class' => 'btn btn-success ']) ?>
+                            <?= Html::button('Guardar/Generar Contrato', [ 'class' => 'btn btn-success', 'onclick' => '(function ( $event ) { sendForm() })();' ]); ?>
+                            <?php // Html::submitButton('Guardar Contrato', ['class' => 'btn btn-success ']) ?>
                             <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
                         </div>
                     </div>
 
-                    <?php ActiveForm::end(); ?>
+                    <!-- info modal -->
+                    <div class="modal fade" id="modal-default" style="display: none;" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Información de la llave</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table-responsive border-opacity-10">
+                                        <tr class="table-head-fixed">
+                                            <td style="width: 30%"></td>
+                                            <td style="width: 70%"></td>
+                                        </tr>
+                                        <tr class="text-body"> <td class="text-bold">Propietario</td><td id="ll_propietario"></td> </tr>
+                                        <tr class="text-body"> <td class="text-bold">Cliente</td><td id="ll_cliente"></td> </tr>
+                                        <tr class="text-body"> <td class="text-bold">Tipo</td><td id="ll_tipo"></td> </tr>
+                                        <tr class="text-body"> <td class="text-bold">Código</td><td id="ll_codigo"></td> </tr>
+                                        <tr class="text-body"> <td class="text-bold">Descripción</td><td id="ll_descripcion"></td> </tr>
+                                        <tr class="text-body"> <td class="text-bold">Observación</td><td id="ll_observacion"></td> </tr>
+                                        <tr class="text-body"> <td class="text-bold">Alarma</td><td id="ll_alarma"></td> </tr>
+                                        <tr class="text-body"> <td class="text-bold">Ubicación</td><td id="ll_ubicacion"></td> </tr>
+                                        <tr class="text-body"> <td class="text-bold">Estado</td><td id="ll_estado"></td> </tr>
+                                    </table>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -202,3 +267,9 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <!--.card-->
 </div>
+
+<?php $this->registerJs(
+    "$(document).on('click', '[data-js-id]', function () {
+            selectChk($(this).data('js-id')) ;
+        });"
+); ?>
