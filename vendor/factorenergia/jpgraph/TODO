@@ -1,2 +1,0 @@
-// clases sin namespace
-new (\w+)\(

@@ -7,7 +7,6 @@ Thumbs.db
 
 # composer vendor dir
 /vendor
-!/vendor/
 
 # composer itself is not needed
 composer.phar
@@ -26,36 +25,27 @@ phpunit.phar
 # ignore dev installed apps and extensions
 /apps
 /extensions
-/packages
-!/mysql/
+!/packages
+!/mysql
+/mysql
+!/vagrant
+/vagrant
+/web/plantillas
+!/web/plantillas
+!/vendor
+/vendor
 
 # NPM packages
 /node_modules
 .env
 package-lock.json!/mysql/admin_key/!/mysql/admin_key/
 
-/mysql/mysql/
-
-!/mysql/performance_schema/
-
-!/mysql/auto.cnf
-
-!/mysql/ib_logfile0
-
-!/mysql/ib_logfile1
-
-!/mysql/ibdata1
-/mysql/
-
 !assets/.gitignore
 protected/runtime/*
 !protected/runtime/.gitignore
 protected/data/*.db
 themes/classic/views/
-!/config/db.php
 
-!/vendor/
 !/config/db.php
 !/composer.lock
 !/tests/
-!/web/plantillas/
