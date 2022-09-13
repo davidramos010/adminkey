@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
 
                     <div class="card-body">
-                        <?php $form = ActiveForm::begin(['id' => 'generar-form', 'options' => ['enctype' => 'multipart/form-data'] ]); ?>
+                        <?php $form = ActiveForm::begin(['action' =>['contratos/generar-contrato'],'id' => 'generar-form', 'options' => ['enctype' => 'multipart/form-data'] ]); ?>
                         <?= $form->field($model_log, 'parametros')->hiddenInput(['id'=>'parametros'])->label(false); ?>
                         <div class="row">
                             <div class="col-md-6 " >

@@ -138,5 +138,8 @@ function sendForm(){
     listLlave = JSON.stringify(listKeyCheck);
     console.log(listLlave);
     $('#parametros').val(listLlave);
-    alert('enviar')
+    //alert('enviar');
+    $('#generar-form').submit();
+
+
 }

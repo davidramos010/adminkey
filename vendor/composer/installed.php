@@ -896,6 +896,15 @@
             ),
             'dev_requirement' => false,
         ),
+        'laminas/laminas-escaper' => array(
+            'pretty_version' => '2.11.x-dev',
+            'version' => '2.11.9999999.9999999-dev',
+            'reference' => '7c2c047c25dd934e74b3fa74312650bcccae68b2',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../laminas/laminas-escaper',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'maennchen/zipstream-php' => array(
             'pretty_version' => '2.2.1',
             'version' => '2.2.1.0',
@@ -1090,6 +1099,15 @@
             'reference' => '69991111e05fca3ff7398e1e7fca9ebed33efec6',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpoffice/phpspreadsheet',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'phpoffice/phpword' => array(
+            'pretty_version' => '0.18.3',
+            'version' => '0.18.3.0',
+            'reference' => 'be0190cd5d8f95b4be08d5853b107aa4e352759a',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../phpoffice/phpword',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -1473,7 +1491,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/deprecation-contracts',
             'aliases' => array(),
-            'dev_requirement' => false,
+            'dev_requirement' => true,
         ),
         'symfony/dom-crawler' => array(
             'pretty_version' => '4.4.x-dev',
@@ -1514,15 +1532,6 @@
             'reference' => '66bd787edb5e42ff59d3523f623895af05043e4f',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/finder',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'symfony/options-resolver' => array(
-            'pretty_version' => '5.4.x-dev',
-            'version' => '5.4.9999999.9999999-dev',
-            'reference' => '54f14e36aa73cb8f7261d7686691fd4d75ea2690',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../symfony/options-resolver',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -1601,7 +1610,7 @@
             'aliases' => array(
                 0 => '1.26.x-dev',
             ),
-            'dev_requirement' => false,
+            'dev_requirement' => true,
         ),
         'symfony/polyfill-php80' => array(
             'pretty_version' => 'dev-main',
@@ -1681,17 +1690,6 @@
             'aliases' => array(),
             'dev_requirement' => true,
         ),
-        'wsdl2phpgenerator/wsdl2phpgenerator' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => 'c92d01beed99b26b75d8c514f386f39eb84454c1',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../wsdl2phpgenerator/wsdl2phpgenerator',
-            'aliases' => array(
-                0 => '3.5.x-dev',
-            ),
-            'dev_requirement' => false,
-        ),
         'yii2mod/yii2-sweet-alert' => array(
             'pretty_version' => '1.3',
             'version' => '1.3.0.0',
@@ -1704,7 +1702,7 @@
         'yiisoft/yii2' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '89a489b85ac02f28a1ea9af2c969421c3e31f621',
+            'reference' => '084c304cf376b468fee1cb0c0626ac46a98b6327',
             'type' => 'library',
             'install_path' => __DIR__ . '/../yiisoft/yii2',
             'aliases' => array(
@@ -1751,9 +1749,9 @@
             'dev_requirement' => false,
         ),
         'yiisoft/yii2-debug' => array(
-            'pretty_version' => '2.1.19',
-            'version' => '2.1.19.0',
-            'reference' => '84d20d738b0698298f851fcb6fc25e748d759223',
+            'pretty_version' => '2.1.21',
+            'version' => '2.1.21.0',
+            'reference' => 'fa9fa02e242c1b744eb68045ee8e9d698134836d',
             'type' => 'yii2-extension',
             'install_path' => __DIR__ . '/../yiisoft/yii2-debug',
             'aliases' => array(),
@@ -1771,9 +1769,9 @@
             'dev_requirement' => true,
         ),
         'yiisoft/yii2-gii' => array(
-            'pretty_version' => '2.2.4',
-            'version' => '2.2.4.0',
-            'reference' => '80893fc4c0df97f3638938948bf34ca43dd8bff6',
+            'pretty_version' => '2.2.5',
+            'version' => '2.2.5.0',
+            'reference' => 'e2f2dcf0f16713e678df6ba70362c99a215a8f72',
             'type' => 'yii2-extension',
             'install_path' => __DIR__ . '/../yiisoft/yii2-gii',
             'aliases' => array(),

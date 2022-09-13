@@ -53,6 +53,7 @@
         "philippfrenzel/yii2fullcalendar": "3.9.0",
         "clegginabox/pdf-merger": "dev-master",
         "phpoffice/phpspreadsheet": "^1.11",
+        "phpoffice/phpword": "v0.18.*",
         "zircote/swagger-php": "^3.0",
         "bower-asset/swagger-ui": "^3.25",
         "2amigos/yii2-chartjs-widget": "3.0.1",
@@ -65,6 +66,7 @@
         "vilochane/yii2-barcode-generator": "dev-master",
         "kartik-v/yii2-dropdown-x": "dev-master",
         "kartik-v/yii2-bootstrap4-dropdown": "@dev"
+
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

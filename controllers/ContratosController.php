@@ -6,6 +6,7 @@ use app\models\Codipostal;
 use app\models\ContratosLog;
 use app\models\Llave;
 use app\models\LlaveSearch;
+use PhpOffice\PhpWord\TemplateProcessor;
 use Yii;
 use app\models\Contratos;
 use app\models\ContratosSearch;
@@ -253,6 +254,34 @@ class ContratosController extends Controller
         $query->where(['ll.id'=>$numId]);
         $arrLlave = $query->asArray()->all();
         return json_encode($arrLlave[0]);
+
+    }
+
+
+    public function actionGenerarContrato()
+    {
+        $arrParam = $this->request->post();
+        //var_dump($arrParam);
+        $arrParam = $arrParam['ContratosLog'];
+        $parametros = $arrParam['parametros'];
+        $contrato = $arrParam['id_contrato'];
+        $observacion = $arrParam['observacion'];
+
+        $objContrato = Contratos::findOne(['id'=>$contrato]);
+        $rutaContrato = Yii::getAlias('@webroot') . '/plantillas/' . $objContrato->documento;
+
+        $templateProcessor = new TemplateProcessor($rutaContrato);
+        $templateProcessor->setValue('llaves', $parametros);
+        $templateProcessor->setValue('observaciones', $observacion);
+
+        $pathToSave = Yii::getAlias('@webroot') . '/plantillas/' . date('Ymd').'_'.$objContrato->documento;
+        $templateProcessor->saveAs($pathToSave);
+
+        if (file_exists($pathToSave)) {
+            return Yii::$app->response->sendFile($pathToSave, date('Ymd').'_'.$objContrato->documento);
+        }
+        return true;
+
 
     }
 
