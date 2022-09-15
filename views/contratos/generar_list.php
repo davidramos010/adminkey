@@ -58,19 +58,19 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     ],
                     [
-                        'attribute' => 'descripcion',
-                        'label' => 'Descripción',
+                        'attribute' => 'estado',
+                        'label' => 'Estado',
                         'headerOptions' => ['style' => 'width: 30%'],
                         'format' => 'raw',
                         'value' => function($model){
-                            return $model->descripcion;
+                            return ($model->estado==1)?'<span class="float-none badge bg-success">ACTIVO</span>':'<span class="float-none badge bg-danger">ACTIVO</span>' ;
                         }
                     ],
                     [
-                        'attribute' => 'fecha_ini',
+                        'attribute' => 'fecha',
                         'headerOptions' => ['style' => 'width: 15%'],
                         'value' => function ($model) {
-                            return (isset($model->fecha_ini))? util::getDateFormatedSqlToUser($model->fecha_ini) :'' ;
+                            return (isset($model->fecha))? util::getDateTimeFormatedSqlToUser($model->fecha) :'' ;
                         },
                         'filterType' => GridView::FILTER_DATE,
                         'filterWidgetOptions' => [
@@ -91,109 +91,23 @@ $this->params['breadcrumbs'][] = $this->title;
                         'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; ']
                     ],
                     [
-                        'attribute' => 'fecha_fin',
-                        'headerOptions' => ['style' => 'width: 15%'],
-                        'value' => function ($model) {
-                            return (isset($model->fecha_fin))? util::getDateFormatedSqlToUser($model->fecha_fin) :'' ;
-                        },
-                        'filterType' => GridView::FILTER_DATE,
-                        'filterWidgetOptions' => [
-                            'pluginOptions' => [
-                                'autoclose' => true,
-                                'format' => 'dd-mm-yyyy',
-                                'showButtonPanel'=>'true',
-                                'showTodayButton' => 'true'
-                            ],
-
-                        ],
-                        'filterInputOptions' => [
-                            'class' => 'form-control',
-                            'placeholder' => Yii::t('app', 'Validado hasta'),
-                        ],
-                        'label' => Yii::t('app', 'Validado hasta'),
-                        'headerOptions' => ['class' => 'col-xs-2'],
-                        'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; ']
-                    ],
-                    [
-                        'attribute' => 'estado',
-                        'label' => 'Estado',
-                        'headerOptions' => ['style' => 'width: 5%'],
-                        'value' => function ($model) {
-                            return ($model->estado==1)?'<span class="float-none badge bg-success">ACTIVO</span>':'<span class="float-none badge bg-danger">ACTIVO</span>' ;
-                        },
-                        'format' => 'raw',
-                        'filterType' => GridView::FILTER_SELECT2,
-                        'filter' => [ '1' => 'ACTIVO', '0' => 'INACTIVO'],
-                        'filterWidgetOptions' => [
-                            'theme' => Select2::THEME_BOOTSTRAP,
-                            'size' => Select2::SMALL,
-                            'pluginOptions' => [
-                                'allowClear' => true,
-                                'placeholder' => 'Todos',
-                            ]
-                        ],
-                    ],
-                    [
-                        'attribute' => 'id_user',
-                        'label' => 'Usuario',
-                        'headerOptions' => ['style' => 'width: 10%'],
+                        'attribute' => 'parametros',
+                        'label' => 'llaves',
+                        'headerOptions' => ['style' => 'width: 20%'],
                         'format' => 'raw',
                         'value' => function($model){
-                            return $model->usuario->username;
+                            return $model->parametros;
                         }
                     ],
                     [
-                        'attribute' => 'documento',
-                        'label' => 'Plantilla',
-                        'headerOptions' => ['style' => 'width: 5%'],
+                        'attribute' => 'copia_firma',
+                        'label' => 'Documento Firmado',
+                        'headerOptions' => ['style' => 'width: 20%'],
                         'format' => 'raw',
                         'value' => function($model){
-                            $url = Yii::$app->urlManager->createUrl(['site/download','path'=>'/plantillas/','file'=>$model->documento]);
+                            $url = Yii::$app->urlManager->createUrl(['site/download','path'=>'/plantillas/','file'=>$model->copia_firma]);
                             return Html::a('<i class="fas fa-download"></i>' , $url, ['title'=>'Descargar Plantilla', 'target' => '_blank', 'class' => 'box_button fl download_link', 'data' => ['tooltip' => true, 'pjax' => 0 ]])  ;
                         }
-                    ],
-                    [
-                        'class' => '\kartik\grid\ActionColumn',
-                        'header' => '',
-                        'headerOptions' => array('style' => 'width: 100%'),
-                        'mergeHeader' => false,
-                        'template' => ' {update} {delete} ',
-                        'width'=>'70px',
-                        'vAlign'=>GridView::ALIGN_MIDDLE,
-                        'hAlign'=>GridView::ALIGN_LEFT,
-                        'buttons' => [
-                            'update' => function ($url, $model) {
-                                $viewButton = Html::a(
-                                    Html::button('<i class="fas fa-pen"></i>', ['class' => 'btn btn-primary btn-xs'] ),
-                                    ['contratos/update', 'id' => $model['id']],
-                                    [
-                                        'title' => Yii::t('common', 'Editar'),
-                                        'data' => [
-                                            'tooltip' => true,
-                                            'pjax' => 0
-                                        ]
-                                    ]
-                                );
-                                return $viewButton;
-                            },
-                            'delete' => function ($url, $model) {
-                                $viewButton = null;
-                                if($model['estado']){
-                                    $viewButton = Html::a(
-                                        Html::button('<i class="fas fa-trash-alt"></i>', ['class' => 'btn btn-primary btn-xs'] ),
-                                        ['contratos/delete', 'id' => $model['id']],
-                                        [
-                                            'title' => Yii::t('common', 'Inactivar'),
-                                            'data' => [
-                                                'tooltip' => true,
-                                                'pjax' => 0
-                                            ]
-                                        ]
-                                    );
-                                }
-                                return $viewButton;
-                            }
-                        ]
                     ],
 
                 ]; ?>

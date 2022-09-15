@@ -13,12 +13,17 @@ use Yii;
  * @property string|null $fecha
  * @property int|null $id_usuario
  * @property string|null $copia_firma
+ * @property string|null $observacion
  *
  * @property Contratos $contrato
  * @property User $usuario
  */
 class ContratosLog extends \yii\db\ActiveRecord
 {
+    public $estado = null;
+    public $nombre = null;
+    public $nomenclatura = null;
+
     /**
      * {@inheritdoc}
      */
@@ -33,10 +38,10 @@ class ContratosLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id'], 'required'],
+            [['id_contrato'], 'required'],
             [['id', 'id_contrato', 'id_usuario'], 'integer'],
             [['fecha'], 'safe'],
-            [['parametros', 'copia_firma'], 'string', 'max' => 255],
+            [['observacion','parametros', 'copia_firma'], 'string', 'max' => 255],
             [['id'], 'unique'],
             [['id_usuario'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_usuario' => 'id']],
             [['id_contrato'], 'exist', 'skipOnError' => true, 'targetClass' => Contratos::className(), 'targetAttribute' => ['id_contrato' => 'id']],
@@ -55,6 +60,7 @@ class ContratosLog extends \yii\db\ActiveRecord
             'fecha' => Yii::t('app', 'Fecha'),
             'id_usuario' => Yii::t('app', 'Id Usuario'),
             'copia_firma' => Yii::t('app', 'Copia Firma'),
+            'observacion' => Yii::t('app', 'Observación'),
         ];
     }
 

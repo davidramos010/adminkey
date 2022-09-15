@@ -40,9 +40,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
                                 <?php
                                 echo Html::ul([
-                                    'El nombre del documento debe ser Unico',
-                                    'Una vez se cumpla la fecha de finalización el contrato, no estará disponible para impresión.',
-                                    'Los documentos deben ser extension doc/docx.'
+                                    'Seleccione un formato de contrato',
+                                    'Seleccione minimo una llave para generar un contrato.',
+                                    'Una vez se almacene la información, se podra imprimir el formato tantas veces como se necesario'
                                 ], ['encode' => false]);
                                 ?>
                             </div>
@@ -52,14 +52,38 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="card-body">
                         <?php $form = ActiveForm::begin(['action' =>['contratos/generar-contrato'],'id' => 'generar-form', 'options' => ['enctype' => 'multipart/form-data'] ]); ?>
                         <?= $form->field($model_log, 'parametros')->hiddenInput(['id'=>'parametros'])->label(false); ?>
+                        <?= $form->field($model_log, 'id')->hiddenInput(['id'=>'id'])->label(false); ?>
                         <div class="row">
                             <div class="col-md-6 " >
-                                <?= $form->field($model_log, 'id_contrato')->dropDownList( Contratos::getContratosDropdownList()  , ['class'=>'form-control', 'prompt' => 'Seleccione Uno' ])->label('Contrato'); ?>
+                                <?= $form->field($model_log, 'id_contrato')->dropDownList( Contratos::getContratosDropdownList()  , ['class'=>'form-control', 'prompt' => 'Seleccione Uno', 'disabled'=>!empty($model_log->copia_firma) ])->label('Contrato'); ?>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 " >
-                                <?= $form->field($model_log, 'observacion')->textArea(['id' => 'observaciones', 'class' => 'form-control', 'style' => 'width:100%'])->label('Notas/Observaciones') ?>
+                            <div class="col-md-8 " >
+                                <?= $form->field($model_log, 'observacion')->textArea(['id' => 'observaciones', 'class' => 'form-control', 'style' => 'width:100%', 'disabled'=>!empty($model_log->copia_firma) ])->label('Notas/Observaciones') ?>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6" >
+                                <?= $form->field($model_log, 'copia_firma',['options' => ['class' => 'file-uploader']])->widget(FileInput::class, [
+                                    'language' => 'es',
+                                    'options' => [
+                                        'id' => 'copia_firma',
+                                        'multiple'=>false
+                                    ],
+                                    'pluginOptions' => array_merge(
+                                        [
+                                            'showBrowse' => true,
+                                            'showCaption' => true,
+                                            'showRemove' => false,
+                                            'showUpload' => false,
+                                            'showPreview' => false,
+                                            'initialCaption'=>"Seleccione el documento firmado",
+                                            'allowedFileTypes' => ['png','jpg','pdf','jpeg','gif','pdf','office','doc', 'docx'],
+                                            'msgInvalidFileType' => 'El tipo de archivo de: {name} no es correcto. Sólo se admiten archivos del tipo "docx,pdf,imagenes".'
+
+                                        ])
+                                ])->label('Contrato Firmado')   ?>
                             </div>
                         </div>
                         <?php ActiveForm::end(); ?>
@@ -220,9 +244,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                         </div>
                         <div  style="padding-top: 15px" >
-                            <?= Html::button('Guardar/Generar Contrato', [ 'class' => 'btn btn-success', 'onclick' => '(function ( $event ) { sendForm() })();' ]); ?>
-                            <?php // Html::submitButton('Guardar Contrato', ['class' => 'btn btn-success ']) ?>
-                            <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
+                            <?php if(!$model_log->copia_firma && empty($model_log->copia_firma)): ?>
+                                <?= Html::button('Guardar Contrato', [ 'class' => 'btn btn-success', 'onclick' => '(function ( $event ) { sendForm() })();' ]); ?>
+                            <?php endif; ?>
+                            <?= Html::a(Yii::t('app', 'Cancelar'), ['generar-list'], ['class' => 'btn btn-default ']) ?>
+                            <?php if(!$model_log->isNewRecord && !empty($model_log->copia_firma)): ?>
+                                <?php $url = Yii::$app->urlManager->createUrl(['site/download','path'=>'/contratos_firmados/','file'=>$model_log->copia_firma]); ?>
+                                <?= Html::a('<i class="fas fa-download"></i> Descargar Copia' , $url, ['title'=>'Descargar Copia', 'target' => '_blank', 'class' => 'btn btn-info download_link', 'data' => ['tooltip' => true, 'pjax' => 0 ]]);  ?>
+                            <?php endif; ?>
+                            <?php if(!$model_log->isNewRecord): ?>
+                                <?= Html::a('<i class="fas fa-download"></i> Generar Contrato' , ['descargar-contrato', 'id' => $model_log->id], ['title'=>'Generar Contrato', 'target' => '_blank', 'class' => 'btn btn-info download_link', 'data' => ['tooltip' => true, 'pjax' => 0 ]]);  ?>
+                            <?php endif; ?>
                         </div>
                     </div>
 
@@ -271,5 +303,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php $this->registerJs(
     "$(document).on('click', '[data-js-id]', function () {
             selectChk($(this).data('js-id')) ;
-        });"
-); ?>
+        });
+        
+        $( document ).ready(function() {
+            fnReloadSeleccionLlaves();
+        });  "
+      );
+?>

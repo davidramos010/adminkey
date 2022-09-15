@@ -30,8 +30,8 @@ phpunit.phar
 /mysql
 !/vagrant
 /vagrant
-/web/plantillas
-!/web/plantillas
+/web/plantillas/
+/web/contratos_firmados/
 !/vendor
 /vendor
 

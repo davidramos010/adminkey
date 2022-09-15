@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Codipostal;
 use app\models\ContratosLog;
+use app\models\ContratosLogLlave;
 use app\models\Llave;
 use app\models\LlaveSearch;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -57,7 +58,7 @@ class ContratosController extends Controller
     public function actionGenerarList()
     {
         $searchModel = new ContratosSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search_log(Yii::$app->request->queryParams);
 
         return $this->render('generar_list', [
             'searchModel' => $searchModel,
@@ -69,10 +70,10 @@ class ContratosController extends Controller
      * Lists all Contratos models.
      * @return mixed
      */
-    public function actionCreateContrato()
+    public function actionCreateContrato($idContratoLog=null)
     {
         $model = new Contratos();
-        $modelLog = new ContratosLog();
+        $modelLog = (empty($idContratoLog))?new ContratosLog():ContratosLog::findOne(['id'=>$idContratoLog]);
 
         $searchModel = new LlaveSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
@@ -132,8 +133,6 @@ class ContratosController extends Controller
             'model' => $model,
         ]);
     }
-
-
 
     /**
      * Updates an existing Contratos model.
@@ -257,31 +256,102 @@ class ContratosController extends Controller
 
     }
 
-
+    /**
+     * @return bool|\yii\web\Response
+     * @throws \PhpOffice\PhpWord\Exception\CopyFileException
+     * @throws \PhpOffice\PhpWord\Exception\CreateTemporaryFileException
+     */
     public function actionGenerarContrato()
     {
-        $arrParam = $this->request->post();
-        //var_dump($arrParam);
-        $arrParam = $arrParam['ContratosLog'];
-        $parametros = $arrParam['parametros'];
-        $contrato = $arrParam['id_contrato'];
-        $observacion = $arrParam['observacion'];
+        if (Yii::$app->request->post()) {
+            $arrParam = $this->request->post();
+            $objLogContrato = (isset($arrParam['ContratosLog']['id']) && !empty($arrParam['ContratosLog']['id']))? ContratosLog::findOne(['id'=>$arrParam['ContratosLog']['id']]) :new ContratosLog();
 
-        $objContrato = Contratos::findOne(['id'=>$contrato]);
+            if(!$objLogContrato->isNewRecord && (isset($_FILES['ContratosLog']['name']['copia_firma']) && !empty($_FILES['ContratosLog']['name']['copia_firma']))){
+                //Guardar contrato firmado
+                $documentoContrato = UploadedFile::getInstance($objLogContrato, 'copia_firma');
+                $objLogContrato->copia_firma = date('Ymdhi').'_'.$documentoContrato->getBaseName().'.'. $documentoContrato->getExtension();
+                $pathToSave = Yii::getAlias('@webroot') . '/contratos_firmados/' . $objLogContrato->copia_firma;
+                $documentoContrato->saveAs( $pathToSave );
+                if (file_exists($pathToSave) && $objLogContrato->save()) {
+                    Yii::$app->session->setFlash('success', Yii::t('yii', 'Almacenado Correctamente!!'));
+                    return $this->redirect(['create-contrato', 'idContratoLog' => $objLogContrato->id]);
+                }
+            }else{
+                $arrParam['ContratosLog']['id_usuario'] = Yii::$app->user->identity->id;
+                $arrParam['ContratosLog']['parametros'] = str_replace(['[',']','null'],'',$arrParam['ContratosLog']['parametros']);// Limpiar formato
+                $objLogContrato->load($arrParam);
+            }
+
+            if ($objLogContrato->save()) {
+                try {
+
+
+                    $arrParam = $arrParam['ContratosLog'];
+                    $parametros = $arrParam['parametros'];
+                    $contrato = $arrParam['id_contrato'];
+                    $observacion = $arrParam['observacion'];
+
+                    //guardar parametros
+                    $arrParam['ContratosLogLlave'] = explode(',',$parametros);
+                    if(count($arrParam['ContratosLogLlave'])){
+                        ContratosLogLlave::deleteAll(['id_contrato_log'=>$objLogContrato->id]);
+                    }
+                    foreach ($arrParam['ContratosLogLlave'] as $keyLlave){
+                        if(empty($keyLlave))
+                            continue;
+
+                        $newObjContratosLogLlave = new ContratosLogLlave();
+                        $newObjContratosLogLlave->load(['ContratosLogLlave'=>['id_llave'=> (int) $keyLlave, 'id_contrato_log'=>(int) $objLogContrato->id]]);
+                        $newObjContratosLogLlave->save();
+                    }
+
+                    $objContrato = Contratos::findOne(['id' => $contrato]);
+                    $rutaContrato = Yii::getAlias('@webroot') . '/plantillas/' . $objContrato->documento;
+                    $templateProcessor = new TemplateProcessor($rutaContrato);
+                    $templateProcessor->setValue('llaves', $parametros);
+                    $templateProcessor->setValue('observaciones', $observacion);
+
+                    $fileName = date('Ymd') . '_' . $objContrato->documento;
+                    $pathToSave = tempnam(sys_get_temp_dir(), $fileName);
+                    $templateProcessor->saveAs($pathToSave);
+
+                    Yii::$app->session->setFlash('success', Yii::t('yii', 'Almacenado Correctamente!!'));
+                    return $this->redirect(['create-contrato', 'idContratoLog' => $objLogContrato->id]);
+                } catch (ErrorException $e) {
+                    Yii::$app->session->setFlash('error', Yii::t('yii', 'No se puede almacenar. Valide el formulario he intente nuevamente.'));
+                }
+            } else {
+                Yii::$app->session->setFlash('error', Yii::t('yii', 'No se puede almacenar. Valide el formulario he intente nuevamente.'));
+            }
+        }
+        return $this->actionCreateContrato();
+    }
+
+    /**
+     * @return void|\yii\console\Response|\yii\web\Response
+     * @throws \PhpOffice\PhpWord\Exception\CopyFileException
+     * @throws \PhpOffice\PhpWord\Exception\CreateTemporaryFileException
+     */
+    public function actionDescargarContrato()
+    {
+
+        $arrParam = $this->request->get();
+        $numIdContratoLog = $arrParam['id'];
+        $objContratoLog = ContratosLog::findOne(['id'=>$numIdContratoLog]);
+        $objContrato = Contratos::findOne(['id' => $objContratoLog->id_contrato]);
         $rutaContrato = Yii::getAlias('@webroot') . '/plantillas/' . $objContrato->documento;
-
         $templateProcessor = new TemplateProcessor($rutaContrato);
-        $templateProcessor->setValue('llaves', $parametros);
-        $templateProcessor->setValue('observaciones', $observacion);
+        $templateProcessor->setValue('llaves', $objContratoLog->parametros);
+        $templateProcessor->setValue('observaciones', $objContratoLog->observacion);
 
-        $pathToSave = Yii::getAlias('@webroot') . '/plantillas/' . date('Ymd').'_'.$objContrato->documento;
+        $fileName = date('Ymd') . '_' . $objContrato->documento;
+        $pathToSave = tempnam(sys_get_temp_dir(), $fileName);
         $templateProcessor->saveAs($pathToSave);
 
         if (file_exists($pathToSave)) {
-            return Yii::$app->response->sendFile($pathToSave, date('Ymd').'_'.$objContrato->documento);
+            return Yii::$app->response->sendFile($pathToSave, date('Ymd') . '_' . $objContrato->documento, ['inline' => false]);
         }
-        return true;
-
 
     }
 

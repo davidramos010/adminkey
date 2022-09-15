@@ -1,5 +1,9 @@
 var listKeyCheck = [];
 
+/**
+ * Esta funcion se ejecuta cada vez que se preiona el boton de adicionar llave a contrato
+ * @param idLlave
+ */
 function selectChk(idLlave){
     let bolInserRow = true;
     let infoLlave = [];
@@ -16,7 +20,7 @@ function selectChk(idLlave){
 }
 
 /**
- * Eliminar fila del resgitro
+ * Eliminar fila del registro
  * @param id
  */
 function delKey(idLlave)
@@ -33,7 +37,8 @@ function delKey(idLlave)
 }
 
 /**
- * Envio de formulario
+ * Buscar informacion basica de una llave especifica y agregarla en la tabla de llaves seleccionadas
+ * @param idLlave
  */
 function fnFindLlave(idLlave)
 {
@@ -49,7 +54,7 @@ function fnFindLlave(idLlave)
         },
         success: function (data) {
             infoLlave = data;
-            console.log(infoLlave);
+            //console.log(infoLlave);
             $('#tblKeyCheck tbody') // select table tbody
                 .prepend('<tr id="tr_'+idLlave+'" />') // prepend table row
                 .children('tr:first') // select row we just created
@@ -65,17 +70,12 @@ function fnFindLlave(idLlave)
 }
 
 /**
- * Identificador de la operacion que se esta ejecutando E/S
- * @param strOperacion
+ * Buscar informacion basica de una llave especifica
+ * Cargar informacion en ventana modal
+ * @param infoLlaveId
  */
-function fnSetOperacion(strOperacion){
-    $('#id_operacion').val(strOperacion);
-}
-
 function getInfoLlaveCard(infoLlaveId){
 
-    //console.log('=================');
-    //console.log(infoLlaveId);
     let url = '/index.php?r=contratos/ajax-find-llave';
     $.ajax({
         url: url,
@@ -101,7 +101,6 @@ function getInfoLlaveCard(infoLlaveId){
             }else{
                 estado = '<span class="float-none badge bg-success">Almacenada</span>';
             }
-
 
             switch (parseInt(htmlTipo)){
                 case 1:
@@ -133,13 +132,48 @@ function getInfoLlaveCard(infoLlaveId){
     return true;
 }
 
+/**
+ * Envio de formulario
+ */
 function sendForm(){
-    let listLlave = null;
-    listLlave = JSON.stringify(listKeyCheck);
-    console.log(listLlave);
-    $('#parametros').val(listLlave);
-    //alert('enviar');
-    $('#generar-form').submit();
+    let listLlaves = null;
+    let idContrato = null;
+    let strMensaje = '';
 
+    listLlaves = JSON.stringify(listKeyCheck);
+    idContrato = $('#contratoslog-id_contrato').val();
+
+    if(idContrato==''){
+        strMensaje += 'El formato de contrato no puede estar vacio.\n ';
+        $('#contratoslog-id_contrato').focus();
+    }
+
+    if(listKeyCheck.length==0){
+        strMensaje += 'Debe seleccionar por lo menos una llave para agregar al contrato.\n ';
+        $('#llavesearch-llavelaststatus').focus();
+    }
+
+    if(strMensaje!=''){
+        toastr.error('Atención:\n'+strMensaje);
+        return false;
+    }
+
+    $('#parametros').val(listLlaves);
+    $('#generar-form').submit();
+    return true;
+}
+
+/**
+ *
+ */
+function fnReloadSeleccionLlaves(){
+    let parametros = $('#parametros').val();
+    let arrParam = parametros.split(',');
+    if(parametros!='' && arrParam.length>0){
+        arrParam.forEach(function(key, index, object) {
+            //console.log(key);
+            selectChk(parseInt(key));
+        });
+    }
 
 }
