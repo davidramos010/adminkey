@@ -20,6 +20,7 @@ class ContratosSearch extends Contratos
         return [
             [['id', 'estado', 'id_user'], 'integer'],
             [['nombre', 'descripcion', 'fecha_ini', 'fecha_fin', 'created'], 'safe'],
+            [['fecha','llaves', 'propietario','propietario','cliente'], 'safe'],
         ];
     }
 
@@ -96,9 +97,23 @@ class ContratosSearch extends Contratos
             "cl.*",
             "cn.nombre as nombre",
             "cn.estado as estado",
-            "( SELECT group_concat(codigo) FROM llave WHERE id in (  
-                   SELECT clg.id FROM contratos_log_llave clg WHERE clg.id_contrato_log = cl.id 
-                ) ) AS parametros ",
+            "( SELECT group_concat(llb.codigo) FROM llave llb WHERE llb.id IN (  
+                   SELECT clg.id_llave FROM contratos_log_llave clg WHERE clg.id_contrato_log = cl.id
+              )) AS llaves ",
+            "( SELECT group_concat(c.nombre) FROM comunidad c WHERE id IN (  
+               SELECT DISTINCT l.id_comunidad FROM llave l 
+               INNER JOIN contratos_log_llave cll ON ( cll.id_llave=l.id ) 
+               WHERE cll.id_contrato_log = cl.id
+            ) ) AS cliente",
+            "( SELECT group_concat(CASE
+                                        WHEN p.nombre_propietario IS NOT NULL THEN p.nombre_propietario
+                                        WHEN p.nombre_representante IS NOT NULL THEN p.nombre_representante
+                                        ELSE NULL
+                                    END) FROM propietarios p WHERE p.id IN (  
+               SELECT DISTINCT l.id_propietario FROM llave l 
+               INNER JOIN contratos_log_llave cll ON ( cll.id_llave=l.id ) 
+               WHERE cll.id_contrato_log = cl.id
+            ) ) AS propietario"
         ]);
 
         $query->leftJoin('contratos cn','cl.id_contrato = cn.id');
@@ -117,21 +132,30 @@ class ContratosSearch extends Contratos
         }
 
         // grid filtering conditions
-        /*$query->andFilterWhere([
-            'id' => $this->id,
-            'estado' => $this->estado,
-            'id_user' => $this->id_user,
-            'created' => $this->created,
+        $query->andFilterWhere([
+            'cn.estado' => $this->estado,
+            'cn.nombre' => $this->nombre
         ]);
 
         if($this->fecha){
-            $query->andFilterWhere([
-                'LIKE', 'fecha_ini', Date('Y-m-d', strtotime($this->fecha_ini))
-            ]);
+            $strtotime_fecha = Date('Y-m-d',strtotime($this->fecha));
+            $query->andFilterWhere(['between', 'cl.fecha',  $strtotime_fecha." 00:00", $strtotime_fecha." 23:59" ]);
         }
 
-        $query->andFilterWhere(['like', 'nombre', $this->nombre])
-            ->andFilterWhere(['like', 'descripcion', $this->descripcion]);*/
+        //filtrar los que no se han eliminado
+        $query->andWhere(['deleted' => null]);
+
+        if($this->llaves){
+            $query->andHaving("llaves like :L",[':L' => "%".$this->llaves."%"]);
+        }
+
+        if($this->cliente){
+            $query->andHaving("cliente like :C",[':C' => "%".$this->cliente."%"]);
+        }
+
+        if($this->propietario){
+            $query->andHaving("propietario like :P",[':P' => "%".$this->propietario."%"]);
+        }
 
         return $dataProvider;
     }

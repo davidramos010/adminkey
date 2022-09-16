@@ -14,6 +14,7 @@ use Yii;
  * @property int|null $id_usuario
  * @property string|null $copia_firma
  * @property string|null $observacion
+ * @property string|null $deleted
  *
  * @property Contratos $contrato
  * @property User $usuario
@@ -22,7 +23,9 @@ class ContratosLog extends \yii\db\ActiveRecord
 {
     public $estado = null;
     public $nombre = null;
-    public $nomenclatura = null;
+    public $cliente = null;
+    public $propietario = null;
+    public $llaves = null;
 
     /**
      * {@inheritdoc}
@@ -38,9 +41,10 @@ class ContratosLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['llaves'], 'safe'],
             [['id_contrato'], 'required'],
             [['id', 'id_contrato', 'id_usuario'], 'integer'],
-            [['fecha'], 'safe'],
+            [['fecha','deleted'], 'safe'],
             [['observacion','parametros', 'copia_firma'], 'string', 'max' => 255],
             [['id'], 'unique'],
             [['id_usuario'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_usuario' => 'id']],
@@ -82,5 +86,17 @@ class ContratosLog extends \yii\db\ActiveRecord
     public function getUsuario()
     {
         return $this->hasOne(User::className(), ['id' => 'id_usuario']);
+    }
+
+    /**
+     * Actualizar el campo delete
+     * @param $numIdContratoLog
+     * @return bool
+     */
+    public static function setDeleteContratoLog($numIdContratoLog): bool
+    {
+        $objContrato = self::findOne($numIdContratoLog);
+        $objContrato->deleted = date('Y-m-d H:i:s');
+        return $objContrato->save();
     }
 }

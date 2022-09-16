@@ -15,6 +15,7 @@ use yii\widgets\Pjax;
 
 $this->title = Yii::t('app', 'Contratos');
 $this->params['breadcrumbs'][] = $this->title;
+\yii\web\YiiAsset::register($this);
 ?>
 <div class="container-fluid">
     <div class="ribbon_wrap" >
@@ -50,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 $gridColumns = [
                     [
                         'attribute' => 'nombre',
-                        'label' => 'Nombre',
+                        'label' => 'Contrato',
                         'headerOptions' => ['style' => 'width: 15%'],
                         'format' => 'raw',
                         'value' => function($model){
@@ -58,13 +59,51 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     ],
                     [
+                        'attribute' => 'llaves',
+                        'label' => 'Llaves',
+                        'headerOptions' => ['style' => 'width: 20%'],
+                        'format' => 'raw',
+                        'value' => function($model){
+                            return strtoupper($model->llaves);
+                        }
+                    ],
+                    [
+                        'attribute' => 'cliente',
+                        'label' => 'Cliente',
+                        'headerOptions' => ['style' => 'width: 20%'],
+                        'format' => 'raw',
+                        'value' => function($model){
+                            return strtoupper($model->cliente);
+                        }
+                    ],
+                    [
+                        'attribute' => 'propietario',
+                        'label' => 'Propietario',
+                        'headerOptions' => ['style' => 'width: 20%'],
+                        'format' => 'raw',
+                        'value' => function($model){
+                            return strtoupper($model->propietario);
+                        }
+                    ],
+                    [
                         'attribute' => 'estado',
                         'label' => 'Estado',
-                        'headerOptions' => ['style' => 'width: 30%'],
+                        'headerOptions' => ['style' => 'width: 5%'],
                         'format' => 'raw',
                         'value' => function($model){
                             return ($model->estado==1)?'<span class="float-none badge bg-success">ACTIVO</span>':'<span class="float-none badge bg-danger">ACTIVO</span>' ;
-                        }
+                        },
+                        'format' => 'raw',
+                        'filterType' => GridView::FILTER_SELECT2,
+                        'filter' => [ '1' => 'ACTIVO', '0' => 'INACTIVO'],
+                        'filterWidgetOptions' => [
+                            'theme' => Select2::THEME_BOOTSTRAP,
+                            'size' => Select2::SMALL,
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                                'placeholder' => 'Todos',
+                            ]
+                        ],
                     ],
                     [
                         'attribute' => 'fecha',
@@ -80,36 +119,75 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'showButtonPanel'=>'true',
                                 'showTodayButton' => 'true'
                             ],
-
                         ],
                         'filterInputOptions' => [
                             'class' => 'form-control',
-                            'placeholder' => Yii::t('app', 'Validado desde'),
+                            'placeholder' => Yii::t('app', 'Fecha Creación'),
                         ],
-                        'label' => Yii::t('app', 'Validado desde'),
+                        'label' => Yii::t('app', 'Creado'),
                         'headerOptions' => ['class' => 'col-xs-2'],
                         'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; ']
                     ],
                     [
-                        'attribute' => 'parametros',
-                        'label' => 'llaves',
-                        'headerOptions' => ['style' => 'width: 20%'],
+                        'attribute' => 'copia_firma',
+                        'label' => 'Documento Firmado',
+                        'headerOptions' => ['style' => 'width: 5%'],
                         'format' => 'raw',
                         'value' => function($model){
-                            return $model->parametros;
+                            $strReturn = "";
+                            if(!empty($model->copia_firma)){
+                                $url = Yii::$app->urlManager->createUrl(['site/download','path'=>'/contratos_firmados/','file'=>$model->copia_firma]);
+                                $strReturn = Html::a('<i class="fas fa-download"></i> Descargar' , $url, ['title'=>'Descargar Plantilla', 'target' => '_blank', 'class' => 'btn btn-primary float-right btn-sm', 'style'=>'margin-right: 5px;', 'data' => ['tooltip' => true, 'pjax' => 0 ]])  ;
+                            }
+                            return $strReturn;
                         }
                     ],
                     [
-                        'attribute' => 'copia_firma',
-                        'label' => 'Documento Firmado',
-                        'headerOptions' => ['style' => 'width: 20%'],
-                        'format' => 'raw',
-                        'value' => function($model){
-                            $url = Yii::$app->urlManager->createUrl(['site/download','path'=>'/plantillas/','file'=>$model->copia_firma]);
-                            return Html::a('<i class="fas fa-download"></i>' , $url, ['title'=>'Descargar Plantilla', 'target' => '_blank', 'class' => 'box_button fl download_link', 'data' => ['tooltip' => true, 'pjax' => 0 ]])  ;
-                        }
-                    ],
+                        'class' => '\kartik\grid\ActionColumn',
+                        'header' => '',
+                        'headerOptions' => array('style' => 'width: 100%'),
+                        'mergeHeader' => false,
+                        'template' => ' {update} {delete} ',
+                        'width'=>'70px',
+                        'vAlign'=>GridView::ALIGN_MIDDLE,
+                        'hAlign'=>GridView::ALIGN_LEFT,
+                        'buttons' => [
+                            'update' => function ($url, $model) {
+                                $viewButton = Html::a(
+                                    Html::button('<i class="fas fa-pen"></i>', ['class' => 'btn btn-primary btn-xs'] ),
+                                    ['contratos/create-contrato', 'idContratoLog' => $model['id']],
+                                    [
+                                        'title' => Yii::t('common', 'Editar'),
+                                        'data' => [
+                                            'tooltip' => true,
+                                            'pjax' => 0
+                                        ]
+                                    ]
+                                );
+                                return $viewButton;
+                            },
+                            'delete' => function ($url, $model) {
+                                $viewButton = null;
+                                if($model['estado']){
 
+                                    $viewButton = Html::a(
+                                        Html::button('<i class="fas fa-trash-alt"></i>', ['class' => 'btn btn-primary btn-xs'] ),
+                                        ['contratos/delete-contrato', 'idContratoLog' => $model['id']],
+                                        [
+                                            'title' => Yii::t('common', 'Eliminar'),
+                                            'data' => [
+                                                'confirm' => 'Esta seguro que desea eliminar el registro?',
+                                                'method' => 'post',
+                                                'tooltip' => true,
+                                                'pjax' => 0
+                                            ]
+                                        ]
+                                    );
+                                }
+                                return $viewButton;
+                            }
+                        ]
+                    ]
                 ]; ?>
                 <?= // Renders a export dropdown menu
                 ExportMenu::widget([

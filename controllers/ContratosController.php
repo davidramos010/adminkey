@@ -196,6 +196,26 @@ class ContratosController extends Controller
     }
 
     /**
+     * Deletes an existing Contratos model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param int $id ID
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionDeleteContrato(int $idContratoLog)
+    {
+        $bolResultModel = ContratosLog::setDeleteContratoLog($idContratoLog);
+
+        if($bolResultModel){
+            Yii::$app->session->setFlash('success', Yii::t('yii', 'Se ha eliminado correctamente'));
+        }else{
+            Yii::$app->session->setFlash('error', Yii::t('yii', 'El proceso no finaliza correctamente, vuelva a intentar.'));
+        }
+
+        return $this->redirect(['generar-list']);
+    }
+
+    /**
      * Finds the Contratos model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
