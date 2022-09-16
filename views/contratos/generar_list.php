@@ -168,7 +168,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'delete' => function ($url, $model) {
                                 $viewButton = null;
-                                if($model['estado']){
+                                if($model['estado'] && empty($model['copia_firma']) ){
 
                                     $viewButton = Html::a(
                                         Html::button('<i class="fas fa-trash-alt"></i>', ['class' => 'btn btn-primary btn-xs'] ),
