@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Propietarios;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
@@ -56,7 +57,7 @@ $this->title = Yii::t('app', 'Propietarios');
                             'headerOptions' => ['style' => 'width: 10%'],
                             'format' => 'raw',
                             'value' => function($model){
-                                return (isset($model->tipo_documento_propietario) && isset($model->documento_propietario))? '<span class="float-none badge bg-default">'.$model->arrTipoDocumentos[$model->tipo_documento_propietario] .'</span> '.strtoupper($model->documento_propietario) :'' ;
+                                return (isset($model->tipo_documento_propietario) && isset($model->documento_propietario))? '<span class="float-none badge bg-default">'.Propietarios::getTipoDocmento($model->tipo_documento_propietario) .'</span> '.strtoupper($model->documento_propietario) :'' ;
                             }
                         ],
                         [
@@ -74,7 +75,7 @@ $this->title = Yii::t('app', 'Propietarios');
                             'headerOptions' => ['style' => 'width: 10%'],
                             'format' => 'raw',
                             'value' => function($model){
-                                return (isset($model->tipo_documento_representante) && isset($model->documento_representante))? $model->arrTipoDocumentos[$model->tipo_documento_representante] .' '.strtoupper($model->documento_representante) :'' ;
+                                return (isset($model->tipo_documento_representante) && isset($model->documento_representante))? '<span class="float-none badge bg-default">'.Propietarios::getTipoDocmento($model->tipo_documento_representante) .'</span> '.strtoupper($model->documento_representante) :'' ;
                             }
                         ],
                         [

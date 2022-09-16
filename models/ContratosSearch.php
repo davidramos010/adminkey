@@ -43,7 +43,6 @@ class ContratosSearch extends Contratos
     public function search($params)
     {
         $query = Contratos::find();
-
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -156,6 +155,9 @@ class ContratosSearch extends Contratos
         if($this->propietario){
             $query->andHaving("propietario like :P",[':P' => "%".$this->propietario."%"]);
         }
+
+        $query->orderBy(['cl.id'=>SORT_DESC]);
+
 
         return $dataProvider;
     }

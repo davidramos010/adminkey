@@ -23,8 +23,6 @@ use yii\helpers\ArrayHelper;
  */
 class Contratos extends \yii\db\ActiveRecord
 {
-    public $estado = null;
-    public $nombre = null;
     public $cliente = null;
     public $propietario = null;
     public $llaves = null;

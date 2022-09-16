@@ -24,8 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
                     <?php
                     echo Html::ul([
-                        'El nombre del documento debe ser Unico',
-                        'Una vez se cumpla la fecha de finalización el contrato, no estará disponible para impresión.'
+                        'Use los filtros para identificar un contrato.',
+                        'El campo CREADO filtra contratos con fecha de creación del día seleccionado.'
                     ], ['encode' => false]);
                     ?>
                 </div>

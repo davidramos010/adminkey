@@ -25,7 +25,7 @@ use Yii;
  */
 class Propietarios extends \yii\db\ActiveRecord
 {
-    public $arrTipoDocumentos = [1=>'NIF',2=>'NIE',3=>'PASS',4=>'OTROS'];
+    const arrTipoDocumentos = [1=>'NIF',2=>'NIE',3=>'PASS',4=>'OTROS'];
     /**
      * {@inheritdoc}
      */
@@ -112,5 +112,14 @@ class Propietarios extends \yii\db\ActiveRecord
     public static function find()
     {
         return new PropietariosQuery(get_called_class());
+    }
+
+    /**
+     * @param int $numTipoDoc
+     * @return string
+     */
+    public static function getTipoDocmento(int $numTipoDoc):string
+    {
+        return self::arrTipoDocumentos[$numTipoDoc];
     }
 }

@@ -3,10 +3,13 @@
 namespace app\controllers;
 
 use app\models\Codipostal;
+use app\models\Comunidad;
 use app\models\ContratosLog;
 use app\models\ContratosLogLlave;
 use app\models\Llave;
 use app\models\LlaveSearch;
+use app\models\Propietarios;
+use app\models\util;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Yii;
 use app\models\Contratos;
@@ -285,56 +288,43 @@ class ContratosController extends Controller
     {
         if (Yii::$app->request->post()) {
             $arrParam = $this->request->post();
-            $objLogContrato = (isset($arrParam['ContratosLog']['id']) && !empty($arrParam['ContratosLog']['id']))? ContratosLog::findOne(['id'=>$arrParam['ContratosLog']['id']]) :new ContratosLog();
+            $objLogContrato = (isset($arrParam['ContratosLog']['id']) && !empty($arrParam['ContratosLog']['id'])) ? ContratosLog::findOne(['id' => $arrParam['ContratosLog']['id']]) : new ContratosLog();
 
-            if(!$objLogContrato->isNewRecord && (isset($_FILES['ContratosLog']['name']['copia_firma']) && !empty($_FILES['ContratosLog']['name']['copia_firma']))){
+            if (!$objLogContrato->isNewRecord && (isset($_FILES['ContratosLog']['name']['copia_firma']) && !empty($_FILES['ContratosLog']['name']['copia_firma']))) {
                 //Guardar contrato firmado
                 $documentoContrato = UploadedFile::getInstance($objLogContrato, 'copia_firma');
-                $objLogContrato->copia_firma = date('Ymdhi').'_'.$documentoContrato->getBaseName().'.'. $documentoContrato->getExtension();
+                $objLogContrato->copia_firma = date('Ymdhi') . '_' . $documentoContrato->getBaseName() . '.' . $documentoContrato->getExtension();
                 $pathToSave = Yii::getAlias('@webroot') . '/contratos_firmados/' . $objLogContrato->copia_firma;
-                $documentoContrato->saveAs( $pathToSave );
+                $documentoContrato->saveAs($pathToSave);
                 if (file_exists($pathToSave) && $objLogContrato->save()) {
                     Yii::$app->session->setFlash('success', Yii::t('yii', 'Almacenado Correctamente!!'));
                     return $this->redirect(['create-contrato', 'idContratoLog' => $objLogContrato->id]);
                 }
-            }else{
+            } else {
                 $arrParam['ContratosLog']['id_usuario'] = Yii::$app->user->identity->id;
-                $arrParam['ContratosLog']['parametros'] = str_replace(['[',']','null'],'',$arrParam['ContratosLog']['parametros']);// Limpiar formato
+                $arrParam['ContratosLog']['parametros'] = str_replace(['[', ']', 'null'], '', $arrParam['ContratosLog']['parametros']);// Limpiar formato
                 $objLogContrato->load($arrParam);
             }
 
             if ($objLogContrato->save()) {
                 try {
-
-
                     $arrParam = $arrParam['ContratosLog'];
                     $parametros = $arrParam['parametros'];
                     $contrato = $arrParam['id_contrato'];
                     $observacion = $arrParam['observacion'];
-
                     //guardar parametros
-                    $arrParam['ContratosLogLlave'] = explode(',',$parametros);
-                    if(count($arrParam['ContratosLogLlave'])){
-                        ContratosLogLlave::deleteAll(['id_contrato_log'=>$objLogContrato->id]);
+                    $arrParam['ContratosLogLlave'] = explode(',', $parametros);
+                    if (count($arrParam['ContratosLogLlave'])) {
+                        ContratosLogLlave::deleteAll(['id_contrato_log' => $objLogContrato->id]);
                     }
-                    foreach ($arrParam['ContratosLogLlave'] as $keyLlave){
-                        if(empty($keyLlave))
+                    foreach ($arrParam['ContratosLogLlave'] as $keyLlave) {
+                        if (empty($keyLlave))
                             continue;
 
                         $newObjContratosLogLlave = new ContratosLogLlave();
-                        $newObjContratosLogLlave->load(['ContratosLogLlave'=>['id_llave'=> (int) $keyLlave, 'id_contrato_log'=>(int) $objLogContrato->id]]);
+                        $newObjContratosLogLlave->load(['ContratosLogLlave' => ['id_llave' => (int)$keyLlave, 'id_contrato_log' => (int)$objLogContrato->id]]);
                         $newObjContratosLogLlave->save();
                     }
-
-                    $objContrato = Contratos::findOne(['id' => $contrato]);
-                    $rutaContrato = Yii::getAlias('@webroot') . '/plantillas/' . $objContrato->documento;
-                    $templateProcessor = new TemplateProcessor($rutaContrato);
-                    $templateProcessor->setValue('llaves', $parametros);
-                    $templateProcessor->setValue('observaciones', $observacion);
-
-                    $fileName = date('Ymd') . '_' . $objContrato->documento;
-                    $pathToSave = tempnam(sys_get_temp_dir(), $fileName);
-                    $templateProcessor->saveAs($pathToSave);
 
                     Yii::$app->session->setFlash('success', Yii::t('yii', 'Almacenado Correctamente!!'));
                     return $this->redirect(['create-contrato', 'idContratoLog' => $objLogContrato->id]);
@@ -360,10 +350,68 @@ class ContratosController extends Controller
         $numIdContratoLog = $arrParam['id'];
         $objContratoLog = ContratosLog::findOne(['id'=>$numIdContratoLog]);
         $objContrato = Contratos::findOne(['id' => $objContratoLog->id_contrato]);
+        $objContratoLogLlave = ContratosLogLlave::find()->where(['id_contrato_log'=>$objContratoLog->id])->all();
+
         $rutaContrato = Yii::getAlias('@webroot') . '/plantillas/' . $objContrato->documento;
         $templateProcessor = new TemplateProcessor($rutaContrato);
+
+        //Carga informacion de llaves y llaves
+        $numLLaves = count($objContratoLogLlave);
+        $arrLlaves = [];
+        if($numLLaves){
+            $templateProcessor->cloneRow('codigo_llave', $numLLaves);
+            $numRowLlave = 0;
+            foreach ($objContratoLogLlave as $llave_key){
+                $numRowLlave++;
+                $arrLlaves[] = $llave_key->id_llave;
+                $templateProcessor->setValue('codigo_llave#'.$numRowLlave, htmlspecialchars($llave_key->llave->codigo));
+                $templateProcessor->setValue('descripcion_llave#'.$numRowLlave, htmlspecialchars($llave_key->llave->descripcion));
+            }
+        }
+
+        // Consultar Cliente
+        $arrNombreClientes = null;
+        $infoCliente = Comunidad::find()->alias('c')->select('c.nombre')->distinct();
+        $infoCliente->innerJoin('llave l','l.id_comunidad = c.id');
+        $infoCliente->where(['IN','l.id',$arrLlaves])->orderBy('c.nombre asc');
+        $infoCliente = $infoCliente->all();
+        if(count($infoCliente)){
+            foreach ($infoCliente as $keyCliente){
+                $arrNombreClientes[] = strtoupper($keyCliente->nombre);
+            }
+        }
+
+        // Consultar Propietario
+        $arrPropietarioNombre = null;
+        $arrPropietarioNombreIdentificacion = null;
+        $infoPropietario = Propietarios::find()->alias('p')->select('(CASE
+                                                                                        WHEN p.nombre_propietario IS NOT NULL THEN p.nombre_propietario
+                                                                                        WHEN p.nombre_representante IS NOT NULL THEN p.nombre_representante
+                                                                                        ELSE NULL END) as nombre_propietario,
+                                                                                    (CASE
+                                                                                        WHEN p.tipo_documento_propietario IS NOT NULL THEN p.tipo_documento_propietario
+                                                                                        WHEN p.tipo_documento_representante IS NOT NULL THEN p.tipo_documento_representante
+                                                                                        ELSE NULL END) as tipo_documento_propietario,
+                                                                                    (CASE
+                                                                                        WHEN p.documento_propietario IS NOT NULL THEN p.documento_propietario
+                                                                                        WHEN p.documento_representante IS NOT NULL THEN p.documento_representante
+                                                                                        ELSE NULL END) as documento_propietario')->distinct();
+        $infoPropietario->innerJoin('llave l','l.id_propietario= p.id');
+        $infoPropietario = $infoPropietario->where(['IN','l.id',$arrLlaves])->orderBy('p.nombre_propietario asc')->all();
+        if(count($infoPropietario)){
+            foreach ($infoPropietario as $keyPropietario){
+                $arrPropietarioNombre[] = strtoupper($keyPropietario->nombre_propietario);
+                $arrPropietarioNombreIdentificacion[] = Propietarios::getTipoDocmento($keyPropietario->tipo_documento_propietario).' '.$keyPropietario->documento_propietario;
+            }
+        }
+        // ---------------------
         $templateProcessor->setValue('llaves', $objContratoLog->parametros);
         $templateProcessor->setValue('observaciones', $objContratoLog->observacion);
+        $templateProcessor->setValue('fecha_actual', date('d/m/Y H:i:s'));
+        $templateProcessor->setValue('fecha_contrato', util::getDateTimeFormatedSqlToUser($objContratoLog->fecha) );
+        $templateProcessor->setValue('cliente', implode(',',$arrNombreClientes) );
+        $templateProcessor->setValue('propietario', implode(',',$arrPropietarioNombre));
+        $templateProcessor->setValue('propietario_identificacion', implode(',',$arrPropietarioNombreIdentificacion));
 
         $fileName = date('Ymd') . '_' . $objContrato->documento;
         $pathToSave = tempnam(sys_get_temp_dir(), $fileName);

@@ -119,7 +119,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'label' => 'Estado',
                         'headerOptions' => ['style' => 'width: 5%'],
                         'value' => function ($model) {
-                            return ($model->estado==1)?'<span class="float-none badge bg-success">ACTIVO</span>':'<span class="float-none badge bg-danger">ACTIVO</span>' ;
+                            return ($model->estado==1)?'<span class="float-none badge bg-success">ACTIVO</span>':'<span class="float-none badge bg-danger">INACTIVO</span>' ;
                         },
                         'format' => 'raw',
                         'filterType' => GridView::FILTER_SELECT2,

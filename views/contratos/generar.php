@@ -41,8 +41,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <?php
                                 echo Html::ul([
                                     'Seleccione un formato de contrato',
-                                    'Seleccione minimo una llave para generar un contrato.',
-                                    'Una vez se almacene la información, se podra imprimir el formato tantas veces como se necesario'
+                                    'Seleccione mínimo una llave para generar un contrato.',
+                                    'Una vez se almacene la información, se podrá imprimir el formato tantas veces como se necesario.',
+                                    'Cuando se registre una copia firmada, no se podrán aplicar más cambios en el contrato.'
                                 ], ['encode' => false]);
                                 ?>
                             </div>
