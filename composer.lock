@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1b2487bf91864df1bcf327b223305f96",
+    "content-hash": "fc4bccdabf47e026486acab8b2e7bab8",
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -459,7 +459,7 @@
             "version": "3.3.11",
             "source": {
                 "type": "git",
-                "url": "https://github.com/RobinHerbots/Inputmask.git",
+                "url": "git@github.com:RobinHerbots/Inputmask.git",
                 "reference": "5e670ad62f50c738388d4dcec78d2888505ad77b"
             },
             "dist": {
@@ -480,7 +480,7 @@
             "version": "3.6.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jquery/jquery-dist.git",
+                "url": "https://github.com/jquery/jquery-dist.git",
                 "reference": "3711efedf0ca2e998cd0417324f717f2e0b828ec"
             },
             "dist": {
@@ -748,6 +748,53 @@
                 "source": "https://github.com/lipis/flag-icon-css/tree/3.5.0"
             },
             "time": "2020-06-10T11:53:19+00:00"
+        },
+        {
+            "name": "diggindata/yii2-signaturepad",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://bitbucket.org/jwerner/yii2-signaturepad.git",
+                "reference": "eb7eae6414b5c6501aa0db2d6f6a3e8a8bd737fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://bitbucket.org/jwerner/yii2-signaturepad/get/eb7eae6414b5c6501aa0db2d6f6a3e8a8bd737fb.zip",
+                "reference": "eb7eae6414b5c6501aa0db2d6f6a3e8a8bd737fb",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "default-branch": true,
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "diggindata\\signaturepad\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Joachim Werner",
+                    "email": "joachim.werner@diggin-data.de"
+                }
+            ],
+            "description": "Yii2 widget to display a signature pad using https://github.com/INTELOGIE/signature_pad",
+            "homepage": "https://bitbucket.org/jwerner/yii2-signaturepad",
+            "keywords": [
+                "pad",
+                "signature",
+                "widget",
+                "yii2"
+            ],
+            "support": {
+                "source": "https://bitbucket.org/jwerner/yii2-signaturepad/src/eb7eae6414b5c6501aa0db2d6f6a3e8a8bd737fb/?at=0.0.1"
+            },
+            "time": "2021-10-26T12:35:56+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -1106,20 +1153,30 @@
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.14.0",
+            "version": "v4.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "12ab42bd6e742c70c0a52f7b82477fcd44e64b75"
+                "reference": "523407fb06eb9e5f3d59889b3978d5bfe94299c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/12ab42bd6e742c70c0a52f7b82477fcd44e64b75",
-                "reference": "12ab42bd6e742c70c0a52f7b82477fcd44e64b75",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/523407fb06eb9e5f3d59889b3978d5bfe94299c8",
+                "reference": "523407fb06eb9e5f3d59889b3978d5bfe94299c8",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.2"
+                "php": "~5.6.0 || ~7.0.0 || ~7.1.0 || ~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0"
+            },
+            "require-dev": {
+                "cerdic/css-tidy": "^1.7 || ^2.0",
+                "simpletest/simpletest": "dev-master"
+            },
+            "suggest": {
+                "cerdic/css-tidy": "If you want to use the filter 'Filter.ExtractStyleBlocks'.",
+                "ext-bcmath": "Used for unit conversion and imagecrash protection",
+                "ext-iconv": "Converts text to and from non-UTF-8 encodings",
+                "ext-tidy": "Used for pretty-printing HTML"
             },
             "type": "library",
             "autoload": {
@@ -1151,9 +1208,9 @@
             ],
             "support": {
                 "issues": "https://github.com/ezyang/htmlpurifier/issues",
-                "source": "https://github.com/ezyang/htmlpurifier/tree/v4.14.0"
+                "source": "https://github.com/ezyang/htmlpurifier/tree/v4.16.0"
             },
-            "time": "2021-12-25T01:21:49+00:00"
+            "time": "2022-09-18T07:06:19+00:00"
         },
         {
             "name": "factorenergia/jpgraph",
@@ -1793,6 +1850,55 @@
                 "source": "https://github.com/hail812/yii2-adminlte3/tree/v1.1.8"
             },
             "time": "2022-04-16T06:46:23+00:00"
+        },
+        {
+            "name": "inquid/yii2-signature",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/inquid/yii2-signature.git",
+                "reference": "3b7468143bbb4ced10e9b4c1b6e6cffa9bf261c2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/inquid/yii2-signature/zipball/3b7468143bbb4ced10e9b4c1b6e6cffa9bf261c2",
+                "reference": "3b7468143bbb4ced10e9b4c1b6e6cffa9bf261c2",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "default-branch": true,
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "inquid\\signature\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "inquid",
+                    "email": "contact@inquid.co"
+                }
+            ],
+            "description": "Draw and save signatures in Yii2",
+            "keywords": [
+                "extension",
+                "legal",
+                "signature",
+                "widget",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/inquid/yii2-signature/issues",
+                "source": "https://github.com/inquid/yii2-signature/tree/master"
+            },
+            "abandoned": "inquid/yii2-signature",
+            "time": "2021-05-02T06:10:06+00:00"
         },
         {
             "name": "kartik-v/bootstrap-checkbox-x",
@@ -4671,12 +4777,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-escaper.git",
-                "reference": "7c2c047c25dd934e74b3fa74312650bcccae68b2"
+                "reference": "5140d4496321cc02a6af5ab6043c5cb23090e535"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-escaper/zipball/7c2c047c25dd934e74b3fa74312650bcccae68b2",
-                "reference": "7c2c047c25dd934e74b3fa74312650bcccae68b2",
+                "url": "https://api.github.com/repos/laminas/laminas-escaper/zipball/5140d4496321cc02a6af5ab6043c5cb23090e535",
+                "reference": "5140d4496321cc02a6af5ab6043c5cb23090e535",
                 "shasum": ""
             },
             "require": {
@@ -4726,7 +4832,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-09-06T00:48:23+00:00"
+            "time": "2022-09-15T01:38:11+00:00"
         },
         {
             "name": "maennchen/zipstream-php",
@@ -7568,12 +7674,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "084c304cf376b468fee1cb0c0626ac46a98b6327"
+                "reference": "6c6568262ada02ca317efa06badad34342008293"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/084c304cf376b468fee1cb0c0626ac46a98b6327",
-                "reference": "084c304cf376b468fee1cb0c0626ac46a98b6327",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/6c6568262ada02ca317efa06badad34342008293",
+                "reference": "6c6568262ada02ca317efa06badad34342008293",
                 "shasum": ""
             },
             "require": {
@@ -7683,7 +7789,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-07T06:24:35+00:00"
+            "time": "2022-09-16T08:44:07+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap",
@@ -8669,12 +8775,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FakerPHP/Faker.git",
-                "reference": "874e880a699face9acf3c87bb79fc1df2bc4b9f1"
+                "reference": "42fa8b94cd75c823131a581eb1cf0e24b9a3bbde"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/874e880a699face9acf3c87bb79fc1df2bc4b9f1",
-                "reference": "874e880a699face9acf3c87bb79fc1df2bc4b9f1",
+                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/42fa8b94cd75c823131a581eb1cf0e24b9a3bbde",
+                "reference": "42fa8b94cd75c823131a581eb1cf0e24b9a3bbde",
                 "shasum": ""
             },
             "require": {
@@ -8729,7 +8835,7 @@
                 "issues": "https://github.com/FakerPHP/Faker/issues",
                 "source": "https://github.com/FakerPHP/Faker/tree/main"
             },
-            "time": "2022-09-01T20:02:58+00:00"
+            "time": "2022-09-13T15:45:34+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -9616,12 +9722,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "1071dfcef776a57013124ff35e1fc41ccd294758"
+                "reference": "1dc7ceb4a24aede938c7af2a9ed1de09609ca770"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/1071dfcef776a57013124ff35e1fc41ccd294758",
-                "reference": "1071dfcef776a57013124ff35e1fc41ccd294758",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/1dc7ceb4a24aede938c7af2a9ed1de09609ca770",
+                "reference": "1dc7ceb4a24aede938c7af2a9ed1de09609ca770",
                 "shasum": ""
             },
             "require": {
@@ -9674,7 +9780,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/comparator/issues",
-                "source": "https://github.com/sebastianbergmann/comparator/tree/3.0"
+                "source": "https://github.com/sebastianbergmann/comparator/tree/3.0.5"
             },
             "funding": [
                 {
@@ -9682,7 +9788,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-11-30T08:04:30+00:00"
+            "time": "2022-09-14T12:31:48+00:00"
         },
         {
             "name": "sebastian/diff",
@@ -9819,12 +9925,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/exporter.git",
-                "reference": "77200c5b1b7b073a04aca7f593a26dad7df1de35"
+                "reference": "73a9676f2833b9a7c36968f9d882589cd75511e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/77200c5b1b7b073a04aca7f593a26dad7df1de35",
-                "reference": "77200c5b1b7b073a04aca7f593a26dad7df1de35",
+                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/73a9676f2833b9a7c36968f9d882589cd75511e6",
+                "reference": "73a9676f2833b9a7c36968f9d882589cd75511e6",
                 "shasum": ""
             },
             "require": {
@@ -9888,7 +9994,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-03-06T06:59:21+00:00"
+            "time": "2022-09-14T06:00:17+00:00"
         },
         {
             "name": "sebastian/global-state",
@@ -11266,7 +11372,9 @@
         "krisengine/yii2-graylog2": 20,
         "clegginabox/pdf-merger": 20,
         "vilochane/yii2-barcode-generator": 20,
-        "kartik-v/yii2-bootstrap4-dropdown": 20
+        "kartik-v/yii2-bootstrap4-dropdown": 20,
+        "diggindata/yii2-signaturepad": 20,
+        "inquid/yii2-signature": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

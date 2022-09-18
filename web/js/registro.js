@@ -108,10 +108,11 @@ function delKey(id)
  * Envio de formulario
  */
 function sendForm()
-{
+{   //https://github.com/inquid/yii2-signature/blob/master/assets/app.js
     let url = '/index.php?r=registro/ajax-reg-mov';
     let observacion = $('#txt_observacion').val();
     let comercial = $('#id_comercial').val();
+    let numIdRegistro = null;
 
     $.ajax({
         url: url,
@@ -125,6 +126,9 @@ function sendForm()
         },
 
         success: function (data) {
+            console.log('----------------'+data);
+            //console.log('----------------'.data.registro_id);
+            numIdRegistro = 9;//data.registro_id;
             listKeyEntrada.forEach(function(key, index, object) {
              object.splice(index, 1);
              $('#tr_'+index).remove();
@@ -143,7 +147,13 @@ function sendForm()
             $('#id_llave').attr('readonly', true);
             $('#btn_registrar').attr('readonly', true);
 
-            setTimeout("location.reload(true);",600);
+            if (!signaturePad.isEmpty()) {
+                fnGuardarCuadroFirma(numIdRegistro);
+            }else {
+                toastr.warning('El registro no incluyye firma digital.');
+                setTimeout("location.reload(true);",600);
+            }
+
         }
     });
 }
@@ -154,4 +164,25 @@ function sendForm()
  */
 function fnSetOperacion(strOperacion){
     $('#id_operacion').val(strOperacion);
+}
+
+/**
+ * Limpiar cuadro de firma
+ */
+function fnLimpiarCuadroFirma(){
+    var objButtonClear = $(".signature-pad--actions").find("[data-action='clear']");
+    objButtonClear.click();
+}
+
+/**
+ * guardar firma
+ */
+function fnGuardarCuadroFirma(numIdRegistro){
+    var objButtonClear = $(".signature-pad--actions").find("[data-action='save-server']");
+    objButtonClear.click();
+    setTimeout("location.reload(true);",600);
+}
+
+function fnDisplayFirma(){
+    $( "#divFirma" ).toggle( "slow");
 }

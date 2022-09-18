@@ -1,6 +1,8 @@
 <?php
 
 use app\models\Registro;
+use diggindata\signaturepad\SignaturePadWidget;
+use inquid\signature\SignatureWidget;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -19,7 +21,7 @@ use yii\widgets\ActiveForm;
     <div id="div_info" class="callout callout-info" >
         <h5><i class="fas fa-info"></i> Note:</h5>
         Este registro estara asociado al usuario en sesion <label class="exampleInputBorder">( <?= Yii::$app->user->identity->name ?> ) </label>.<br/>
-        Las llaves se irán registrando segun su último estado de disponibilidad.
+        Las llaves se irán registrando según su último estado de disponibilidad.
     </div>
     <div class="col-md-12">
         <!-- general form elements -->
@@ -118,14 +120,31 @@ use yii\widgets\ActiveForm;
                 <!-- /.card -->
             </div>
 
-
             <!-- form start -->
             <div class="card-body">
+
+
                 <?php $form = ActiveForm::begin(); ?>
                     <div class="form-group">
                         <?= $form->field($model, 'id_comercial')->dropDownList(Registro::getComercialesDropdownList(), ['id' => 'id_comercial','class' => 'form-control', 'prompt' => 'Seleccione Uno'])->label('Empresa'); ?>
                         <?= $form->field($model, 'observacion')->textArea(['id' => 'txt_observacion', 'class' => 'form-control', 'style' => 'width:100%'])->label('Observaciones') ?>
                     </div>
+                    <div class="form-group">
+                        <div class="card text-center">
+                            <div class="card-header">
+                                <?= Yii::t('app', 'Firma de Aceptación') ?>
+                            </div>
+                            <div class="card-body">
+                                <?= Html::button(Yii::t('app', 'Limpiar'), ['id' => 'btn_limpiar', 'class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { fnLimpiarCuadroFirma() })();']); ?>
+                                <?php //echo Html::button(Yii::t('app', 'Guardar'), ['id' => 'btn_guardar', 'class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { fnGuardarCuadroFirma() })();']); ?>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <?= SignatureWidget::widget(['clear' => true, 'url' => '/index.php?r=registro/add-firma', 'save_server' => true]); ?>
+                            </div>
+                        </div>
+                    </div>
+
+
                 <?php ActiveForm::end(); ?>
                 <div style="padding-top: 15px">
                     <?= Html::button('Registrar Movimiento', ['id' => 'btn_registrar', 'class' => 'btn btn-success', 'onclick' => '(function ( $event ) { sendForm() })();']); ?>
@@ -137,10 +156,14 @@ use yii\widgets\ActiveForm;
 </div>
 <?php $this->registerJs(
     '$("document").ready(function(){ 
-         $("#id_llave").keypress(function(event) {
-            if (event.keyCode === 13) {
-                addKey();
-            }
-        });
-     });'
+             $("#id_llave").keypress(function(event) {
+                if (event.keyCode === 13) {
+                    addKey();
+                }
+            });
+         });
+         var wrapper = document.getElementById("signature-pad");
+         '
 ); ?>
+
+<?php $this->registerCss(".signature-pad--actions{ display:none; } ") ?>

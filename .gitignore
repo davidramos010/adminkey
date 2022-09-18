@@ -49,3 +49,4 @@ themes/classic/views/
 !/config/db.php
 !/composer.lock
 !/tests/
+!/web/firmas/

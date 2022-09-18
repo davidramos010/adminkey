@@ -15,6 +15,7 @@ use yii\helpers\ArrayHelper;
  * @property string|null $entrada
  * @property string|null $salida
  * @property string|null $observacion
+ * @property string|null $firma_soporte
  *
  * @property Llave $llave
  * @property User $user
@@ -40,9 +41,10 @@ class Registro extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_user', 'id_llave', 'id_comercial', 'id_comercial'], 'integer'],
-            [['entrada', 'salida'], 'safe'],
-            [['observacion','codigo','username','comunidad','comercial','nombre_propietario'], 'string', 'max' => 255],
+            [['id_user'], 'required'],
+            [['id_user', 'id_llave', 'id_comercial'], 'integer'],
+            [['entrada', 'salida','signature'], 'safe'],
+            [['observacion','codigo','username','comunidad','comercial','nombre_propietario','firma_soporte'], 'string', 'max' => 255],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
             [['id_llave'], 'exist', 'skipOnError' => true, 'targetClass' => Llave::className(), 'targetAttribute' => ['id_llave' => 'id']],
         ];
@@ -61,6 +63,8 @@ class Registro extends \yii\db\ActiveRecord
             'entrada' => 'Entrada',
             'salida' => 'Salida',
             'observacion' => 'Observacion',
+            'id_' => 'Observacion',
+            'firma_soporte' => 'Firma Soporte'
         ];
     }
 

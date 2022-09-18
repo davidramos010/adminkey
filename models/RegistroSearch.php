@@ -53,9 +53,10 @@ class RegistroSearch extends Registro
                 WHEN pp.nombre_propietario IS NOT NULL THEN pp.nombre_propietario
                 WHEN pp.nombre_representante IS NOT NULL THEN pp.nombre_representante
                 ELSE NULL
-            END) as nombre_propietario"
+            END) as nombre_propietario",
+            "ls.id as id_status"
         ]);
-
+        $query->innerJoin('llave_status ls','ls.id_registro = r.id');
         $query->leftJoin('llave ll','r.id_llave = ll.id');
         $query->leftJoin('User u','r.id_user = u.id');
         $query->leftJoin('comunidad co','ll.id_comunidad = co.id');
@@ -107,7 +108,7 @@ class RegistroSearch extends Registro
 
         $query->andFilterWhere(['like', 'observacion', $this->observacion]);
         $query->andFilterWhere(['like', 'll.codigo', $this->codigo]);
-        $query->orderBy('id DESC');
+        $query->orderBy('r.id DESC');
 
         return $dataProvider;
     }

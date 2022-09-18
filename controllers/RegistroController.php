@@ -157,7 +157,6 @@ class RegistroController extends Controller
      */
     public function actionAjaxAddKey()
     {
-
         $strCode = (!empty($this->request->get()) && isset($this->request->get()['code']))?(string) trim($this->request->get()['code']):null;
         $strCode = str_replace("'","-",$strCode);
         $arrModelStatus = null;
@@ -175,7 +174,28 @@ class RegistroController extends Controller
         return json_encode( ['llave'=>$arrModelLlave,'status'=>$arrModelStatus, 'comunidad'=>$arrComunidadLlave, 'estado'=>$strEstado]);
     }
 
+    /**
+     * @return false|string
+     */
+    public function actionAddFirma()
+    {
+        $arrParam = $this->request->post();
+        $data_uri = $arrParam['signature'];//"data:image/png;base64,iVBORw0K...";
+        $encoded_image = explode(",", $data_uri)[1];
+        $decoded_image = base64_decode($encoded_image);
+        $fileName = date('Ymdhis') . '_firma.jpg';
+        $pathToSave = Yii::getAlias('@webroot') . '/firmas/' .$fileName;
 
+        if(file_put_contents($pathToSave, $decoded_image) && Yii::$app->session->has('lastRegistro')){
+            $objRegistro = Registro::findOne(Yii::$app->session->get('lastRegistro'));
+            $objRegistro->firma_soporte = $fileName;
+            $objRegistro->save();
+        }
+    }
+
+    /**
+     * @return false|string
+     */
     public function actionAjaxRegMov()
     {
         $arrParam = $this->request->post();
@@ -184,44 +204,38 @@ class RegistroController extends Controller
         $arrKeysEntrada = (empty($arrParam['listKeyEntrada']) || !isset($arrParam['listKeyEntrada']))?null:$arrParam['listKeyEntrada'];
         $arrKeysSalida = (empty($arrParam['listKeySalida']) || !isset($arrParam['listKeySalida']))?null:$arrParam['listKeySalida'];
 
+        if(!empty($arrKeysEntrada) || !empty($arrKeysSalida)){
+            $newRegistro = new Registro();
+            $newRegistro->id_user = (int) Yii::$app->user->id;
+            $newRegistro->observacion = $strObservacion;
+            $newRegistro->id_comercial = (int) $idComercial;
+            $newRegistro->entrada = (!empty($arrKeysEntrada))?date('Y-m-d H:i:s'):NULL;
+            $newRegistro->salida = (!empty($arrKeysSalida))?date('Y-m-d H:i:s'):NULL;
+            if($newRegistro->save()){
+                Yii::$app->session->set('lastRegistro', $newRegistro->id);
+            }
+        }
+
         //Entrada: Devolución de llave
-        if(!empty($arrKeysEntrada)){
+        if(isset($newRegistro->id) && !empty($arrKeysEntrada)){
             foreach ($arrKeysEntrada as $value){
-
-                $newRegistro = new Registro();
                 $newRegistroStatus = new LlaveStatus();
-                $newRegistro->id_user = Yii::$app->user->id;
-                $newRegistro->id_llave = $value;
-                $newRegistro->observacion = $strObservacion;
-                $newRegistro->id_comercial = $idComercial;
-                $newRegistro->save();
-
                 $strEstado = 'Entrada';
-                $newRegistro->entrada = date('Y-m-d H:i:s');
                 $newRegistroStatus->id_llave = $value;
                 $newRegistroStatus->status = ($strEstado=='Entrada')?'E':'S';
-                $newRegistro->save();
+                $newRegistroStatus->id_registro = $newRegistro->id;
                 $newRegistroStatus->save();
             }
         }
 
         //Salida: Entrega de llave
-        if(!empty($arrKeysSalida)){
+        if(isset($newRegistro->id) && !empty($arrKeysSalida)){
             foreach ($arrKeysSalida as $value){
-
-                $newRegistro = new Registro();
                 $newRegistroStatus = new LlaveStatus();
-                $newRegistro->id_user = Yii::$app->user->id;
-                $newRegistro->id_llave = $value;
-                $newRegistro->observacion = $strObservacion;
-                $newRegistro->id_comercial = $idComercial;
-                $newRegistro->save();
-
                 $strEstado = 'Salida';
-                $newRegistro->salida = date('Y-m-d H:i:s');
                 $newRegistroStatus->id_llave = $value;
                 $newRegistroStatus->status = ($strEstado=='Entrada')?'E':'S';
-                $newRegistro->save();
+                $newRegistroStatus->id_registro = $newRegistro->id;
                 $newRegistroStatus->save();
             }
         }

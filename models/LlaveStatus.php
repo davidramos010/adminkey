@@ -9,6 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property int|null $id_llave
+ * @property int|null $id_registro
  * @property string|null $status Entrada/Salida
  * @property string|null $fecha
  *
@@ -30,7 +31,8 @@ class LlaveStatus extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_llave'], 'integer'],
+            [['id_llave','id_registro','status'], 'required'],
+            [['id_llave','id_registro'], 'integer'],
             [['fecha'], 'safe'],
             [['status'], 'string', 'max' => 1],
             [['id_llave'], 'exist', 'skipOnError' => true, 'targetClass' => Llave::className(), 'targetAttribute' => ['id_llave' => 'id']],

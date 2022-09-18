@@ -1,0 +1,5 @@
+.kbw-signature { width: 400px; height: 200px;}
+#sig canvas{
+    width: 100% !important;
+    height: auto;
+}
