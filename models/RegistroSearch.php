@@ -18,7 +18,7 @@ class RegistroSearch extends Registro
     {
         return [
             [['id', 'id_user', 'id_llave'], 'integer'],
-            [['entrada', 'salida', 'observacion', 'codigo', 'username','comunidad','comercial','nombre_propietario'], 'safe'],
+            [['entrada', 'salida', 'observacion', 'codigo', 'username','comunidad','comercial','propietarios','clientes','llaves','llaves_e','llaves_s'], 'safe'],
         ];
     }
 
@@ -42,26 +42,38 @@ class RegistroSearch extends Registro
     {
 
         $query = Registro::find()->alias('r');
-
         $query->select([
             'r.*',
-            'co.nombre as comunidad',
-            'cm.nombre as comercial',
             'll.codigo',
             'u.username',
-            "(CASE
-                WHEN pp.nombre_propietario IS NOT NULL THEN pp.nombre_propietario
-                WHEN pp.nombre_representante IS NOT NULL THEN pp.nombre_representante
-                ELSE NULL
-            END) as nombre_propietario",
-            "ls.id as id_status"
+            'cm.nombre as comercial',
+            "( SELECT group_concat(llv.codigo) FROM llave llv WHERE llv.id IN (  
+                   SELECT st.id_llave FROM llave_status st WHERE st.id_registro = r.id
+              )) AS llaves",
+            "( SELECT group_concat(llv.codigo) FROM llave llv WHERE llv.id IN (  
+                   SELECT st.id_llave FROM llave_status st WHERE st.id_registro = r.id and st.status = 'E'
+              )) AS llaves_e",
+            "( SELECT group_concat(llv.codigo) FROM llave llv WHERE llv.id IN (  
+                   SELECT st.id_llave FROM llave_status st WHERE st.id_registro = r.id and st.status = 'S'
+              )) AS llaves_s",
+            "( SELECT group_concat(c.nombre) FROM comunidad c WHERE id IN (  
+               SELECT DISTINCT l.id_comunidad FROM llave l 
+               INNER JOIN llave_status sta ON ( sta.id_llave=l.id ) 
+               WHERE sta.id_registro = r.id
+            ) ) AS clientes",
+            "( SELECT group_concat(CASE
+                                        WHEN p.nombre_propietario IS NOT NULL THEN p.nombre_propietario
+                                        WHEN p.nombre_representante IS NOT NULL THEN p.nombre_representante
+                                        ELSE NULL
+                                    END) FROM propietarios p WHERE p.id IN (
+                SELECT DISTINCT l.id_propietario FROM llave l 
+                       INNER JOIN llave_status stb ON ( stb.id_llave=l.id ) 
+                       WHERE stb.id_registro = r.id
+                    ) ) AS propietarios"
         ]);
-        $query->innerJoin('llave_status ls','ls.id_registro = r.id');
         $query->leftJoin('llave ll','r.id_llave = ll.id');
         $query->leftJoin('User u','r.id_user = u.id');
-        $query->leftJoin('comunidad co','ll.id_comunidad = co.id');
         $query->leftJoin('comerciales cm','r.id_comercial = cm.id');
-        $query->leftJoin('propietarios pp','ll.id_propietario = pp.id');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -82,7 +94,6 @@ class RegistroSearch extends Registro
             'id_user' => $this->id_user,
             'id_llave' => $this->id_llave,
             'u.username' => $this->username,
-            'co.nombre' => $this->comunidad,
             'cm.nombre' => $this->comercial,
         ]);
 
@@ -99,15 +110,22 @@ class RegistroSearch extends Registro
         }
 
         // ======================================================
-        // Propietarios
-        if(!empty($this->nombre_propietario)){
-            $query->andWhere(['or',
-                ['like', 'pp.nombre_propietario', $this->nombre_propietario],
-                ['like', 'pp.nombre_representante', $this->nombre_propietario]]);
-        }
-
         $query->andFilterWhere(['like', 'observacion', $this->observacion]);
         $query->andFilterWhere(['like', 'll.codigo', $this->codigo]);
+
+        // ====================================================== andHaving
+        if($this->llaves){
+            $query->andHaving("llaves like :L",[':L' => "%".$this->llaves."%"]);
+        }
+
+        if($this->clientes){
+            $query->andHaving("clientes like :C",[':C' => "%".$this->clientes."%"]);
+        }
+
+        if($this->propietarios){
+            $query->andHaving("propietarios like :P",[':P' => "%".$this->propietarios."%"]);
+        }
+
         $query->orderBy('r.id DESC');
 
         return $dataProvider;

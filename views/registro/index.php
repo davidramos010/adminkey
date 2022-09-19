@@ -68,35 +68,31 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     ],
                     [
-                        'attribute' => 'codigo',
-                        'label' => 'Llave',
+                        'attribute' => 'llaves',
+                        'label' => 'Llaves',
                         'format' => 'raw',
                         'value' => function($model){
-                            return (isset($model->llave))?strtoupper($model->llave->codigo):'No Encontrado' ;
+                            $strLLaves = '';
+                            $strLLaves .= (!empty($model->llaves_s))?'<span class="float-none badge bg-danger">'.strtoupper($model->llaves_s).'</span>':'';
+                            $strLLaves .= (!empty($strLLaves))?'<br>':'';
+                            $strLLaves .= (!empty($model->llaves_e))?'<span class="float-none badge bg-success">'.strtoupper($model->llaves_e).'</span>':'';
+                            return (isset($strLLaves))?$strLLaves:'No Encontrado' ;
                         }
                     ],
                     [
-                        'attribute' => 'id_llave',
-                        'label' => 'Descripcion',
-                        'format' => 'raw',
-                        'value' => function($model){
-                            return (isset($model->llave))?strtoupper($model->llave->descripcion):'No Encontrado' ;
-                        }
-                    ],
-                    [
-                        'attribute' => 'nombre_propietario',
+                        'attribute' => 'propietarios',
                         'label' => 'Propietario',
                         'format' => 'raw',
                         'value' => function($model){
-                            return (isset($model->nombre_propietario))?strtoupper($model->nombre_propietario):'' ;
+                            return (isset($model->propietarios))?strtoupper($model->propietarios):'' ;
                         }
                     ],
                     [
-                        'attribute' => 'comunidad',
+                        'attribute' => 'clientes',
                         'label' => 'Cliente',
                         'format' => 'raw',
                         'value' => function($model){
-                            return (isset($model->llave))?strtoupper($model->comunidad):'' ;
+                            return (isset($model->clientes))?strtoupper($model->clientes):'' ;
                         }
                     ],
                     [

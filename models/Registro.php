@@ -24,9 +24,13 @@ class Registro extends \yii\db\ActiveRecord
 {
     public $codigo = null;
     public $username = null;
-    public $comunidad = null;
+    public $clientes = null;//cliente
+    public $propietarios = null;
     public $comercial = null;
     public $nombre_propietario = null;
+    public $llaves = null;
+    public $llaves_e = null;
+    public $llaves_s = null;
     /**
      * {@inheritdoc}
      */
@@ -44,7 +48,7 @@ class Registro extends \yii\db\ActiveRecord
             [['id_user'], 'required'],
             [['id_user', 'id_llave', 'id_comercial'], 'integer'],
             [['entrada', 'salida','signature'], 'safe'],
-            [['observacion','codigo','username','comunidad','comercial','nombre_propietario','firma_soporte'], 'string', 'max' => 255],
+            [['observacion','codigo','username','firma_soporte'], 'string', 'max' => 255],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
             [['id_llave'], 'exist', 'skipOnError' => true, 'targetClass' => Llave::className(), 'targetAttribute' => ['id_llave' => 'id']],
         ];
