@@ -102,7 +102,7 @@ $arrColumns = [[
 
                 <?php ActiveForm::end(); ?>
                 <div style="padding-top: 15px">
-                    <?= Html::button('Registrar Movimiento', ['id' => 'btn_registrar', 'class' => 'btn btn-success', 'onclick' => '(function ( $event ) { sendForm() })();']); ?>
+                    <?php // Html::button('Registrar Movimiento', ['id' => 'btn_registrar', 'class' => 'btn btn-success', 'onclick' => '(function ( $event ) { sendForm() })();']); ?>
                     <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
                 </div>
             </div>
