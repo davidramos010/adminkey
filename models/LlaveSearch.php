@@ -53,9 +53,9 @@ class LlaveSearch extends Llave
             END) as nombre_propietario"
         ]);
         $query->leftJoin('llave_status ls','ls.id_llave = ll.id and ls.id = (
-           SELECT MAX(id) 
-           FROM llave_status cm 
-           WHERE ls.id_llave = ll.id
+           SELECT MAX(st.id) 
+           FROM llave_status st 
+           WHERE st.id_llave = ll.id
         )');
 
         $query->leftJoin('propietarios pp','ll.id_propietario = pp.id');
