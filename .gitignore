@@ -32,6 +32,8 @@ phpunit.phar
 /vagrant
 /web/plantillas/
 /web/contratos_firmados/
+!/web/firmas/
+/web/firmas/
 !/vendor
 /vendor
 
@@ -49,4 +51,4 @@ themes/classic/views/
 !/config/db.php
 !/composer.lock
 !/tests/
-!/web/firmas/
+
