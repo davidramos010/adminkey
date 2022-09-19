@@ -31,6 +31,7 @@ class Registro extends \yii\db\ActiveRecord
     public $llaves = null;
     public $llaves_e = null;
     public $llaves_s = null;
+    public $fecha_registro = null;
     /**
      * {@inheritdoc}
      */
@@ -120,5 +121,14 @@ class Registro extends \yii\db\ActiveRecord
             ->createCommand($query)
             ->queryAll();
         return ArrayHelper::map($result, 'id', 'nombre');
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFechaRegistro(){
+        $this->fecha_registro = (!empty($this->entrada))?$this->entrada:null;
+        $this->fecha_registro = (empty($strFecha))?$this->salida:$this->fecha_registro;
+        return $this->fecha_registro;
     }
 }

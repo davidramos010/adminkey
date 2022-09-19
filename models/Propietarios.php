@@ -122,4 +122,13 @@ class Propietarios extends \yii\db\ActiveRecord
     {
         return self::arrTipoDocumentos[$numTipoDoc];
     }
+
+    /**
+     * @return string
+     */
+    public function getNombre(){
+        $strNombrePropietario = (!empty($this->nombre_propietario))?strtoupper($this->nombre_propietario):'';
+        $strNombrePropietario = (empty($strNombrePropietario))?strtoupper($this->nombre_representante):$strNombrePropietario;
+        return trim($strNombrePropietario);
+    }
 }

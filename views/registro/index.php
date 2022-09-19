@@ -141,7 +141,32 @@ $this->params['breadcrumbs'][] = $this->title;
                         'headerOptions' => ['class' => 'col-xs-2'],
                         'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; ']
                     ],
-
+                    [
+                        'class' => '\kartik\grid\ActionColumn',
+                        'header' => '',
+                        'headerOptions' => array('style' => 'width: 100%'),
+                        'mergeHeader' => false,
+                        'template' => ' {view} ',
+                        'width'=>'70px',
+                        'vAlign'=>GridView::ALIGN_MIDDLE,
+                        'hAlign'=>GridView::ALIGN_LEFT,
+                        'buttons' => [
+                            'view' => function ($url, $model) {
+                                $viewButton = Html::a(
+                                    Html::button('<i class="fas fa-eye"></i>', ['class' => 'btn btn-primary btn-xs'] ),
+                                    ['registro/view', 'id' => $model['id']],
+                                    [
+                                        'title' => Yii::t('common', 'Editar'),
+                                        'data' => [
+                                            'tooltip' => true,
+                                            'pjax' => 0
+                                        ]
+                                    ]
+                                );
+                                return $viewButton;
+                            },
+                        ]
+                    ]
                 ];
 
                 // Renders a export dropdown menu

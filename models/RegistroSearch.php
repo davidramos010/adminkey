@@ -2,9 +2,9 @@
 
 namespace app\models;
 
+use app\models\Registro;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Registro;
 
 /**
  * RegistroSearch represents the model behind the search form of `app\models\Registro`.
@@ -127,6 +127,22 @@ class RegistroSearch extends Registro
         }
 
         $query->orderBy('r.id DESC');
+
+        return $dataProvider;
+    }
+
+    /**
+     * @param $params
+     * @return ActiveDataProvider
+     */
+    public function search_status($idRegistro, $strStatus)
+    {
+
+        $query = LlaveStatus::find()->where(['id_registro'=>$idRegistro,'status'=>$strStatus]);
+        $query->orderBy('id DESC');
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
 
         return $dataProvider;
     }

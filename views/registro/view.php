@@ -1,39 +1,111 @@
 <?php
+
+use app\models\Registro;
+use app\models\util;
+use kartik\grid\GridView;
 use yii\helpers\Html;
-use yii\widgets\DetailView;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Registro */
+/* @var $arrInfoStatusE array */
+/* @var $arrInfoStatusS array */
 
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Registros', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+$arrColumns = [[
+                    'attribute' => 'id',
+                    'label' => 'Codigo',
+                    'headerOptions' => ['style' => 'width: 10%'],
+                    'format' => 'raw',
+                    'value' => function($model){
+                        return (isset($model->llave->codigo))?strtoupper($model->llave->codigo):'' ;
+                    }
+                ],
+                [
+                    'attribute' => 'id',
+                    'label' => 'Descripción',
+                    'headerOptions' => ['style' => 'width: 40%'],
+                    'format' => 'raw',
+                    'value' => function($model){
+                        return (isset($model->llave->descripcion))?strtoupper($model->llave->descripcion):'' ;
+                    }
+                ],
+                [
+                    'attribute' => 'id',
+                    'label' => 'Cliente',
+                    'headerOptions' => ['style' => 'width: 25%'],
+                    'format' => 'raw',
+                    'value' => function($model){
+                        return (isset($model->llave->comunidad->nombre))?strtoupper($model->llave->comunidad->nombre):'' ;
+                    }
+                ],
+                [
+                    'attribute' => 'id',
+                    'label' => 'Propietario',
+                    'headerOptions' => ['style' => 'width: 25%'],
+                    'format' => 'raw',
+                    'value' => function($model){
+                        return (isset($model->llave->propietarios))?strtoupper($model->llave->propietarios->nombre):'' ;
+                    }
+                ] ];
 ?>
 <div class="registro-view">
+    <div class="ribbon_wrap" >
+        <!-- general form elements -->
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-angle-double-up text-success"></i> Registros de Salida</h3>
+            </div>
+            <div class="card-body">
+                <?= GridView::widget([
+                    'dataProvider' => $arrInfoStatusS,
+                    'columns' => $arrColumns
+                ]) ?>
+            </div>
+        </div>
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-angle-double-down text-danger"></i> Registros de Entrada</h3>
+            </div>
+            <div class="card-body">
+                <?= GridView::widget([
+                    'dataProvider' => $arrInfoStatusE,
+                    'columns' => $arrColumns
+                ]) ?>
+            </div>
+        </div>
+        <!-- form start -->
+        <div class="card card-primary">
+            <div class="card-body">
+                <?php $form = ActiveForm::begin(); ?>
+                <div class="form-group">
+                    <?= $form->field($model, 'id_user')->textInput(['id'=>'user','maxlength' => true,'class'=>'form-control','readonly' => true, 'value'=> trim(strtoupper( $model->user->userInfo->nombres.' '.$model->user->userInfo->apellidos )) ])->label('Fecha Registro') ?>
+                    <?= $form->field($model, 'entrada')->textInput(['id'=>'fecha_registro','maxlength' => true,'class'=>'form-control','readonly' => true, 'value'=> util::getDateTimeFormatedSqlToUser($model->getFechaRegistro()) ])->label('Fecha Registro') ?>
+                    <?= $form->field($model, 'id_comercial')->dropDownList(Registro::getComercialesDropdownList(), ['id' => 'id_comercial', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'disabled' => true])->label('Empresa'); ?>
+                    <?= $form->field($model, 'observacion')->textArea(['id' => 'txt_observacion', 'class' => 'form-control', 'style' => 'width:100%', 'readonly' => true])->label('Observaciones') ?>
+                </div>
+                <div class="form-group">
+                    <div class="card text-center">
+                        <div class="card-header">
+                            <?= Yii::t('app', 'Firma de Aceptación') ?>
+                        </div>
+                        <div class="card-footer text-muted">
+                           <?php if(!empty($model->firma_soporte)):?>
+                            <?= Html::img('@web/firmas/'.$model->firma_soporte) ?>
+                           <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'id_user',
-            'id_llave',
-            'entrada',
-            'salida',
-            'observacion',
-        ],
-    ]) ?>
-
+                <?php ActiveForm::end(); ?>
+                <div style="padding-top: 15px">
+                    <?= Html::button('Registrar Movimiento', ['id' => 'btn_registrar', 'class' => 'btn btn-success', 'onclick' => '(function ( $event ) { sendForm() })();']); ?>
+                    <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

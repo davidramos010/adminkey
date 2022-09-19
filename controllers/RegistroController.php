@@ -59,8 +59,17 @@ class RegistroController extends Controller
      */
     public function actionView($id)
     {
+        $arrInfoStatusE = LlaveStatus::find()->where(['id_registro'=>$id,'status'=>'E'])->all();
+        $arrInfoStatusS = LlaveStatus::find()->where(['id_registro'=>$id,'status'=>'S'])->all();
+
+        $searchModel = new RegistroSearch();
+        $arrInfoStatusE = $searchModel->search_status($id,'E');
+        $arrInfoStatusS = $searchModel->search_status($id,'S');
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'arrInfoStatusE' => $arrInfoStatusE,
+            'arrInfoStatusS' => $arrInfoStatusS
         ]);
     }
 
