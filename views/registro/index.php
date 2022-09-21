@@ -14,6 +14,7 @@ use app\models\util;
 
 $this->title = 'Registros';
 $this->params['breadcrumbs'][] = $this->title;
+$this->registerJsFile('@web/js/registro.js');
 ?>
 <div class="registro-index">
 
@@ -142,6 +143,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; ']
                     ],
                     [
+                        'attribute' => 'id',
+                        'label' => 'Soporte',
+                        'headerOptions' => ['style' => 'width: 5%'],
+                        'format' => 'raw',
+                        'value' => function($model){
+                            return Html::button('<i class="fas fa-download"></i> Descargar', ['id' => 'btn_registrar', 'class' => 'btn btn-primary float-left btn-sm', 'onclick' => '(function ( $event ) { generatePdfRegistro( '.$model->id.' ) })();', 'style'=>'margin-right: 5px;']); ;
+                        }
+                    ],
+                    [
                         'class' => '\kartik\grid\ActionColumn',
                         'header' => '',
                         'headerOptions' => array('style' => 'width: 100%'),
@@ -210,5 +220,4 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
-
 </div>

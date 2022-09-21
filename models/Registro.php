@@ -2,8 +2,11 @@
 
 namespace app\models;
 
+use phpDocumentor\Reflection\Types\This;
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "registro".
@@ -130,5 +133,189 @@ class Registro extends \yii\db\ActiveRecord
         $this->fecha_registro = (!empty($this->entrada))?$this->entrada:null;
         $this->fecha_registro = (empty($strFecha))?$this->salida:$this->fecha_registro;
         return $this->fecha_registro;
+    }
+
+    /**
+     * @param int $numIdRegistro
+     * @return void
+     */
+    public function getInfoRegistro(int $numIdRegistro){
+        $objRegistro = self::findOne(['id'=>$this->id]);
+        $objLlaves =   $this->getInfoByParams(['id'=>$this->id]);
+        $objComercial = Comerciales::findOne(['id'=>$objRegistro->id_comercial]);
+        return ['registro'=>$objRegistro,'llaves'=>$objLlaves,'comercial'=>$objComercial];
+    }
+
+    /**
+     * Esta funcion retorna datos de la llave
+     * @param $params
+     * @return Registro[]|array|null
+     */
+    public function getInfoByParams($params)
+    {
+        $query = LlaveStatus::find()->alias('sta');
+        $query->select([
+            'sta.id as id',
+            'sta.fecha as fecha_registro',
+            'r.firma_soporte',
+            'll.codigo',
+            'll.descripcion as descripcion_llave',
+            'u.username',
+            'cm.nombre as comercial',
+            'sta.status as status',
+            "com.nombre as clientes",
+            "(CASE
+                WHEN p.nombre_propietario IS NOT NULL THEN p.nombre_propietario
+                WHEN p.nombre_representante IS NOT NULL THEN p.nombre_representante
+                ELSE NULL
+              END) as nombre_propietario"
+        ]);
+        $query->leftJoin('registro r','sta.id_registro = r.id');
+        $query->leftJoin('llave ll','sta.id_llave = ll.id');
+        $query->leftJoin('User u','r.id_user = u.id');
+        $query->leftJoin('comerciales cm','r.id_comercial = cm.id');
+        $query->leftJoin('propietarios p','p.id = ll.id_propietario');
+        $query->leftJoin('comunidad com','com.id = ll.id_comunidad');
+
+        if(!empty( $this->id )){
+            $query->where(['r.id' => $this->id]);
+            $query->andWhere('sta.id_registro =r.id');
+        }
+
+        $query->orderBy('r.id DESC');
+
+        return $query->all();
+    }
+
+
+    /**
+     * Retrono HTML de certificado de entrga y/o devolución
+     * @return string
+     */
+    public function getHtmlAceptacion(array $arrParams){
+
+        $objComercial = $arrParams['comercial'];
+        $objRegistro = $arrParams['registro'];
+        $strFirma =  (!empty($objRegistro->firma_soporte))?"<img src='".Url::to('@app/web/firmas/'.$objRegistro->firma_soporte)."' width='150'>":"";
+
+        $addHtmlRows = '';
+        if(count($arrParams['llaves'])){
+            foreach ($arrParams['llaves'] as $valueLlave){
+                $valueLlave->status = ($valueLlave->status=='E')?'Entrada':'Salida';
+                $addHtmlRows .="<tr>
+                                 <td>".$valueLlave->status."</td>
+                                 <td>".$valueLlave->codigo."</td>
+                                 <td>".$valueLlave->descripcion_llave."</td>
+                                 <td>".$valueLlave->clientes."</td>
+                                 <td>".$valueLlave->nombre_propietario."</td>
+                                </tr>";
+            }
+        }
+
+        $strHtmlHeader = " <div class=\"row\">
+                              <div class=\"col-12\">
+                                <h2 class=\"page-header\">
+                                  <i class=\"fas fa-globe\"></i> ".Yii::$app->params['empresa']."
+                                  <small class=\"float-right\"> ".date('d/m/Y H:i:s')." </small>
+                                </h2>
+                              </div>
+                              <!-- /.col -->
+                            </div><!-- title row -->
+                            <!-- info row -->
+                            <div class=\"row invoice-info\">
+                              <div class=\"col-12 invoice-col\">
+                                <div class=\"table-responsive\">
+                                  <table class=\"table\">
+                                    <tr>
+                                      <td style=\"width:50%\">Administrador</td>
+                                      <td>Cliente</td>
+                                    </tr>
+                                    <tr>
+                                      <td>
+                                        <address>
+                                          <strong>".Yii::$app->params['empresa']."</strong><br>
+                                          ".Yii::$app->params['direccion']."<br>
+                                          ".Yii::$app->params['poblacion']."<br>
+                                          Teléfono: ".Yii::$app->params['telefono']."<br>
+                                          Movíl: ".Yii::$app->params['movil']."<br>
+                                          Email: ".Yii::$app->params['email']."
+                                        </address>
+                                      </td>
+                                      <td>
+                                        <address>
+                                          <strong>".$objComercial->nombre."</strong><br>
+                                          ".$objComercial->direccion."<br>
+                                          ".$objComercial->cod_postal." ".$objComercial->poblacion." <br>
+                                          Teléfono: ".$objComercial->telefono."<br>
+                                          Movíl: ".$objComercial->movil."<br>
+                                          Email: ".$objComercial->email."
+                                        </address>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- /.row -->";
+        $strHtmlBody = "<div class=\"row\">
+                          <div class=\"col-12 table-responsive\">
+                            <table class=\"table table-striped small\">
+                              <thead>
+                              <tr>
+                                <th style=\"width:9% \">Acción</th>
+                                <th style=\"width:10%\">Código</th>
+                                <th style=\"width:31%\">Descripción</th>
+                                <th style=\"width:25%\">Cliente</th>
+                                <th style=\"width:25%\">Propietario</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              ".$addHtmlRows."
+                              </tbody>
+                            </table>
+                          </div>
+                          <!-- /.col -->
+                        </div>";
+        $strHtmlFooter = "<div class=\"row\">
+                          <!-- accepted payments column -->
+                          <div class=\"col-12\">
+                            <p class=\"text-muted well well-sm shadow-none small\" style=\"margin-top: 10px;\">
+                              ".$objRegistro->observacion."
+                            </p>
+                          </div>
+                          <!-- /.col -->
+                          <div class=\"col-12\">
+                             <table class=\"table table-striped\">
+                                <tr>
+                                    <td style=\"width:60%\">
+                                        <div class=\"col-sm-4 invoice-col\">
+                                           <b>ID</b> #".str_pad($objRegistro->id, 6, "0", STR_PAD_LEFT)."<br>
+                                           <b>Usuario:</b> ".$objRegistro->user->userInfo->nombres." ".$objRegistro->user->userInfo->apellidos." <br>
+                                           <b>Fecha Registro:</b> ".$objRegistro->getFechaRegistro()."<br>
+                                        </div>
+                                    </td>
+                                    <td style=\"width:40%; align-content: center; text-align: center  \">
+                                        ".$strFirma."
+                                    </td>
+                                </tr>
+                             </table>
+                          </div>
+                          <!-- /.col -->
+                        </div>";
+
+        $strHtml = "<div class=\"wrapper\">
+                      <!-- Main content -->
+                      <section class=\"invoice\">
+                        ".$strHtmlHeader."
+                        <!-- Table row -->
+                        ".$strHtmlBody."
+                        <!-- /.row -->
+                        ".$strHtmlFooter."
+                        <!-- /.row -->
+                      </section>
+                      <!-- /.content -->
+                    </div>
+                  <!-- ./wrapper -->";
+        return $strHtml;
     }
 }

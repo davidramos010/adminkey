@@ -131,6 +131,8 @@ class RegistroSearch extends Registro
         return $dataProvider;
     }
 
+
+
     /**
      * @param $params
      * @return ActiveDataProvider

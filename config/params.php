@@ -1,10 +1,17 @@
 <?php
 
 return [
+    'dominio' => 'http://localhost:81/',
     'adminEmail' => 'admin@example.com',
     'senderEmail' => 'noreply@example.com',
     'senderName' => 'Example.com mailer',
-    'contacto' => 'Empresa Reparaciones SL - Telf. 123456789 - Palamos',
+    'contacto' => 'Salvadó & Gubert - Telf. 992 236 254 - Palamós',
+    'empresa' => 'Salvadó & Gubert',
+    'email' => 'contacto@mail.com',
+    'telefono' => '992 236 254',
+    'movil' => '611 258 147',
+    'direccion' => 'Carrer López i Puigcerver, 111',
+    'poblacion' => '17230 Palamós, Girona',
     'bsVersion' => '4.x', // this will set globally `bsVersion` to Bootstrap 5.x for all Krajee Extensions
     'hail812/yii2-adminlte3' => [
         'pluginMap' => [
