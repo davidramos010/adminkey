@@ -15,7 +15,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\LlaveSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Llaves';
+$this->title = 'Reporte de Llaves';
 ?>
 <div class="llave-index">
     <div class="ribbon_wrap" >
@@ -24,18 +24,12 @@ $this->title = 'Llaves';
                 <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
                     <?php
                     echo Html::ul([
-                        'El codigo de barras de cada llave se genera Automaticamente',
-                        'El codigo de la llave hace referencia a una codificación interna del usuario.'
+                        'Utilice los recuadros de cada columna para filtar la información de desea consultar.',
                     ], ['encode' => false]);
                     ?>
                 </div>
             </div>
             <div class="col-md-2">
-                <div class="d-flex justify-content-end">
-                    <?php
-                    echo Html::a('Crear Registro',['create'],['class' => 'btn btn-success']);
-                    ?>
-                </div>
             </div>
         </div>
 
@@ -96,7 +90,7 @@ $this->title = 'Llaves';
                             'size' => Select2::SMALL,
                             'pluginOptions' => [
                                 'allowClear' => true,
-                                'placeholder' => '',
+                                'placeholder' => 'Todos',
                             ]
                         ],
                     ],
@@ -120,18 +114,63 @@ $this->title = 'Llaves';
                         'label' => 'Alarma',
                         'headerOptions' => ['style' => 'width: 5%'],
                         'value' => function ($model) {
-                            return ($model->alarma==1)?'<span class="float-none badge bg-success">SI</span>':'<span class="float-none badge bg-danger">NO</span>' ;
+
+                            switch ($model->alarma){
+                                case 1:
+                                    $strReturnAlarm = '<span class="float-none badge bg-success">SI</span>';
+                                    break;
+                                case 0:
+                                    $strReturnAlarm = '<span class="float-none badge bg-danger">NO</span>';
+                                    break;
+                                default:
+                                    $strReturnAlarm = '';
+                            }
+
+                            return $strReturnAlarm ;
                         },
                         'format' => 'raw',
                         'filterType' => GridView::FILTER_SELECT2,
-                        'filter' => [ '1' => 'Si', '0' => 'No'],
+                        'filter' => [ 1 => 'Si', 0 => 'No'],
                         'filterWidgetOptions' => [
                             'theme' => Select2::THEME_BOOTSTRAP,
                             'size' => Select2::SMALL,
+                            'options' => ['prompt' => ''],
                             'pluginOptions' => [
                                 'allowClear' => true,
                                 'placeholder' => 'Todos',
                             ]
+                        ],
+                    ],
+                    [
+                        'attribute' => 'facturable',
+                        'label' => 'Facturable',
+                        'headerOptions' => ['style' => 'width: 5%'],
+                        'value' => function ($model) {
+
+                            switch ($model->facturable){
+                                case 1:
+                                    $strReturnFac = '<span class="float-none badge bg-success">SI</span>';
+                                    break;
+                                case 0:
+                                    $strReturnFac = '<span class="float-none badge bg-danger">NO</span>';
+                                    break;
+                                default:
+                                    $strReturnFac = '';
+                            }
+
+                            return $strReturnFac ;
+                        },
+                        'format' => 'raw',
+                        'filterType' => GridView::FILTER_SELECT2,
+                        'filter' => [ 1 => 'Si', 0 => 'No'],
+                        'filterWidgetOptions' => [
+                            'theme' => Select2::THEME_BOOTSTRAP,
+                            'size' => Select2::SMALL,
+                            'options' => ['prompt' => ''],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                                'placeholder' => 'Todos',
+                            ],
                         ],
                     ],
                     [
@@ -149,67 +188,10 @@ $this->title = 'Llaves';
                             'size' => Select2::SMALL,
                             'pluginOptions' => [
                                 'allowClear' => true,
-                                'placeholder' => '',
+                                'placeholder' => 'Todos',
                             ]
                         ],
                     ],
-                    [
-                        'class' => '\kartik\grid\ActionColumn',
-                        'header' => '',
-                        'headerOptions' => array('style' => 'width: 10%'),
-                        'mergeHeader' => false,
-                        'template' => '{view} {update} {delete} ',
-                        'width'=>'70px',
-                        'vAlign'=>GridView::ALIGN_MIDDLE,
-                        'hAlign'=>GridView::ALIGN_LEFT,
-                        'buttons' => [
-                            'view' => function ($url, $model) {
-                                $viewButton = Html::a(
-                                    Html::button('<i class="fas fa-eye"></i>', ['class' => 'btn btn-primary btn-xs'] ),
-                                    ['llave/view', 'id' => $model['id']],
-                                    [
-                                        'title' => Yii::t('common', 'Editar'),
-                                        'data' => [
-                                            'tooltip' => true,
-                                            'pjax' => 0
-                                        ]
-                                    ]
-                                );
-                                return $viewButton;
-                            },
-                            'update' => function ($url, $model) {
-                                $viewButton = Html::a(
-                                    Html::button('<i class="fas fa-pen"></i>', ['class' => 'btn btn-primary btn-xs'] ),
-                                    ['llave/update', 'id' => $model['id']],
-                                    [
-                                        'title' => Yii::t('common', 'Editar'),
-                                        'data' => [
-                                            'tooltip' => true,
-                                            'pjax' => 0
-                                        ]
-                                    ]
-                                );
-                                return $viewButton;
-                            },
-                            'delete' => function ($url, $model) {
-                                $viewButton = null;
-                                if($model['activa']){
-                                    $viewButton = Html::a(
-                                        Html::button('<i class="fas fa-trash-alt"></i>', ['class' => 'btn btn-primary btn-xs'] ),
-                                        ['llave/delete', 'id' => $model['id']],
-                                        [
-                                            'title' => Yii::t('common', 'Eliminar'),
-                                            'data' => [
-                                                'tooltip' => true,
-                                                'pjax' => 0
-                                            ]
-                                        ]
-                                    );
-                                }
-                                return $viewButton;
-                            }
-                        ]
-                    ]
                 ]; ?>
                 <?= // Renders a export dropdown menu
                  ExportMenu::widget([

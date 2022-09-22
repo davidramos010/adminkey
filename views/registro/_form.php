@@ -152,7 +152,7 @@ use yii\widgets\ActiveForm;
                                     'templateSelection' => new JsExpression('(cp) => cp.nombre'),
                                 ],
                             ]
-                        )->label('Empresa'); ?>
+                        )->label('Empresa/Proveedor'); ?>
 
                         <?php // $form->field($model, 'id_comercial')->dropDownList(Registro::getComercialesDropdownList(), ['id' => 'id_comercial','class' => 'form-control', 'prompt' => 'Seleccione Uno'])->label('Empresa'); ?>
                         <?= $form->field($model, 'observacion')->textArea(['id' => 'txt_observacion', 'class' => 'form-control', 'style' => 'width:100%'])->label('Observaciones') ?>

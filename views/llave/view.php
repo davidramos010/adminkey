@@ -81,6 +81,14 @@ $this->registerJsFile('@web/js/llave.js');
                             return $model->activa ? 'Activo':'Inactivo';
                         }
                     ],
+                    [
+                        'attribute' => 'facturable',
+                        'label' => 'Facturable',
+                        'format' => 'raw',
+                        'value' => function($model){
+                            return $model->facturable ? 'Si':'No';
+                        }
+                    ],
                 ],
             ]) ?>
 

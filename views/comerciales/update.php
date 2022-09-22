@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $model app\models\Comerciales */
 
 $this->title = 'Info General : '.$model->nombre;
-$this->params['breadcrumbs'][] = ['label' => 'Comerciales', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Proveedor', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Actualizar';
 ?>

@@ -21,6 +21,7 @@ use yii\helpers\ArrayHelper;
  * @property int|null $alarma
  * @property string|null $codigo_alarma
  * @property string|null $nomenclatura
+ * @property int|null $facturable
  *
  * @property Comunidad $comunidad
  * @property LlaveStatus[] $llaveStatuses
@@ -51,7 +52,7 @@ class Llave extends \yii\db\ActiveRecord
     {
         return [
             [['codigo', 'id_llave_ubicacion', 'id_tipo','descripcion'], 'required', 'message'=> Yii::t('yii',  '{attribute} es requerido')],
-            [['id_comunidad', 'id_tipo', 'id_propietario', 'id_llave_ubicacion','copia', 'activa','alarma'], 'integer'],
+            [['id_comunidad', 'id_tipo', 'id_propietario', 'id_llave_ubicacion','copia', 'activa','alarma','facturable'], 'integer'],
             [['codigo','nombre_propietario','nomenclatura'], 'string', 'max' => 100],
             [['descripcion', 'observacion','codigo_alarma'], 'string', 'max' => 255],
             /*[['codigo'], 'unique'],*/
@@ -75,6 +76,8 @@ class Llave extends \yii\db\ActiveRecord
             'descripcion' => 'Descripción',
             'observacion' => 'Observación',
             'activa' => 'Activa',
+            'facturable' => 'Facturable',
+            'alarma' => 'Alarma'
         ];
     }
 

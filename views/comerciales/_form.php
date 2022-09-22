@@ -99,7 +99,7 @@ $this->registerJsFile('@web/js/comerciales.js');
                 </div>
 
                 <div  style="padding-top: 15px" >
-                    <?= Html::submitButton('Guardar Empresa', ['class' => 'btn btn-success ']) ?>
+                    <?= Html::submitButton('Guardar Proveedor', ['class' => 'btn btn-success ']) ?>
                     <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
                 </div>
             </div>

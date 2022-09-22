@@ -62,7 +62,7 @@ $this->registerJsFile('@web/js/registro.js');
                     ],
                     [
                         'attribute' => 'comercial',
-                        'label' => 'Empresa/Responsable',
+                        'label' => 'Empresa/Proveedor',
                         'format' => 'raw',
                         'value' => function($model){
                             return (isset($model->comercial))?strtoupper($model->comercial):'' ;
@@ -148,7 +148,7 @@ $this->registerJsFile('@web/js/registro.js');
                         'headerOptions' => ['style' => 'width: 5%'],
                         'format' => 'raw',
                         'value' => function($model){
-                            return Html::button('<i class="fas fa-download"></i> Descargar', ['id' => 'btn_registrar', 'class' => 'btn btn-primary float-left btn-sm', 'onclick' => '(function ( $event ) { generatePdfRegistro( '.$model->id.' ) })();', 'style'=>'margin-right: 5px;']); ;
+                            return Html::button('<i class="fas fa-download"></i> Descargar', ['id' => 'btn_registrar', 'class' => 'btn btn-primary float-left btn-sm', 'onclick' => '(function ( $event ) { generatePdfRegistro( '.$model->id.' ) })();', 'style'=>'margin-right: 5px;']);
                         }
                     ],
                     [

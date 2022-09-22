@@ -77,6 +77,11 @@ use yii\widgets\ActiveForm;
                         <?= $form->field($model, 'copia')->textInput(['type' => 'number','maxlength' => 2,'class'=>'form-control','readonly'=> !$model->isNewRecord])->label('Número de copias') ?>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-2 " >
+                        <?= $form->field($model, 'facturable')->widget(SwitchInput::class, ['id'=>'facturable','pluginOptions'=>['id'=>'facturable','size'=>'small','onText'=>'SI','offText'=>'NO']])->label('Facturable') ; ?>
+                    </div>
+                </div>
                 <div  style="padding-top: 15px" >
                     <?= Html::submitButton('Guardar Llave', ['class' => 'btn btn-success ']) ?>
                     <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
