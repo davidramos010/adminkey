@@ -11,6 +11,7 @@ use yii\widgets\ActiveForm;
 /* @var $arrInfoStatusE array */
 /* @var $arrInfoStatusS array */
 
+$this->registerJsFile('@web/js/registro.js');
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Registros', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -57,7 +58,7 @@ $arrColumns = [[
         <!-- general form elements -->
         <div class="card card-primary">
             <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-angle-double-up text-success"></i> Registros de Salida</h3>
+                <h3 class="card-title"><i class="fas fa-angle-double-up text-danger"></i> Registros de Salida</h3>
             </div>
             <div class="card-body">
                 <?= GridView::widget([
@@ -68,7 +69,7 @@ $arrColumns = [[
         </div>
         <div class="card card-primary">
             <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-angle-double-down text-danger"></i> Registros de Entrada</h3>
+                <h3 class="card-title"><i class="fas fa-angle-double-down text-success"></i> Registros de Entrada</h3>
             </div>
             <div class="card-body">
                 <?= GridView::widget([
@@ -102,8 +103,9 @@ $arrColumns = [[
 
                 <?php ActiveForm::end(); ?>
                 <div style="padding-top: 15px">
-                    <?php // Html::button('Registrar Movimiento', ['id' => 'btn_registrar', 'class' => 'btn btn-success', 'onclick' => '(function ( $event ) { sendForm() })();']); ?>
                     <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
+                    <?=  Html::button('<i class="fas fa-download"></i> Imprimir', ['id' => 'btn_registrar', 'class' => 'btn btn-primary float-left', 'onclick' => '(function ( $event ) { generatePdfRegistro( '.$model->id.' ) })();', 'style'=>'margin-right: 5px;']); ?>
+
                 </div>
             </div>
         </div>

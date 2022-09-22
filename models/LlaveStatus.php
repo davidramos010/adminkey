@@ -17,6 +17,17 @@ use Yii;
  */
 class LlaveStatus extends \yii\db\ActiveRecord
 {
+    public $codigo = null;
+    public $username = null;
+    public $clientes = null;//cliente
+    public $propietarios = null;
+    public $comercial = null;
+    public $nombre_propietario = null;
+    public $llaves = null;
+    public $fecha_registro = null;
+    public $firma_soporte = null;
+    public $descripcion_llave = null;
+
     /**
      * {@inheritdoc}
      */

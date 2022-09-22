@@ -414,7 +414,7 @@
             "version": "v3.9.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fullcalendar/fullcalendar.git",
+                "url": "git@github.com:fullcalendar/fullcalendar.git",
                 "reference": "3ddb3c8d1461c6b841aed3487ba07d8ba338adb6"
             },
             "dist": {
@@ -459,7 +459,7 @@
             "version": "3.3.11",
             "source": {
                 "type": "git",
-                "url": "git@github.com:RobinHerbots/Inputmask.git",
+                "url": "https://github.com/RobinHerbots/Inputmask.git",
                 "reference": "5e670ad62f50c738388d4dcec78d2888505ad77b"
             },
             "dist": {
@@ -7674,12 +7674,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "6c6568262ada02ca317efa06badad34342008293"
+                "reference": "f950481cfb100972ee152cbb156e3179cb700cc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/6c6568262ada02ca317efa06badad34342008293",
-                "reference": "6c6568262ada02ca317efa06badad34342008293",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/f950481cfb100972ee152cbb156e3179cb700cc3",
+                "reference": "f950481cfb100972ee152cbb156e3179cb700cc3",
                 "shasum": ""
             },
             "require": {
@@ -7789,7 +7789,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-16T08:44:07+00:00"
+            "time": "2022-09-19T16:35:30+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap",

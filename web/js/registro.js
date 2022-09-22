@@ -183,6 +183,13 @@ function fnGuardarCuadroFirma(numIdRegistro){
     setTimeout("location.reload(true);",600);
 }
 
-function fnDisplayFirma(){
-    $( "#divFirma" ).toggle( "slow");
+/**
+ * Genera pdf de registro
+ */
+function generatePdfRegistro(numIdRegistro){
+    var win = window.open('/index.php?r=registro/report&id='+numIdRegistro, '_blank');
+    if (win) {
+        //Browser has allowed it to be opened
+        win.focus();
+    }
 }
