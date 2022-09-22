@@ -43,8 +43,16 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
                         ],
                         'visible' => ((int) Yii::$app->user->identity->perfiluser->id_perfil==1)
                     ],
+                    [
+                        'label' => 'Reportes',
+                        'icon' => 'fa-solid fa-file-export',
+                        'items' => [
+                            ['label' => 'Reporte Movimientos', 'url' => ['registro/index'], 'iconStyle' => 'far'],
+                            ['label' => 'Llaves', 'url' => ['llave/report'], 'iconStyle' => 'far'],
+                        ],
+                        'visible' => ((int) Yii::$app->user->identity->perfiluser->id_perfil==1)
+                    ],
                     ['label' => 'Registro',  'icon' => 'fas fa-edit', 'url' => ['registro/create']],
-                    ['label' => 'Reporte',  'icon' => 'fas fa-columns', 'url' => ['registro/index']],
                     ['label' => 'Contratos',  'icon' => 'fas fa-file-contract', 'url' => ['contratos/generar-list']],
                     ['label' => 'Login', 'url' => ['site/login'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
                     /*['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank'],

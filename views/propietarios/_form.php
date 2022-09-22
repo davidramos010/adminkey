@@ -34,7 +34,7 @@ $this->registerJsFile('@web/js/propietarios.js');
                 </div>
                 <div class="row">
                     <div class="col-md-4 " >
-                        <?= $form->field($model, 'tipo_documento_propietario')->dropDownList( $model->arrTipoDocumentos , ['class'=>'form-control', 'prompt' => 'Seleccione Uno' ])->label('Tipo Doc.'); ?>
+                        <?= $form->field($model, 'tipo_documento_propietario')->dropDownList( $model::arrTipoDocumentos , ['class'=>'form-control', 'prompt' => 'Seleccione Uno' ])->label('Tipo Doc.'); ?>
                     </div>
                     <div class="col-md-8 "  >
                         <?= $form->field($model, 'documento_propietario')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Documento Propietario') ?>
@@ -50,7 +50,7 @@ $this->registerJsFile('@web/js/propietarios.js');
                 </div>
                 <div class="row">
                     <div class="col-md-4 " >
-                        <?= $form->field($model, 'tipo_documento_representante')->dropDownList( $model->arrTipoDocumentos , ['class'=>'form-control', 'prompt' => 'Seleccione Uno' ])->label('Tipo Doc.'); ?>
+                        <?= $form->field($model, 'tipo_documento_representante')->dropDownList( $model::arrTipoDocumentos , ['class'=>'form-control', 'prompt' => 'Seleccione Uno' ])->label('Tipo Doc.'); ?>
                     </div>
                     <div class="col-md-8 "  >
                         <?= $form->field($model, 'documento_representante')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Documento Representante') ?>
@@ -114,7 +114,7 @@ $this->registerJsFile('@web/js/propietarios.js');
                 </div>
 
                 <div  style="padding-top: 15px" >
-                    <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success ']) ?>
+                    <?= Html::submitButton(Yii::t('app', 'Guardar Propietario'), ['class' => 'btn btn-success ']) ?>
                     <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
                 </div>
             </div>

@@ -1,6 +1,7 @@
 <?php
 
 use kartik\widgets\Select2;
+use kartik\widgets\SwitchInput;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\JsExpression;
@@ -89,6 +90,11 @@ $this->registerJsFile('@web/js/comunidad.js');
                     </div>
                     <div class="form-group">
                         <?= $form->field($model, 'nomenclatura')->textInput(['maxlength' => true,'class'=>'form-control','style'=>'text-transform: uppercase'])->label('Nomenclatura/Codigo') ?>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 " >
+                            <?= $form->field($model, 'estado')->widget(SwitchInput::class, ['pluginOptions'=>['id'=>'estado','size'=>'small','onText'=>'Activo','offText'=>'Inactivo']])->label('Estado') ; ?>
+                        </div>
                     </div>
                     <div  style="padding-top: 15px" >
                         <?= Html::submitButton(Yii::t('app', 'Guardar Cliente'), ['class' => 'btn btn-success ']) ?>

@@ -50,6 +50,20 @@ class LlaveController extends Controller
     }
 
     /**
+     * @return string
+     */
+    public function actionReport()
+    {
+        $searchModel = new LlaveSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        return $this->render('report', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
      * Displays a single Llave model.
      * @param int $id ID
      * @return string

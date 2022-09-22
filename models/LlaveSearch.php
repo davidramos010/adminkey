@@ -17,7 +17,7 @@ class LlaveSearch extends Llave
     public function rules()
     {
         return [
-            [['id', 'id_comunidad', 'id_tipo', 'copia', 'activa','alarma','id_propietario'], 'integer'],
+            [['id', 'id_comunidad', 'id_tipo', 'copia', 'activa','alarma','id_propietario','facturable'], 'integer'],
             [['codigo', 'descripcion', 'observacion','codigo_alarma','llaveLastStatus','nombre_propietario'], 'safe'],
         ];
     }
@@ -78,8 +78,10 @@ class LlaveSearch extends Llave
             'll.id_comunidad' => $this->id_comunidad,
             'll.id_tipo' => $this->id_tipo,
             'll.copia' => $this->copia,
-            'll.activa' => $this->activa,
-            'll.alarma' => $this->alarma,
+            'll.activa' =>  $this->activa,
+            'll.alarma' =>  $this->alarma,
+            'll.facturable' =>  $this->facturable,
+
         ]);
 
         $query->andFilterWhere(['like', 'll.codigo', $this->codigo])

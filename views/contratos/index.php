@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'attribute' => 'nombre',
                         'label' => 'Nombre',
-                        'headerOptions' => ['style' => 'width: 15%'],
+                        'headerOptions' => ['style' => 'width: 20%'],
                         'format' => 'raw',
                         'value' => function($model){
                             return strtoupper($model->nombre);
@@ -149,13 +149,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         'format' => 'raw',
                         'value' => function($model){
                             $url = Yii::$app->urlManager->createUrl(['site/download','path'=>'/plantillas/','file'=>$model->documento]);
-                            return Html::a('<i class="fas fa-download"></i>' , $url, ['title'=>'Descargar Plantilla', 'target' => '_blank', 'class' => 'box_button fl download_link', 'data' => ['tooltip' => true, 'pjax' => 0 ]])  ;
+
+                            return Html::a('<i class="fas fa-download"></i> Descargar' , $url, ['title'=>'Descargar Plantilla', 'target' => '_blank', 'class' => 'btn btn-primary float-left btn-sm', 'data' => ['tooltip' => true, 'pjax' => 0 ]])  ;
                         }
                     ],
                     [
                         'class' => '\kartik\grid\ActionColumn',
                         'header' => '',
-                        'headerOptions' => array('style' => 'width: 100%'),
+                        'headerOptions' => array('style' => 'width: 10%'),
                         'mergeHeader' => false,
                         'template' => ' {update} {delete} ',
                         'width'=>'70px',

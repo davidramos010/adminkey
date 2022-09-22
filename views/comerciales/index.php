@@ -46,59 +46,125 @@ $this->title = 'Proveedores';
             <!-- /.card-header -->
             <div class="card-body">
                 <?php Pjax::begin(); ?>
+                <?php
+                    $gridColumns =[
+                                    ['class' => 'yii\grid\SerialColumn'],
+                                    [
+                                        'attribute' => 'nombre',
+                                        'label' => 'Nombre',
+                                        'headerOptions' => ['style' => 'width: 20%']
+                                    ],
+                                    [
+                                        'attribute' => 'contacto',
+                                        'label' => 'Persona/Contacto',
+                                        'headerOptions' => ['style' => 'width: 20%']
+                                    ],
+                                    [
+                                        'attribute' => 'telefono',
+                                        'label' => 'Teléfono',
+                                        'headerOptions' => ['style' => 'width: 20%']
+                                    ],
+                                    [
+                                        'attribute' => 'direccion',
+                                        'label' => 'Dirección',
+                                        'headerOptions' => ['style' => 'width: 20%']
+                                    ],
+                                    [
+                                        'attribute' => 'estado',
+                                        'label' => 'Estado',
+                                        'headerOptions' => ['style' => 'width: 10%'],
+                                        'value' => function ($model) {
+                                            return ($model->estado==1)?'<span class="float-none badge bg-success">ACTIVO</span>':'<span class="float-none badge bg-danger">INACTIVO</span>' ;
+                                        },
+                                        'format' => 'raw',
+                                        'filterType' => GridView::FILTER_SELECT2,
+                                        'filter' => [ '1' => 'ACTIVO', '0' => 'INACTIVO'],
+                                        'filterWidgetOptions' => [
+                                            'theme' => Select2::THEME_BOOTSTRAP,
+                                            'size' => Select2::SMALL,
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                                'placeholder' => 'Todos',
+                                            ]
+                                        ],
+                                    ],
+                                    [
+                                        'class' => '\kartik\grid\ActionColumn',
+                                        'header' => '',
+                                        'headerOptions' => array('style' => 'width: 100%'),
+                                        'mergeHeader' => false,
+                                        'template' => ' {update} {delete} ',
+                                        'width'=>'70px',
+                                        'vAlign'=>GridView::ALIGN_MIDDLE,
+                                        'hAlign'=>GridView::ALIGN_LEFT,
+                                        'buttons' => [
+                                            'update' => function ($url, $model) {
+                                                $viewButton = Html::a(
+                                                    Html::button('<i class="fas fa-pen"></i>', ['class' => 'btn btn-primary btn-xs'] ),
+                                                    ['comerciales/update', 'id' => $model['id']],
+                                                    [
+                                                        'title' => Yii::t('common', 'Editar'),
+                                                        'data' => [
+                                                            'tooltip' => true,
+                                                            'pjax' => 0
+                                                        ]
+                                                    ]
+                                                );
+                                                return $viewButton;
+                                            },
+                                            'delete' => function ($url, $model) {
+                                                $viewButton = null;
+                                                if($model['estado']){
+                                                    $viewButton = Html::a(
+                                                        Html::button('<i class="fas fa-trash-alt"></i>', ['class' => 'btn btn-primary btn-xs'] ),
+                                                        ['comerciales/delete', 'id' => $model['id']],
+                                                        [
+                                                            'title' => Yii::t('common', 'Eliminar'),
+                                                            'data' => [
+                                                                'tooltip' => true,
+                                                                'pjax' => 0
+                                                            ]
+                                                        ]
+                                                    );
+                                                }
+                                                return $viewButton;
+                                            }
+                                        ]
+                                    ]
+                                ];
+                ?>
+                <?= // Renders a export dropdown menu
+                ExportMenu::widget([
+                    'dataProvider' => $dataProvider,
+                    'columns' => $gridColumns,
+                    'dropdownOptions' => [
+                        'label' => 'Export All',
+                        'class' => 'btn btn-default',
+                    ],
+                    'showConfirmAlert'=>false,
+                    'exportContainer' => [
+                        'class' => 'btn-group mr-2'
+                    ],
+                    'filename'        => Yii::t('app', 'ReportProveedor'),
+                    'exportConfig' => [
+                        ExportMenu::FORMAT_HTML => false,
+                        ExportMenu::FORMAT_EXCEL => false,
+                        ExportMenu::FORMAT_TEXT => false,
+                        ExportMenu::FORMAT_PDF => false,
+                        ExportMenu::FORMAT_CSV   => [
+                            'label'           => Yii::t('app', 'CSV'),
+                        ],
+                        ExportMenu::FORMAT_EXCEL_X => [
+                            'label'           => Yii::t('app', 'Excel'),
+                        ],
+                    ],
+                ]);
+                ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'formatter' => array('class' => 'yii\i18n\Formatter', 'nullDisplay' => ''),
-                    'columns' => [
-                        ['class' => 'yii\grid\SerialColumn'],
-                        [
-                            'attribute' => 'nombre',
-                            'label' => 'Nombre',
-                            'headerOptions' => ['style' => 'width: 20%']
-                        ],
-                        [
-                            'attribute' => 'contacto',
-                            'label' => 'Persona/Contacto',
-                            'headerOptions' => ['style' => 'width: 20%']
-                        ],
-                        [
-                            'attribute' => 'telefono',
-                            'label' => 'Teléfono',
-                            'headerOptions' => ['style' => 'width: 20%']
-                        ],
-                        [
-                            'attribute' => 'direccion',
-                            'label' => 'Dirección',
-                            'headerOptions' => ['style' => 'width: 20%']
-                        ],
-                        [
-                            'attribute' => 'estado',
-                            'label' => 'Estado',
-                            'headerOptions' => ['style' => 'width: 10%'],
-                            'value' => function ($model) {
-                                return ($model->estado==1)?'<span class="float-none badge bg-success">ACTIVO</span>':'<span class="float-none badge bg-danger">INACTIVO</span>' ;
-                            },
-                            'format' => 'raw',
-                            'filterType' => GridView::FILTER_SELECT2,
-                            'filter' => [ '1' => 'ACTIVO', '0' => 'INACTIVO'],
-                            'filterWidgetOptions' => [
-                                'theme' => Select2::THEME_BOOTSTRAP,
-                                'size' => Select2::SMALL,
-                                'pluginOptions' => [
-                                    'allowClear' => true,
-                                    'placeholder' => 'Todos',
-                                ]
-                            ],
-                        ],
-                        [
-                            'class' => ActionColumn::class,
-                            'template'=>'{update}{delete} ',
-                            'urlCreator' => function ($action, Comerciales $model, $key, $index, $column) {
-                                return Url::toRoute([$action, 'id' => $model->id]);
-                            }
-                        ],
-                    ],
+                    'columns' => $gridColumns
                 ]); ?>
                 <?php Pjax::end(); ?>
             </div>

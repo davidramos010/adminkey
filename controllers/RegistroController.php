@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use app\components\ValidadorCsv;
+use app\models\Codipostal;
+use app\models\Comerciales;
 use app\models\Comunidad;
 use app\models\Llave;
 use app\models\LlaveStatus;
@@ -296,4 +298,17 @@ class RegistroController extends Controller
         // return the pdf output as per the destination setting
         return $pdf->render();
     }
+
+    /**
+     * Devuelve un listado de poblaciones en funcion del codipostal especificado
+     * @param bool $q
+     * @return array
+     */
+    public function actionFindComercial($q = false)
+    {
+        $rows = Comerciales::find()->select('id,nombre')->distinct()
+            ->where(['like', 'nombre', $q])->andWhere(['estado'=>1])->asArray()->all();
+        return json_encode($rows);
+    }
+
 }

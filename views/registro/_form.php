@@ -3,7 +3,10 @@
 use app\models\Registro;
 use diggindata\signaturepad\SignaturePadWidget;
 use inquid\signature\SignatureWidget;
+use kartik\widgets\Select2;
 use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -122,11 +125,36 @@ use yii\widgets\ActiveForm;
 
             <!-- form start -->
             <div class="card-body">
-
-
                 <?php $form = ActiveForm::begin(); ?>
                     <div class="form-group">
-                        <?= $form->field($model, 'id_comercial')->dropDownList(Registro::getComercialesDropdownList(), ['id' => 'id_comercial','class' => 'form-control', 'prompt' => 'Seleccione Uno'])->label('Empresa'); ?>
+
+                        <?=  $form->field($model, 'id_comercial')->widget(Select2::class, [
+                                'theme' => Select2::THEME_BOOTSTRAP,
+                                'size' => Select2::SMALL,
+                                'data' => [$model->id_comercial => $model->id_comercial],
+                                'options' => [
+                                    'data-js-req-cont' => 'generic',
+                                    'id' => 'id_comercial'
+                                ],
+                                'pluginOptions' => [
+                                    'minimumInputLength' => 4,
+                                    'language' => [
+                                        'inputTooShort' => new JsExpression("() => 'Escríbe 4 caracteres mínimo. Puedes buscar por empresa.'"),
+                                        'errorLoading' => new JsExpression("() => 'Buscando...'"),
+                                    ],
+                                    'ajax' => [
+                                        'url' => Url::to(['registro/find-comercial']),
+                                        'dataType' => 'json',
+                                        'processResults' => new JsExpression('(data) => procesarResultadosComercial(data)'),
+                                        'data' => new JsExpression('(params) => { return {q:params.term} }')
+                                    ],
+                                    'templateResult' => new JsExpression('(params) => params.loading ? "Buscando..." : params.id + " - " + params.nombre'),
+                                    'templateSelection' => new JsExpression('(cp) => cp.nombre'),
+                                ],
+                            ]
+                        )->label('Empresa/Proveedor'); ?>
+
+                        <?php // $form->field($model, 'id_comercial')->dropDownList(Registro::getComercialesDropdownList(), ['id' => 'id_comercial','class' => 'form-control', 'prompt' => 'Seleccione Uno'])->label('Empresa'); ?>
                         <?= $form->field($model, 'observacion')->textArea(['id' => 'txt_observacion', 'class' => 'form-control', 'style' => 'width:100%'])->label('Observaciones') ?>
                     </div>
                     <div class="form-group">
@@ -143,7 +171,6 @@ use yii\widgets\ActiveForm;
                             </div>
                         </div>
                     </div>
-
 
                 <?php ActiveForm::end(); ?>
                 <div style="padding-top: 15px">

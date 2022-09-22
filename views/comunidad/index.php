@@ -104,12 +104,48 @@ $this->title = 'Clientes';
                             ],
                         ],
                         [
-                            'class' => ActionColumn::className(),
-                            'template'=>'{update}{delete} ',
-                            'urlCreator' => function ($action, Comunidad $model, $key, $index, $column) {
-                                return Url::toRoute([$action, 'id' => $model->id]);
-                            }
-                        ],
+                            'class' => '\kartik\grid\ActionColumn',
+                            'header' => '',
+                            'headerOptions' => array('style' => 'width: 100%'),
+                            'mergeHeader' => false,
+                            'template' => ' {update} {delete} ',
+                            'width'=>'70px',
+                            'vAlign'=>GridView::ALIGN_MIDDLE,
+                            'hAlign'=>GridView::ALIGN_LEFT,
+                            'buttons' => [
+                                'update' => function ($url, $model) {
+                                    $viewButton = Html::a(
+                                        Html::button('<i class="fas fa-pen"></i>', ['class' => 'btn btn-primary btn-xs'] ),
+                                        ['comunidad/update', 'id' => $model['id']],
+                                        [
+                                            'title' => Yii::t('common', 'Editar'),
+                                            'data' => [
+                                                'tooltip' => true,
+                                                'pjax' => 0
+                                            ]
+                                        ]
+                                    );
+                                    return $viewButton;
+                                },
+                                'delete' => function ($url, $model) {
+                                    $viewButton = null;
+                                    if($model['estado']){
+                                        $viewButton = Html::a(
+                                            Html::button('<i class="fas fa-trash-alt"></i>', ['class' => 'btn btn-primary btn-xs'] ),
+                                            ['comunidad/delete', 'id' => $model['id']],
+                                            [
+                                                'title' => Yii::t('common', 'Eliminar'),
+                                                'data' => [
+                                                    'tooltip' => true,
+                                                    'pjax' => 0
+                                                ]
+                                            ]
+                                        );
+                                    }
+                                    return $viewButton;
+                                }
+                            ]
+                        ]
                     ];
                 ?>
                 <?= // Renders a export dropdown menu

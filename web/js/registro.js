@@ -193,3 +193,31 @@ function generatePdfRegistro(numIdRegistro){
         win.focus();
     }
 }
+
+
+/**
+ *  Al seleccionar un CP se llenan los campos localidad y provincia
+ * @param params
+ */
+function fnSelectedComercial(params) {
+
+    if (params && params.data) {
+        console.log('ahi vamos');
+        //$("#altasin-dir_poblac").val(params.data.localidad);
+        //$("#comunidad-poblacion").val(params.data.poblacio+ ', '+params.data.provincia);
+    }
+}
+
+/**
+ * Filtra los codigos postales y lo devuelve con la construcción esperada por el select2
+ * @param data
+ * @returns {{results: *}}
+ */
+
+function procesarResultadosComercial(data) {
+    return {
+        results: data.map(d => {
+            return {id: d.id, nombre: d.nombre };
+        })
+    }
+}
