@@ -24,7 +24,7 @@ $this->title = 'Reporte de Llaves';
                 <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
                     <?php
                     echo Html::ul([
-                        'Utilice los recuadros de cada columna para filtar la información de desea consultar.',
+                        'Utilice los recuadros de cada columna para filtrar la información que desea consultar.',
                     ], ['encode' => false]);
                     ?>
                 </div>
@@ -34,10 +34,6 @@ $this->title = 'Reporte de Llaves';
         </div>
 
         <div class="card card-primary">
-            <div class="card-header">
-                <h3 class="card-title"><?= $this->title; ?></h3>
-            </div>
-            <!-- /.card-header -->
             <div class="card-body">
                 <?php Pjax::begin(); ?>
                 <?php
@@ -130,7 +126,7 @@ $this->title = 'Reporte de Llaves';
                         },
                         'format' => 'raw',
                         'filterType' => GridView::FILTER_SELECT2,
-                        'filter' => [ 1 => 'Si', 0 => 'No'],
+                        'filter' => [ '1' => 'Si', '0' => 'No', ''=>'Todos'],
                         'filterWidgetOptions' => [
                             'theme' => Select2::THEME_BOOTSTRAP,
                             'size' => Select2::SMALL,
@@ -162,7 +158,7 @@ $this->title = 'Reporte de Llaves';
                         },
                         'format' => 'raw',
                         'filterType' => GridView::FILTER_SELECT2,
-                        'filter' => [ 1 => 'Si', 0 => 'No'],
+                        'filter' => [ '1' => 'Si', '0' => 'No', ''=>'Todos'],
                         'filterWidgetOptions' => [
                             'theme' => Select2::THEME_BOOTSTRAP,
                             'size' => Select2::SMALL,
@@ -220,17 +216,48 @@ $this->title = 'Reporte de Llaves';
                      ],
                 ]);
                 ?>
+                <br><br>
                 <?= \kartik\grid\GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'formatter' => array('class' => 'yii\i18n\Formatter', 'nullDisplay' => ''),
+                    'resizableColumns' => false,
+                    'condensed' => true,
+                    'floatHeader' => false,
+                    'pjax' => true,
+                    'pjaxSettings' => [
+                        'options' => [
+                            'timeout' => false,
+                            'enablePushState' => false,
+                            'clientOptions' => [
+                                'method' => 'GET'
+                            ]
+                        ]
+                    ],
                     'columns' => $gridColumns,
+                    'toolbar' => [
+                        [
+                            'content' =>
+                                 Html::a('Recargar', Url::current(), [
+                                    'class' => 'btn bg-orange',
+                                    'title' => Yii::t('Common', 'Recargar manteniendo filtros')
+                                ]) . ' ' . Html::a('Limpiar', ['report'], [
+                                    'class' => 'btn btn-default',
+                                    'title' => Yii::t('Common', 'Limpiar filtros')
+                                ]),
+                        ],
+                        //count($dataProvider->models) < 100 ? '{toggleData}' : '',
+                    ],
+                    'panelPrefix' => 'panel mb-0 panel-',
+                    'panel' => [
+                        'heading' =>  $this->title,
+                        'type' => GridView::TYPE_PRIMARY,
+                        'class' => 'mb-0'
+                    ],
                 ]); ?>
                 <?php Pjax::end(); ?>
             </div>
             <!-- /.card-body -->
-            <div class="card-footer clearfix">
-            </div>
         </div>
     </div>
 
