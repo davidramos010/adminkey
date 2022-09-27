@@ -1,6 +1,7 @@
 <?php
 namespace app\controllers;
 
+use app\models\Llave;
 use app\models\Perfiles;
 use app\models\PerfilesUsuario;
 use Yii;
@@ -65,21 +66,19 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $srtNotificacion = NULL;
+        $arrParam = [];
         if (!Yii::$app->user->identity) {
             $model = new LoginForm();
             if ($model->load(Yii::$app->request->post())) {
                 if($model->login()){
                     $objPerfil = PerfilesUsuario::find()->where(['id_user'=>Yii::$app->user->identity->id ])->one();
-                    if(!empty($objPerfil)){
-                        if($objPerfil->id_perfil==1 && (int) $model->perfil==1 ){
-                            return $this->render('index');
-                        }
-                        if($objPerfil->id_perfil==2 && (int) $model->perfil==2){
-                            return $this->redirect('index.php?r=registro/create');
-                        }
+                    $strReturn = PerfilesUsuario::getIndexPerfil($objPerfil,$model);
+                    if(!empty($strReturn)){
+                        return $this->redirect($strReturn);
                     }
+                    $srtNotificacion .= "Validar los permisos asignados. \n";
                 }
-                $srtNotificacion = "Validar los parámetros ingresados";
+                $srtNotificacion .= "Validar los parámetros ingresados. \n";
                 Yii::$app->user->logout();
                 Yii::$app->user->logout(true);
             }
@@ -90,7 +89,14 @@ class SiteController extends Controller
             ]);
         }
 
-        return $this->render('index');
+        // --------------------------------
+        // Parametros para usuarios que ya iniciaron sesion
+        if (Yii::$app->user->identity) {
+            // Cantidad de llave y llaves prestadas
+            $arrParam['llaves'] = Llave::getInfoDashboard();
+        }
+
+        return $this->render('index',['params'=>$arrParam]);
     }
 
     /**
@@ -100,7 +106,6 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }

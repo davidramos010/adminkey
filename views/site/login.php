@@ -13,7 +13,7 @@ $this->registerCssFile("@web/css/site.css", []);
 
     <div class="login-box">
         <div class="login-logo">
-            <a href="../../index2.html"><b>Admin</b>KEYS</a>
+            <b>Admin</b>KEYS
         </div>
         <!-- /.login-logo -->
         <div class="card">
@@ -36,7 +36,7 @@ $this->registerCssFile("@web/css/site.css", []);
                                     ->label(false)
                                     ->passwordInput(['placeholder' => $model->getAttributeLabel('Codigo Acceso')]) ?>
                                 <p class="d-flex align-items-center justify-content-center">
-                                    <?= Html::submitButton('Iniciar', ['class' => 'btn btn-light btn-block']) ?>
+                                    <?= Html::submitButton('Iniciar', ['value' => 1,'name' => 'authkey','class' => 'btn btn-light btn-block']) ?>
                                 </p>
                             </div>
                             <div class="icon">
@@ -66,7 +66,7 @@ $this->registerCssFile("@web/css/site.css", []);
                                     ->label(false)
                                     ->passwordInput(['placeholder' => $model->getAttributeLabel('password')]) ?>
                                 <p class="d-flex align-items-center justify-content-center">
-                                    <?= Html::submitButton('Iniciar', ['class' => 'btn btn-light btn-block']) ?>
+                                    <?= Html::submitButton('Iniciar', ['value' => 1,'name' => 'admin','class' => 'btn btn-light btn-block']) ?>
                                 </p>
                             </div>
                             <div class="icon">

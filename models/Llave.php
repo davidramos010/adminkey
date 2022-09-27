@@ -193,4 +193,28 @@ class Llave extends \yii\db\ActiveRecord
         return (int)$next+1;
     }
 
+    /**
+     * @return array
+     * @throws \yii\db\Exception
+     */
+    public static function getInfoDashboard():array
+    {
+        $query = Yii::$app->db;
+        // --------------------------
+        // Cantidad de llaves activas
+        $numLlaves = (int) Llave::find()->where(['activa'=>1])->count();
+        // ---------------------------
+        // Array de llaves con salida
+        $queryString = '
+            SELECT ls.id_llave ,ls.id AS lastid, ls.status
+            FROM llave_status ls
+            INNER JOIN ( SELECT MAX(id) AS indice ,id_llave FROM llave_status GROUP BY id_llave  ) AS lsb ON ( lsb.indice = ls.id )
+            WHERE ls.status ="S"; ';
+        $resultadosSalida = $query->createCommand($queryString)->queryAll();
+        $numLlavesSalida = (int) count($resultadosSalida);
+        $porcLlavesSalida = round((float) ((100/$numLlaves)*$numLlavesSalida),2);
+        // --------------------------
+        return ['num_llaves'=>$numLlaves,'porcentaje_salida'=>$porcLlavesSalida,'num_salida'=>$numLlavesSalida,'arr_salida'=>$resultadosSalida];
+    }
+
 }
