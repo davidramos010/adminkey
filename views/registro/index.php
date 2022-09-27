@@ -4,6 +4,7 @@ use app\models\Registro;
 use kartik\export\ExportMenu;
 use kartik\grid\GridView;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\Pjax;
 use yii\data\ArrayDataProvider;
 use app\models\util;
@@ -13,7 +14,6 @@ use app\models\util;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Registros';
-$this->params['breadcrumbs'][] = $this->title;
 $this->registerJsFile('@web/js/registro.js');
 ?>
 <div class="registro-index">
@@ -24,7 +24,7 @@ $this->registerJsFile('@web/js/registro.js');
                 <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
                     <?php
                     echo Html::ul([
-                        'Listado de registro de entrada y salida de llaves'
+                        'Listado de registro de entrada y salida de llaves.'
                     ], ['encode' => false]);
 
                     ?>
@@ -38,9 +38,6 @@ $this->registerJsFile('@web/js/registro.js');
         </div>
 
         <div class="card card-primary">
-            <div class="card-header">
-                <h3 class="card-title"><?= $this->title; ?></h3>
-            </div>
             <!-- /.card-header -->
             <div class="card-body">
                 <?php Pjax::begin(); ?>
@@ -205,12 +202,45 @@ $this->registerJsFile('@web/js/registro.js');
                         ],
                     ],
                 ]);
-
+                echo "<br><br>";
                 // You can choose to render your own GridView separately
                 echo \kartik\grid\GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
-                    'columns' => $gridColumns
+                    'columns' => $gridColumns,
+                    'formatter' => array('class' => 'yii\i18n\Formatter', 'nullDisplay' => ''),
+                    'resizableColumns' => false,
+                    'condensed' => true,
+                    'floatHeader' => false,
+                    'pjax' => true,
+                    'pjaxSettings' => [
+                        'options' => [
+                            'timeout' => false,
+                            'enablePushState' => false,
+                            'clientOptions' => [
+                                'method' => 'GET'
+                            ]
+                        ]
+                    ],
+                    'toolbar' => [
+                        [
+                            'content' =>
+                                Html::a('Recargar', Url::current(), [
+                                    'class' => 'btn bg-orange',
+                                    'title' => Yii::t('Common', 'Recargar manteniendo filtros')
+                                ]) . ' ' . Html::a('Limpiar', ['index'], [
+                                    'class' => 'btn btn-default',
+                                    'title' => Yii::t('Common', 'Limpiar filtros')
+                                ]),
+                        ],
+                        //count($dataProvider->models) < 100 ? '{toggleData}' : '',
+                    ],
+                    'panelPrefix' => 'panel mb-0 panel-',
+                    'panel' => [
+                        'heading' =>  $this->title,
+                        'type' => GridView::TYPE_PRIMARY,
+                        'class' => 'mb-0'
+                    ],
                 ]);
                 ?>
                 <?php Pjax::end(); ?>

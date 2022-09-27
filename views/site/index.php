@@ -1,18 +1,62 @@
 <?php
+
+
+use hail812\adminlte\widgets\InfoBox;
+
 $this->title = 'Starter Page';
 $this->params['breadcrumbs'] = [['label' => $this->title]];
+
+/* @var $this yii\web\View */
+/* @var $form yii\bootstrap\ActiveForm */
+/* @var $params array */
+
 ?>
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-6">
             <?= \hail812\adminlte\widgets\Alert::widget([
                 'type' => 'success',
-                'body' => '<h3>Notas Importantes</h3>',
+                'body' => '<h3>Notas Importantes 123</h3>',
             ]) ?>
             <?= \hail812\adminlte\widgets\Callout::widget([
                 'type' => 'danger',
                 'head' => 'Notas Importantes - Alertas!',
                 'body' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis tincidunt bibendum tellus nec convallis. Maecenas euismod nulla nec scelerisque rutrum. Interdum et malesuada fames ac ante ipsum primis in faucibus. In hendrerit dapibus euismod. Etiam sed justo tempus, eleifend libero at, porta risus.'
+            ]) ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <?= InfoBox::widget([
+                'text' => 'Cantidad de Llaves',
+                'number' => $params['llaves']['num_llaves'] ,
+                'theme' => 'gradient-success',
+                'icon' => 'far fa-flag',
+            ]) ?>
+        </div>
+        <div class="col-md-2">
+            <?= InfoBox::widget([
+                'text' => 'Llaves con Salida',
+                'number' => $params['llaves']['num_salida'],
+                'theme' => 'gradient-info',
+                'icon' => 'far fa-flag',
+            ]) ?>
+        </div>
+        <div class="col-md-4 ">
+            <?php $numPorcentaje = (float) $params['llaves']['porcentaje_salida']; ?>
+            <?= InfoBox::widget([
+                'text' => '<div class="progress">
+                                <div class="progress-bar bg-primary progress-bar-striped" role="progressbar" aria-valuenow="'.$numPorcentaje.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$numPorcentaje.'%">
+                                 <span class="sr-only">'.$numPorcentaje.'% de llaves por fuera</span>
+                                </div>
+                              </div>
+                              ',
+                'number' => '<small>
+                               '.$params['llaves']['porcentaje_salida'].'% de llaves por fuera 
+                              </small>',
+                'theme' => 'gradient-default',
+                'icon' => 'far fa-copy',
             ]) ?>
         </div>
     </div>

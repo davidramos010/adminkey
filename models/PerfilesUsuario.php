@@ -77,4 +77,13 @@ class PerfilesUsuario extends \yii\db\ActiveRecord
     {
         return new PerfilesUsuarioQuery(get_called_class());
     }
+
+    public static function getIndexPerfil(PerfilesUsuario $objParam, LoginForm $modelLogin):string
+    {
+        $strReturn = "";
+        if(isset($objParam) && !empty($objParam->id_perfil) && !empty($modelLogin->perfil)){
+            $strReturn = Yii::$app->params['index_perfil'][$modelLogin->perfil];
+        }
+        return $strReturn;
+    }
 }
