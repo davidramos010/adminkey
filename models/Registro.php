@@ -22,6 +22,7 @@ use yii\helpers\Url;
  *
  * @property Llave $llave
  * @property User $user
+ * @property Comerciales $comerciales
  */
 class Registro extends \yii\db\ActiveRecord
 {
@@ -97,9 +98,11 @@ class Registro extends \yii\db\ActiveRecord
     }
 
     /**
+     *
+     * Gets query for [[Comerciales]].
      * @return \yii\db\ActiveQuery
      */
-    public function getComercial()
+    public function getComerciales()
     {
         return $this->hasOne(Comerciales::className(), ['id' => 'id_comercial']);
     }
