@@ -150,9 +150,13 @@ class LlaveStatusSearch extends LlaveStatus
     public function searchDataByPropietario()
     {
         $query = Llave::find()->alias('l');
-        $query->select(["COUNT(1) AS total, l.id_propietario, p.nombre_propietario AS descripcion,
-                            (
-                            SELECT COUNT(ls.id_llave) as numSalida
+        $query->select(["COUNT(1) AS total, l.id_propietario,
+                            ( CASE
+                                WHEN p.nombre_propietario IS NOT NULL THEN p.nombre_propietario
+                                WHEN p.nombre_representante IS NOT NULL THEN p.nombre_representante
+                                ELSE NULL
+                              END) AS descripcion,
+                            ( SELECT COUNT(ls.id_llave) as numSalida
                                 FROM llave_status ls
                                 INNER JOIN ( SELECT MAX(id) AS indice ,id_llave FROM llave_status GROUP BY id_llave  ) AS lsb ON ( lsb.indice = ls.id )
                                 INNER JOIN llave l2 on (ls.id_llave = l2.id )
