@@ -131,7 +131,7 @@ $this->registerJsFile('@web/js/home.js');
             <div class="col-lg-12" >
                 <?= Callout::widget([
                     'head' => 'Importante!',
-                    'body' => 'En este momento existen  <strong> '.count($params['llaves']['arrLlavesFecha'][5]).' </strong>  llaves que se han prestado hace mas de 5 dias y de las cuales no se ha registrado su ingreso.'.$addHtmlGrid
+                    'body' => 'En este momento existen  <strong> '.count($params['llaves']['arrLlavesFecha'][5]).' </strong>  llaves que se han prestado hace más de 5 días y de las cuales no se ha registrado su ingreso.'.$addHtmlGrid
                 ]) ?>
             </div>
         </div>
@@ -251,7 +251,7 @@ $this->registerJsFile('@web/js/home.js');
                 <?= Callout::widget([
                     'type' => 'warning',
                     'head' => 'Iniciar gestiones para recuperación de llaves - Alerta !',
-                    'body' => 'En este momento existen  <strong> '.count($params['llaves']['arrLlavesFecha'][10]).' </strong>  llaves que se han prestado hace mas de 10 dias y de las cuales no se ha registrado su ingreso.'.$addHtmlGrid
+                    'body' => 'En este momento existen  <strong> '.count($params['llaves']['arrLlavesFecha'][10]).' </strong>  llaves que se han prestado hace más de 10 días y de las cuales no se ha registrado su ingreso.'.$addHtmlGrid
                 ]) ?>
             </div>
         </div>
@@ -376,7 +376,7 @@ $this->registerJsFile('@web/js/home.js');
                 <?= Callout::widget([
                     'type' => 'danger',
                     'head' => 'Iniciar proceso de recuperación de llaves - Urgente!!',
-                    'body' => 'En este momento existen  <strong> '.count($params['llaves']['arrLlavesFecha'][15]).' </strong>  llaves que se han prestado hace mas de 15 dias y de las cuales no se ha registrado su ingreso.'.$addHtmlGrid
+                    'body' => 'En este momento existen  <strong> '.count($params['llaves']['arrLlavesFecha'][15]).' </strong>  llaves que se han prestado hace más de 15 días y de las cuales no se ha registrado su ingreso.'.$addHtmlGrid
                 ]) ?>
             </div>
         </div>
