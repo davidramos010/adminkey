@@ -130,7 +130,7 @@ $this->registerJsFile('@web/js/home.js');
         <div class="row">
             <div class="col-lg-12" >
                 <?= Callout::widget([
-                    'head' => 'Importante!',
+                    'head' => '<i class="fas fa-info"></i>  Importante!',
                     'body' => 'En este momento existen  <strong> '.count($params['llaves']['arrLlavesFecha'][5]).' </strong>  llaves que se han prestado hace más de 5 días y de las cuales no se ha registrado su ingreso.'.$addHtmlGrid
                 ]) ?>
             </div>
@@ -250,7 +250,7 @@ $this->registerJsFile('@web/js/home.js');
             <div class="col-lg-12">
                 <?= Callout::widget([
                     'type' => 'warning',
-                    'head' => 'Iniciar gestiones para recuperación de llaves - Alerta !',
+                    'head' => '<i class="fas fa-info-circle"></i> Iniciar gestiones para recuperación de llaves - Alerta !',
                     'body' => 'En este momento existen  <strong> '.count($params['llaves']['arrLlavesFecha'][10]).' </strong>  llaves que se han prestado hace más de 10 días y de las cuales no se ha registrado su ingreso.'.$addHtmlGrid
                 ]) ?>
             </div>
@@ -367,15 +367,12 @@ $this->registerJsFile('@web/js/home.js');
             'options'=>[ 'style'=>'font-size:12px;display:none']
         ]);
 
-
-
-
         ?>
         <div class="row">
             <div class="col-lg-12">
                 <?= Callout::widget([
                     'type' => 'danger',
-                    'head' => 'Iniciar proceso de recuperación de llaves - Urgente!!',
+                    'head' => '<i class="fas fa-times-circle"></i> Iniciar proceso de recuperación de llaves - Urgente!!',
                     'body' => 'En este momento existen  <strong> '.count($params['llaves']['arrLlavesFecha'][15]).' </strong>  llaves que se han prestado hace más de 15 días y de las cuales no se ha registrado su ingreso.'.$addHtmlGrid
                 ]) ?>
             </div>
@@ -385,18 +382,18 @@ $this->registerJsFile('@web/js/home.js');
     <div class="row">
         <div class="col-md-3">
             <?= InfoBox::widget([
-                'text' => 'Cantidad de Llaves',
+                'text' => 'Cant. Llaves',
                 'number' => $params['llaves']['num_llaves'] ,
                 'theme' => 'gradient-success',
-                'icon' => 'far fa-flag',
+                'icon' => 'fas fa-key',
             ]) ?>
         </div>
         <div class="col-md-3">
             <?= InfoBox::widget([
-                'text' => 'Llaves con Salida',
+                'text' => 'Por fuera',
                 'number' => $params['llaves']['num_salida'],
                 'theme' => 'gradient-info',
-                'icon' => 'far fa-flag',
+                'icon' => 'fas fa-key',
             ]) ?>
         </div>
         <div class="col-md-6 ">
@@ -412,7 +409,7 @@ $this->registerJsFile('@web/js/home.js');
                                '.$params['llaves']['porcentaje_salida'].'% de llaves por fuera 
                               </small>',
                 'theme' => 'gradient-default',
-                'icon' => 'far fa-copy',
+                'icon' => 'fas fa-sign-out-alt',
             ]) ?>
         </div>
     </div>
