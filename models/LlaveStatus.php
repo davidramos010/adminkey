@@ -74,6 +74,16 @@ class LlaveStatus extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Registro]].
+     *
+     * @return \yii\db\ActiveQuery|LlaveQuery
+     */
+    public function getRegistro()
+    {
+        return $this->hasOne(Registro::className(), ['id' => 'id_registro']);
+    }
+
+    /**
      * {@inheritdoc}
      * @return LlaveStatusQuery the active query used by this AR class.
      */

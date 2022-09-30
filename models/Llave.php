@@ -37,6 +37,9 @@ class Llave extends \yii\db\ActiveRecord
     public $nombre_propietario = null;
     public $nomenclatura = null;
 
+    public $total = null;
+    public $salida = null;
+
     /**
      * {@inheritdoc}
      */
@@ -101,6 +104,10 @@ class Llave extends \yii\db\ActiveRecord
         return $this->hasMany(LlaveStatus::className(), ['id_llave' => 'id']);
     }
 
+    /**
+     * Ultimo estado de una llave
+     * @return \yii\db\ActiveQuery
+     */
     public function getLlaveLastStatus()
     {
         return $this->hasOne(LlaveStatus::className(), ['id_llave' => 'id'])->orderBy(['id'=>SORT_DESC]);
@@ -145,7 +152,10 @@ class Llave extends \yii\db\ActiveRecord
         return new LlaveQuery(get_called_class());
     }
 
-
+    /**
+     * @return array
+     * @throws \yii\db\Exception
+     */
     public static function getComunidadesDropdownList()
     {
         $query = "SELECT id, nombre FROM comunidad order by nombre";
@@ -155,7 +165,10 @@ class Llave extends \yii\db\ActiveRecord
         return ArrayHelper::map($result, 'id', 'nombre');
     }
 
-
+    /**
+     * @return array
+     * @throws \yii\db\Exception
+     */
     public static function getTipoLlaveDropdownList()
     {
         $query = "SELECT id, descripcion FROM tipo_llave order by descripcion";
@@ -165,6 +178,10 @@ class Llave extends \yii\db\ActiveRecord
         return ArrayHelper::map($result, 'id', 'descripcion');
     }
 
+    /**
+     * @return array
+     * @throws \yii\db\Exception
+     */
     public static function getUbicacionDropdownList()
     {
         $query = "SELECT id, CONCAT(tipo_almacen, ' ', descripcion_almacen) as descripcion_almacen FROM llave_ubicaciones order by descripcion_almacen ASC";
@@ -213,8 +230,54 @@ class Llave extends \yii\db\ActiveRecord
         $resultadosSalida = $query->createCommand($queryString)->queryAll();
         $numLlavesSalida = (int) count($resultadosSalida);
         $porcLlavesSalida = round((float) ((100/$numLlaves)*$numLlavesSalida),2);
+        $arrLlavesFecha[5] =  self::getLlavesStatusRangoFecha('S',5);
+        $arrLlavesFecha[10] = self::getLlavesStatusRangoFecha('S',10);
+        $arrLlavesFecha[15] = self::getLlavesStatusRangoFecha('S',15);
         // --------------------------
-        return ['num_llaves'=>$numLlaves,'porcentaje_salida'=>$porcLlavesSalida,'num_salida'=>$numLlavesSalida,'arr_salida'=>$resultadosSalida];
+        return ['num_llaves'=>$numLlaves,'porcentaje_salida'=>$porcLlavesSalida,'num_salida'=>$numLlavesSalida,'arr_salida'=>$resultadosSalida,'arrLlavesFecha'=>$arrLlavesFecha];
+    }
+
+    /**
+     * Consulta llaves con salidas de hace mas de 5,10 y 15 dias y sin devolución
+     * @param string $strStatus
+     * @param int $numDias
+     * @return array
+     */
+    public static function getLlavesStatusRangoFecha(string $strStatus = 'S' , int $numDias=15 ): array
+    {
+        $query = Yii::$app->db;
+        $fecha_actual = date("d-m-Y");
+
+        switch ($numDias){
+            case 5:
+                $strFechaConsultaIni = date("Y-m-d",strtotime($fecha_actual."- ".$numDias." days"));
+                $strFechaConsultaFin = date("Y-m-d",strtotime($fecha_actual."- ".($numDias+5)." days"));
+                break;
+
+            case 10:
+                $strFechaConsultaIni = date("Y-m-d",strtotime($fecha_actual."- ".($numDias+1)." days"));
+                $strFechaConsultaFin = date("Y-m-d",strtotime($fecha_actual."- ".($numDias+5)." days"));
+                break;
+
+            case 15:
+                $strFechaConsultaIni = date("Y-m-d",strtotime($fecha_actual."- ".$numDias." days"));
+                $strFechaConsultaFin = null;
+                break;
+
+        }
+        // ---------------------------
+        // Generar rangos
+        $strAddWere = (!empty($strFechaConsultaFin))? " fecha >='".$strFechaConsultaFin." 00:00:00' AND ":" ";
+
+        // ---------------------------
+        // Array de llaves con salida en el rango de fechas
+        $queryString = "
+            SELECT ls.id_llave ,ls.id AS lastid, ls.status,ls.fecha
+            FROM llave_status ls
+            INNER JOIN ( SELECT MAX(id) AS indice ,id_llave FROM llave_status GROUP BY id_llave  ) AS lsb ON ( lsb.indice = ls.id )
+            WHERE ls.status ='".$strStatus."' and  $strAddWere fecha <='".$strFechaConsultaIni." 23:00:00'; ";
+        $resultadosSalida = $query->createCommand($queryString)->queryAll();
+     return $resultadosSalida;
     }
 
 }

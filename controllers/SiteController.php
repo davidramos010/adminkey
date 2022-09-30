@@ -2,6 +2,7 @@
 namespace app\controllers;
 
 use app\models\Llave;
+use app\models\LlaveStatusSearch;
 use app\models\Perfiles;
 use app\models\PerfilesUsuario;
 use Yii;
@@ -92,8 +93,20 @@ class SiteController extends Controller
         // --------------------------------
         // Parametros para usuarios que ya iniciaron sesion
         if (Yii::$app->user->identity) {
+            $searchModelStatus = new LlaveStatusSearch();
             // Cantidad de llave y llaves prestadas
             $arrParam['llaves'] = Llave::getInfoDashboard();
+            // --------------------------------------------
+            // Lista de llaves prestadas
+            $searchModelStatus->status = 'S';
+            $arrParam['llavesDataProvider'][5] = (count($arrParam['llaves']['arrLlavesFecha'][5]))?$searchModelStatus->searchBetween([],5):null;
+            $arrParam['llavesDataProvider'][10] = (count($arrParam['llaves']['arrLlavesFecha'][10]))?$searchModelStatus->searchBetween([],10):null;
+            $arrParam['llavesDataProvider'][15] = (count($arrParam['llaves']['arrLlavesFecha'][15]))?$searchModelStatus->searchBetween([],15):null;
+            // --------------------------------------------
+            // Contador de llaves
+            $arrParam['llavesDataProvider']['cliente'] = $searchModelStatus->searchDataByCliente();
+            $arrParam['llavesDataProvider']['propietario'] = $searchModelStatus->searchDataByPropietario();
+
         }
 
         return $this->render('index',['params'=>$arrParam]);
