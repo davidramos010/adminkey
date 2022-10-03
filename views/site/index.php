@@ -5,9 +5,7 @@ use hail812\adminlte\widgets\InfoBox;
 use kartik\export\ExportMenu;
 use kartik\grid\GridView;
 
-$this->title = 'Starter Page';
-$this->params['breadcrumbs'] = [['label' => $this->title]];
-
+$this->title = 'Dashboard';
 $this->registerJsFile('@web/js/home.js');
 
 /* @var $this yii\web\View */

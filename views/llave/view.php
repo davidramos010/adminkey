@@ -36,62 +36,18 @@ $this->registerJsFile('@web/js/llave.js');
 
 ?>
 
-<div class="llave-view">
+<div class="llave-view" style="max-width: 960px">
     <h1><?= Html::encode($this->title) ?></h1>
-    <div class="col-md-6">
+    <!-- form start -->
+    <?= $this->render('_form', [
+        'model' => $model,'view'=>true
+    ]) ?>
+    <!-- form end -->
+
+    <div class="col-md-12">
         <!-- general form elements -->
         <div class="card card-primary">
-            <div class="card-header">
-                <h3 class="card-title">Llaves</h3>
-            </div>
             <!-- /.card-header -->
-            <!-- form start -->
-            <?= DetailView::widget([
-                'model' => $model,
-                'attributes' => [
-                    'id',
-                    [
-                        'attribute' => 'id_comunidad',
-                        'label' => 'Cliente',
-                        'format' => 'raw',
-                        'value' => function($model){
-                            return (isset($model->comunidad))?strtoupper($model->comunidad->nombre):'No Encontrado' ;
-                        }
-                    ],
-                    [
-                        'attribute' => 'id_tipo',
-                        'label' => 'Tipo',
-                        'format' => 'raw',
-                        'value' => function($model){
-                            return (isset($model->tipo))?strtoupper($model->tipo->descripcion):'No Encontrado' ;
-                        }
-                    ],
-                    [
-                        'attribute' => 'copia',
-                        'label' => 'Número de Copias',
-                    ],
-                    'codigo',
-                    'descripcion',
-                    'observacion',
-                    [
-                        'attribute' => 'activa',
-                        'label' => 'Estado',
-                        'format' => 'raw',
-                        'value' => function($model){
-                            return $model->activa ? 'Activo':'Inactivo';
-                        }
-                    ],
-                    [
-                        'attribute' => 'facturable',
-                        'label' => 'Facturable',
-                        'format' => 'raw',
-                        'value' => function($model){
-                            return $model->facturable ? 'Si':'No';
-                        }
-                    ],
-                ],
-            ]) ?>
-
             <div id="showTableBarcode" style=" max-width: 230px; max-height: 170px; aling-items: center; justify-content: center" class="border border-primary">
                 <table align="center"  style=" font-size: 10px; max-width: 200px; max-height: 170px;">
                     <tr> <td style=" text-align: center; height: 15px"><?= strtoupper(trim($model->comunidad->nomenclatura)) ?></td></tr>
@@ -113,7 +69,7 @@ $this->registerJsFile('@web/js/llave.js');
                         'method' => 'post',
                     ],
                 ]) ?>
-                <?= Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
                 <?= Html::a(Yii::t('app', 'Volver a listado'), ['index'], ['class' => 'btn btn-default ']) ?>
                 <?= Html::button('Imprimir Barras', [ 'class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { printDiv() })();' ]); ?>
             </div>

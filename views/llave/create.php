@@ -13,7 +13,7 @@ $this->registerJsFile('@web/js/llave.js');
 <div class="llave-create">
 
     <?= $this->render('_form', [
-        'model' => $model,
+        'model' => $model,'view'=>false,
     ]) ?>
 
 </div>

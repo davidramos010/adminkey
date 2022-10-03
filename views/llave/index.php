@@ -113,7 +113,7 @@ $this->title = 'Llaves';
                     [
                         'attribute' => 'observacion',
                         'label' => 'Observación',
-                        'headerOptions' => ['style' => 'width: 20%'],
+                        'headerOptions' => ['style' => 'width: 15%'],
                     ],
                     [
                         'attribute' => 'alarma',
@@ -124,7 +124,7 @@ $this->title = 'Llaves';
                         },
                         'format' => 'raw',
                         'filterType' => GridView::FILTER_SELECT2,
-                        'filter' => [ '1' => 'Si', '0' => 'No'],
+                        'filter' => ['1' => 'Si', '0' => 'No', ''=>'Todos'],
                         'filterWidgetOptions' => [
                             'theme' => Select2::THEME_BOOTSTRAP,
                             'size' => Select2::SMALL,
@@ -144,6 +144,25 @@ $this->title = 'Llaves';
                         'format' => 'raw',
                         'filterType' => GridView::FILTER_SELECT2,
                         'filter' => ['S' => 'Prestada', 'E' => 'Almacenada'],
+                        'filterWidgetOptions' => [
+                            'theme' => Select2::THEME_BOOTSTRAP,
+                            'size' => Select2::SMALL,
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                                'placeholder' => '',
+                            ]
+                        ],
+                    ],
+                    [
+                        'attribute' => 'activa',
+                        'label' => 'Activa',
+                        'headerOptions' => ['style' => 'width: 5%'],
+                        'value' => function ($model) {
+                            return ($model->activa==0)?'<span class="float-none badge bg-danger">Inactiva</span>':'<span class="float-none badge bg-success">Aactiva</span>' ;
+                        },
+                        'format' => 'raw',
+                        'filterType' => GridView::FILTER_SELECT2,
+                        'filter' => ['1' => 'Si', '0' => 'No', ''=>'Todos'],
                         'filterWidgetOptions' => [
                             'theme' => Select2::THEME_BOOTSTRAP,
                             'size' => Select2::SMALL,
@@ -191,6 +210,7 @@ $this->title = 'Llaves';
                                 );
                                 return $viewButton;
                             },
+
                             'delete' => function ($url, $model) {
                                 $viewButton = null;
                                 if($model['activa']){
@@ -200,6 +220,8 @@ $this->title = 'Llaves';
                                         [
                                             'title' => Yii::t('common', 'Eliminar'),
                                             'data' => [
+                                                'confirm' => Yii::t('app', '¿Estás segura de que quieres eliminar este registro?'),
+                                                'method' => 'post',
                                                 'tooltip' => true,
                                                 'pjax' => 0
                                             ]

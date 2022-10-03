@@ -26,7 +26,7 @@ class LlaveController extends Controller
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
-                        'delete' => ['POST'],
+                        //'delete' => ['POST'],
                     ],
                 ],
             ]
@@ -123,9 +123,16 @@ class LlaveController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->validate()) {
+            $model->codigo = $model->nomenclatura.'-'.$model->codigo;
+            $model->codigo .= ($model->copia>1)?'.1':'';
+            $model->save();
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
+
+        $model->nomenclatura = $model->comunidad->nomenclatura;
+        $model->codigo = str_replace($model->nomenclatura.'-','',$model->codigo);
 
         return $this->render('update', [
             'model' => $model,
@@ -141,7 +148,9 @@ class LlaveController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $objLlave = Llave::findOne($id);
+        $objLlave->activa =0;
+        $objLlave->save();
 
         return $this->redirect(['index']);
     }
