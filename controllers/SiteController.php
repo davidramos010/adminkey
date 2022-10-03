@@ -128,7 +128,7 @@ class SiteController extends Controller
             $objPerfil = PerfilesUsuario::find()->where(['id_user'=>Yii::$app->user->identity->id ])->one();
             if(!empty($objPerfil)){
                 if($objPerfil->id_perfil==1 && (int) $model->perfil==1 ){
-                    return $this->render('index');
+                    return $this->render('index.php');
                 }
                 if($objPerfil->id_perfil==2 && (int) $model->perfil==2){
                     return $this->redirect('index.php?r=registro/create');
