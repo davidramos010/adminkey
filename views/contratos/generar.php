@@ -64,30 +64,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <?= $form->field($model_log, 'observacion')->textArea(['id' => 'observaciones', 'class' => 'form-control', 'style' => 'width:100%', 'disabled'=>!empty($model_log->copia_firma) ])->label('Notas/Observaciones') ?>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6" >
-                                <?= $form->field($model_log, 'copia_firma',['options' => ['class' => 'file-uploader']])->widget(FileInput::class, [
-                                    'language' => 'es',
-                                    'options' => [
-                                        'id' => 'copia_firma',
-                                        'multiple'=>false
-                                    ],
-                                    'pluginOptions' => array_merge(
-                                        [
-                                            'showBrowse' => true,
-                                            'showCaption' => true,
-                                            'showRemove' => false,
-                                            'showUpload' => false,
-                                            'showPreview' => false,
-                                            'initialCaption'=>"Seleccione el documento firmado",
-                                            'allowedFileTypes' => ['png','jpg','pdf','jpeg','gif','pdf','office','doc', 'docx'],
-                                            'msgInvalidFileType' => 'El tipo de archivo de: {name} no es correcto. Sólo se admiten archivos del tipo "docx,pdf,imagenes".'
-
-                                        ])
-                                ])->label('Contrato Firmado')   ?>
-                            </div>
-                        </div>
-                        <?php ActiveForm::end(); ?>
                         <br/>
                         <div class="card card-primary">
                             <div class="card-header">
@@ -244,6 +220,32 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </table>
                             </div>
                         </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-md-6" >
+                                <?php $strLabel = (empty($model_log->copia_firma))?'':' * Ya existe un documento adjunto'; ?>
+                                <?= $form->field($model_log, 'copia_firma',['options' => ['class' => 'file-uploader']])->widget(FileInput::class, [
+                                    'language' => 'es',
+                                    'options' => [
+                                        'id' => 'copia_firma',
+                                        'multiple'=>false
+                                    ],
+                                    'pluginOptions' => array_merge(
+                                        [
+                                            'showBrowse' => true,
+                                            'showCaption' => true,
+                                            'showRemove' => false,
+                                            'showUpload' => false,
+                                            'showPreview' => false,
+                                            'initialCaption'=>"Seleccione el documento firmado",
+                                            'allowedFileTypes' => ['png','jpg','pdf','jpeg','gif','pdf','office','doc', 'docx'],
+                                            'msgInvalidFileType' => 'El tipo de archivo de: {name} no es correcto. Sólo se admiten archivos del tipo "docx,pdf,imagenes".'
+
+                                        ])
+                                ])->label( 'Contrato Firmado '.$strLabel )   ?>
+                            </div>
+                        </div>
+                        <?php ActiveForm::end(); ?>
                         <div  style="padding-top: 15px" >
                             <?php if(!$model_log->copia_firma && empty($model_log->copia_firma)): ?>
                                 <?= Html::button('Guardar Contrato', [ 'class' => 'btn btn-success', 'onclick' => '(function ( $event ) { sendForm() })();' ]); ?>
@@ -254,7 +256,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <?= Html::a('<i class="fas fa-download"></i> Descargar Copia' , $url, ['title'=>'Descargar Copia', 'target' => '_blank', 'class' => 'btn btn-info download_link', 'data' => ['tooltip' => true, 'pjax' => 0 ]]);  ?>
                             <?php endif; ?>
                             <?php if(!$model_log->isNewRecord): ?>
-                                <?= Html::a('<i class="fas fa-download"></i> Generar Contrato' , ['descargar-contrato', 'id' => $model_log->id], ['title'=>'Generar Contrato', 'target' => '_blank', 'class' => 'btn btn-info download_link', 'data' => ['tooltip' => true, 'pjax' => 0 ]]);  ?>
+                                <?= Html::a('<i class="fas fa-download"></i> Generar Contrato' , ['descargar-contrato', 'id' => $model_log->id], ['title'=>'Generar Contrato', 'target' => '_blank', 'class' => 'btn btn-warning download_link', 'data' => ['tooltip' => true, 'pjax' => 0 ]]);  ?>
                             <?php endif; ?>
                         </div>
                     </div>

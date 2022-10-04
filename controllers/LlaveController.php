@@ -5,6 +5,8 @@ namespace app\controllers;
 use app\models\Comunidad;
 use app\models\Llave;
 use app\models\LlaveSearch;
+use app\models\LlaveStatus;
+use app\models\util;
 use yii\helpers\UnsetArrayValue;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -72,6 +74,19 @@ class LlaveController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
+     * Displays a single Llave model.
+     * @param int $id ID
+     * @return string
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionInfo($id)
+    {
+        return $this->render('info', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -171,7 +186,9 @@ class LlaveController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-
+    /**
+     * @return false|string
+     */
     public function actionAjaxFindCode()
     {
         $arrParam = $this->request->post();
@@ -182,5 +199,30 @@ class LlaveController extends Controller
         $arrInfo['id'] = (string) $model->getNext();
         $arrInfo['nomenclatura'] = $objComunidad->nomenclatura;
         return json_encode( $arrInfo);
+    }
+
+    /**
+     * buscar movimientos
+     * @return false|string
+     */
+    public function actionAjaxFindStatus():string
+    {
+        $arrParam   = $this->request->post();
+        $numIdLlave = $arrParam['numIdLlave'];
+        $strTableTr = "";
+        $arrStatus = LlaveStatus::find()->where(['id_llave'=>$numIdLlave])->orderBy('id DESC')->all();
+        if(count($arrStatus)){
+            foreach ($arrStatus as $modelStatus){
+                $modelStatus->status = ($modelStatus->status=='S')?'<span class="float-none badge bg-danger">Salida</span>':'<span class="float-none badge bg-success">Entrada</span>';
+
+                $strTableTr .= "<tr>";
+                $strTableTr .= "<td >".$modelStatus->status."</td>";
+                $strTableTr .= "<td style='font-size: 13px; font-weight: bold'>". util::getDateTimeFormatedSqlToUser($modelStatus->fecha)  ."</td>";
+                $strTableTr .= "<td>".$modelStatus->registro->comerciales->nombre."</td>";
+                $strTableTr .= "<td style='font-size: 12px;'>".$modelStatus->registro->observacion."</td></tr>";
+            }
+        }
+
+        return $strTableTr;
     }
 }

@@ -126,7 +126,6 @@ function getInfoLlaveCard(infoLlaveId){
             $('#ll_alarma').html(alarma);
             $('#ll_ubicacion').html(infoLlave['ubicacion']);
             $('#ll_estado').html(estado);
-
         }
     });
     return true;
@@ -175,5 +174,4 @@ function fnReloadSeleccionLlaves(){
             selectChk(parseInt(key));
         });
     }
-
 }

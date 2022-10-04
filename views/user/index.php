@@ -53,6 +53,7 @@ $this->title = 'Usuarios';
                            'label' => 'User',
                            'format' => 'raw',
                            'headerOptions' => array('style' => 'width: 10%'),
+                           'enableSorting'=>false,
                        ],
                        [
                            'attribute' => 'nombres',

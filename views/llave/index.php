@@ -7,17 +7,22 @@ use yii\helpers\Url;
 use kartik\grid\GridView;
 use kartik\icons\Icon;
 use kartik\widgets\Select2;
-
+use yii\bootstrap\Modal;
 use yii\widgets\Pjax;
-
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\LlaveSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Llaves';
+$this->registerJsFile('@web/js/llave.js');
 ?>
 <div class="llave-index">
+
+    <!-- form start -->
+    <?= $this->render('info') ?>
+    <!-- form end -->
+
     <div class="ribbon_wrap" >
         <div class="row">
             <div class="col-md-10">
@@ -53,6 +58,7 @@ $this->title = 'Llaves';
                         'attribute' => 'nombre_propietario',
                         'label' => 'Propietario',
                         'headerOptions' => ['style' => 'width: 15%'],
+                        'enableSorting'=>false,
                         'format' => 'raw',
                         'value' => function($model){
                             return (isset($model->nombre_propietario))?strtoupper($model->nombre_propietario):'' ;
@@ -62,6 +68,7 @@ $this->title = 'Llaves';
                         'attribute' => 'id_comunidad',
                         'label' => 'Cliente',
                         'headerOptions' => ['style' => 'width: 15%'],
+                        'enableSorting'=>false,
                         'format' => 'raw',
                         'value' => function($model){
                             return (isset($model->comunidad))?strtoupper($model->comunidad->nombre):'No Encontrado' ;
@@ -71,6 +78,7 @@ $this->title = 'Llaves';
                         'attribute' => 'id_tipo',
                         'label' => 'Tipo Llave',
                         'headerOptions' => ['style' => 'width: 5%'],
+                        'enableSorting'=>false,
                         'value' => function ($model) {
                             $strLabel = (isset($model->tipo))?strtoupper($model->tipo->descripcion):'No Encontrado' ;
                             switch ($model->id_tipo){
@@ -104,21 +112,25 @@ $this->title = 'Llaves';
                         'attribute' => 'codigo',
                         'label' => 'Código',
                         'headerOptions' => ['style' => 'width: 5%'],
+                        'enableSorting'=>false,
                     ],
                     [
                         'attribute' => 'descripcion',
                         'label' => 'Descripción',
                         'headerOptions' => ['style' => 'width: 20%'],
+                        'enableSorting'=>false,
                     ],
                     [
                         'attribute' => 'observacion',
                         'label' => 'Observación',
                         'headerOptions' => ['style' => 'width: 15%'],
+                        'enableSorting'=>false,
                     ],
                     [
                         'attribute' => 'alarma',
                         'label' => 'Alarma',
                         'headerOptions' => ['style' => 'width: 5%'],
+                        'enableSorting'=>false,
                         'value' => function ($model) {
                             return ($model->alarma==1)?'<span class="float-none badge bg-success">SI</span>':'<span class="float-none badge bg-danger">NO</span>' ;
                         },
@@ -138,6 +150,7 @@ $this->title = 'Llaves';
                         'attribute' => 'llaveLastStatus',
                         'label' => 'Estado',
                         'headerOptions' => ['style' => 'width: 5%'],
+                        'enableSorting'=>false,
                         'value' => function ($model) {
                             return ($model->llaveLastStatus=='S')?'<span class="float-none badge bg-danger">Prestada</span>':'<span class="float-none badge bg-success">Almacenada</span>' ;
                         },
@@ -157,6 +170,7 @@ $this->title = 'Llaves';
                         'attribute' => 'activa',
                         'label' => 'Activa',
                         'headerOptions' => ['style' => 'width: 5%'],
+                        'enableSorting'=>false,
                         'value' => function ($model) {
                             return ($model->activa==0)?'<span class="float-none badge bg-danger">Inactiva</span>':'<span class="float-none badge bg-success">Aactiva</span>' ;
                         },
@@ -173,6 +187,16 @@ $this->title = 'Llaves';
                         ],
                     ],
                     [
+                        'attribute' => 'id',
+                        'label' => 'Info',
+                        'headerOptions' => ['style' => 'width: 5%'],
+                        'enableSorting'=>false,
+                        'format' => 'raw',
+                        'value' => function($model){
+                            return '<button type="button" class="btn btn-outline-info btn-block btn-sm" data-toggle="modal" data-target="#modal-default" onclick="getInfoLlaveCard('.$model->id.')"><i class="fas fa-info-circle"></i></button> ';
+                        }
+                    ],
+                    [
                         'class' => '\kartik\grid\ActionColumn',
                         'header' => '',
                         'headerOptions' => array('style' => 'width: 10%'),
@@ -182,6 +206,7 @@ $this->title = 'Llaves';
                         'vAlign'=>GridView::ALIGN_MIDDLE,
                         'hAlign'=>GridView::ALIGN_LEFT,
                         'buttons' => [
+
                             'view' => function ($url, $model) {
                                 $viewButton = Html::a(
                                     Html::button('<i class="fas fa-eye"></i>', ['class' => 'btn btn-primary btn-xs'] ),
