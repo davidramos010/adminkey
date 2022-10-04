@@ -25,7 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php
                     echo Html::ul([
                         'Use los filtros para identificar un contrato.',
-                        'El campo CREADO filtra contratos con fecha de creación del día seleccionado.'
+                        'El campo CREADO filtra contratos con fecha de creación del día seleccionado.',
+                        'El contrato se puede anular solo si no se ha subido una copia firmada.',
                     ], ['encode' => false]);
                     ?>
                 </div>
@@ -95,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'format' => 'raw',
                         'filterType' => GridView::FILTER_SELECT2,
-                        'filter' => [ '1' => 'ACTIVO', '0' => 'INACTIVO'],
+                        'filter' => ['1' => 'ACTIVO', '0' => 'INACTIVO', '' => 'Todos'],
                         'filterWidgetOptions' => [
                             'theme' => Select2::THEME_BOOTSTRAP,
                             'size' => Select2::SMALL,
@@ -107,6 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     [
                         'attribute' => 'fecha',
+                        'label' => Yii::t('app', 'Creado'),
                         'headerOptions' => ['style' => 'width: 15%'],
                         'value' => function ($model) {
                             return (isset($model->fecha))? util::getDateTimeFormatedSqlToUser($model->fecha) :'' ;
@@ -124,7 +126,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'form-control',
                             'placeholder' => Yii::t('app', 'Fecha Creación'),
                         ],
-                        'label' => Yii::t('app', 'Creado'),
                         'headerOptions' => ['class' => 'col-xs-2'],
                         'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; ']
                     ],
@@ -133,6 +134,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'label' => 'Documento Firmado',
                         'headerOptions' => ['style' => 'width: 5%'],
                         'format' => 'raw',
+                        'enableSorting'=>false,
                         'value' => function($model){
                             $strReturn = "";
                             if(!empty($model->copia_firma)){

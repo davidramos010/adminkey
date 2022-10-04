@@ -9,15 +9,18 @@ use kartik\icons\Icon;
 use kartik\widgets\Select2;
 
 use yii\widgets\Pjax;
-
-
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\LlaveSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+$this->registerJsFile('@web/js/llave.js');
 $this->title = 'Reporte de Llaves';
 ?>
 <div class="llave-index">
+    <!-- form start -->
+    <?= $this->render('info') ?>
+    <!-- form end -->
+
     <div class="ribbon_wrap" >
         <div class="row">
             <div class="col-md-10">
@@ -43,6 +46,7 @@ $this->title = 'Reporte de Llaves';
                         'attribute' => 'nombre_propietario',
                         'label' => 'Propietario',
                         'headerOptions' => ['style' => 'width: 15%'],
+                        'enableSorting'=>false,
                         'format' => 'raw',
                         'value' => function($model){
                             return (isset($model->nombre_propietario))?strtoupper($model->nombre_propietario):'' ;
@@ -52,6 +56,7 @@ $this->title = 'Reporte de Llaves';
                         'attribute' => 'id_comunidad',
                         'label' => 'Cliente',
                         'headerOptions' => ['style' => 'width: 15%'],
+                        'enableSorting'=>false,
                         'format' => 'raw',
                         'value' => function($model){
                             return (isset($model->comunidad))?strtoupper($model->comunidad->nombre):'No Encontrado' ;
@@ -61,6 +66,7 @@ $this->title = 'Reporte de Llaves';
                         'attribute' => 'id_tipo',
                         'label' => 'Tipo Llave',
                         'headerOptions' => ['style' => 'width: 5%'],
+                        'enableSorting'=>false,
                         'value' => function ($model) {
                             $strLabel = (isset($model->tipo))?strtoupper($model->tipo->descripcion):'No Encontrado' ;
                             switch ($model->id_tipo){
@@ -94,21 +100,25 @@ $this->title = 'Reporte de Llaves';
                         'attribute' => 'codigo',
                         'label' => 'Código',
                         'headerOptions' => ['style' => 'width: 5%'],
+                        'enableSorting'=>false,
                     ],
                     [
                         'attribute' => 'descripcion',
                         'label' => 'Descripción',
                         'headerOptions' => ['style' => 'width: 20%'],
+                        'enableSorting'=>false,
                     ],
                     [
                         'attribute' => 'observacion',
                         'label' => 'Observación',
                         'headerOptions' => ['style' => 'width: 20%'],
+                        'enableSorting'=>false,
                     ],
                     [
                         'attribute' => 'alarma',
                         'label' => 'Alarma',
                         'headerOptions' => ['style' => 'width: 5%'],
+                        'enableSorting'=>false,
                         'value' => function ($model) {
 
                             switch ($model->alarma){
@@ -141,6 +151,7 @@ $this->title = 'Reporte de Llaves';
                         'attribute' => 'facturable',
                         'label' => 'Facturable',
                         'headerOptions' => ['style' => 'width: 5%'],
+                        'enableSorting'=>false,
                         'value' => function ($model) {
 
                             switch ($model->facturable){
@@ -173,6 +184,7 @@ $this->title = 'Reporte de Llaves';
                         'attribute' => 'llaveLastStatus',
                         'label' => 'Estado',
                         'headerOptions' => ['style' => 'width: 5%'],
+                        'enableSorting'=>false,
                         'value' => function ($model) {
                             return ($model->llaveLastStatus=='S')?'<span class="float-none badge bg-danger">Prestada</span>':'<span class="float-none badge bg-success">Almacenada</span>' ;
                         },
@@ -187,6 +199,17 @@ $this->title = 'Reporte de Llaves';
                                 'placeholder' => 'Todos',
                             ]
                         ],
+                    ],
+                    [
+                        'attribute' => 'id',
+                        'label' => 'Info',
+                        'filter'=>false,
+                        'enableSorting'=>false,
+                        'headerOptions' => ['style' => 'width: 5%'],
+                        'format' => 'raw',
+                        'value' => function($model){
+                            return '<button type="button" class="btn btn-outline-info btn-block btn-sm" data-toggle="modal" data-target="#modal-default" onclick="getInfoLlaveCard('.$model->id.')"><i class="fas fa-info-circle"></i></button> ';
+                        }
                     ],
                 ]; ?>
                 <?= // Renders a export dropdown menu

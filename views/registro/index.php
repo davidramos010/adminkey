@@ -53,6 +53,7 @@ $this->registerJsFile('@web/js/registro.js');
                         'attribute' => 'id_user',
                         'label' => 'Usuario Sistema',
                         'format' => 'raw',
+                        'enableSorting'=>false,
                         'value' => function($model){
                             return (isset($model->user))?strtoupper($model->user->username):'No Encontrado' ;
                         }
@@ -61,6 +62,7 @@ $this->registerJsFile('@web/js/registro.js');
                         'attribute' => 'comercial',
                         'label' => 'Empresa/Proveedor',
                         'format' => 'raw',
+                        'enableSorting'=>false,
                         'value' => function($model){
                             return (isset($model->comercial))?strtoupper($model->comercial):'' ;
                         }
@@ -69,6 +71,7 @@ $this->registerJsFile('@web/js/registro.js');
                         'attribute' => 'llaves',
                         'label' => 'Llaves',
                         'format' => 'raw',
+                        'enableSorting'=>false,
                         'value' => function($model){
                             $strLLaves = '';
                             $strLLaves .= (!empty($model->llaves_s))?'<span class="float-none badge bg-danger">'.strtoupper($model->llaves_s).'</span>':'';
@@ -81,6 +84,7 @@ $this->registerJsFile('@web/js/registro.js');
                         'attribute' => 'propietarios',
                         'label' => 'Propietario',
                         'format' => 'raw',
+                        'enableSorting'=>false,
                         'value' => function($model){
                             return (isset($model->propietarios))?strtoupper($model->propietarios):'' ;
                         }
@@ -89,6 +93,7 @@ $this->registerJsFile('@web/js/registro.js');
                         'attribute' => 'clientes',
                         'label' => 'Cliente',
                         'format' => 'raw',
+                        'enableSorting'=>false,
                         'value' => function($model){
                             return (isset($model->clientes))?strtoupper($model->clientes):'' ;
                         }
@@ -96,6 +101,7 @@ $this->registerJsFile('@web/js/registro.js');
                     [
                         'attribute' => 'salida',
                         'headerOptions' => ['style' => 'width: 10%'],
+                        'enableSorting'=>false,
                         'value' => function ($model) {
                             return (isset($model->salida))? util::getDateTimeFormatedSqlToUser($model->salida) :'' ;
                         },
@@ -120,6 +126,7 @@ $this->registerJsFile('@web/js/registro.js');
                     [
                         'attribute' => 'entrada',
                         'headerOptions' => ['style' => 'width: 20%'],
+                        'enableSorting'=>false,
                         'value' => function ($model) {
                             return (isset($model->entrada))? util::getDateTimeFormatedSqlToUser($model->entrada) :'' ;
                         },
@@ -143,6 +150,7 @@ $this->registerJsFile('@web/js/registro.js');
                         'attribute' => 'id',
                         'label' => 'Soporte',
                         'headerOptions' => ['style' => 'width: 5%'],
+                        'enableSorting'=>false,
                         'format' => 'raw',
                         'value' => function($model){
                             return Html::button('<i class="fas fa-download"></i> Descargar', ['id' => 'btn_registrar', 'class' => 'btn btn-primary float-left btn-sm', 'onclick' => '(function ( $event ) { generatePdfRegistro( '.$model->id.' ) })();', 'style'=>'margin-right: 5px;']);
