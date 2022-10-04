@@ -26,7 +26,7 @@ return [
         ]
     ],
     'index_perfil' => [
-        1 => 'index',
+        1 => 'index.php',
         2 => 'index.php?r=registro/create'
     ],
     'bsDependencyEnabled' => false, // this will not load Bootstrap CSS and JS for all Krajee extensions
