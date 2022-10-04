@@ -7,88 +7,95 @@ use kartik\grid\GridView;
 
 $this->title = 'Dashboard';
 $this->registerJsFile('@web/js/home.js');
+$this->registerJsFile('@web/js/llave.js');
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $params array */
 
+$gridColumns = [
+    [
+        'attribute' => 'id_llave',
+        'label' => 'Código',
+        'headerOptions' => ['style' => 'width: 10%; '],
+        'format' => 'raw',
+        'enableSorting' => false,
+        'value' => function($model){
+            return '<button type="button" class="btn btn-outline-info btn-block btn-sm" data-toggle="modal" data-target="#modal-default" onclick="getInfoLlaveCard('.$model->id_llave.')">'.$model->llave->codigo.'</button>';
+        }
+    ],
+    [
+        'attribute' => 'id_llave',
+        'label' => 'Descripción',
+        'headerOptions' => ['style' => 'width: 20%'],
+        'format' => 'raw',
+        'enableSorting' => false,
+        'value' => function($model){
+            return $model->llave->descripcion;
+        }
+    ],
+    [
+        'attribute' => 'id_llave',
+        'label' => 'Cliente',
+        'headerOptions' => ['style' => 'width: 20%'],
+        'format' => 'raw',
+        'enableSorting' => false,
+        'value' => function($model){
+            return (isset($model->llave->comunidad) && !empty($model->llave->comunidad))?$model->llave->comunidad->nombre:'';
+        }
+    ],
+    [
+        'attribute' => 'id_llave',
+        'label' => 'Dirección',
+        'headerOptions' => ['style' => 'width: 25%'],
+        'format' => 'raw',
+        'enableSorting' => false,
+        'value' => function($model){
+            return (isset($model->llave->comunidad) && !empty($model->llave->comunidad))?$model->llave->comunidad->poblacion.' '.$model->llave->comunidad->direccion:'';
+        }
+    ],
+    [
+        'attribute' => 'id_llave',
+        'label' => 'Responsable',
+        'headerOptions' => ['style' => 'width: 15%'],
+        'format' => 'raw',
+        'enableSorting' => false,
+        'value' => function($model){
+            return (isset($model->registro->comerciales) && !empty($model->registro->comerciales))?$model->registro->comerciales->nombre:'';
+        }
+    ],
+    [
+        'attribute' => 'id_llave',
+        'label' => 'Teléfono',
+        'headerOptions' => ['style' => 'width: 15%'],
+        'format' => 'raw',
+        'enableSorting' => false,
+        'value' => function($model){
+            return (isset($model->registro->comerciales) && !empty($model->registro->comerciales))?$model->registro->comerciales->telefono.' '.$model->registro->comerciales->movil:'';
+        }
+    ],
+    [
+        'attribute' => 'fecha',
+        'label' => 'Fecha Salida',
+        'headerOptions' => ['style' => 'width: 10%'],
+        'format' => 'raw',
+        'enableSorting' => false,
+        'value' => function($model){
+            return $model->fecha ;
+        }
+    ],
+];
+
 ?>
 <div class="pull-right" style="max-width: 960px">
 
+    <!-- form start -->
+    <?= $this->render('../llave/info') ?>
+    <!-- form end -->
+
     <?php if(count($params['llaves']['arrLlavesFecha'][5])): ?>
         <?php
-        $gridColumns = [
-            [
-                'attribute' => 'id_llave',
-                'label' => 'Código',
-                'headerOptions' => ['style' => 'width: 10%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return $model->llave->codigo;
-                }
-            ],
-            [
-                'attribute' => 'id_llave',
-                'label' => 'Descripción',
-                'headerOptions' => ['style' => 'width: 20%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return $model->llave->descripcion;
-                }
-            ],
-            [
-                'attribute' => 'id_llave',
-                'label' => 'Cliente',
-                'headerOptions' => ['style' => 'width: 20%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return (isset($model->llave->comunidad) && !empty($model->llave->comunidad))?$model->llave->comunidad->nombre:'';
-                }
-            ],
-            [
-                'attribute' => 'id_llave',
-                'label' => 'Dirección',
-                'headerOptions' => ['style' => 'width: 25%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return (isset($model->llave->comunidad) && !empty($model->llave->comunidad))?$model->llave->comunidad->poblacion.' '.$model->llave->comunidad->direccion:'';
-                }
-            ],
-            [
-                'attribute' => 'id_llave',
-                'label' => 'Responsable',
-                'headerOptions' => ['style' => 'width: 15%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return (isset($model->registro->comerciales) && !empty($model->registro->comerciales))?$model->registro->comerciales->nombre:'';
-                }
-            ],
-            [
-                'attribute' => 'id_llave',
-                'label' => 'Teléfono',
-                'headerOptions' => ['style' => 'width: 15%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return (isset($model->registro->comerciales) && !empty($model->registro->comerciales))?$model->registro->comerciales->telefono.' '.$model->registro->comerciales->movil:'';
-                }
-            ],
-            [
-                'attribute' => 'fecha',
-                'label' => 'Fecha Salida',
-                'headerOptions' => ['style' => 'width: 10%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return $model->fecha ;
-                }
-            ],
-        ];
+
         $addHtmlGrid = " <button id='BtnGridView5' type='button' class='btn btn-outline-primary btn-xs' onclick='fnToogleSeeKey(5)'> Ver + </button> ";
         $addHtmlGrid .= '<div id="GridViewExport5" style="display: none">'.ExportMenu::widget([
             'dataProvider' => $params['llavesDataProvider'][5],
@@ -137,78 +144,6 @@ $this->registerJsFile('@web/js/home.js');
 
     <?php if(count($params['llaves']['arrLlavesFecha'][10])): ?>
         <?php
-            $gridColumns = [
-            [
-                'attribute' => 'id_llave',
-                'label' => 'Código',
-                'headerOptions' => ['style' => 'width: 10%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return $model->llave->codigo;
-                }
-            ],
-            [
-                'attribute' => 'id_llave',
-                'label' => 'Descripción',
-                'headerOptions' => ['style' => 'width: 20%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return $model->llave->descripcion;
-                }
-            ],
-            [
-                'attribute' => 'id_llave',
-                'label' => 'Cliente',
-                'headerOptions' => ['style' => 'width: 20%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return (isset($model->llave->comunidad) && !empty($model->llave->comunidad))?$model->llave->comunidad->nombre:'';
-                }
-            ],
-            [
-                'attribute' => 'id_llave',
-                'label' => 'Dirección',
-                'headerOptions' => ['style' => 'width: 25%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return (isset($model->llave->comunidad) && !empty($model->llave->comunidad))?$model->llave->comunidad->poblacion.' '.$model->llave->comunidad->direccion:'';
-                }
-            ],
-            [
-                'attribute' => 'id_llave',
-                'label' => 'Responsable',
-                'headerOptions' => ['style' => 'width: 15%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return (isset($model->registro->comerciales) && !empty($model->registro->comerciales))?$model->registro->comerciales->nombre:'';
-                }
-            ],
-            [
-                'attribute' => 'id_llave',
-                'label' => 'Teléfono',
-                'headerOptions' => ['style' => 'width: 15%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return (isset($model->registro->comerciales) && !empty($model->registro->comerciales))?$model->registro->comerciales->telefono.' '.$model->registro->comerciales->movil:'';
-                }
-            ],
-            [
-                'attribute' => 'fecha',
-                'label' => 'Fecha Salida',
-                'headerOptions' => ['style' => 'width: 10%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return $model->fecha ;
-                }
-            ],
-        ];
             $addHtmlGrid = " <button id='BtnGridView10' type='button' class='btn btn-outline-warning btn-xs' onclick='fnToogleSeeKey(10)'> Ver + </button> ";
             $addHtmlGrid .= '<div id="GridViewExport10" style="display: none">'.ExportMenu::widget([
             'dataProvider' => $params['llavesDataProvider'][10],
@@ -241,7 +176,13 @@ $this->registerJsFile('@web/js/home.js');
                 'formatter' => array('class' => 'yii\i18n\Formatter', 'nullDisplay' => ''),
                 'columns' => $gridColumns,
                 'summary'=>'',
-                'options'=>[ 'style'=>'font-size:12px;display:none']
+                'options'=>[ 'style'=>'font-size:12px;display:none'],
+                'rowOptions' => function ($model) {
+                    return [
+                        'data-js-url' => $model->id,
+                        'class' => 'row-grid cursor-pointer ' ,
+                    ];
+                },
             ]);
         ?>
         <div class="row">
@@ -257,78 +198,6 @@ $this->registerJsFile('@web/js/home.js');
     <?php endif; ?>
     <?php if(count($params['llaves']['arrLlavesFecha'][15])): ?>
         <?php
-        $gridColumns = [
-            [
-                'attribute' => 'id_llave',
-                'label' => 'Código',
-                'headerOptions' => ['style' => 'width: 10%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return $model->llave->codigo;
-                }
-            ],
-            [
-                'attribute' => 'id_llave',
-                'label' => 'Descripción',
-                'headerOptions' => ['style' => 'width: 20%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return $model->llave->descripcion;
-                }
-            ],
-            [
-                'attribute' => 'id_llave',
-                'label' => 'Cliente',
-                'headerOptions' => ['style' => 'width: 20%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return (isset($model->llave->comunidad) && !empty($model->llave->comunidad))?$model->llave->comunidad->nombre:'';
-                }
-            ],
-            [
-                'attribute' => 'id_llave',
-                'label' => 'Dirección',
-                'headerOptions' => ['style' => 'width: 25%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return (isset($model->llave->comunidad) && !empty($model->llave->comunidad))?$model->llave->comunidad->poblacion.' '.$model->llave->comunidad->direccion:'';
-                }
-            ],
-            [
-                'attribute' => 'id_llave',
-                'label' => 'Responsable',
-                'headerOptions' => ['style' => 'width: 15%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return (isset($model->registro->comerciales) && !empty($model->registro->comerciales))?$model->registro->comerciales->nombre:'';
-                }
-            ],
-            [
-                'attribute' => 'id_llave',
-                'label' => 'Teléfono',
-                'headerOptions' => ['style' => 'width: 15%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return (isset($model->registro->comerciales) && !empty($model->registro->comerciales))?$model->registro->comerciales->telefono.' '.$model->registro->comerciales->movil:'';
-                }
-            ],
-            [
-                'attribute' => 'fecha',
-                'label' => 'Fecha Salida',
-                'headerOptions' => ['style' => 'width: 10%'],
-                'format' => 'raw',
-                'enableSorting' => false,
-                'value' => function($model){
-                    return $model->fecha ;
-                }
-            ],
-        ];
         $addHtmlGrid = " <button id='BtnGridView15' type='button' class='btn btn-outline-danger btn-xs' onclick='fnToogleSeeKey(15)'> Ver + </button> ";
         // Renders a export dropdown menu
         $addHtmlGrid .= '<div id="GridViewExport15" style="display: none">'.ExportMenu::widget([
@@ -623,11 +492,13 @@ $this->registerJsFile('@web/js/home.js');
 
             echo $addHtmlGrid;
             ?>
-
         </div>
         <!-- /.card-body -->
     </div>
-
-
-
 </div>
+<?php $this->registerJs(
+    "$(document).on('dblclick', '[data-js-url]', function () {
+         alert($(this).data('js-url'));
+        }); "
+);
+?>
