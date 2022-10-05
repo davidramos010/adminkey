@@ -7,7 +7,6 @@ use app\models\Perfiles;
 use app\models\PerfilesUsuario;
 use Yii;
 use yii\filters\AccessControl;
-use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
@@ -15,7 +14,7 @@ use app\models\ContactForm;
 use app\widgets\Alert;
 
 
-class SiteController extends Controller
+class SiteController extends BaseController
 {
     /**
      * {@inheritdoc}
@@ -196,6 +195,25 @@ class SiteController extends Controller
         } else {
             throw new \yii\web\NotFoundHttpException("{$file} is not found!");
         }
+    }
 
+    /**
+     * @param $local
+     * @return Response
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionChangeLang($local)
+    {
+        $available_locales = ['es', 'ca', 'en' ];
+        if (!in_array($local, $available_locales)) {
+            throw new \yii\web\BadRequestHttpException();
+        }
+
+        $session = Yii::$app->session;
+        !$session->isActive ? $session->open() : $session->close();
+        $session->set('language', $local);
+        $session->close();
+
+        return isset($_SERVER['HTTP_REFERER']) ? $this->redirect($_SERVER['HTTP_REFERER']) : $this->redirect(Yii::$app->homeUrl);
     }
 }
