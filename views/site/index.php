@@ -96,7 +96,7 @@ $gridColumns = [
     <?php if(count($params['llaves']['arrLlavesFecha'][5])): ?>
         <?php
 
-        $addHtmlGrid = " <button id='BtnGridView5' type='button' class='btn btn-outline-primary btn-xs' onclick='fnToogleSeeKey(5)'> Ver + </button> ";
+        $addHtmlGrid = " <button id='BtnGridView5' type='button' class='btn btn-outline-primary btn-xs' onclick='fnToogleSeeKey(5)'> ".Yii::t('common', 'Ver')." + </button> ";
         $addHtmlGrid .= '<div id="GridViewExport5" style="display: none">'.ExportMenu::widget([
             'dataProvider' => $params['llavesDataProvider'][5],
             'columns' => $gridColumns,
@@ -135,8 +135,8 @@ $gridColumns = [
         <div class="row">
             <div class="col-lg-12" >
                 <?= Callout::widget([
-                    'head' => '<i class="fas fa-info"></i>  Importante!',
-                    'body' => 'En este momento existen  <strong> '.count($params['llaves']['arrLlavesFecha'][5]).' </strong>  llaves que se han prestado hace más de 5 días y de las cuales no se ha registrado su ingreso.'.$addHtmlGrid
+                    'head' => '<i class="fas fa-info"></i> &nbsp; '.Yii::t('app', 'importante').' !',
+                    'body' => Yii::t('app', 'indexBody5a').' <strong> '.count($params['llaves']['arrLlavesFecha'][5]).' </strong>'.Yii::t('app', 'indexBody5b').' '.$addHtmlGrid
                 ]) ?>
             </div>
         </div>
@@ -144,7 +144,7 @@ $gridColumns = [
 
     <?php if(count($params['llaves']['arrLlavesFecha'][10])): ?>
         <?php
-            $addHtmlGrid = " <button id='BtnGridView10' type='button' class='btn btn-outline-warning btn-xs' onclick='fnToogleSeeKey(10)'> Ver + </button> ";
+            $addHtmlGrid = " <button id='BtnGridView10' type='button' class='btn btn-outline-warning btn-xs' onclick='fnToogleSeeKey(10)'> ".Yii::t('common', 'Ver')." + </button> ";
             $addHtmlGrid .= '<div id="GridViewExport10" style="display: none">'.ExportMenu::widget([
             'dataProvider' => $params['llavesDataProvider'][10],
             'columns' => $gridColumns,
@@ -189,8 +189,8 @@ $gridColumns = [
             <div class="col-lg-12">
                 <?= Callout::widget([
                     'type' => 'warning',
-                    'head' => '<i class="fas fa-info-circle"></i> Iniciar gestiones para recuperación de llaves - Alerta !',
-                    'body' => 'En este momento existen  <strong> '.count($params['llaves']['arrLlavesFecha'][10]).' </strong>  llaves que se han prestado hace más de 10 días y de las cuales no se ha registrado su ingreso.'.$addHtmlGrid
+                    'head' => '<i class="fas fa-info-circle"></i> '.Yii::t('app', 'arrLlavesFecha10').'!',
+                    'body' => Yii::t('app', 'indexBody10a').'<strong> '.count($params['llaves']['arrLlavesFecha'][10]).' </strong>'.Yii::t('app', 'indexBody10b').' '.$addHtmlGrid
                 ]) ?>
             </div>
         </div>
@@ -198,7 +198,7 @@ $gridColumns = [
     <?php endif; ?>
     <?php if(count($params['llaves']['arrLlavesFecha'][15])): ?>
         <?php
-        $addHtmlGrid = " <button id='BtnGridView15' type='button' class='btn btn-outline-danger btn-xs' onclick='fnToogleSeeKey(15)'> Ver + </button> ";
+        $addHtmlGrid = " <button id='BtnGridView15' type='button' class='btn btn-outline-danger btn-xs' onclick='fnToogleSeeKey(15)'> ".Yii::t('common', 'Ver')." + </button> ";
         // Renders a export dropdown menu
         $addHtmlGrid .= '<div id="GridViewExport15" style="display: none">'.ExportMenu::widget([
             'dataProvider' => $params['llavesDataProvider'][15],
@@ -239,8 +239,8 @@ $gridColumns = [
             <div class="col-lg-12">
                 <?= Callout::widget([
                     'type' => 'danger',
-                    'head' => '<i class="fas fa-times-circle"></i> Iniciar proceso de recuperación de llaves - Urgente!!',
-                    'body' => 'En este momento existen  <strong> '.count($params['llaves']['arrLlavesFecha'][15]).' </strong>  llaves que se han prestado hace más de 15 días y de las cuales no se ha registrado su ingreso.'.$addHtmlGrid
+                    'head' => '<i class="fas fa-times-circle"></i> '.Yii::t('app', 'arrLlavesFecha15'),
+                    'body' => Yii::t('app', 'indexBody15a').'<strong> '.count($params['llaves']['arrLlavesFecha'][15]).' </strong>  '.Yii::t('app', 'indexBody15b').$addHtmlGrid
                 ]) ?>
             </div>
         </div>
@@ -249,7 +249,7 @@ $gridColumns = [
     <div class="row">
         <div class="col-md-3">
             <?= InfoBox::widget([
-                'text' => 'Cant. Llaves',
+                'text' => Yii::t('app', 'Cant. Llaves'),
                 'number' => $params['llaves']['num_llaves'] ,
                 'theme' => 'gradient-success',
                 'icon' => 'fas fa-key',
@@ -257,7 +257,7 @@ $gridColumns = [
         </div>
         <div class="col-md-3">
             <?= InfoBox::widget([
-                'text' => 'Por fuera',
+                'text' => Yii::t('app', 'Llaves por fuera'),
                 'number' => $params['llaves']['num_salida'],
                 'theme' => 'gradient-info',
                 'icon' => 'fas fa-key',
@@ -268,12 +268,12 @@ $gridColumns = [
             <?= InfoBox::widget([
                 'text' => '<div class="progress">
                                 <div class="progress-bar bg-primary progress-bar-striped" role="progressbar" aria-valuenow="'.$numPorcentaje.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$numPorcentaje.'%">
-                                 <span class="sr-only">'.$numPorcentaje.'% de llaves por fuera</span>
+                                 <span class="sr-only">'.$numPorcentaje.' '.Yii::t('app', 'indexLlavesFuera').'</span>
                                 </div>
                               </div>
                               ',
                 'number' => '<small>
-                               '.$params['llaves']['porcentaje_salida'].'% de llaves por fuera 
+                               '.$params['llaves']['porcentaje_salida'].' '.Yii::t('app', 'indexLlavesFuera').'
                               </small>',
                 'theme' => 'gradient-default',
                 'icon' => 'fas fa-sign-out-alt',
@@ -283,7 +283,7 @@ $gridColumns = [
 
     <div class="col-md-12 card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Lista de Clientes, por cantidad de llaves y llaves por fuera.</h3>
+            <h3 class="card-title"><?= Yii::t('app', 'indexTituloCliente') ?></h3>
         </div>
         <div class="card-body">
 
@@ -291,7 +291,7 @@ $gridColumns = [
                 $gridColumns = [
                     [
                         'attribute' => 'descripcion',
-                        'label' => 'Clientes',
+                        'label' => Yii::t('app', 'Cliente'),
                         'headerOptions' => ['style' => 'width: 40%'],
                         'format' => 'raw',
                         'enableSorting' => false,
@@ -301,7 +301,7 @@ $gridColumns = [
                     ],
                     [
                         'attribute' => 'total',
-                        'label' => 'Cant. llaves',
+                        'label' => Yii::t('app', 'Cant. llaves'),
                         'headerOptions' => ['style' => 'width: 15%'],
                         'format' => 'raw',
                         'enableSorting' => false,
@@ -311,7 +311,7 @@ $gridColumns = [
                     ],
                     [
                         'attribute' => 'salida',
-                        'label' => 'Llaves por fuera',
+                        'label' => Yii::t('app', 'Llaves por fuera'),
                         'headerOptions' => ['style' => 'width: 15%'],
                         'format' => 'raw',
                         'enableSorting' => false,
@@ -321,7 +321,7 @@ $gridColumns = [
                     ],
                     [
                         'attribute' => 'salida',
-                        'label' => '% de llaves por fuera',
+                        'label' => '% '.Yii::t('app', 'Llaves por fuera'),
                         'headerOptions' => ['style' => 'width: 30%'],
                         'format' => 'raw',
                         'enableSorting' => false,
@@ -345,7 +345,7 @@ $gridColumns = [
                             return "<div class='progress progress-sm'>
                                  <div class='progress-bar bg-".$strColor."' role='progressbar' aria-valuenow='".$numPrc."' aria-valuemin=0 aria-valuemax=100 style='width: ".$numPrc."%'></div>
                                 </div>
-                                <small>".$numPrc."% por fuera </small>";
+                                <small>".$numPrc."% ".Yii::t('app', 'Llaves por fuera')."</small>";
                         }
                     ],
                 ];
@@ -391,7 +391,7 @@ $gridColumns = [
 
     <div class="col-md-12 card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Lista de Propietarios, por cantidad de llaves y llaves por fuera.</h3>
+            <h3 class="card-title"><?= Yii::t('app', 'indexTituloPropietario') ?></h3>
         </div>
         <div class="card-body">
 
@@ -399,7 +399,7 @@ $gridColumns = [
             $gridColumns = [
                 [
                     'attribute' => 'descripcion',
-                    'label' => 'Propietario',
+                    'label' => Yii::t('app', 'Propietario'),
                     'headerOptions' => ['style' => 'width: 40%'],
                     'format' => 'raw',
                     'enableSorting' => false,
@@ -409,7 +409,7 @@ $gridColumns = [
                 ],
                 [
                     'attribute' => 'total',
-                    'label' => 'Cant. llaves',
+                    'label' => Yii::t('app', 'Cant. llaves'),
                     'headerOptions' => ['style' => 'width: 15%'],
                     'format' => 'raw',
                     'enableSorting' => false,
@@ -419,7 +419,7 @@ $gridColumns = [
                 ],
                 [
                     'attribute' => 'salida',
-                    'label' => 'Llaves por fuera',
+                    'label' => Yii::t('app', 'Llaves por fuera'),
                     'headerOptions' => ['style' => 'width: 15%'],
                     'format' => 'raw',
                     'enableSorting' => false,
@@ -429,7 +429,7 @@ $gridColumns = [
                 ],
                 [
                     'attribute' => 'salida',
-                    'label' => '% de llaves por fuera',
+                    'label' => '% '.Yii::t('app', 'Llaves por fuera'),
                     'headerOptions' => ['style' => 'width: 30%'],
                     'format' => 'raw',
                     'enableSorting' => false,
@@ -452,7 +452,7 @@ $gridColumns = [
                         return "<div class='progress progress-sm'>
                                  <div class='progress-bar bg-".$strColor."' role='progressbar' aria-valuenow='".$numPrc."' aria-valuemin=0 aria-valuemax=100 style='width: ".$numPrc."%'></div>
                                 </div>
-                                <small>".$numPrc."% por fuera </small>";
+                                <small>".$numPrc."% ".Yii::t('app', 'Llaves por fuera')." </small>";
                     }
                 ],
 
@@ -497,8 +497,8 @@ $gridColumns = [
     </div>
 </div>
 <?php $this->registerJs(
-    "$(document).on('dblclick', '[data-js-url]', function () {
-         alert($(this).data('js-url'));
+    "$(document).on('onclick', '[data-js-url]', function () {
+         //alert($(this).data('js-url'));
         }); "
 );
 ?>

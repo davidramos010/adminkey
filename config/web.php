@@ -1,24 +1,31 @@
 <?php
 
 use kartik\mpdf\Pdf;
-
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'debug', 'gii'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
         /*'@plantillas' => "@web/plantillas"*/
     ],
+    'language' => 'es',
     'components' => [
         'i18n' => [
             'translations' => [
                 '*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
+                    //'basePath' => '@app/messages', // if advanced application, set @frontend/messages
+                    'sourceLanguage' => 'es',
+                    'fileMap' => [
+                        'app' => 'app.php',
+                        'common' => 'common.php',
+                        'yii' => 'yii.php',
+                    ],
                 ],
             ],
         ],
@@ -31,7 +38,8 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'app\models\User',
-            'enableAutoLogin' => true,
+            'enableAutoLogin' => false,
+            'enableSession' => true,
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',

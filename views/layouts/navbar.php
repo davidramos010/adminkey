@@ -19,24 +19,16 @@ use yii\helpers\Html;
     <ul class="navbar-nav ml-auto">
 
         <!-- Notifications Dropdown Menu -->
-        <li class="nav-item dropdown">
-            <a class="nav-link" data-toggle="dropdown" href="#">
-                <i class="far fa-bell"></i>
-                <span class="badge badge-warning navbar-badge">15</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <span class="dropdown-header">15 Notificaciones</span>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-envelope mr-2"></i> 4 Mensajes
-                    <span class="float-right text-muted text-sm">4 mins</span>
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-file mr-2"></i> 3 Reportes
-                    <span class="float-right text-muted text-sm">2 dias</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer">Ver Todo</a>
+        <li class="nav-item pull-right">
+            <div class="btn-group">
+                <button type="button" class="btn btn-group-sm dropdown-toggle " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                    <?= Yii::t('app','Lang') ?><span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu small" style="width: 50px">
+                    <li class="small" ><a href="index.php?r=site/change-lang&local=en">ENGLISH</a></li>
+                    <li class="small" ><a href="index.php?r=site/change-lang&local=ca">CATALAN</a></li>
+                    <li class="small" ><a href="index.php?r=site/change-lang&local=es">CALTELLANO</a></li>
+                </ul>
             </div>
         </li>
         <li class="nav-item">
