@@ -71,6 +71,12 @@ class SiteController extends BaseController
             $model = new LoginForm();
             if ($model->load(Yii::$app->request->post())) {
                 if($model->login()){
+
+                    $session = Yii::$app->session;
+                    !$session->isActive ? $session->open() : $session->close();
+                    $session->set('language', 'es');
+                    $session->close();
+
                     $objPerfil = PerfilesUsuario::find()->where(['id_user'=>Yii::$app->user->identity->id ])->one();
                     $strReturn = PerfilesUsuario::getIndexPerfil($objPerfil,$model);
                     if(!empty($strReturn)){
@@ -126,6 +132,7 @@ class SiteController extends BaseController
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             $objPerfil = PerfilesUsuario::find()->where(['id_user'=>Yii::$app->user->identity->id ])->one();
             if(!empty($objPerfil)){
+
                 if($objPerfil->id_perfil==1 && (int) $model->perfil==1 ){
                     return $this->redirect('index.php');
                 }
