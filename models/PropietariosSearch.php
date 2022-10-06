@@ -76,6 +76,8 @@ class PropietariosSearch extends Propietarios
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'observaciones', $this->observaciones]);
 
+        $query->orderBy('nombre_propietario,nombre_representante  ASC');
+
         return $dataProvider;
     }
 }

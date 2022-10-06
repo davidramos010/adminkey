@@ -65,6 +65,8 @@ class ComercialesSearch extends Comerciales
             ->andFilterWhere(['like', 'telefono', $this->telefono])
             ->andFilterWhere(['like', 'contacto', $this->contacto]);
 
+        $query->orderBy('nombre ASC');
+
         return $dataProvider;
     }
 }

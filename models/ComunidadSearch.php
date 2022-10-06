@@ -70,7 +70,7 @@ class ComunidadSearch extends Comunidad
             ->andFilterWhere(['like', 'poblacion', $this->poblacion])
             ->andFilterWhere(['like', 'nomenclatura', $this->nomenclatura]);
 
-        $query->orderBy(['nombre'=>SORT_DESC]);
+        $query->orderBy(['nombre'=>SORT_ASC]);
 
         return $dataProvider;
     }
