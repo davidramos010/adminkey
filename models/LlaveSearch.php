@@ -18,7 +18,7 @@ class LlaveSearch extends Llave
     {
         return [
             [['id', 'id_comunidad', 'id_tipo', 'copia', 'activa','alarma','id_propietario','facturable'], 'integer'],
-            [['codigo', 'descripcion', 'observacion','codigo_alarma','llaveLastStatus','nombre_propietario'], 'safe'],
+            [['codigo', 'descripcion', 'observacion','codigo_alarma','llaveLastStatus','nombre_propietario','cliente_comunidad'], 'safe'],
         ];
     }
 
@@ -45,6 +45,7 @@ class LlaveSearch extends Llave
         // add conditions that should always apply here
         $query->select([
             "ll.*",
+            "cc.nombre as cliente_comunidad",
             "ls.status as llaveLastStatus",
             "(CASE
                 WHEN pp.nombre_propietario IS NOT NULL THEN pp.nombre_propietario
@@ -59,6 +60,7 @@ class LlaveSearch extends Llave
         )');
 
         $query->leftJoin('propietarios pp','ll.id_propietario = pp.id');
+        $query->leftJoin('comunidad cc','ll.id_comunidad = cc.id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -80,12 +82,12 @@ class LlaveSearch extends Llave
             'll.copia' => $this->copia,
             'll.activa' =>  $this->activa,
             'll.alarma' =>  $this->alarma,
-            'll.facturable' =>  $this->facturable,
-
+            'll.facturable' =>  $this->facturable
         ]);
 
         $query->andFilterWhere(['like', 'll.codigo', $this->codigo])
             ->andFilterWhere(['like', 'll.descripcion', $this->descripcion])
+            ->andFilterWhere(['like', 'cc.nombre', $this->cliente_comunidad])
             ->andFilterWhere(['like', 'll.observacion', $this->observacion]);
 
         // ======================================================
