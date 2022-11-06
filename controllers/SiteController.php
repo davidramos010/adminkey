@@ -132,7 +132,6 @@ class SiteController extends BaseController
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             $objPerfil = PerfilesUsuario::find()->where(['id_user'=>Yii::$app->user->identity->id ])->one();
             if(!empty($objPerfil)){
-
                 if($objPerfil->id_perfil==1 && (int) $model->perfil==1 ){
                     return $this->redirect('index.php');
                 }

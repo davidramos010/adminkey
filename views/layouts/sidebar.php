@@ -33,13 +33,20 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
                         'label' => 'Administrador',
                         'icon' => 'tachometer-alt',
                         'items' => [
-                            ['label' => 'Cliente', 'url' => ['comunidad/index'], 'iconStyle' => 'far'],
-                            ['label' => 'Proveedor', 'url' => ['comerciales/index'], 'iconStyle' => 'far'],
-                            ['label' => 'Llaves', 'url' => ['llave/index'], 'iconStyle' => 'far'],
-                            ['label' => 'Tipo Llave', 'url' => ['tipo-llave/index'], 'iconStyle' => 'far'],
                             ['label' => 'Usuarios', 'url' => ['user/index'], 'iconStyle' => 'far'],
-                            ['label' => 'Propietarios', 'url' => ['propietarios/index'], 'iconStyle' => 'far'],
+                            ['label' => 'Tipo Llave', 'url' => ['tipo-llave/index'], 'iconStyle' => 'far'],
+                            ['label' => 'Llaves', 'url' => ['llave/index'], 'iconStyle' => 'far'],
                             ['label' => 'Contratos', 'url' => ['contratos/index'], 'iconStyle' => 'far'],
+                        ],
+                        'visible' => ((int) Yii::$app->user->identity->perfiluser->id_perfil==1)
+                    ],
+                    [
+                        'label' => 'Clientes/Proveedores',
+                        'icon' => 'tachometer-alt',
+                        'items' => [
+                            ['label' => 'Cliente', 'url' => ['comunidad/index'], 'iconStyle' => 'far'],
+                            ['label' => 'Propietarios', 'url' => ['propietarios/index'], 'iconStyle' => 'far'],
+                            ['label' => 'Proveedor', 'url' => ['comerciales/index'], 'iconStyle' => 'far'],
                         ],
                         'visible' => ((int) Yii::$app->user->identity->perfiluser->id_perfil==1)
                     ],
