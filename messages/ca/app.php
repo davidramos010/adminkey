@@ -26,13 +26,13 @@ return [
     'indexBody15a' => 'En aquest moment existeixen',
     'indexBody15b' => ' claus que s\'han prestat fa més de 15 dies i de les quals no s\'ha registrat el seu ingrés.',
 
-    'indexLlavesFuera' => '% de claus per fora',
-    'indexTituloCliente' => 'Llista de Clients, per quantitat de claus i claus per fora.',
-    'indexTituloPropietario' => 'Llista de Propietaris, per quantitat de claus i claus per fora.',
+    'indexLlavesFuera' => '% de claus lliurades',
+    'indexTituloCliente' => 'Llista de Clients, per quantitat de claus a Dipòsit i claus per Lliurades.',
+    'indexTituloPropietario' => 'Llista de Propietaris, per quantitat de claus a Dipòsit i claus Lliurades.',
 
     'Cliente' => 'Client',
-    'Cant. llaves' => 'Cant. claus',
-    'Llaves por fuera' => 'Claus per fora',
+    'Cant. llaves' => 'Claus en Dipòsit',
+    'Llaves por fuera' => 'Claus Lliurades',
     'Propietario' => 'Propietari',
 
     'arrLlavesFecha15'=> 'Iniciar procés de recuperació de claus - Urgent!!',

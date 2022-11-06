@@ -17,7 +17,7 @@ $gridColumns = [
     [
         'attribute' => 'id_llave',
         'label' => 'Código',
-        'headerOptions' => ['style' => 'width: 10%; '],
+        'headerOptions' => ['style' => 'width: 5%; '],
         'format' => 'raw',
         'enableSorting' => false,
         'value' => function($model){
@@ -27,7 +27,7 @@ $gridColumns = [
     [
         'attribute' => 'id_llave',
         'label' => 'Descripción',
-        'headerOptions' => ['style' => 'width: 20%'],
+        'headerOptions' => ['style' => 'width: 15%'],
         'format' => 'raw',
         'enableSorting' => false,
         'value' => function($model){
@@ -37,7 +37,7 @@ $gridColumns = [
     [
         'attribute' => 'id_llave',
         'label' => 'Cliente',
-        'headerOptions' => ['style' => 'width: 20%'],
+        'headerOptions' => ['style' => 'width: 15%'],
         'format' => 'raw',
         'enableSorting' => false,
         'value' => function($model){
@@ -47,7 +47,7 @@ $gridColumns = [
     [
         'attribute' => 'id_llave',
         'label' => 'Dirección',
-        'headerOptions' => ['style' => 'width: 25%'],
+        'headerOptions' => ['style' => 'width: 20%'],
         'format' => 'raw',
         'enableSorting' => false,
         'value' => function($model){
@@ -77,7 +77,7 @@ $gridColumns = [
     [
         'attribute' => 'fecha',
         'label' => 'Fecha Salida',
-        'headerOptions' => ['style' => 'width: 10%'],
+        'headerOptions' => ['style' => 'width: 15%'],
         'format' => 'raw',
         'enableSorting' => false,
         'value' => function($model){
@@ -87,7 +87,7 @@ $gridColumns = [
 ];
 
 ?>
-<div class="pull-right" style="max-width: 960px">
+<div class="pull-right" >
 
     <!-- form start -->
     <?= $this->render('../llave/info') ?>
