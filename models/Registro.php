@@ -215,45 +215,32 @@ class Registro extends \yii\db\ActiveRecord
             }
         }
 
-        $strHtmlHeader = " <div class=\"row\">
-                              <div class=\"col-12\">
-                                <h2 class=\"page-header\">
-                                  <i class=\"fas fa-globe\"></i> ".Yii::$app->params['empresa']."
-                                  <small class=\"float-right\"> ".date('d/m/Y H:i:s')." </small>
-                                </h2>
-                              </div>
-                              <!-- /.col -->
-                            </div><!-- title row -->
-                            <!-- info row -->
+        $strHtmlHeader = " <!-- info row -->
                             <div class=\"row invoice-info\">
                               <div class=\"col-12 invoice-col\">
                                 <div class=\"table-responsive\">
                                   <table class=\"table\">
-                                    <tr>
-                                      <td style=\"width:50%\">Administrador</td>
-                                      <td>Cliente</td>
-                                    </tr>
+                                   <tr>
+                                     <td width='50%'><h3><address>".Yii::$app->params['empresa']."</address></h3></td>
+                                     <td width='50%' align='right'><small class=\"float-right\"> ".date('d/m/Y H:i:s')." </small></td>
+                                   </tr>
                                     <tr>
                                       <td>
                                         <address>
-                                          <strong>".Yii::$app->params['empresa']."</strong><br>
-                                          ".Yii::$app->params['direccion']."<br>
+                                          ".Yii::$app->params['direccion']." 
                                           ".Yii::$app->params['poblacion']."<br>
-                                          Teléfono: ".Yii::$app->params['telefono']."<br>
-                                          Movíl: ".Yii::$app->params['movil']."<br>
-                                          Email: ".Yii::$app->params['email']."
+                                          Email: ".Yii::$app->params['email']."<br>
+                                          Teléfono: ".Yii::$app->params['telefono']."&nbsp;&nbsp;
+                                          Movíl: ".Yii::$app->params['movil']."&nbsp;&nbsp;
                                         </address>
                                       </td>
-                                      <td>
-                                        <address>
-                                          <strong>".$objComercial->nombre."</strong><br>
-                                          ".$objComercial->direccion."<br>
-                                          ".$objComercial->cod_postal." ".$objComercial->poblacion." <br>
-                                          Teléfono: ".$objComercial->telefono."<br>
-                                          Movíl: ".$objComercial->movil."<br>
-                                          Email: ".$objComercial->email."
-                                        </address>
-                                      </td>
+                                        <td align='right'>
+                                            <div class=\"col-sm-4 invoice-col\">
+                                               <b>ID</b> #".str_pad($objRegistro->id, 6, "0", STR_PAD_LEFT)."<br>
+                                               Usuario: ".$objRegistro->user->userInfo->nombres." ".$objRegistro->user->userInfo->apellidos." <br>
+                                               Fecha Registro: ".$objRegistro->getFechaRegistro()."<br>
+                                            </div>
+                                        </td>
                                     </tr>
                                   </table>
                                 </div>
@@ -290,11 +277,28 @@ class Registro extends \yii\db\ActiveRecord
                           <div class=\"col-12\">
                              <table class=\"table table-striped\">
                                 <tr>
+                                  <td>
+                                    <address>Responsable</address>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td colspan='2'>
+                                    <address>
+                                      <strong>".$objComercial->nombre."</strong><br>
+                                      ".$objComercial->direccion."&nbsp;&nbsp;
+                                      ".$objComercial->cod_postal."&nbsp;&nbsp;".$objComercial->poblacion." <br>
+                                      Email: ".$objComercial->email."&nbsp;&nbsp;
+                                      Teléfono: ".$objComercial->telefono."&nbsp;&nbsp;
+                                      Movíl: ".$objComercial->movil."<br>
+                                    </address>
+                                  </td>
+                                </tr>
+                                <tr>
                                     <td style=\"width:60%\">
                                         <div class=\"col-sm-4 invoice-col\">
-                                           <b>ID</b> #".str_pad($objRegistro->id, 6, "0", STR_PAD_LEFT)."<br>
-                                           <b>Usuario:</b> ".$objRegistro->user->userInfo->nombres." ".$objRegistro->user->userInfo->apellidos." <br>
-                                           <b>Fecha Registro:</b> ".$objRegistro->getFechaRegistro()."<br>
+                                           <b>Persona Responsable:</b> ".$objRegistro->user->userInfo->nombres." ".$objRegistro->user->userInfo->apellidos." <br>
+                                           <b>Identificación:</b> NIE Y4424475V<br>
+                                           <b>Movíl:</b> 123456789<br>
                                         </div>
                                     </td>
                                     <td style=\"width:40%; align-content: center; text-align: center  \">
