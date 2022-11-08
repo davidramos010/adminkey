@@ -35,9 +35,6 @@ use yii\widgets\ActiveForm;
             <?php $form = ActiveForm::begin(); ?>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-6 " >
-                        <?= $form->field($model, 'id_propietario')->dropDownList(Llave::getPropietariosDropdownList() , ['class'=>'form-control','prompt' => 'Seleccione Uno', 'readonly'=>$view ])->label('Propietario'); ?>
-                    </div>
                     <div class="col-md-3 " >
                         <?= $form->field($model, 'id_tipo')->dropDownList(Llave::getTipoLlaveDropdownList() , ['class'=>'form-control', 'prompt' => 'Seleccione Uno', 'readonly'=>$view  ])->label('Tipo'); ?>
                     </div>
@@ -56,8 +53,17 @@ use yii\widgets\ActiveForm;
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-md-1 " >
+                        <?= $form->field($model, 'id_propietario')->widget(SwitchInput::class, ['id'=>'propietario_chk','pluginOptions'=>['id'=>'propietario_chk','size'=>'small','onText'=>'SI','offText'=>'NO'],'pluginEvents' => ["switchChange.bootstrapSwitch" => "function(item) { if($(item.currentTarget).is(':checked')){ $('#id_propietario').val('').show(300,''); }else{ $('#id_propietario').val('').hide(300, '');} }" ]])->label('Propietario') ; ?>
+                    </div>
                     <div class="col-md-6 " >
-                        <?= $form->field($model, 'id_llave_ubicacion')->dropDownList(Llave::getUbicacionDropdownList() , ['class'=>'form-control', 'prompt' => 'Seleccione Uno', 'readonly'=>$view  ])->label('Ubicación'); ?>
+                        <?= $form->field($model, 'id_propietario')->dropDownList(Llave::getPropietariosDropdownList() , ['id'=>'id_propietario','class'=>'form-control','prompt' => 'Seleccione Uno', 'readonly'=>$view, 'style'=>'display:none' ])->label('Propietario'); ?>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6 " >
+                        <?= $form->field($model, 'id_llave_ubicacion')->dropDownList(Llave::getUbicacionDropdownList() , ['class'=>'form-control', 'prompt' => 'Seleccione Uno', 'readonly'=>$view  ])->label('Ubicación Almacenamiento'); ?>
                     </div>
                 </div>
                 <div class="row">
