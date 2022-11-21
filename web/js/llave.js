@@ -1,4 +1,26 @@
 /**
+ *
+ */
+var n = null;
+function fnTipoLlaveSelected(){
+    let idTipoSelect = $('#llave-id_tipo').val();
+    let url = '/index.php?r=llave/ajax-find-attributes';
+
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        type: 'POST',
+        data: {
+            "numIdTipoLlave": idTipoSelect,
+        },
+        success: function (data) {
+            
+        }
+    });
+
+}
+
+/**
  * Consultar detalles de movimientos
  * @param id
  */

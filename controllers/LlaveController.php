@@ -6,6 +6,7 @@ use app\models\Comunidad;
 use app\models\Llave;
 use app\models\LlaveSearch;
 use app\models\LlaveStatus;
+use app\models\TipoLlave;
 use app\models\util;
 use yii\helpers\UnsetArrayValue;
 use yii\web\Controller;
@@ -79,19 +80,6 @@ class LlaveController extends Controller
     }
 
     /**
-     * Displays a single Llave model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionInfo($id)
-    {
-        return $this->render('info', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
      * Creates a new Llave model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
@@ -99,7 +87,6 @@ class LlaveController extends Controller
     public function actionCreate()
     {
         $model = new Llave();
-
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->validate()) {
                 $model->codigo = $strCodBase = $model->nomenclatura.'-'.$model->codigo;
@@ -214,7 +201,6 @@ class LlaveController extends Controller
         if(count($arrStatus)){
             foreach ($arrStatus as $modelStatus){
                 $modelStatus->status = ($modelStatus->status=='S')?'<span class="float-none badge bg-danger">Salida</span>':'<span class="float-none badge bg-success">Entrada</span>';
-
                 $strTableTr .= "<tr>";
                 $strTableTr .= "<td >".$modelStatus->status."</td>";
                 $strTableTr .= "<td style='font-size: 13px; font-weight: bold'>". util::getDateTimeFormatedSqlToUser($modelStatus->fecha)  ."</td>";
@@ -224,5 +210,17 @@ class LlaveController extends Controller
         }
 
         return $strTableTr;
+    }
+
+    /**
+     * Funcion que retorna los atributos de una tipo de llave
+     * @return false|string
+     */
+    public function actionAjaxFindAttributes()
+    {
+        $arrParam = $this->request->post();
+        $numTipoLlave = (int) $arrParam['numIdTipoLlave'];
+        $objTipoLLave = TipoLlave::findOne(['id'=>$numTipoLlave]);
+        return !empty($objTipoLLave)? json_encode( $objTipoLLave->getAttributes() ):'';
     }
 }

@@ -10,6 +10,8 @@ use Yii;
  * @property int $id
  * @property string|null $codigo
  * @property string|null $descripcion
+ * @property int $comunidad
+ * @property int $propietario
  *
  * @property Llave[] $llaves
  */
@@ -32,6 +34,7 @@ class TipoLlave extends \yii\db\ActiveRecord
             [['codigo'], 'string', 'max' => 2],
             [['descripcion'], 'string', 'max' => 255],
             [['codigo'], 'unique'],
+            [['comunidad','propietario'], 'integer'],
         ];
     }
 
@@ -44,6 +47,8 @@ class TipoLlave extends \yii\db\ActiveRecord
             'id' => 'ID',
             'codigo' => 'Codigo',
             'descripcion' => 'Descripcion',
+            'comunidad' => 'Comunidad',
+            'propietario' => 'Propietario',
         ];
     }
 
