@@ -1,20 +1,20 @@
 /**
  *
  */
+var n = null;
 function fnTipoLlaveSelected(){
     let idTipoSelect = $('#llave-id_tipo').val();
-    alert(idTipoSelect);
-
     let url = '/index.php?r=llave/ajax-find-attributes';
 
     $.ajax({
         url: url,
+        dataType: 'json',
         type: 'POST',
         data: {
             "numIdTipoLlave": idTipoSelect,
         },
         success: function (data) {
-            console.log(data);
+            
         }
     });
 

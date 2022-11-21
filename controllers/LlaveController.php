@@ -201,7 +201,6 @@ class LlaveController extends Controller
         if(count($arrStatus)){
             foreach ($arrStatus as $modelStatus){
                 $modelStatus->status = ($modelStatus->status=='S')?'<span class="float-none badge bg-danger">Salida</span>':'<span class="float-none badge bg-success">Entrada</span>';
-
                 $strTableTr .= "<tr>";
                 $strTableTr .= "<td >".$modelStatus->status."</td>";
                 $strTableTr .= "<td style='font-size: 13px; font-weight: bold'>". util::getDateTimeFormatedSqlToUser($modelStatus->fecha)  ."</td>";
@@ -220,8 +219,8 @@ class LlaveController extends Controller
     public function actionAjaxFindAttributes()
     {
         $arrParam = $this->request->post();
-        $numTipoLlave = $arrParam['numIdTipoLlave'];
+        $numTipoLlave = (int) $arrParam['numIdTipoLlave'];
         $objTipoLLave = TipoLlave::findOne(['id'=>$numTipoLlave]);
-        return json_encode( $objTipoLLave);
+        return !empty($objTipoLLave)? json_encode( $objTipoLLave->getAttributes() ):'';
     }
 }
