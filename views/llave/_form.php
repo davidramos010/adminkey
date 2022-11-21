@@ -36,7 +36,7 @@ use yii\widgets\ActiveForm;
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3 " >
-                        <?= $form->field($model, 'id_tipo')->dropDownList(Llave::getTipoLlaveDropdownList() , ['class'=>'form-control', 'prompt' => 'Seleccione Uno', 'readonly'=>$view  ])->label('Tipo'); ?>
+                        <?= $form->field($model, 'id_tipo')->dropDownList(Llave::getTipoLlaveDropdownList() , ['onchange'=>'fnTipoLlaveSelected()','class'=>'form-control', 'prompt' => 'Seleccione Uno', 'readonly'=>$view  ])->label('Tipo'); ?>
                     </div>
                 </div>
                 <div class="row">
