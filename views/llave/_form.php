@@ -39,7 +39,7 @@ use yii\widgets\ActiveForm;
                         <?= $form->field($model, 'id_tipo')->dropDownList(Llave::getTipoLlaveDropdownList() , ['onchange'=>'fnTipoLlaveSelected()','class'=>'form-control', 'prompt' => 'Seleccione Uno', 'readonly'=>$view  ])->label('Tipo'); ?>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" id="divFormComunidad" style="display: none">
                     <div class="col-md-6 " >
                         <?= $form->field($model, 'id_comunidad')->dropDownList(Llave::getComunidadesDropdownList() , ['class'=>'form-control','prompt' => 'Seleccione Uno', 'readonly'=>$view  ])->label('Comunidad'); ?>
                     </div>
@@ -51,13 +51,22 @@ use yii\widgets\ActiveForm;
                     <div class="col-md-3 " >
                         <?= $form->field($model, 'codigo')->textInput(['id'=>'llave-codigo', 'maxlength' => true,'class'=>'form-control', 'readonly'=>$view ])->label('Código') ?>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-md-1 " >
-                        <?= $form->field($model, 'id_propietario')->widget(SwitchInput::class, ['id'=>'propietario_chk','pluginOptions'=>['id'=>'propietario_chk','size'=>'small','onText'=>'SI','offText'=>'NO'],'pluginEvents' => ["switchChange.bootstrapSwitch" => "function(item) { if($(item.currentTarget).is(':checked')){ $('#id_propietario').val('').show(300,''); }else{ $('#id_propietario').val('').hide(300, '');} }" ]])->label('Propietario') ; ?>
+                        <div class="form-group field-id_comunidad">
+                            <label class="control-label" for="id_comunidad_modal">Adicionar</label>
+                            <?= Html::button('<i class="fas fa-info-circle"></i>', [ 'data-target'=>'#modal-default','data-toggle'=>'modal' ,'class' => 'btn btn-success', 'onclick' => '(function ( $event ) { sendForm() })();' ]); ?>
+                        </div>
                     </div>
+                </div>
+                <div class="row" id="divFormPropietario" style="display: none">
                     <div class="col-md-6 " >
-                        <?= $form->field($model, 'id_propietario')->dropDownList(Llave::getPropietariosDropdownList() , ['id'=>'id_propietario','class'=>'form-control','prompt' => 'Seleccione Uno', 'readonly'=>$view, 'style'=>'display:none' ])->label('Propietario'); ?>
+                        <?= $form->field($model, 'id_propietario')->dropDownList(Llave::getPropietariosDropdownList() , ['id'=>'id_propietario','class'=>'form-control','prompt' => 'Seleccione Uno', 'readonly'=>$view])->label('Propietario'); ?>
+                    </div>
+                    <div class="col-md-1" style="vertical-align: bottom" >
+                        <div class="form-group field-id_propietario">
+                            <label class="control-label" for="id_propietario_modal">Adicionar</label>
+                            <?= Html::button('<i class="fas fa-info-circle"></i>', [ 'data-target'=>'#modal-default','data-toggle'=>'modal' ,'class' => 'btn btn-success', 'onclick' => '(function ( $event ) { sendForm() })();' ]); ?>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
