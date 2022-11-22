@@ -1,11 +1,9 @@
 /**
- *
+ * Captura las propiedades del tipo de llave
  */
-var n = null;
 function fnTipoLlaveSelected(){
     let idTipoSelect = $('#llave-id_tipo').val();
     let url = '/index.php?r=llave/ajax-find-attributes';
-
     $.ajax({
         url: url,
         dataType: 'json',
@@ -14,10 +12,19 @@ function fnTipoLlaveSelected(){
             "numIdTipoLlave": idTipoSelect,
         },
         success: function (data) {
-            
+            if(data.propietario == 1){
+                $('#divFormPropietario').show(300,'');
+            }else{
+                $('#divFormPropietario').hide(300,'');
+            }
+
+            if(data.comunidad == 1){
+                $('#divFormComunidad').show(300,'');
+            }else{
+                $('#divFormComunidad').hide(300,'');
+            }
         }
     });
-
 }
 
 /**
@@ -27,7 +34,6 @@ function fnTipoLlaveSelected(){
 function getInfoLlaveCard(id){
 
     let url = '/index.php?r=llave/ajax-find-status';
-
     $.ajax({
         url: url,
         type: 'POST',
