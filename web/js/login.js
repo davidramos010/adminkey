@@ -13,3 +13,22 @@ function fnVerUser(){
     $('#loginform-password').val('');
     $('#loginform-perfil').val(2);
 }
+
+function fnAddNumerLogin(number){
+    var strCadena = $('#authkey').val();
+    if( $.isNumeric( number ) ){
+        $('#authkey').val( strCadena+number);
+        return true;
+    }
+
+    if( number == '-' ){
+        $('#authkey').val( strCadena.slice(0, -1) );
+        return true;
+    }
+
+    if( number == '*' ){
+        $('#authkey').val('');
+        return true;
+    }
+
+}
