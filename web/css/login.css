@@ -1,0 +1,10 @@
+.btn-group-vertical>.btn-group:not(:first-child)>.btn, .btn-group-vertical>.btn:not(:first-child) {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    margin: 1%;
+    border: 1px solid black;
+}
+
+.kv-meter-container {
+    width: 0px !important;
+}
