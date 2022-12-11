@@ -76,7 +76,7 @@ class LoginForm extends Model
      */
     public function login()
     {
-        if(!empty($this->authkey) && (int) $this->perfil==2)
+        if(!empty($this->authkey) && (int) $this->perfil==1)
         {
             $this->username = null;
             $this->password = null;
