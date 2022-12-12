@@ -29,7 +29,6 @@ class LoginForm extends Model
         return [
             // username and password are both required
             [['username', 'password'], 'string', 'max' => 255],
-            [['authkey'], 'integer','message'=>'Codigo no validado.'],
             [['perfil'], 'integer'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],

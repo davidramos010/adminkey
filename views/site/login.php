@@ -29,7 +29,7 @@ $this->registerCssFile("@web/css/login.css", []);
                     <div class="row">
                         <div id="divLoginUser" class="small-box bg-success" >
                             <div class="inner" >
-
+                                <h5>Acceso Basico</h5>
                                 <div class="btn-group-vertical" role="group" style="margin: 1%;">
                                     <div class="btn-group text-center mb-2 form-group">
                                         <?=
@@ -37,10 +37,9 @@ $this->registerCssFile("@web/css/login.css", []);
                                                 'id' => 'authkey',
                                                 'name' => 'authkey',
                                                 'language' => 'es',
-                                                'pluginOptions' => ['value'=>'','showMeter' => false,'class' => 'form-group has-feedback','autocomplete' => 'off', 'placeholder' => $model->getAttributeLabel('Codigo Acceso')],
-                                                'options' => ['class' => 'form-group has-feedback', 'id' => 'authkey', 'autocomplete' => 'off','autocomplete' => 'off', 'placeholder' => $model->getAttributeLabel('Codigo Acceso'),'template' => '{beginWrapper}{input}{error}{endWrapper}','wrapperOptions' => ['class' => 'input-group mb-5']]
-
-                                            ]);
+                                                'pluginOptions' => ['value'=>'','showMeter' => false],
+                                                'options' => ['class' => 'form-group has-feedback', 'id' => 'authkey', 'autocomplete' => 'off', 'placeholder' => $model->getAttributeLabel('Codigo Acceso'),'template' => '{beginWrapper}{input}{error}{endWrapper}','wrapperOptions' => ['class' => 'input-group mb-5']]
+                                            ])->label( false);
                                        ?>
                                     </div>
                                     <div class="btn-group ">
@@ -64,7 +63,6 @@ $this->registerCssFile("@web/css/login.css", []);
                                         <button type="button" class="btn btn-light" onclick="fnAddNumerLogin('*');">..</button>
                                     </div>
                                 </div>
-
                                 <p class="d-flex align-items-center justify-content-center;" style="padding-top: 10px">
                                     <?= Html::submitButton('Iniciar', ['value' => 1,'name' => 'authkey','class' => 'btn btn-light btn-block']) ?>
                                 </p>
@@ -75,20 +73,20 @@ $this->registerCssFile("@web/css/login.css", []);
                             <a href="#" class="small-box-footer" onclick="fnVerAdmin()">Administrador <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
 
-                        <div id="divLoginAdmin" class="small-box bg-cyan" style="display: none;">
+                        <div id="divLoginAdmin" class="small-box bg-gray-dark" style="display: none;">
                             <div class="inner">
                                 <h5>Acceso Administrador</h5>
                                 <?= $form->field($model,'username', [
-                                    'options' => ['class' => 'form-group has-feedback'],
+                                    'options' => ['class' => 'form-group has-feedback','autocomplete' => 'off'],
                                     'inputTemplate' => '{input}<div class="input-group-append"><div class="input-group-text"><span class="fas fa-envelope"></span></div></div>',
                                     'template' => '{beginWrapper}{input}{error}{endWrapper}',
-                                    'wrapperOptions' => ['class' => 'input-group mb-5']
+                                    'wrapperOptions' => ['class' => 'input-group mb-3']
                                 ])
                                     ->label(false)
                                     ->textInput(['placeholder' => $model->getAttributeLabel('username')]) ?>
 
                                 <?= $form->field($model, 'password', [
-                                    'options' => ['class' => 'form-group has-feedback'],
+                                    'options' => ['class' => 'form-group has-feedback','autocomplete' => 'off'],
                                     'inputTemplate' => '{input}<div class="input-group-append"><div class="input-group-text"><span class="fas fa-lock"></span></div></div>',
                                     'template' => '{beginWrapper}{input}{error}{endWrapper}',
                                     'wrapperOptions' => ['class' => 'input-group mb-3']
@@ -119,7 +117,7 @@ $this->registerCssFile("@web/css/login.css", []);
 
 if(!empty($notificacion)){
     $this->registerJs(
-        " toastr.error('".$notificacion."'); "
+        " toastr.error('".trim($notificacion)."'); "
     );
 }
 
