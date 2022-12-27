@@ -24,7 +24,7 @@ $this->registerCssFile("@web/css/login.css", []);
             <div class="card-body login-card-body">
                 <p class="login-box-msg">Iniciar sesion.</p>
                 <?php $form = ActiveForm::begin(['id' => 'login-form', 'options' => ['autocomplete' => 'off']]) ?>
-                <?= $form->field($model, 'perfil')->hiddenInput(['value' => 1])->label(false); //Por defecto user simple ?>
+                <?= $form->field($model, 'perfil')->hiddenInput(['value' => 2])->label(false); //Por defecto user gestor ?>
                 <div class="h-100 d-flex align-items-center justify-content-center">
                     <div class="row">
                         <div id="divLoginUser" class="small-box bg-success" >

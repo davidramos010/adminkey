@@ -96,7 +96,6 @@ function printDivHistorialMovimientos()
 
 }
 
-
 /**
  * Exportar documento
  * @returns {*}
@@ -133,6 +132,46 @@ function fnExcelReport(strName)
         sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
 
     return (sa);
+}
+
+/**
+ * Formulario de nueva comunidad
+ * @param id
+ */
+function setNewComunidad(){
+    alert('setNewComunidad');
+    return false;
+    let url = '/index.php?r=llave/ajax-find-status';
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+            "numIdLlave": id,
+        },
+        success: function (data) {
+            $('#modal-email-contenido-table').html(data);
+        }
+    });
+}
+
+/**
+ * Formulario de nuevo propietario
+ * @param id
+ */
+function setNewPropietario(){
+    alert('setNewPropietario');
+    return false;
+    let url = '/index.php?r=llave/ajax-find-status';
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+            "numIdLlave": id,
+        },
+        success: function (data) {
+            $('#modal-email-contenido-table').html(data);
+        }
+    });
 }
 
 
