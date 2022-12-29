@@ -18,6 +18,25 @@ function findCode()
     });
 }
 
+
+/**
+ * Filtra los codigos postales y lo devuelve con la construcción esperada por el select2
+ * @param data
+ * @returns {{results: *}}
+ */
+
+function procesarResultadosComercial(data) {
+    return {
+        results: data.map(d => {
+            return {id: d.id, nombre: d.nombre };
+        })
+    }
+}
+
+/**
+ * Envio de formulario
+ * @returns {boolean}
+ */
 function fnSubmit()
 {
     var bolError = false;

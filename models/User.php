@@ -20,7 +20,6 @@ use yii\web\IdentityInterface;
  * @property int $idPerfil
  * @property string $password_new
  * @property string $authKey_new
- *
  * @property Perfiles $perfiles
  * @property PerfilesUsuario $perfilesUsuario
  */

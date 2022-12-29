@@ -10,6 +10,7 @@ use app\models\Llave;
 use app\models\LlaveStatus;
 use app\models\Registro;
 use app\models\RegistroSearch;
+use app\models\User;
 use kartik\mpdf\Pdf;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -92,6 +93,12 @@ class RegistroController extends Controller
         } else {
             $model->loadDefaultValues();
         }
+
+        $objUser = User::findOne(Yii::$app->user->id);
+        $model->nombre_responsable = trim($objUser->userInfo->nombres.' '.$objUser->userInfo->apellidos);
+        $model->telefono = $objUser->userInfo->telefono;
+        $model->tipo_documento = $objUser->userInfo->tipo_documento;
+        $model->documento = $objUser->userInfo->documento;
 
         return $this->render('create', [
             'model' => $model,
@@ -211,16 +218,13 @@ class RegistroController extends Controller
     public function actionAjaxRegMov()
     {
         $arrParam = $this->request->post();
-        $strObservacion = $arrParam['observacion'];
-        $idComercial = $arrParam['comercial'];
-        $arrKeysEntrada = (empty($arrParam['listKeyEntrada']) || !isset($arrParam['listKeyEntrada']))?null:$arrParam['listKeyEntrada'];
-        $arrKeysSalida = (empty($arrParam['listKeySalida']) || !isset($arrParam['listKeySalida']))?null:$arrParam['listKeySalida'];
+        $arrKeysEntrada = (empty($arrParam['listKeyEntrada']) || !isset($arrParam['listKeyEntrada']))?null:explode(',' , $arrParam['listKeyEntrada']);
+        $arrKeysSalida = (empty($arrParam['listKeySalida']) || !isset($arrParam['listKeySalida']))?null:explode(',' , $arrParam['listKeySalida']);
 
         if(!empty($arrKeysEntrada) || !empty($arrKeysSalida)){
             $newRegistro = new Registro();
+            $newRegistro->load($arrParam);
             $newRegistro->id_user = (int) Yii::$app->user->id;
-            $newRegistro->observacion = $strObservacion;
-            $newRegistro->id_comercial = (int) $idComercial;
             $newRegistro->entrada = (!empty($arrKeysEntrada))?date('Y-m-d H:i:s'):NULL;
             $newRegistro->salida = (!empty($arrKeysSalida))?date('Y-m-d H:i:s'):NULL;
             if($newRegistro->save()){
@@ -233,7 +237,7 @@ class RegistroController extends Controller
             foreach ($arrKeysEntrada as $value){
                 $newRegistroStatus = new LlaveStatus();
                 $strEstado = 'Entrada';
-                $newRegistroStatus->id_llave = $value;
+                $newRegistroStatus->id_llave = (int) $value;
                 $newRegistroStatus->status = ($strEstado=='Entrada')?'E':'S';
                 $newRegistroStatus->id_registro = $newRegistro->id;
                 $newRegistroStatus->save();
@@ -245,7 +249,7 @@ class RegistroController extends Controller
             foreach ($arrKeysSalida as $value){
                 $newRegistroStatus = new LlaveStatus();
                 $strEstado = 'Salida';
-                $newRegistroStatus->id_llave = $value;
+                $newRegistroStatus->id_llave = (int) $value;
                 $newRegistroStatus->status = ($strEstado=='Entrada')?'E':'S';
                 $newRegistroStatus->id_registro = $newRegistro->id;
                 $newRegistroStatus->save();

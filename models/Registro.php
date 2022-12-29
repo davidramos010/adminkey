@@ -19,10 +19,13 @@ use yii\helpers\Url;
  * @property string|null $salida
  * @property string|null $observacion
  * @property string|null $firma_soporte
- *
  * @property Llave $llave
  * @property User $user
  * @property Comerciales $comerciales
+ * @property string|null $tipo_documento
+ * @property string|null $documento
+ * @property string|null $nombre_responsable
+ * @property string|null $telefono
  */
 class Registro extends \yii\db\ActiveRecord
 {
@@ -51,9 +54,10 @@ class Registro extends \yii\db\ActiveRecord
     {
         return [
             [['id_user'], 'required'],
-            [['id_user', 'id_llave', 'id_comercial'], 'integer'],
+            [['id_user', 'id_llave', 'id_comercial','tipo_documento'], 'integer'],
             [['entrada', 'salida','signature'], 'safe'],
-            [['observacion','codigo','username','firma_soporte'], 'string', 'max' => 255],
+            [['documento','telefono'], 'string', 'max' => 20],
+            [['nombre_responsable', 'observacion','codigo','username','firma_soporte'], 'string', 'max' => 255],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
             [['id_llave'], 'exist', 'skipOnError' => true, 'targetClass' => Llave::className(), 'targetAttribute' => ['id_llave' => 'id']],
         ];
@@ -73,7 +77,11 @@ class Registro extends \yii\db\ActiveRecord
             'salida' => 'Salida',
             'observacion' => 'Observacion',
             'id_' => 'Observacion',
-            'firma_soporte' => 'Firma Soporte'
+            'firma_soporte' => 'Firma Soporte',
+            'tipo_documento' => 'Tipo Documento',
+            'documento' => 'Documento',
+            'nombre_reponsable' => 'Nombre Responsable',
+            'telefono' => 'Teléfono',
         ];
     }
 

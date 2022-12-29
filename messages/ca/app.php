@@ -893,6 +893,7 @@ return [
     'Tipo de contrato' => '',
     'Tipo de via' => '',
     'Tipos de tarifas' => '',
+    'titulo_usuario_relacion_comercial' => '* Relació d-un usuari amb una empresa/proveïdor',
     'Tlf' => '',
     'Tlf Ext' => '',
     'Total  Saldo' => '',
