@@ -55,8 +55,9 @@ class Llave extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['codigo', 'id_llave_ubicacion', 'id_tipo','descripcion'], 'required', 'message'=> Yii::t('yii',  '{attribute} es requerido')],
+            [['codigo', 'id_llave_ubicacion', 'id_tipo','descripcion'], 'required', 'message'=> Yii::t('yii',  'Es requerido')],
             [['id_comunidad', 'id_tipo', 'id_propietario', 'id_llave_ubicacion','copia', 'activa','alarma','facturable'], 'integer'],
+            [['copia'], 'integer', 'max' => 10],
             [['codigo','nombre_propietario','nomenclatura','cliente_comunidad'], 'string', 'max' => 100],
             [['descripcion', 'observacion','codigo_alarma'], 'string', 'max' => 255],
             /*[['codigo'], 'unique'],*/

@@ -78,17 +78,18 @@ use yii\widgets\ActiveForm;
                         <?= $form->field($model, 'nomenclatura')->textInput(['id' => 'llave-nomenclatura', 'maxlength' => true, 'class' => 'form-control', 'readonly' => true])->label('_') ?>
                     </div>
                 <?php endif; ?>
-                <div class="col-md-3 ">
-                    <?= $form->field($model, 'codigo')->textInput(['id' => 'llave-codigo', 'maxlength' => true, 'class' => 'form-control', 'readonly' => $view])->label('Código') ?>
+                <div class="col-md-1 ">
+                    <?= $form->field($model, 'codigo')->textInput(['id' => 'llave-codigo', 'maxlength' => true, 'class' => 'form-control', 'readonly' => $view])->label('Código Llave') ?>
                 </div>
-                <div class="col-md-2 ">
+                <div class="col-md-1 ">&nbsp;</div>
+                <div class="col-md-1 ">
                     <?php if (!$view): ?>
                         <?= $form->field($model, 'alarma')->widget(SwitchInput::class, ['id' => 'alarma', 'pluginOptions' => ['id' => 'alarma', 'size' => 'small', 'onText' => 'SI', 'offText' => 'NO'], 'pluginEvents' => ["switchChange.bootstrapSwitch" => "function(item) { if($(item.currentTarget).is(':checked')){ $('#codigo_alarma').val('').prop('readonly', false); }else{ $('#codigo_alarma').val('').prop('readonly', true);} }"]])->label('Alarma'); ?>
                     <?php else: ?>
                         <?= $form->field($model, 'alarma')->textInput(['id' => 'alarma', 'maxlength' => true, 'class' => 'form-control', 'readonly' => $view, 'value' => ($model->alarma) ? 'SI' : 'NO'])->label('Alarma') ?>
                     <?php endif; ?>
                 </div>
-                <div class="col-md-4 ">
+                <div class="col-md-2 ">
                     <?= $form->field($model, 'codigo_alarma')->textInput(['id' => 'codigo_alarma', 'maxlength' => true, 'class' => 'form-control', 'readonly' => true])->label('Código Alarma') ?>
                 </div>
             </div>
@@ -101,7 +102,7 @@ use yii\widgets\ActiveForm;
             </div>
             <div class="row">
                 <div class="col-md-2">
-                    <?= $form->field($model, 'copia')->textInput(['type' => 'number', 'maxlength' => 2, 'class' => 'form-control', 'readonly' => !$model->isNewRecord])->label('Número de copias') ?>
+                    <?= $form->field($model, 'copia')->textInput(['type' => 'number', 'maxlength' => true, 'style'=>'width:50%;', 'class' => 'form-control', 'readonly' => !$model->isNewRecord])->label('Número de copias') ?>
                 </div>
             </div>
             <div class="row">
