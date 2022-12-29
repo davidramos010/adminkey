@@ -347,6 +347,7 @@ return [
     'Dual' => '',
     'Dudoso' => '',
     'Edad' => '',
+    'error_url_modal' => 'No se puede cargar correctamente esta página, comuníquese con el administrador.',
     'Email' => '',
     'Email Enviado' => '',
     'Email2' => '',

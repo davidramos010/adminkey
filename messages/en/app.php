@@ -104,6 +104,7 @@ return [
     'Dual' => '',
     'Dudoso' => '',
     'Edad' => '',
+    'error_url_modal' => 'This page cannot be loaded correctly, please contact the administrator.',
     'Email' => '',
     'Email Enviado' => '',
     'Email2' => '',

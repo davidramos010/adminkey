@@ -69,18 +69,19 @@ class LoginForm extends Model
     }
 
     /**
-     * Perfiles 1: user simple, 2: administrado
+     * Perfiles 2: user gestor, 1: administrado
      * Logs in a user using the provided username and password.
      * @return bool whether the user is logged in successfully
      */
     public function login()
     {
-        if(!empty($this->authkey) && (int) $this->perfil==1)
+        if(!empty($this->authkey) && (int) $this->perfil==2)
         {
             $this->username = null;
             $this->password = null;
             $this->getAuthKey();
         }else{
+            $this->authkey = null;
             if(!empty($this->password)){
                 $this->password = util::hash($this->password);
             }
@@ -111,9 +112,9 @@ class LoginForm extends Model
      */
     public function getAuthKey()
     {
+        $objUserPerfil = null;
         if (!empty($this->authkey)) {
             $objUser = User::find()->where(['authkey'=> $this->authkey ])->one();
-
             if(!empty($objUser)){
                 $objUserPerfil = PerfilesUsuario::find()->where(['id_user'=>$objUser->id,'id_perfil'=>2])->one();
                 if(!empty($objUserPerfil)){
@@ -124,6 +125,6 @@ class LoginForm extends Model
             }
         }
 
-        return (!empty($objUser));
+        return (!empty($objUserPerfil));
     }
 }

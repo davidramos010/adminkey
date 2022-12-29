@@ -351,6 +351,7 @@ return [
     'Dual' => '',
     'Dudoso' => '',
     'Edad' => '',
+    'error_url_modal' => 'No es pot carregar correctament aquesta pàgina, comuniqueu-ho amb l-administrador.',
     'Email' => '',
     'Email Enviado' => '',
     'Email2' => '',
