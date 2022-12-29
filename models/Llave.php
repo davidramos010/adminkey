@@ -145,6 +145,16 @@ class Llave extends \yii\db\ActiveRecord
     }
 
     /**
+     * retorno de la variable de nomenclatura
+     * @return string|null
+     */
+    public function getNomenclatura()
+    {
+        return $this->nomenclatura = !empty($this->id_comunidad) ? $this->comunidad->nomenclatura : 'P'.$this->propietarios->id;
+    }
+
+
+    /**
      * {@inheritdoc}
      * @return LlaveQuery the active query used by this AR class.
      */

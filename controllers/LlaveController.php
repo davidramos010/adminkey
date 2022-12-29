@@ -6,6 +6,7 @@ use app\models\Comunidad;
 use app\models\Llave;
 use app\models\LlaveSearch;
 use app\models\LlaveStatus;
+use app\models\Propietarios;
 use app\models\TipoLlave;
 use app\models\util;
 use yii\helpers\UnsetArrayValue;
@@ -124,16 +125,12 @@ class LlaveController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
         if ($this->request->isPost && $model->load($this->request->post()) && $model->validate()) {
             $model->codigo = $model->nomenclatura.'-'.$model->codigo;
-            $model->codigo .= ($model->copia>1)?'.1':'';
             $model->save();
-
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        $model->nomenclatura = $model->comunidad->nomenclatura;
         $model->codigo = str_replace($model->nomenclatura.'-','',$model->codigo);
 
         return $this->render('update', [
@@ -167,6 +164,8 @@ class LlaveController extends Controller
     protected function findModel($id)
     {
         if (($model = Llave::findOne(['id' => $id])) !== null) {
+            // definicion de la variable nomenclatura
+            $model->nomenclatura = $model->getNomenclatura();
             return $model;
         }
 
@@ -180,11 +179,22 @@ class LlaveController extends Controller
     {
         $arrParam = $this->request->post();
         $comunidad_id = $arrParam['comunidad'];
-        $objComunidad = Comunidad::findOne(['id'=>$comunidad_id]);
-        $model = new Llave();
-        $model->id_comunidad = (int) $comunidad_id;
-        $arrInfo['id'] = (string) $model->getNext();
-        $arrInfo['nomenclatura'] = $objComunidad->nomenclatura;
+        $propietario_id = $arrParam['propietario'];
+        if(!empty($comunidad_id)){
+            $objComunidad = Comunidad::findOne(['id'=>$comunidad_id]);
+            $model = new Llave();
+            $model->id_comunidad = (int) $comunidad_id;
+            $arrInfo['id'] = (string) $model->getNext();
+            $arrInfo['nomenclatura'] = $objComunidad->nomenclatura;
+        }
+
+        if(!isset($model) && !empty($propietario_id)){
+            $objPropietario = Propietarios::findOne(['id'=>$propietario_id]);
+            $model = new Llave();
+            $arrInfo['id'] = (string) $model->getNext();
+            $arrInfo['nomenclatura'] = 'P'.$objPropietario->id;
+        }
+
         return json_encode( $arrInfo);
     }
 

@@ -46,31 +46,23 @@ use yii\widgets\ActiveForm;
             </div>
             <div class="row" id="divFormComunidad" style="display: none">
                 <div class="col-md-6 ">
-                    <?= $form->field($model, 'id_comunidad')->dropDownList(Llave::getComunidadesDropdownList(), ['class' => 'form-control', 'prompt' => 'Seleccione Uno', 'readonly' => $view])->label('Comunidad'); ?>
-                </div>
-                <?php if (!$view): ?>
-                    <div class="col-md-1 ">
-                        <?= $form->field($model, 'nomenclatura')->textInput(['id' => 'llave-nomenclatura', 'maxlength' => true, 'class' => 'form-control', 'readonly' => true])->label('_') ?>
-                    </div>
-                <?php endif; ?>
-                <div class="col-md-3 ">
-                    <?= $form->field($model, 'codigo')->textInput(['id' => 'llave-codigo', 'maxlength' => true, 'class' => 'form-control', 'readonly' => $view])->label('Código') ?>
+                    <?= $form->field($model, 'id_comunidad')->dropDownList(Llave::getComunidadesDropdownList(), ['class' => 'form-control', 'prompt' => 'Seleccione Uno', 'readonly' => $view, 'data-js-find-nomenclatura'=>'comunidad'])->label('Comunidad'); ?>
                 </div>
                 <div class="col-md-1 ">
                     <div class="form-group field-id_comunidad_modal">
                         <label class="control-label" for="id_comunidad_modal">Adicionar</label><br/>
-                        <?= Html::button('<i class="fas fa-info-circle"></i>', ['data-target' => '#modal-comunidad', 'data-toggle' => 'modal', 'class' => 'btn btn-success', 'onclick' => 'setNewComunidad()']); ?>
+                        <?= Html::a('<i class="fas fa-info-circle"></i>', ['comunidad/create-modal'], ['class' => 'btn btn-success', 'id' => 'btn-modal-comunidad', 'title' => Yii::t('app', 'Nueva Comunidad')]); ?>
                     </div>
                 </div>
             </div>
             <div class="row" id="divFormPropietario" style="display: none">
                 <div class="col-md-6 ">
-                    <?= $form->field($model, 'id_propietario')->dropDownList(Llave::getPropietariosDropdownList(), ['id' => 'id_propietario', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'readonly' => $view])->label('Propietario'); ?>
+                    <?= $form->field($model, 'id_propietario')->dropDownList(Llave::getPropietariosDropdownList(), ['id' => 'id_propietario', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'readonly' => $view, 'data-js-find-nomenclatura'=>'propietario'])->label('Propietario'); ?>
                 </div>
                 <div class="col-md-1" style="vertical-align: bottom">
                     <div class="form-group field-id_propietario_modal">
                         <label class="control-label" for="id_propietario_modal">Adicionar</label><br/>
-                        <?= Html::button('<i class="fas fa-info-circle"></i>', ['data-target' => '#modal-propietario', 'data-toggle' => 'modal', 'class' => 'btn btn-success', 'onclick' => 'setNewPropietario()']); ?>
+                        <?= Html::a('<i class="fas fa-info-circle"></i>', ['propietarios/create-modal'], ['class' => 'btn btn-success', 'id' => 'btn-modal-propietario', 'title' => Yii::t('app', 'Nuevo Propietario')]); ?>
                     </div>
                 </div>
             </div>
@@ -81,6 +73,14 @@ use yii\widgets\ActiveForm;
                 </div>
             </div>
             <div class="row">
+                <?php if (!$view): ?>
+                    <div class="col-md-1 ">
+                        <?= $form->field($model, 'nomenclatura')->textInput(['id' => 'llave-nomenclatura', 'maxlength' => true, 'class' => 'form-control', 'readonly' => true])->label('_') ?>
+                    </div>
+                <?php endif; ?>
+                <div class="col-md-3 ">
+                    <?= $form->field($model, 'codigo')->textInput(['id' => 'llave-codigo', 'maxlength' => true, 'class' => 'form-control', 'readonly' => $view])->label('Código') ?>
+                </div>
                 <div class="col-md-2 ">
                     <?php if (!$view): ?>
                         <?= $form->field($model, 'alarma')->widget(SwitchInput::class, ['id' => 'alarma', 'pluginOptions' => ['id' => 'alarma', 'size' => 'small', 'onText' => 'SI', 'offText' => 'NO'], 'pluginEvents' => ["switchChange.bootstrapSwitch" => "function(item) { if($(item.currentTarget).is(':checked')){ $('#codigo_alarma').val('').prop('readonly', false); }else{ $('#codigo_alarma').val('').prop('readonly', true);} }"]])->label('Alarma'); ?>
@@ -125,14 +125,34 @@ use yii\widgets\ActiveForm;
     </div>
 </div>
 
-<?php $this->registerJs(
-    '$("#llave-id_comunidad").on("change", function() {
-            findCode();
-        });'
-); ?>
+<?php
 
-<?php $this->registerJs(
+
+$this->registerJs(
+    '$(document).on("click", "[data-js-find-nomenclatura]", function (e) {
+            findCodeLlave();
+        });'
+);
+
+$this->registerJs(
     '$("#codigo_alarma").on("change", function() {
             activeCodAlarma();
         });'
-); ?>
+);
+$this->registerJs(
+'$("#btn-modal-comunidad").click(function(e){
+       e.preventDefault();      
+       $("#modal-comunidad").modal("show")
+                  .find(".modal-content")
+                  .load($(this).attr("href"));  
+       }); '
+);
+$this->registerJs(
+    '$("#btn-modal-propietario").click(function(e){
+       e.preventDefault();      
+       $("#modal-propietario").modal("show")
+                  .find(".modal-content")
+                  .load($(this).attr("href"));  
+       }); '
+);
+?>

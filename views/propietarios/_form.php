@@ -9,6 +9,7 @@ use yii\web\JsExpression;
 /* @var $this yii\web\View */
 /* @var $model app\models\Propietarios */
 /* @var $form yii\bootstrap4\ActiveForm */
+/* @var $modal boolean */
 $this->registerJsFile('@web/js/propietarios.js');
 
 ?>
@@ -22,7 +23,7 @@ $this->registerJsFile('@web/js/propietarios.js');
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <?php $form = ActiveForm::begin(); ?>
+            <?php $form = ActiveForm::begin(['id' => 'form-propietario', 'enableClientValidation' => true, 'enableAjaxValidation' => false]); ?>
             <div class="card-body">
 
                 <div class="row card-header text-muted border-bottom-0"> <i class="nav-icon fas fa-edit"></i> &nbsp;&nbsp; <h3 class="card-title">Datos Propietario</h3> </div>
@@ -114,8 +115,10 @@ $this->registerJsFile('@web/js/propietarios.js');
                 </div>
 
                 <div  style="padding-top: 15px" >
-                    <?= Html::submitButton(Yii::t('app', 'Guardar Propietario'), ['class' => 'btn btn-success ']) ?>
-                    <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
+                    <?= isset($modal) ? '' : Html::submitButton(Yii::t('app', 'Guardar Propietario'), ['class' => 'btn btn-success ']) ?>
+                    <?= isset($modal) ? '' : Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
+                    <?= isset($modal) ? Html::button(Yii::t('app', 'Guardar Cliente'), ['class' => 'btn btn-success ', 'data-js-set-propietario' => true,]) : ''; ?>
+                    <?= isset($modal) ? Html::button(Yii::t('app', 'Cancelar'), ['id'=>'btn_cancelar_modal_propietarios','class' => 'btn btn-default ', 'data-dismiss' => 'modal']) : ''; ?>
                 </div>
             </div>
             <?php ActiveForm::end(); ?>

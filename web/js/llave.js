@@ -16,12 +16,14 @@ function fnTipoLlaveSelected(){
                 $('#divFormPropietario').show(300,'');
             }else{
                 $('#divFormPropietario').hide(300,'');
+                $('#id_propietario').val(null);
             }
 
             if(data.comunidad == 1){
                 $('#divFormComunidad').show(300,'');
             }else{
                 $('#divFormComunidad').hide(300,'');
+                $('#llave-id_comunidad').val(null);
             }
         }
     });
@@ -49,10 +51,11 @@ function getInfoLlaveCard(id){
 /**
  * Buscar el codigo/nomenclatura de la comunidad
  */
-function findCode()
+function findCodeLlave()
 {
     let url = '/index.php?r=llave/ajax-find-code';
     let comunidad = $('#llave-id_comunidad').val();
+    let propietario = $('#id_propietario').val();
 
     $.ajax({
         url: url,
@@ -60,6 +63,7 @@ function findCode()
         type: 'POST',
         data: {
             "comunidad": comunidad,
+            "propietario": propietario,
         },
         success: function (data) {
             $('#llave-codigo').val(data.id);
@@ -135,44 +139,86 @@ function fnExcelReport(strName)
 }
 
 /**
- * Formulario de nueva comunidad
- * @param id
+ * registrar comunidad en el formulario del modal
  */
-function setNewComunidad(){
-    alert('setNewComunidad');
-    return false;
-    let url = '/index.php?r=llave/ajax-find-status';
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: {
-            "numIdLlave": id,
-        },
-        success: function (data) {
-            $('#modal-email-contenido-table').html(data);
+function fnSetComunidad(){
+
+    let url = '/index.php?r=comunidad%2Fajax-create';
+    var form = $('#form-comunidad');
+    var formData = form.serialize();
+
+    setTimeout(function () {
+        if ($('[aria-invalid="true"]').length) {
+            toastr.error('Atención hay algún campo incorrecto o por llenar. <br /> ' +
+                '<span class="small">Sí no detectas el error, mira que no haya espacios en blanco delante o detrás del campo erróneo. </span> ');
+            return false;
+        }else{
+            $.ajax({
+                url: url,
+                dataType: 'JSON',
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    if(data.error != '' && data.error!=null) {
+                        toastr.error(data.error);
+                    }else {
+                        toastr.success(data.ok_sms);
+                        $('#llave-id_comunidad').append($('<option>', {
+                            value: data.ok,
+                            text: data.name,
+                            selected : true
+                        }));
+                        $('#llave-codigo').val(data.ok);
+                        $('#llave-nomenclatura').val(data.nomenclatura);
+                        $('#btn_cancelar_modal_comunidad').click();
+                    }
+                },
+                error: function () {
+                    toastr.error("Something went wrong");
+                }
+            });
         }
-    });
+    }, 350);
 }
 
 /**
- * Formulario de nuevo propietario
- * @param id
+ * registrar Propietario en el formulario del modal
  */
-function setNewPropietario(){
-    alert('setNewPropietario');
-    return false;
-    let url = '/index.php?r=llave/ajax-find-status';
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: {
-            "numIdLlave": id,
-        },
-        success: function (data) {
-            $('#modal-email-contenido-table').html(data);
+function fnSetPropietario(){
+    let url = '/index.php?r=propietarios%2Fajax-create';
+    var form = $('#form-propietario');
+    var formData = form.serialize();
+
+    setTimeout(function () {
+        if ($('[aria-invalid="true"]').length) {
+            toastr.error('Atención hay algún campo incorrecto o por llenar. <br /> ' +
+                '<span class="small">Sí no detectas el error, mira que no haya espacios en blanco delante o detrás del campo erróneo. </span> ');
+            return false;
+        }else{
+            $.ajax({
+                url: url,
+                dataType: 'JSON',
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    if(data.error != '' && data.error!=null) {
+                        toastr.error(data.error);
+                    }else {
+                        toastr.success(data.ok_sms);
+                        $('#id_propietario').append($('<option>', {
+                            value: data.ok,
+                            text: data.name,
+                            selected : true
+                        }));
+                        $('#id_propietario').val(data.ok);
+                        $('#btn_cancelar_modal_propietarios').click();
+                    }
+                },
+                error: function () {
+                    toastr.error("Something went wrong. Propietarios");
+                }
+            });
         }
-    });
+    }, 350);
 }
-
-
 

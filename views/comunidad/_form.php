@@ -10,12 +10,12 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\Comunidad */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $modal boolean */
 
 $this->registerJsFile('@web/js/comunidad.js');
 
 ?>
-
-<div class="comunidad-form col-md-9">
+<div class="comunidad-form col-md-12">
         <!-- general form elements -->
         <div class="card card-primary">
             <div class="card-header">
@@ -23,7 +23,7 @@ $this->registerJsFile('@web/js/comunidad.js');
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <?php $form = ActiveForm::begin(); ?>
+            <?php $form = ActiveForm::begin(['id' => 'form-comunidad', 'enableClientValidation' => true, 'enableAjaxValidation' => false]); ?>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -97,8 +97,10 @@ $this->registerJsFile('@web/js/comunidad.js');
                         </div>
                     </div>
                     <div  style="padding-top: 15px" >
-                        <?= Html::submitButton(Yii::t('app', 'Guardar Cliente'), ['class' => 'btn btn-success ']) ?>
-                        <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
+                        <?= isset($modal) ? '' : Html::submitButton(Yii::t('app', 'Guardar Cliente'), ['class' => 'btn btn-success']) ?>
+                        <?= isset($modal) ? '' : Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
+                        <?= isset($modal) ? Html::button(Yii::t('app', 'Guardar Cliente'), ['class' => 'btn btn-success ', 'data-js-set-comunidad' => true,]) : ''; ?>
+                        <?= isset($modal) ? Html::button(Yii::t('app', 'Cancelar'), ['id'=>'btn_cancelar_modal_comunidad', 'class' => 'btn btn-default ', 'data-dismiss' => 'modal']) : ''; ?>
                     </div>
                 </div>
             <?php ActiveForm::end(); ?>
