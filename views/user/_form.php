@@ -1,6 +1,7 @@
 <?php
 
 use app\models\User;
+use app\models\util;
 use kartik\widgets\Select2;
 use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
@@ -30,6 +31,14 @@ $this->registerJsFile('@web/js/usuarios.js');
                     <div class="col-md-4">
                         <?= $form->field($model, 'id')->hiddenInput(['id'=>'id'])->label(false); ?>
                         <?= $form->field($model, 'username')->textInput(['id'=>'username', 'maxlength' => true,'class'=>'form-control','autocomplete'=>'off','style'=>'width:40%','readonly'=>!$model->isNewRecord])->label('*Username') ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <?= $form->field($model_info, 'tipo_documento')->dropDownList( util::arrTipoDocumentos , ['class'=>'form-control', 'prompt' => 'Seleccione Uno' ])->label('Tipo Doc.'); ?>
+                    </div>
+                    <div class="col-md-4">
+                        <?= $form->field($model_info, 'documento')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Documento Identidad') ?>
                     </div>
                 </div>
                 <div class="row">
@@ -78,7 +87,7 @@ $this->registerJsFile('@web/js/usuarios.js');
                         <?=  $form->field($model_info, 'id_comercial')->widget(Select2::class, [
                                 'theme' => Select2::THEME_BOOTSTRAP,
                                 'size' => Select2::SMALL,
-                                'data' => [$model_info->id_comercial,$model_info->comercial->nombre],
+                                'data' => !empty($model_info->id_comercial) ? [$model_info->id_comercial,$model_info->id_comercial] : [],
                                 'options' => [
                                     'data-js-req-cont' => 'generic',
                                     'id' => 'id_comercial'

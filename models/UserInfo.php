@@ -17,6 +17,8 @@ use Yii;
  * @property string|null $codigo
  * @property string|null $id_comercial
  * @property int|null $estado 1: Activo: 0:Inactivo
+ * @property int $tipo_documento
+ * @property string $documento
  * @property string|null $created
  *
  * @property User $user
@@ -37,11 +39,12 @@ class UserInfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_user', 'estado', 'id_comercial'], 'integer'],
+            [['id_user', 'estado', 'id_comercial','tipo_documento'], 'integer'],
             [['created'], 'safe'],
             [['nombres', 'apellidos', 'direccion', 'email'], 'string', 'max' => 255],
-            [['nombres', 'apellidos'], 'required', 'message'=> Yii::t('yii',  '{attribute} no es valido')],
+            [['tipo_documento','documento','nombres', 'apellidos'], 'required', 'message'=> Yii::t('yii',  '{attribute} no es valido')],
             [['telefono'], 'string', 'max' => 30],
+            [['documento'], 'string', 'max' => 20],
             [['codigo'], 'string', 'max' => 100],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
             [['id_comercial'], 'exist', 'skipOnError' => true, 'targetClass' => Comerciales::className(), 'targetAttribute' => ['id_comercial' => 'id']]

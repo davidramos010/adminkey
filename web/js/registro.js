@@ -110,24 +110,17 @@ function delKey(id)
 function sendForm()
 {   //https://github.com/inquid/yii2-signature/blob/master/assets/app.js
     let url = '/index.php?r=registro/ajax-reg-mov';
-    let observacion = $('#txt_observacion').val();
-    let comercial = $('#id_comercial').val();
     let numIdRegistro = null;
+
+    var form = $('#form-registro');
+    var formData = form.serialize();
 
     $.ajax({
         url: url,
         dataType: 'JSON',
         type: 'POST',
-        data: {
-            "observacion": observacion,
-            "comercial":comercial,
-            "listKeyEntrada": listKeyEntrada,
-            "listKeySalida": listKeySalida,
-        },
-
+        data: formData+"&listKeyEntrada="+JSON.parse(JSON.stringify(listKeyEntrada))+"&listKeySalida="+JSON.parse(JSON.stringify(listKeySalida)),
         success: function (data) {
-            console.log('----------------'+data);
-            //console.log('----------------'.data.registro_id);
             numIdRegistro = 9;//data.registro_id;
             listKeyEntrada.forEach(function(key, index, object) {
              object.splice(index, 1);
@@ -139,7 +132,6 @@ function sendForm()
             });
 
             toastr.success('Registro almacenado correctamente.');
-
             $('#div_msm').show("slow");
             $('#div_info').hide();
 
@@ -150,7 +142,7 @@ function sendForm()
             if (!signaturePad.isEmpty()) {
                 fnGuardarCuadroFirma(numIdRegistro);
             }else {
-                toastr.warning('El registro no incluyye firma digital.');
+                toastr.warning('El registro no incluye firma digital.');
                 setTimeout("location.reload(true);",600);
             }
 
