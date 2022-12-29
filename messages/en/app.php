@@ -646,6 +646,7 @@ return [
     'Tipo de contrato' => '',
     'Tipo de via' => '',
     'Tipos de tarifas' => '',
+    'titulo_usuario_relacion_comercial' => '* Relationship of a user with a Company/Provider',
     'Tlf' => '',
     'Tlf Ext' => '',
     'Total  Saldo' => '',

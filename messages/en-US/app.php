@@ -883,6 +883,7 @@ return [
     'Traspaso A Perdidas' => '',
     'Type' => '',
     'Type ID' => '',
+    'titulo_usuario_relacion_comercial' => '* Relationship of a user with a Company/Provider',
     'Técnico' => '',
     'Update' => '',
     'Update Agentes Norton: mode' => '',

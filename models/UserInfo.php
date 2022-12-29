@@ -15,6 +15,7 @@ use Yii;
  * @property string|null $direccion
  * @property string|null $email
  * @property string|null $codigo
+ * @property string|null $id_comercial
  * @property int|null $estado 1: Activo: 0:Inactivo
  * @property string|null $created
  *
@@ -36,13 +37,14 @@ class UserInfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_user', 'estado'], 'integer'],
+            [['id_user', 'estado', 'id_comercial'], 'integer'],
             [['created'], 'safe'],
             [['nombres', 'apellidos', 'direccion', 'email'], 'string', 'max' => 255],
             [['nombres', 'apellidos'], 'required', 'message'=> Yii::t('yii',  '{attribute} no es valido')],
             [['telefono'], 'string', 'max' => 30],
             [['codigo'], 'string', 'max' => 100],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
+            [['id_comercial'], 'exist', 'skipOnError' => true, 'targetClass' => Comerciales::className(), 'targetAttribute' => ['id_comercial' => 'id']]
         ];
     }
 
@@ -73,6 +75,14 @@ class UserInfo extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'id_user']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getComercial()
+    {
+        return $this->hasOne(Comerciales::className(), ['id' => 'id_comercial']);
     }
 
     /**
