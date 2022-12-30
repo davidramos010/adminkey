@@ -39,11 +39,11 @@ use yii\widgets\ActiveForm;
                 <div class="card-body">
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-10">
                                 <?= $form->field($model, 'id_comercial')->widget(Select2::class, [
                                         'theme' => Select2::THEME_BOOTSTRAP,
                                         'size' => Select2::SMALL,
-                                        'data' => [$model->id_comercial => $model->id_comercial],
+                                        'data' => !empty($model->id_comercial) ? [$model->id_comercial => $model->comerciales->nombre] : [],
                                         'options' => [
                                             'data-js-req-cont' => 'generic',
                                             'id' => 'id_comercial'
@@ -61,14 +61,23 @@ use yii\widgets\ActiveForm;
                                                 'data' => new JsExpression('(params) => { return {q:params.term} }')
                                             ],
                                             'templateResult' => new JsExpression('(params) => params.loading ? "Buscando..." : params.id + " - " + params.nombre'),
-                                            'templateSelection' => new JsExpression('(cp) => cp.nombre'),
+                                            'templateSelection' => new JsExpression('function (data) { 
+                                                                                                if(data.nombre==="" || data.nombre === undefined || data.nombre === null){
+                                                                                                    return data.text;
+                                                                                                } else {
+                                                                                                    return data.nombre;
+                                                                                                } }'),
                                         ],
                                     ]
                                 )->label('Empresa/Proveedor'); ?>
                             </div>
+                            <div class="col-md-2">
+                                <label class="control-label" for="id_comercial_adicionar">&nbsp;</label><br/>
+                                <?= !empty($model->id_comercial) ? Html::button('<i class="fas fa-info-circle"></i> '.Yii::t('app', 'Add_Contact'), ['class' => 'btn-sm btn-primary ', 'title' => Yii::t('app', 'Add_Contact'), 'onclick' => 'setCopyDataContacto()']) : '' ?>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-1">
+                            <div class="col-md-2">
                                 <?= $form->field($model, 'tipo_documento')->dropDownList( util::arrTipoDocumentos , ['class'=>'form-control', 'prompt' => 'Seleccione Uno' ])->label('Tipo Doc.'); ?>
                             </div>
                             <div class="col-md-2">
@@ -206,7 +215,16 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 </div>
-<?php $this->registerJs(
+
+<?php
+
+$this->registerJs(
+    '$(document).on("click", "[data-js-set-contacto]", function (e) {
+            findCodeLlave();
+        });'
+);
+
+$this->registerJs(
     '$("document").ready(function(){ 
              $("#id_llave").keypress(function(event) {
                 if (event.keyCode === 13) {
@@ -215,6 +233,7 @@ use yii\widgets\ActiveForm;
             });
          });
          var wrapper = document.getElementById("signature-pad");'
-); ?>
+);
 
-<?php $this->registerCss(".signature-pad--actions{ display:none; } ") ?>
+$this->registerCss(".signature-pad--actions{ display:none; } ");
+ ?>
