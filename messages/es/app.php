@@ -57,7 +57,7 @@ return [
     'Activo Televenta' => '',
     'Activo Validacion' => '',
     'Actualizar calendario' => '',
-    'Address ID' => '',
+    'Add_Contact' => 'Copiar Contacto',
     'Admin.' => '',
     'Administracion' => '',
     'Agenda' => '',

@@ -63,12 +63,12 @@ class RegistroController extends Controller
      */
     public function actionView($id)
     {
-        $arrInfoStatusE = LlaveStatus::find()->where(['id_registro'=>$id,'status'=>'E'])->all();
-        $arrInfoStatusS = LlaveStatus::find()->where(['id_registro'=>$id,'status'=>'S'])->all();
+        $arrInfoStatusE = LlaveStatus::find()->where(['id_registro' => $id, 'status' => 'E'])->all();
+        $arrInfoStatusS = LlaveStatus::find()->where(['id_registro' => $id, 'status' => 'S'])->all();
 
         $searchModel = new RegistroSearch();
-        $arrInfoStatusE = $searchModel->search_status($id,'E');
-        $arrInfoStatusS = $searchModel->search_status($id,'S');
+        $arrInfoStatusE = $searchModel->search_status($id, 'E');
+        $arrInfoStatusS = $searchModel->search_status($id, 'S');
 
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -85,7 +85,6 @@ class RegistroController extends Controller
     public function actionCreate()
     {
         $model = new Registro();
-
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -95,10 +94,11 @@ class RegistroController extends Controller
         }
 
         $objUser = User::findOne(Yii::$app->user->id);
-        $model->nombre_responsable = trim($objUser->userInfo->nombres.' '.$objUser->userInfo->apellidos);
+        $model->nombre_responsable = trim($objUser->userInfo->nombres . ' ' . $objUser->userInfo->apellidos);
         $model->telefono = $objUser->userInfo->telefono;
         $model->tipo_documento = $objUser->userInfo->tipo_documento;
         $model->documento = $objUser->userInfo->documento;
+        $model->id_comercial = $objUser->userInfo->id_comercial;
 
         return $this->render('create', [
             'model' => $model,
@@ -162,7 +162,7 @@ class RegistroController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionReporte($id=1)
+    public function actionReporte($id = 1)
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -176,21 +176,33 @@ class RegistroController extends Controller
      */
     public function actionAjaxAddKey()
     {
-        $strCode = (!empty($this->request->get()) && isset($this->request->get()['code']))?(string) trim($this->request->get()['code']):null;
-        $strCode = str_replace("'","-",$strCode);
+        $strCode = (!empty($this->request->get()) && isset($this->request->get()['code'])) ? (string)trim($this->request->get()['code']) : null;
+        $strCode = str_replace("'", "-", $strCode);
         $arrModelStatus = null;
         $arrComunidadLlave = null;
         $strEstado = null;
+        $strError = null;
 
-        $arrModelLlave = Llave::find()->where(['codigo'=>$strCode])->asArray()->one();
-        if(!empty($arrModelLlave)){
+        $arrModelLlave = Llave::find()->where(['codigo' => $strCode])->asArray()->one();
+        if (!empty($arrModelLlave)) {
+            // solo el administrador puede ingresar llaves de otros usuario
+            $userSession = Yii::$app->user->id;
+            $userPerfil = Yii::$app->user->identity->perfiluser->id_perfil;
+
             $numId = $arrModelLlave['id'];
-            $arrModelStatus = (object) LlaveStatus::find()->where(['id_llave'=>$numId])->orderBy(['id' => SORT_DESC])->asArray()->one();
-            $arrComunidadLlave = (!empty($arrModelLlave))?Comunidad::find()->where(['id'=>$arrModelLlave['id_comunidad']])->asArray()->one():null;
-            $strEstado = (empty($arrModelStatus) || !isset($arrModelStatus->status))?'E':$arrModelStatus->status;
+            $arrModelStatus = (object) LlaveStatus::find()->where(['id_llave' => $numId])->orderBy(['id' => SORT_DESC])->asArray()->one();
+            $arrComunidadLlave = (!empty($arrModelLlave)) ? Comunidad::find()->where(['id' => $arrModelLlave['id_comunidad']])->asArray()->one() : null;
+            $strEstado = (empty($arrModelStatus) || !isset($arrModelStatus->status)) ? 'E' : $arrModelStatus->status;
+
+            if($userPerfil!=1 && $strEstado=='S'){ // si no es admin, evalua quien creo el registro
+                $objRegistro = Registro::findOne(['id'=>$arrModelStatus->id_registro]);
+                if(!empty($objRegistro) && (int) $objRegistro->id_user != (int) $userSession ){
+                    $strError = "El usuario no puede realizar esta operación, la llave esta asignada aa otro usuario.";
+                }
+            }
         }
 
-        return json_encode( ['llave'=>$arrModelLlave,'status'=>$arrModelStatus, 'comunidad'=>$arrComunidadLlave, 'estado'=>$strEstado]);
+        return json_encode(['llave' => $arrModelLlave, 'status' => $arrModelStatus, 'comunidad' => $arrComunidadLlave, 'estado' => $strEstado, 'error' => $strError]);
     }
 
     /**
@@ -203,9 +215,9 @@ class RegistroController extends Controller
         $encoded_image = explode(",", $data_uri)[1];
         $decoded_image = base64_decode($encoded_image);
         $fileName = date('Ymdhis') . '_firma.jpg';
-        $pathToSave = Yii::getAlias('@webroot') . '/firmas/' .$fileName;
+        $pathToSave = Yii::getAlias('@webroot') . '/firmas/' . $fileName;
 
-        if(file_put_contents($pathToSave, $decoded_image) && Yii::$app->session->has('lastRegistro')){
+        if (file_put_contents($pathToSave, $decoded_image) && Yii::$app->session->has('lastRegistro')) {
             $objRegistro = Registro::findOne(Yii::$app->session->get('lastRegistro'));
             $objRegistro->firma_soporte = $fileName;
             $objRegistro->save();
@@ -215,56 +227,57 @@ class RegistroController extends Controller
     /**
      * @return false|string
      */
-    public function actionAjaxRegMov()
+    public function actionAjaxRegisterMotion()
     {
         $arrParam = $this->request->post();
-        $arrKeysEntrada = (empty($arrParam['listKeyEntrada']) || !isset($arrParam['listKeyEntrada']))?null:explode(',' , $arrParam['listKeyEntrada']);
-        $arrKeysSalida = (empty($arrParam['listKeySalida']) || !isset($arrParam['listKeySalida']))?null:explode(',' , $arrParam['listKeySalida']);
+        $arrKeysEntrada = (empty($arrParam['listKeyEntrada']) || !isset($arrParam['listKeyEntrada'])) ? null : explode(',', $arrParam['listKeyEntrada']);
+        $arrKeysSalida = (empty($arrParam['listKeySalida']) || !isset($arrParam['listKeySalida'])) ? null : explode(',', $arrParam['listKeySalida']);
 
-        if(!empty($arrKeysEntrada) || !empty($arrKeysSalida)){
+        if (!empty($arrKeysEntrada) || !empty($arrKeysSalida)) {
             $newRegistro = new Registro();
             $newRegistro->load($arrParam);
-            $newRegistro->id_user = (int) Yii::$app->user->id;
-            $newRegistro->entrada = (!empty($arrKeysEntrada))?date('Y-m-d H:i:s'):NULL;
-            $newRegistro->salida = (!empty($arrKeysSalida))?date('Y-m-d H:i:s'):NULL;
-            if($newRegistro->save()){
+            $newRegistro->id_user = (int)Yii::$app->user->id;
+            $newRegistro->entrada = (!empty($arrKeysEntrada)) ? date('Y-m-d H:i:s') : NULL;
+            $newRegistro->salida = (!empty($arrKeysSalida)) ? date('Y-m-d H:i:s') : NULL;
+            if ($newRegistro->save()) {
                 Yii::$app->session->set('lastRegistro', $newRegistro->id);
             }
         }
 
         //Entrada: Devolución de llave
-        if(isset($newRegistro->id) && !empty($arrKeysEntrada)){
-            foreach ($arrKeysEntrada as $value){
+        if (isset($newRegistro->id) && !empty($arrKeysEntrada)) {
+            foreach ($arrKeysEntrada as $value) {
                 $newRegistroStatus = new LlaveStatus();
                 $strEstado = 'Entrada';
-                $newRegistroStatus->id_llave = (int) $value;
-                $newRegistroStatus->status = ($strEstado=='Entrada')?'E':'S';
+                $newRegistroStatus->id_llave = (int)$value;
+                $newRegistroStatus->status = ($strEstado == 'Entrada') ? 'E' : 'S';
                 $newRegistroStatus->id_registro = $newRegistro->id;
                 $newRegistroStatus->save();
             }
         }
 
         //Salida: Entrega de llave
-        if(isset($newRegistro->id) && !empty($arrKeysSalida)){
-            foreach ($arrKeysSalida as $value){
+        if (isset($newRegistro->id) && !empty($arrKeysSalida)) {
+            foreach ($arrKeysSalida as $value) {
                 $newRegistroStatus = new LlaveStatus();
                 $strEstado = 'Salida';
-                $newRegistroStatus->id_llave = (int) $value;
-                $newRegistroStatus->status = ($strEstado=='Entrada')?'E':'S';
+                $newRegistroStatus->id_llave = (int)$value;
+                $newRegistroStatus->status = ($strEstado == 'Entrada') ? 'E' : 'S';
                 $newRegistroStatus->id_registro = $newRegistro->id;
                 $newRegistroStatus->save();
             }
         }
 
-        return json_encode( ['result'=>'OK']);
+        return json_encode(['result' => 'OK']);
     }
 
     /**
      * Generacion de reoprte pdf
      * @return mixed
      */
-    public function actionReport($id=null) {
-        if(empty($id)){
+    public function actionReport($id = null)
+    {
+        if (empty($id)) {
             return false;
         }
         // get Data
@@ -272,7 +285,7 @@ class RegistroController extends Controller
         $newObjRegistro->id = $id;
         $arrParams = $newObjRegistro->getInfoRegistro($id);
         // get your HTML raw content without any layouts or scripts
-        $content = $newObjRegistro->getHtmlAceptacion( $arrParams );
+        $content = $newObjRegistro->getHtmlAceptacion($arrParams);
         // setup kartik\mpdf\Pdf component
         $pdf = new Pdf([
             // set to use core fonts only
@@ -294,8 +307,8 @@ class RegistroController extends Controller
             'options' => ['title' => 'Krajee Report Title'],
             // call mPDF methods on the fly
             'methods' => [
-                'SetHeader'=>[ Yii::$app->params['contacto'] ],
-                'SetFooter'=>['{PAGENO}'],
+                'SetHeader' => [Yii::$app->params['contacto']],
+                'SetFooter' => ['{PAGENO}'],
             ]
         ]);
 
@@ -311,8 +324,18 @@ class RegistroController extends Controller
     public function actionFindComercial($q = false)
     {
         $rows = Comerciales::find()->select('id,nombre')->distinct()
-            ->where(['like', 'nombre', $q])->andWhere(['estado'=>1])->asArray()->all();
+            ->where(['like', 'nombre', $q])->andWhere(['estado' => 1])->asArray()->all();
         return json_encode($rows);
     }
 
+    /**
+     * Buscar info de un comercial por un metodo ajax
+     * @return false|string
+     */
+    public function actionAjaxFindComercial()
+    {
+        $arrParam = $this->request->post();
+        $rows = Comerciales::find()->where(['id'=>$arrParam['numIdResponsable']])->asArray()->all();
+        return json_encode($rows);
+    }
 }

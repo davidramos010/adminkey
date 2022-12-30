@@ -60,6 +60,7 @@ return [
     'Activo Validacion' => '',
     'Actualizar calendario' => '',
     'Address ID' => '',
+    'Add_Contact' => 'Copiar Contacte',
     'Admin.' => '',
     'Administracion' => '',
     'Agenda' => '',

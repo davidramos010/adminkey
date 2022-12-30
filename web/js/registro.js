@@ -36,6 +36,11 @@ function addKey()
                 return true;
             }
 
+            if(!!data.error){
+                toastr.error(data.error);
+                return true;
+            }
+
             if(operacion=='E'){
                 listKeyEntrada.forEach(function(key, index, object) {
                     if(parseInt(key) === parseInt(data.llave.id)){
@@ -109,7 +114,7 @@ function delKey(id)
  */
 function sendForm()
 {   //https://github.com/inquid/yii2-signature/blob/master/assets/app.js
-    let url = '/index.php?r=registro/ajax-reg-mov';
+    let url = '/index.php?r=registro/ajax-register-motion';
     let numIdRegistro = null;
 
     var form = $('#form-registro');
@@ -191,11 +196,41 @@ function generatePdfRegistro(numIdRegistro){
  * @param data
  * @returns {{results: *}}
  */
-
 function procesarResultadosComercial(data) {
     return {
         results: data.map(d => {
             return {id: d.id, nombre: d.nombre };
         })
     }
+}
+
+/**
+ * Copia los datos de contacto del comercial en el formulario
+ * @param nombreContacto
+ * @param numTelefono
+ * @param idTipoDocumento
+ * @param numDocumento
+ * @returns {boolean}
+ */
+function setCopyDataContacto(){
+
+    let numIdResponsable = $('#id_comercial').val();
+    let url = '/index.php?r=registro/ajax-find-comercial';
+    $.ajax({
+        url: url,
+        dataType: 'JSON',
+        type: 'POST',
+        data: {
+            "numIdResponsable": numIdResponsable
+        },
+        success: function (data) {
+            data = data[0];
+            $('#registro-nombre_responsable').val(data.contacto);
+            $('#registro-telefono').val(data.telefono);
+            $('#registro-tipo_documento').val(data.id_tipo_documento);
+            $('#registro-documento').val(data.documento);
+        }
+    });
+
+    return true;
 }

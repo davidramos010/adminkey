@@ -87,7 +87,7 @@ $this->registerJsFile('@web/js/usuarios.js');
                         <?=  $form->field($model_info, 'id_comercial')->widget(Select2::class, [
                                 'theme' => Select2::THEME_BOOTSTRAP,
                                 'size' => Select2::SMALL,
-                                'data' => !empty($model_info->id_comercial) ? [$model_info->id_comercial,$model_info->id_comercial] : [],
+                                'data' => !empty($model_info->id_comercial) ? [$model_info->id_comercial=>$model_info->comercial->nombre] : [],
                                 'options' => [
                                     'data-js-req-cont' => 'generic',
                                     'id' => 'id_comercial'
@@ -105,7 +105,12 @@ $this->registerJsFile('@web/js/usuarios.js');
                                         'data' => new JsExpression('(params) => { return {q:params.term} }')
                                     ],
                                     'templateResult' => new JsExpression('(params) => params.loading ? "Buscando..." : params.id + " - " + params.nombre'),
-                                    'templateSelection' => new JsExpression('(cp) => cp.nombre'),
+                                    'templateSelection' => new JsExpression('function (data) { 
+                                                                                                if(data.nombre==="" || data.nombre === undefined || data.nombre === null){
+                                                                                                    return data.text;
+                                                                                                } else {
+                                                                                                    return data.nombre;
+                                                                                                } }'),
                                 ],
                             ]
                         )->label('Empresa/Proveedor'); ?>

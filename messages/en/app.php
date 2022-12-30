@@ -33,6 +33,7 @@ return [
     'Cant. llaves' => 'Keys in Deposit',
     'Llaves por fuera' => 'Keys Delivered',
     'Propietario' => 'Owner',
+    'Add_Contact' => 'Copy Contact',
 
     'arrLlavesFecha15'=> 'Start key recovery process - Urgent!!',
     'arrLlavesFecha10'=> 'Start steps to recover keys - Alert',

@@ -128,7 +128,6 @@ use yii\widgets\ActiveForm;
 
 <?php
 
-
 $this->registerJs(
     '$(document).on("click", "[data-js-find-nomenclatura]", function (e) {
             findCodeLlave();
