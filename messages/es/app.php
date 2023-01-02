@@ -652,6 +652,7 @@ return [
     'Nombre Persona Retira' => '',
     'Nombre de la campaña' => '',
     'Nombre empresa' => '',
+    'Restriccion devolucion llave' => 'El usuario no puede realizar esta operación, la llave esta asignada a otro usuario.',
     'titulo_usuario_relacion_comercial' => '* Relación de un usuario con una Empresa/Proveedor',
     'Usuario Contrato' => '',
     'Usuario Dial Applet' => '',
