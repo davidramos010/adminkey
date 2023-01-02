@@ -184,7 +184,7 @@ function fnGuardarCuadroFirma(numIdRegistro){
  * Genera pdf de registro
  */
 function generatePdfRegistro(numIdRegistro){
-    var win = window.open('/index.php?r=registro/report&id='+numIdRegistro, '_blank');
+    var win = window.open('/index.php?r=registro/print-register&id='+numIdRegistro, '_blank');
     if (win) {
         //Browser has allowed it to be opened
         win.focus();

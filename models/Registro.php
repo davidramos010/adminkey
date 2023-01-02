@@ -287,6 +287,12 @@ class Registro extends \yii\db\ActiveRecord
                           </div>
                           <!-- /.col -->
                         </div>";
+
+        $arrResponsable['nombre'] = trim(strtoupper($objRegistro->nombre_responsable));
+        $arrResponsable['documento'] = (!empty($objRegistro->tipo_documento) && isset(util::arrTipoDocumentos[$objRegistro->tipo_documento]))?util::arrTipoDocumentos[$objRegistro->tipo_documento].' ':'';
+        $arrResponsable['documento'] .= trim(strtoupper($objRegistro->documento));
+        $arrResponsable['telefono'] = trim(strtoupper($objRegistro->telefono));
+
         $strHtmlFooter = "<div class=\"row\">
                           <!-- accepted payments column -->
                           <div class=\"col-12\">
@@ -300,12 +306,13 @@ class Registro extends \yii\db\ActiveRecord
                                 <tr>
                                     <td style=\"width:60%\">
                                         <div class=\"col-sm-4 invoice-col\">
-                                           <b>ID</b> #".str_pad($objRegistro->id, 6, "0", STR_PAD_LEFT)."<br>
-                                           <b>Usuario:</b> ".$objRegistro->user->userInfo->nombres." ".$objRegistro->user->userInfo->apellidos." <br>
-                                           <b>Fecha Registro:</b> ".$objRegistro->getFechaRegistro()."<br>
+                                           <b>RESPONSABLE</b><br>
+                                           Nombre : ".$arrResponsable['nombre']."<br>
+                                           Documento : ".$arrResponsable['documento']." <br>
+                                           Teléfono : ".$arrResponsable['telefono']."<br>
                                         </div>
                                     </td>
-                                    <td style=\"width:40%; align-content: center; text-align: center  \">
+                                    <td  style=\"width:50%; align-content: center; text-align: center; font-size: 10px \">Firma :<br> 
                                         ".$strFirma."
                                     </td>
                                 </tr>

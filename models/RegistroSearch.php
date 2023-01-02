@@ -139,7 +139,6 @@ class RegistroSearch extends Registro
      */
     public function search_status($idRegistro, $strStatus)
     {
-
         $query = LlaveStatus::find()->where(['id_registro'=>$idRegistro,'status'=>$strStatus]);
         $query->orderBy('id DESC');
         $dataProvider = new ActiveDataProvider([

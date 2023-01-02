@@ -63,9 +63,6 @@ class RegistroController extends Controller
      */
     public function actionView($id)
     {
-        $arrInfoStatusE = LlaveStatus::find()->where(['id_registro' => $id, 'status' => 'E'])->all();
-        $arrInfoStatusS = LlaveStatus::find()->where(['id_registro' => $id, 'status' => 'S'])->all();
-
         $searchModel = new RegistroSearch();
         $arrInfoStatusE = $searchModel->search_status($id, 'E');
         $arrInfoStatusS = $searchModel->search_status($id, 'S');
@@ -275,7 +272,7 @@ class RegistroController extends Controller
      * Generacion de reoprte pdf
      * @return mixed
      */
-    public function actionReport($id = null)
+    public function actionPrintRegister($id = null)
     {
         if (empty($id)) {
             return false;
