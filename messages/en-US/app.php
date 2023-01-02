@@ -771,6 +771,7 @@ return [
     'Reset' => '',
     'Resultado comandos' => '',
     'Resultados' => '',
+    'Restriccion devolucion llave' => 'The user cannot perform this operation, the key is assigned to another user.',
     'Revoked' => '',
     'SIPS' => '',
     'SIPS2' => '',

@@ -789,6 +789,7 @@ return [
     'Renovados' => '',
     'Reserva de ofertas manual' => '',
     'Reset' => '',
+    'Restriccion devolucion llave' => 'L-usuari no pot fer aquesta operació, la clau està assignada a un altre usuari.',
     'Resultado comandos' => '',
     'Resultados' => '',
     'Revoked' => '',

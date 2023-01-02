@@ -542,6 +542,7 @@ return [
     'Renovados' => '',
     'Reserva de ofertas manual' => '',
     'Reset' => '',
+    'Restriccion devolucion llave' => 'The user cannot perform this operation, the key is assigned to another user.',
     'Resultado comandos' => '',
     'Resultados' => '',
     'Revoked' => '',

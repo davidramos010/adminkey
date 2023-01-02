@@ -194,7 +194,7 @@ class RegistroController extends Controller
             if($userPerfil!=1 && $strEstado=='S'){ // si no es admin, evalua quien creo el registro
                 $objRegistro = Registro::findOne(['id'=>$arrModelStatus->id_registro]);
                 if(!empty($objRegistro) && (int) $objRegistro->id_user != (int) $userSession ){
-                    $strError = "El usuario no puede realizar esta operación, la llave esta asignada aa otro usuario.";
+                    $strError = Yii::t('app', 'Restriccion devolucion llave');
                 }
             }
         }
