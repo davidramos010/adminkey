@@ -213,8 +213,9 @@ class LlaveController extends Controller
                 $modelStatus->status = ($modelStatus->status=='S')?'<span class="float-none badge bg-danger">Salida</span>':'<span class="float-none badge bg-success">Entrada</span>';
                 $strTableTr .= "<tr>";
                 $strTableTr .= "<td >".$modelStatus->status."</td>";
-                $strTableTr .= "<td style='font-size: 13px; font-weight: bold'>". util::getDateTimeFormatedSqlToUser($modelStatus->fecha)  ."</td>";
-                $strTableTr .= "<td>".$modelStatus->registro->comerciales->nombre."</td>";
+                $strTableTr .= "<td style='font-size: 12px; font-weight: bold'>". substr(util::getDateTimeFormatedSqlToUser($modelStatus->fecha),0,10)   ."</td>";
+                $strTableTr .= "<td style='font-size: 13px; '>".$modelStatus->registro->comerciales->nombre."</td>";
+                $strTableTr .= "<td style='font-size: 13px; '>".$modelStatus->registro->nombre_responsable."</td>";
                 $strTableTr .= "<td style='font-size: 12px;'>".$modelStatus->registro->observacion."</td></tr>";
             }
         }
