@@ -57,7 +57,6 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
                             ['label' => 'Reporte Movimientos', 'url' => ['registro/index'], 'iconStyle' => 'far'],
                             ['label' => 'Llaves', 'url' => ['llave/report'], 'iconStyle' => 'far'],
                         ],
-                        'visible' => ((int) Yii::$app->user->identity->perfiluser->id_perfil==1)
                     ],
                     ['label' => 'Registro',  'icon' => 'fas fa-edit', 'url' => ['registro/create']],
                     ['label' => 'Contratos',  'icon' => 'fas fa-file-contract', 'url' => ['contratos/generar-list']],
