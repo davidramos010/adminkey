@@ -89,6 +89,63 @@ class PropietariosController extends Controller
     }
 
     /**
+     * @return string|\yii\web\Response
+     */
+    public function actionCreateModal()
+    {
+        $model = new Propietarios();
+        $this->module->layout = 'content-simple';// redefinición de layout
+        return $this->render('create-modal', [
+            'model' => $model,
+            'modal'=>true
+        ]);
+    }
+
+    /**
+     * Crear un registros de Propietario desde la llamada de un formulario con ajax
+     * Para esta caso se ejecuta desde el formulario de llaves
+     * @return void
+     */
+    public function actionAjaxCreate()
+    {
+        $response['ok_sms'] = Yii::t('yii', 'Almacenado Correctamente');
+        $response['ok'] = null;
+        $response['name'] = null;
+        $response['error'] = null;
+
+        if ($this->request->isPost) {
+
+            $model = new Propietarios();
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                $model->nombre_propietario = strtoupper($model->nombre_propietario);
+                $model->nombre_representante = strtoupper($model->nombre_representante);
+                $model->observaciones = strtoupper($model->observaciones);
+                $model->poblacion = strtoupper($model->poblacion);
+                $model->direccion = strtoupper($model->direccion);
+                if($model->save()){
+                    $response['ok'] = $model->id;
+                    $response['name'] = !empty($model->nombre_representante) ? $model->nombre_representante : $model->nombre_propietario;
+                }else{
+                    $response['error'] = Yii::t('yii', 'No se puede almacenar. Valide el formulario he intente nuevamente.').'<br />';
+                }
+            }
+        }
+
+        // -------------------------------
+        // Gestión de errores
+        if($model->getErrors()){
+            foreach ($model->getErrors() as $key => $campo){
+                $response['error'] .= ucfirst($key).'<br />';
+                foreach($campo as $error_detalle){
+                    $response['error'] .= '<span class="small">'.$error_detalle.'</span><br />';
+                }
+            }
+        }
+
+        echo json_encode($response);
+    }
+
+    /**
      * Updates an existing Propietarios model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID

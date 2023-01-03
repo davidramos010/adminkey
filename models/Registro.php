@@ -19,10 +19,13 @@ use yii\helpers\Url;
  * @property string|null $salida
  * @property string|null $observacion
  * @property string|null $firma_soporte
- *
  * @property Llave $llave
  * @property User $user
  * @property Comerciales $comerciales
+ * @property string|null $tipo_documento
+ * @property string|null $documento
+ * @property string|null $nombre_responsable
+ * @property string|null $telefono
  */
 class Registro extends \yii\db\ActiveRecord
 {
@@ -51,9 +54,10 @@ class Registro extends \yii\db\ActiveRecord
     {
         return [
             [['id_user'], 'required'],
-            [['id_user', 'id_llave', 'id_comercial'], 'integer'],
+            [['id_user', 'id_llave', 'id_comercial','tipo_documento'], 'integer'],
             [['entrada', 'salida','signature'], 'safe'],
-            [['observacion','codigo','username','firma_soporte'], 'string', 'max' => 255],
+            [['documento','telefono'], 'string', 'max' => 20],
+            [['nombre_responsable', 'observacion','codigo','username','firma_soporte'], 'string', 'max' => 255],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
             [['id_llave'], 'exist', 'skipOnError' => true, 'targetClass' => Llave::className(), 'targetAttribute' => ['id_llave' => 'id']],
         ];
@@ -73,7 +77,11 @@ class Registro extends \yii\db\ActiveRecord
             'salida' => 'Salida',
             'observacion' => 'Observacion',
             'id_' => 'Observacion',
-            'firma_soporte' => 'Firma Soporte'
+            'firma_soporte' => 'Firma Soporte',
+            'tipo_documento' => 'Tipo Documento',
+            'documento' => 'Documento',
+            'nombre_reponsable' => 'Nombre Responsable',
+            'telefono' => 'Teléfono',
         ];
     }
 
@@ -236,9 +244,9 @@ class Registro extends \yii\db\ActiveRecord
                                       </td>
                                         <td align='right'>
                                             <div class=\"col-sm-4 invoice-col\">
-                                               <b>ID</b> #".str_pad($objRegistro->id, 6, "0", STR_PAD_LEFT)."<br>
+                                               #".str_pad($objRegistro->id, 6, "0", STR_PAD_LEFT)."<br>
                                                Usuario: ".$objRegistro->user->userInfo->nombres." ".$objRegistro->user->userInfo->apellidos." <br>
-                                               Fecha Registro: ".$objRegistro->getFechaRegistro()."<br>
+                                               Fecha Registro: ".util::getDateTimeFormatedSqlToUser($objRegistro->getFechaRegistro())."<br>
                                             </div>
                                         </td>
                                     </tr>
@@ -266,6 +274,12 @@ class Registro extends \yii\db\ActiveRecord
                           </div>
                           <!-- /.col -->
                         </div>";
+
+        $arrResponsable['nombre'] = trim(strtoupper($objRegistro->nombre_responsable));
+        $arrResponsable['documento'] = (!empty($objRegistro->tipo_documento) && isset(util::arrTipoDocumentos[$objRegistro->tipo_documento]))?util::arrTipoDocumentos[$objRegistro->tipo_documento].' ':'';
+        $arrResponsable['documento'] .= trim(strtoupper($objRegistro->documento));
+        $arrResponsable['telefono'] = trim(strtoupper($objRegistro->telefono));
+
         $strHtmlFooter = "<div class=\"row\">
                           <!-- accepted payments column -->
                           <div class=\"col-12\">
@@ -274,15 +288,14 @@ class Registro extends \yii\db\ActiveRecord
                             </p>
                           </div>
                           <!-- /.col -->
-                          <div class=\"col-12\">
+                          <address class=\"col-12\">
                              <table class=\"table table-striped\">
                                 <tr>
-                                  <td>
-                                    <address>Responsable</address>
-                                  </td>
+                                  <td><address>Empresa/Proveedor</address></td>
+                                  <td><address>Responsable</address></td>
                                 </tr>
                                 <tr>
-                                  <td colspan='2'>
+                                  <td valign='top'>
                                     <address>
                                       <strong>".$objComercial->nombre."</strong><br>
                                       ".$objComercial->direccion."&nbsp;&nbsp;
@@ -292,16 +305,16 @@ class Registro extends \yii\db\ActiveRecord
                                       Movíl: ".$objComercial->movil."<br>
                                     </address>
                                   </td>
+                                  <td style=\"width:50%\"  valign='top'>
+                                        <address>
+                                            <strong>".$arrResponsable['nombre']."</strong><br>
+                                           Documento : ".$arrResponsable['documento']." <br>
+                                           Teléfono : ".$arrResponsable['telefono']."<br>
+                                        </address>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td style=\"width:60%\">
-                                        <div class=\"col-sm-4 invoice-col\">
-                                           <b>Persona Responsable:</b> ".$objRegistro->user->userInfo->nombres." ".$objRegistro->user->userInfo->apellidos." <br>
-                                           <b>Identificación:</b> NIE Y4424475V<br>
-                                           <b>Movíl:</b> 123456789<br>
-                                        </div>
-                                    </td>
-                                    <td style=\"width:40%; align-content: center; text-align: center  \">
+                                    <td colspan='2' style=\"align-content: center; text-align: center; font-size: 10px \">Firma Responsable:<br> 
                                         ".$strFirma."
                                     </td>
                                 </tr>

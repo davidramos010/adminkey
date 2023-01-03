@@ -29,7 +29,6 @@ class LoginForm extends Model
         return [
             // username and password are both required
             [['username', 'password'], 'string', 'max' => 255],
-            [['authkey'], 'integer','message'=>'Codigo no validado.'],
             [['perfil'], 'integer'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
@@ -70,6 +69,7 @@ class LoginForm extends Model
     }
 
     /**
+     * Perfiles 2: user gestor, 1: administrado
      * Logs in a user using the provided username and password.
      * @return bool whether the user is logged in successfully
      */
@@ -81,6 +81,7 @@ class LoginForm extends Model
             $this->password = null;
             $this->getAuthKey();
         }else{
+            $this->authkey = null;
             if(!empty($this->password)){
                 $this->password = util::hash($this->password);
             }
@@ -111,9 +112,9 @@ class LoginForm extends Model
      */
     public function getAuthKey()
     {
+        $objUserPerfil = null;
         if (!empty($this->authkey)) {
             $objUser = User::find()->where(['authkey'=> $this->authkey ])->one();
-
             if(!empty($objUser)){
                 $objUserPerfil = PerfilesUsuario::find()->where(['id_user'=>$objUser->id,'id_perfil'=>2])->one();
                 if(!empty($objUserPerfil)){
@@ -124,6 +125,6 @@ class LoginForm extends Model
             }
         }
 
-        return (!empty($objUser));
+        return (!empty($objUserPerfil));
     }
 }

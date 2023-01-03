@@ -35,9 +35,10 @@ $this->registerJsFile('@web/js/llave.js');
                                     <thead>
                                     <tr>
                                         <th style="width: 10%">Operación</th>
-                                        <th style="width: 25%">Fecha Operación</th>
-                                        <th style="width: 25%">Responsable</th>
-                                        <th style="width: 40%">Observación</th>
+                                        <th style="width: 10%">Fecha</th>
+                                        <th style="width: 23%">Empresa</th>
+                                        <th style="width: 23%">Responsable</th>
+                                        <th style="width: 34%">Observación</th>
                                     </tr>
                                     </thead>
                                     <tbody id="modal-email-contenido-table">

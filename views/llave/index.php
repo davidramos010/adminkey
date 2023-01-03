@@ -71,7 +71,7 @@ $this->registerJsFile('@web/js/llave.js');
                         'enableSorting'=>false,
                         'format' => 'raw',
                         'value' => function($model){
-                            return (isset($model->comunidad))?strtoupper($model->comunidad->nombre):'No Encontrado' ;
+                            return (isset($model->comunidad))?strtoupper($model->comunidad->nombre):'' ;
                         }
                     ],
                     [

@@ -23,8 +23,7 @@ $arrColumns = [[
     'format' => 'raw',
     'value' => function ($model) {
         return (isset($model->llave->codigo)) ? strtoupper($model->llave->codigo) : '';
-    }
-],
+    }],
     [
         'attribute' => 'id',
         'label' => 'Descripción',
@@ -52,11 +51,15 @@ $arrColumns = [[
             return (isset($model->llave->propietarios)) ? strtoupper($model->llave->propietarios->nombre) : '';
         }
     ]];
+
+$bolVisibleGridSalida = $arrInfoStatusS->getTotalCount()>0 ? 'inline' : 'none';
+$bolVisibleGridEntrada = $arrInfoStatusE->getTotalCount()>0 ? 'inline' : 'none';
+
 ?>
 <div class="registro-view">
     <div class="ribbon_wrap">
         <!-- general form elements -->
-        <div class="card card-primary">
+        <div class="card card-primary" style="display:<?= $bolVisibleGridSalida ?>">
             <div class="card-header">
                 <h3 class="card-title"><i class="fas fa-angle-double-up text-danger"></i> Registros de Salida</h3>
             </div>
@@ -67,7 +70,7 @@ $arrColumns = [[
                 ]) ?>
             </div>
         </div>
-        <div class="card card-primary">
+        <div class="card card-primary" style="display:<?= $bolVisibleGridEntrada ?>">
             <div class="card-header">
                 <h3 class="card-title"><i class="fas fa-angle-double-down text-success"></i> Registros de Entrada</h3>
             </div>
@@ -78,15 +81,45 @@ $arrColumns = [[
                 ]) ?>
             </div>
         </div>
-        <!-- form start -->
         <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-user-tag text-white"></i> Responsable</h3>
+            </div>
             <div class="card-body">
-                <?php $form = ActiveForm::begin(); ?>
                 <div class="form-group">
-                    <?= $form->field($model, 'id_user')->textInput(['id' => 'user', 'maxlength' => true, 'class' => 'form-control', 'readonly' => true, 'value' => trim(strtoupper($model->user->userInfo->nombres . ' ' . $model->user->userInfo->apellidos))])->label('Fecha Registro') ?>
-                    <?= $form->field($model, 'entrada')->textInput(['id' => 'fecha_registro', 'maxlength' => true, 'class' => 'form-control', 'readonly' => true, 'value' => util::getDateTimeFormatedSqlToUser($model->getFechaRegistro())])->label('Fecha Registro') ?>
-                    <?= $form->field($model, 'id_comercial')->dropDownList(Registro::getComercialesDropdownList(), ['id' => 'id_comercial', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'disabled' => true])->label('Empresa'); ?>
-                    <?= $form->field($model, 'observacion')->textArea(['id' => 'txt_observacion', 'class' => 'form-control', 'style' => 'width:100%', 'readonly' => true])->label('Observaciones') ?>
+
+                    <?php $form = ActiveForm::begin(); ?>
+                    <div class="row">
+                        <div class="col-md-3 ">
+                            <?= $form->field($model, 'entrada')->textInput(['id'=>'fecha_registro','maxlength' => true,'class'=>'form-control','readonly' => true, 'value'=> util::getDateTimeFormatedSqlToUser($model->getFechaRegistro()) ])->label('Fecha Registro') ?>
+                        </div>
+                        <div class="col-md-9 ">
+                            <?= $form->field($model, 'id_comercial')->dropDownList(Registro::getComercialesDropdownList(), ['id' => 'id_comercial', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'disabled' => true])->label('Empresa'); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1 ">
+                            <?= $form->field($model, 'tipo_documento')->dropDownList(util::arrTipoDocumentos, ['id' => 'tipo_documento_reponsable', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'disabled' => true])->label('Tipo Documento'); ?>
+                        </div>
+                        <div class="col-md-2 ">
+                            <?= $form->field($model, 'documento')->textInput(['id'=>'documento_reponsable','maxlength' => true,'class'=>'form-control','readonly' => true])->label('Documento') ?>
+                        </div>
+                        <div class="col-md-6 ">
+                            <?= $form->field($model, 'nombre_responsable')->textInput(['id'=>'nombre_responsable','maxlength' => true,'class'=>'form-control','readonly' => true, 'value'=> trim(strtoupper( $model->nombre_responsable )) ])->label('Nombre Responsable') ?>
+                        </div>
+                        <div class="col-md-3 ">
+                            <?= $form->field($model, 'telefono')->textInput(['id' => 'telefono_responsable', 'class' => 'form-control', 'style' => 'width:100%', 'readonly' => true])->label('Teléfono') ?>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <?= $form->field($model, 'observacion')->textArea(['id' => 'txt_observacion', 'class' => 'form-control', 'style' => 'width:100%', 'readonly' => true])->label('Observaciones') ?>
+                        </div>
+                    </div>
+                    <?php ActiveForm::end(); ?>
                 </div>
                 <div class="form-group">
                     <div class="card text-center">
@@ -94,17 +127,16 @@ $arrColumns = [[
                             <?= Yii::t('app', 'Firma de Aceptación') ?>
                         </div>
                         <div class="card-footer text-muted">
-                            <?php if (!empty($model->firma_soporte)): ?>
-                                <?= Html::img('@web/firmas/' . $model->firma_soporte) ?>
+
+                            <?php if(!empty($model->firma_soporte)):?>
+                                <?= Html::img('@web/firmas/'.$model->firma_soporte) ?>
                             <?php endif; ?>
                         </div>
                     </div>
                 </div>
-                <?php ActiveForm::end(); ?>
                 <div style="padding-top: 15px">
                     <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
                     <?= Html::button('<i class="fas fa-download"></i> Imprimir', ['id' => 'btn_registrar', 'class' => 'btn btn-primary float-left', 'onclick' => '(function ( $event ) { generatePdfRegistro( ' . $model->id . ' ) })();', 'style' => 'margin-right: 5px;']); ?>
-
                 </div>
             </div>
         </div>

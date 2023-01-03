@@ -36,7 +36,7 @@ $this->registerJsFile('@web/js/llave.js');
 
 ?>
 
-<div class="llave-view" style="max-width: 960px">
+<div class="llave-view" >
     <h1><?= Html::encode($this->title) ?></h1>
     <!-- form start -->
     <?= $this->render('_form', [
@@ -50,7 +50,7 @@ $this->registerJsFile('@web/js/llave.js');
             <!-- /.card-header -->
             <div id="showTableBarcode" style=" max-width: 230px; max-height: 170px; aling-items: center; justify-content: center" class="border border-primary">
                 <table align="center"  style=" font-size: 10px; max-width: 200px; max-height: 170px;">
-                    <tr> <td style=" text-align: center; height: 15px"><?= strtoupper(trim($model->comunidad->nomenclatura)) ?></td></tr>
+                    <tr> <td style=" text-align: center; height: 15px"><?= strtoupper(trim($model->nomenclatura)) ?></td></tr>
                     <tr> <td align="center" style="height: 26px"><div id="showBarcode" ></div></td></tr>
                     <tr>
                         <td style="text-align: center; vertical-align: top">

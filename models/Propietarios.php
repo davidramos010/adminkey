@@ -46,6 +46,8 @@ class Propietarios extends \yii\db\ActiveRecord
             [['nombre_propietario','nombre_representante', 'direccion', 'poblacion', 'email'], 'string', 'max' => 250],
             [['cod_postal'], 'string', 'max' => 10],
             ['email', 'email'],
+            [['cod_postal','direccion','movil'], 'required','message'=> Yii::t('yii',  '{attribute} es requerido.') ],
+            ['documento_propietario', 'validateDocumentos'],
             [
                 ['documento_propietario'],
                 function ($attribute) {
@@ -81,6 +83,15 @@ class Propietarios extends \yii\db\ActiveRecord
 
         ];
     }
+
+    public function validateDocumentos($attribute, $params)
+    {
+        if (!$this->hasErrors() && empty($this[$attribute]) && empty($this['tipo_documento_propietario']) ) {
+            $this->addError($attribute, "Tipo documento no valido!");
+            Yii::$app->session->setFlash('error', 'usuario o password incorrectos.');
+        }
+    }
+
 
     /**
      * {@inheritdoc}
