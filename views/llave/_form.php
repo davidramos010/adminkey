@@ -10,6 +10,9 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 /* @var $view bool */
 
+$strStyleVisiblePropietario = $model->tipo->propietario ? '' : 'none';
+$strStyleVisibleComunidad = $model->tipo->comunidad ? '' : 'none';
+
 ?>
 <div class="llave-form">
     <div class="row">
@@ -44,7 +47,7 @@ use yii\widgets\ActiveForm;
                     <?= $form->field($model, 'id_tipo')->dropDownList(Llave::getTipoLlaveDropdownList(), ['onchange' => 'fnTipoLlaveSelected()', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'readonly' => $view])->label('Tipo'); ?>
                 </div>
             </div>
-            <div class="row" id="divFormComunidad" style="display: none">
+            <div class="row" id="divFormComunidad" style="display: <?= $strStyleVisibleComunidad ?>">
                 <div class="col-md-6 ">
                     <?= $form->field($model, 'id_comunidad')->dropDownList(Llave::getComunidadesDropdownList(), ['class' => 'form-control', 'prompt' => 'Seleccione Uno', 'readonly' => $view, 'data-js-find-nomenclatura'=>'comunidad'])->label('Comunidad'); ?>
                 </div>
@@ -55,7 +58,7 @@ use yii\widgets\ActiveForm;
                     </div>
                 </div>
             </div>
-            <div class="row" id="divFormPropietario" style="display: none">
+            <div class="row" id="divFormPropietario" style="display: <?= $strStyleVisiblePropietario ?>">
                 <div class="col-md-6 ">
                     <?= $form->field($model, 'id_propietario')->dropDownList(Llave::getPropietariosDropdownList(), ['id' => 'id_propietario', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'readonly' => $view, 'data-js-find-nomenclatura'=>'propietario'])->label('Propietario'); ?>
                 </div>

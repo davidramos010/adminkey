@@ -36,7 +36,7 @@ $this->registerJsFile('@web/js/llave.js');
 
 ?>
 
-<div class="llave-view" style="max-width: 960px">
+<div class="llave-view" >
     <h1><?= Html::encode($this->title) ?></h1>
     <!-- form start -->
     <?= $this->render('_form', [
