@@ -173,6 +173,7 @@ class LlaveController extends Controller
     }
 
     /**
+     * Buscar detalles del registro de la llave
      * @return false|string
      */
     public function actionAjaxFindCode()
@@ -199,7 +200,7 @@ class LlaveController extends Controller
     }
 
     /**
-     * buscar movimientos
+     * buscar movimientos - retorna un arreglo con los resgistros de los movimientos
      * @return false|string
      */
     public function actionAjaxFindStatus():string
@@ -218,6 +219,8 @@ class LlaveController extends Controller
                 $strTableTr .= "<td style='font-size: 13px; '>".$modelStatus->registro->nombre_responsable."</td>";
                 $strTableTr .= "<td style='font-size: 12px;'>".$modelStatus->registro->observacion."</td></tr>";
             }
+        }else{
+            $strTableTr = "<tr><td colspan='5' class='text-black-50 text-md-center' >Sin Movimientos</td></tr>";
         }
 
         return $strTableTr;

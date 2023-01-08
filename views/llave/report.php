@@ -53,13 +53,13 @@ $this->title = 'Reporte de Llaves';
                         }
                     ],
                     [
-                        'attribute' => 'id_comunidad',
+                        'attribute' => 'cliente_comunidad',
                         'label' => 'Cliente',
                         'headerOptions' => ['style' => 'width: 15%'],
                         'enableSorting'=>false,
                         'format' => 'raw',
                         'value' => function($model){
-                            return (isset($model->comunidad))?strtoupper($model->comunidad->nombre):'No Encontrado' ;
+                            return (isset($model->cliente_comunidad))?strtoupper($model->cliente_comunidad):'' ;
                         }
                     ],
                     [
@@ -68,7 +68,7 @@ $this->title = 'Reporte de Llaves';
                         'headerOptions' => ['style' => 'width: 5%'],
                         'enableSorting'=>false,
                         'value' => function ($model) {
-                            $strLabel = (isset($model->tipo))?strtoupper($model->tipo->descripcion):'No Encontrado' ;
+                            $strLabel = (isset($model->tipo))?strtoupper($model->tipo->descripcion):'' ;
                             switch ($model->id_tipo){
                                 case 1:
                                     $class = 'bg-success';
