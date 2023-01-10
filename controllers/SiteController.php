@@ -1,10 +1,15 @@
 <?php
 namespace app\controllers;
 
+use app\commands\LoadController;
+use app\models\Comunidad;
 use app\models\Llave;
 use app\models\LlaveStatusSearch;
+use app\models\LlaveUbicaciones;
 use app\models\Perfiles;
 use app\models\PerfilesUsuario;
+use app\models\Propietarios;
+use app\models\TipoLlave;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Response;
@@ -221,5 +226,84 @@ class SiteController extends BaseController
         $session->close();
 
         return isset($_SERVER['HTTP_REFERER']) ? $this->redirect($_SERVER['HTTP_REFERER']) : $this->redirect(Yii::$app->homeUrl);
+    }
+
+    public function actionTest()
+    {
+        $fileHandler=fopen("../web/documents/SGA_CONTROL_CLAUS.csv","r");
+        if($fileHandler){
+            $first_time = true;
+            while($line=fgetcsv($fileHandler,1000)){
+                if ($first_time == true) { // primera fila
+                    $first_time = false;
+                    continue;
+                }
+                $strCode = $line[0];
+                $strOfic = $line[1];
+                $strTipo = $line[2];
+                $strAcceso = $line[4];
+                $numCantidad = (int) $line[5];
+                $strNombrePropietario = strtoupper($line[7]);
+                $strMovilPropietario = trim($line[8]);
+                $numAlarma = strtoupper(trim($line[9]));
+                $strAlarma = trim($line[10]);
+                $strObservaciones = trim($line[12]);
+                //Buscar comunidad
+                $arrCode = explode('-',$strCode);
+
+                $strNomenclatura = "C".$arrCode[0];
+                $strCodigo = $arrCode[1];
+
+                // consultar comunidad
+                $objComunidad = Comunidad::find()->where(['nomenclatura'=>$strNomenclatura])->one();
+                // ubicacion
+                $objLlaveUbicacion = LlaveUbicaciones::find()->where(['descripcion_almacen'=>$strOfic])->one();
+                // TIPO
+                $objLlaveTipo = TipoLlave::find()->where(['descripcion'=>$strTipo])->one();
+
+                // BUSCAR PARTICULAR Y CREARLO
+                if($objLlaveTipo->descripcion=='PARTICULAR'){
+                    $objParticular = Propietarios::find()->where(['like','nombre_propietario',$strNombrePropietario])->one();
+                    if(empty($objParticular)){
+                        $objParticular = new Propietarios();
+                        $objParticular->nombre_propietario = $strNombrePropietario;
+                        $objParticular->direccion = $objComunidad->direccion;
+                        $objParticular->cod_postal = $objComunidad->cod_postal;
+                        $objParticular->poblacion = $objComunidad->poblacion;
+                        $objParticular->telefono = $strMovilPropietario;
+                        $objParticular->movil = $strMovilPropietario;
+                        $objParticular->save();
+                    }
+
+
+                }
+
+                while ($numCantidad>0){
+                    // Crear llave
+                    $objNewLlave = new Llave();
+                    $strCodigoLlave = $strNomenclatura."-".$strCodigo;
+                    $strCodigoLlave .= ($numCantidad>1) ? '-'.$numCantidad:'';
+                    $objNewLlave->id_comunidad = $objComunidad->id;
+                    $objNewLlave->id_tipo = $objLlaveTipo->id;
+                    $objNewLlave->id_llave_ubicacion = $objLlaveUbicacion->id;
+                    $objNewLlave->copia = $numCantidad;
+                    $objNewLlave->codigo = $strCodigoLlave;
+                    $objNewLlave->descripcion = $strAcceso;
+                    $objNewLlave->alarma = $numAlarma=='SI' ? 1 : 0;
+                    $objNewLlave->codigo_alarma = $objNewLlave->alarma ? $strAlarma : NULL;
+                    $objNewLlave->observacion = $strObservaciones;
+                    if(isset($objParticular) && empty($objParticular)){
+                        $objNewLlave->id_propietario = $objParticular->id;
+                    }
+                    if(!$objNewLlave->save()){
+                        die('Error:Code:'.$strCodigo);
+                    }
+                    echo "->".$objNewLlave->id."\\n";
+                    $numCantidad--;
+                }
+
+
+            }
+        }
     }
 }

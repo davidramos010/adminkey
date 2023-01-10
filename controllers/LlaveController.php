@@ -9,6 +9,7 @@ use app\models\LlaveStatus;
 use app\models\Propietarios;
 use app\models\TipoLlave;
 use app\models\util;
+use Yii;
 use yii\helpers\UnsetArrayValue;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -211,7 +212,7 @@ class LlaveController extends Controller
         $arrStatus = LlaveStatus::find()->where(['id_llave'=>$numIdLlave])->orderBy('id DESC')->all();
         if(count($arrStatus)){
             foreach ($arrStatus as $modelStatus){
-                $modelStatus->status = ($modelStatus->status=='S')?'<span class="float-none badge bg-danger">Salida</span>':'<span class="float-none badge bg-success">Entrada</span>';
+                $modelStatus->status = ($modelStatus->status=='S')?'<span class="float-none badge bg-danger">'.Yii::t('app','Exit').'</span>':'<span class="float-none badge bg-success">'.Yii::t('app','Entry').'</span>';
                 $strTableTr .= "<tr>";
                 $strTableTr .= "<td >".$modelStatus->status."</td>";
                 $strTableTr .= "<td style='font-size: 12px; font-weight: bold'>". substr(util::getDateTimeFormatedSqlToUser($modelStatus->fecha),0,10)   ."</td>";
@@ -220,7 +221,7 @@ class LlaveController extends Controller
                 $strTableTr .= "<td style='font-size: 12px;'>".$modelStatus->registro->observacion."</td></tr>";
             }
         }else{
-            $strTableTr = "<tr><td colspan='5' class='text-black-50 text-md-center' >Sin Movimientos</td></tr>";
+            $strTableTr = "<tr><td colspan='5' class='text-black-50 text-md-center' >".Yii::t('yii','No results found.')."</td></tr>";
         }
 
         return $strTableTr;
