@@ -12,7 +12,6 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
         '@tests' => '@app/tests',
-        '@plantillas' => "@web/plantillas"
     ],
     'components' => [
         'cache' => [

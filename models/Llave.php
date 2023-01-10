@@ -12,7 +12,7 @@ use yii\helpers\ArrayHelper;
  * @property int|null $id_comunidad
  * @property int|null $id_tipo
  * @property int|null $id_propietario
- * @property int|null $id_ubicacion
+ * @property int|null $id_llave_ubicacion
  * @property int|null $copia
  * @property string|null $codigo
  * @property string|null $descripcion
@@ -57,7 +57,7 @@ class Llave extends \yii\db\ActiveRecord
         return [
             [['codigo', 'id_llave_ubicacion', 'id_tipo','descripcion'], 'required', 'message'=> Yii::t('yii',  'Es requerido')],
             [['id_comunidad', 'id_tipo', 'id_propietario', 'id_llave_ubicacion','copia', 'activa','alarma','facturable'], 'integer'],
-            [['copia'], 'integer', 'max' => 10],
+            [['copia'], 'integer', 'max' => 99],
             [['codigo','nombre_propietario','nomenclatura','cliente_comunidad'], 'string', 'max' => 100],
             [['descripcion', 'observacion','codigo_alarma'], 'string', 'max' => 255],
             /*[['codigo'], 'unique'],*/
@@ -74,15 +74,15 @@ class Llave extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'id_comunidad' => 'Id comunidad',
-            'id_tipo' => 'Id Tipo',
-            'copia' => 'Copia',
-            'codigo' => 'Código',
-            'descripcion' => 'Descripción',
-            'observacion' => 'Observación',
-            'activa' => 'Activa',
-            'facturable' => 'Facturable',
-            'alarma' => 'Alarma'
+            'id_comunidad' => Yii::t('app','Comunidad'),
+            'id_tipo' => Yii::t('app','Tipo'),
+            'copia' => Yii::t('app','Copia'),
+            'codigo' => Yii::t('app','Codigo'),
+            'descripcion' => Yii::t('app','Descripcion'),
+            'observacion' => Yii::t('app','Observacion'),
+            'activa' => Yii::t('app','Activa'),
+            'facturable' => Yii::t('app','Facturable'),
+            'alarma' => Yii::t('app','Alarma')
         ];
     }
 
@@ -241,7 +241,7 @@ class Llave extends \yii\db\ActiveRecord
             WHERE ls.status ="S"; ';
         $resultadosSalida = $query->createCommand($queryString)->queryAll();
         $numLlavesSalida = (int) count($resultadosSalida);
-        $porcLlavesSalida = round((float) ((100/$numLlaves)*$numLlavesSalida),2);
+        $porcLlavesSalida = ($numLlaves>0 && $numLlavesSalida>0)? round((float) ((100/$numLlaves)*$numLlavesSalida),2):0;
         $arrLlavesFecha[5] =  self::getLlavesStatusRangoFecha('S',5);
         $arrLlavesFecha[10] = self::getLlavesStatusRangoFecha('S',10);
         $arrLlavesFecha[15] = self::getLlavesStatusRangoFecha('S',15);

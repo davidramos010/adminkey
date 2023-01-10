@@ -32,7 +32,7 @@ return [
     'Missing required arguments: {params}' => '',
     'Missing required parameters: {params}' => '',
     'No' => '',
-    'No results found.' => '',
+    'No results found.' => 'Sin Resultados',
     'Only files with these MIME types are allowed: {mimeTypes}.' => '',
     'Only files with these extensions are allowed: {extensions}.' => '',
     'Operator "{operator}" must be used with a search attribute.' => '',
