@@ -141,6 +141,10 @@ class LlaveStatusSearch extends LlaveStatus
         $query->where(['l.activa'=>1]);
         $query->andWhere(['IS NOT', 'l.id_comunidad', NULL]);
         $query->groupBy('l.id_comunidad');
+        // Ordenamos por fecha de creación por defecto
+        if (!isset($params['sort'])) {
+            $query->orderBy('salida DESC,c.nombre ASC');
+        }
         return $dataProvider;
     }
 
@@ -171,6 +175,10 @@ class LlaveStatusSearch extends LlaveStatus
         $query->where(['l.activa'=>1]);
         $query->andWhere(['IS NOT', 'l.id_propietario', NULL]);
         $query->groupBy('l.id_propietario');
+        // Ordenamos por fecha de creación por defecto
+        if (!isset($params['sort'])) {
+            $query->orderBy('salida DESC,p.nombre_propietario ASC, p.nombre_representante');
+        }
 
         return $dataProvider;
     }

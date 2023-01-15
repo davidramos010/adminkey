@@ -78,6 +78,17 @@ class util
         return $dateFormated;
     }
 
+    public static function getDateFormatedSqlToUserLine($date)
+    {
+        if (!empty($date)) {
+            $fecha = \DateTime::createFromFormat('d-m-Y H:i', $date);
+            $dateFormated = $fecha->format('Y-m-d H:i:s');
+        } else {
+            $dateFormated = $date;
+        }
+        return $dateFormated;
+    }
+
     public static function getDateTimeFormatedSqlToUser($date)
     {
         if (!empty($date)) {
