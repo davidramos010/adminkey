@@ -2,14 +2,19 @@
 namespace app\controllers;
 
 use app\commands\LoadController;
+use app\models\Comerciales;
 use app\models\Comunidad;
 use app\models\Llave;
+use app\models\LlaveStatus;
 use app\models\LlaveStatusSearch;
 use app\models\LlaveUbicaciones;
 use app\models\Perfiles;
 use app\models\PerfilesUsuario;
 use app\models\Propietarios;
+use app\models\Registro;
 use app\models\TipoLlave;
+use app\models\User;
+use app\models\util;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Response;
@@ -228,7 +233,7 @@ class SiteController extends BaseController
         return isset($_SERVER['HTTP_REFERER']) ? $this->redirect($_SERVER['HTTP_REFERER']) : $this->redirect(Yii::$app->homeUrl);
     }
 
-    public function actionTest()
+    public function actionTestCargaLlavesMasivo()
     {
         $fileHandler=fopen("../web/documents/SGA_CONTROL_CLAUS.csv","r");
         if($fileHandler){
@@ -274,8 +279,6 @@ class SiteController extends BaseController
                         $objParticular->movil = $strMovilPropietario;
                         $objParticular->save();
                     }
-
-
                 }
 
                 while ($numCantidad>0){
@@ -292,7 +295,7 @@ class SiteController extends BaseController
                     $objNewLlave->alarma = $numAlarma=='SI' ? 1 : 0;
                     $objNewLlave->codigo_alarma = $objNewLlave->alarma ? $strAlarma : NULL;
                     $objNewLlave->observacion = $strObservaciones;
-                    if(isset($objParticular) && empty($objParticular)){
+                    if(isset($objParticular) && !empty($objParticular)){
                         $objNewLlave->id_propietario = $objParticular->id;
                     }
                     if(!$objNewLlave->save()){
@@ -303,6 +306,80 @@ class SiteController extends BaseController
                 }
 
 
+            }
+        }
+    }
+
+    public function actionTestRegistrosMasivos()
+    {
+        $fileHandler=fopen("../web/documents/REGISTROS_ENTRADA.csv","r");
+        if($fileHandler){
+            $first_time = true;
+            $numRow = 0;
+            while($line=fgetcsv($fileHandler,1000,';')){
+                $numRow++;
+                if ($first_time == true) { // primera fila
+                    $first_time = false;
+                    continue;
+                }
+                $numId = $line[0];
+                //$strFechaHoraEntrada = $line[1];
+                $strFechaHoraSalida = util::getDateFormatedSqlToUserLine($line[1]) ;
+                $strStatus = empty($strFechaHoraEntrada) ? 'S':'E';
+                $strCodeLlave = strtoupper(trim($line[2]));//codigo like  '%035%'
+                $strUser = strtoupper(trim($line[9]));
+                $strComercial = strtoupper(trim($line[14]));
+                $numTipoDoc = 1;
+                $strDocumento = null;
+                $strNombreResponsable = strtoupper(trim($line[11]));
+                $strTelefonoResponsable= strtoupper(trim($line[12]));
+
+                $strObservaciones = strtoupper(trim($line[13]));
+
+
+                // consultar llave por codigo
+                $objLlave = Llave::find()->andFilterWhere(['like', 'codigo', $strCodeLlave])->orderBy('codigo ASC')->one();
+                if(empty($objLlave)){
+                    echo "FILA $numRow - Llave no encontrada \n";
+                    continue;
+                }
+                // buscar usuario
+                $objUser = User::find()->andFilterWhere(['like', 'username', $strUser])->one();
+                if(empty($objUser)){
+                    echo "FILA $numRow - Usuario no encontrado \n";
+                    continue;
+                }
+                // buscar comercial asignado
+                $objComercial = Comerciales::find()->andFilterWhere(['like', 'nombre', $strComercial])->one();
+                if(empty($objComercial)){
+                    echo "FILA $numRow - Comercial no encontrado \n";
+                    continue;
+                }
+                // nuevo registr
+                $newRegistro = new Registro();
+                $newRegistro->id = $numId;
+                $newRegistro->id_user = $objUser->id;
+                $newRegistro->id_llave = $objLlave->id;
+                $newRegistro->salida = $strFechaHoraSalida;
+                $newRegistro->observacion = $strObservaciones;
+                $newRegistro->id_comercial = $objComercial->id;
+                $newRegistro->tipo_documento = $numTipoDoc;
+                $newRegistro->nombre_responsable = $strNombreResponsable;
+                $newRegistro->telefono = $strTelefonoResponsable;
+                if($newRegistro->validate() && $newRegistro->save()){
+                    $newStatus = new LlaveStatus();
+                    $newStatus->id_llave  = $newRegistro->id_llave ;
+                    $newStatus->status = $strStatus;
+                    $newStatus->fecha = $newRegistro->getFechaRegistro() ;
+                    $newStatus->id_registro = $newRegistro->id;
+                    if(!$newStatus->save()){
+                        echo "FILA $numRow - Registro-status no creado \n";
+                        continue;
+                    }
+                }else{
+                    echo "FILA $numRow - Registro no creado \n";
+                    continue;
+                }
             }
         }
     }
