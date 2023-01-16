@@ -142,7 +142,7 @@ class Registro extends \yii\db\ActiveRecord
      */
     public function getFechaRegistro(){
         $this->fecha_registro = (!empty($this->entrada))?$this->entrada:null;
-        $this->fecha_registro = (empty($strFecha))?$this->salida:$this->fecha_registro;
+        $this->fecha_registro = (empty($this->fecha_registro))?$this->salida:$this->fecha_registro;
         return $this->fecha_registro;
     }
 
@@ -209,6 +209,24 @@ class Registro extends \yii\db\ActiveRecord
         $objRegistro = $arrParams['registro'];
         $strFirma =  (!empty($objRegistro->firma_soporte))?"<img src='".Url::to('@app/web/firmas/'.$objRegistro->firma_soporte)."' width='150'>":"";
 
+        $arrResponsable['nombre'] = trim(strtoupper($objRegistro->nombre_responsable));
+        $arrResponsable['documento'] = (!empty($objRegistro->documento) && !empty($objRegistro->tipo_documento) && isset(util::arrTipoDocumentos[$objRegistro->tipo_documento]))?util::arrTipoDocumentos[$objRegistro->tipo_documento].' ':'';
+        $arrResponsable['documento'] .= trim(strtoupper($objRegistro->documento));
+        $arrResponsable['telefono'] = trim(strtoupper($objRegistro->telefono));
+
+        $strDivResponsableText = "";
+        $strDivResponsableText .= empty($objComercial->nombre) ? "":"<strong>".$objComercial->nombre."</strong><br>";
+        $strDivResponsableText .= empty($objComercial->direccion) ? "":$objComercial->direccion."&nbsp;&nbsp;";
+        $strDivResponsableText .= empty($objComercial->cod_postal) ? "":$objComercial->cod_postal."&nbsp;&nbsp;";
+        $strDivResponsableText .= empty($objComercial->poblacion) ? "":$objComercial->poblacion."&nbsp;&nbsp;";
+        $strDivResponsableText .= empty($objComercial->email) ? "":"Email: ".$objComercial->email."&nbsp;&nbsp;";
+        $strDivResponsableText .= empty($objComercial->email) ? "":"Teléfono: ".$objComercial->telefono."&nbsp;&nbsp;";
+        $strDivResponsableText .= empty($objComercial->email) ? "":"Movíl: ".$objComercial->movil."<br/>";
+        $strDivResponsableText .= "<strong>Responsable</strong><br/>";
+        $strDivResponsableText .= empty($arrResponsable['documento']) ? "":$arrResponsable['documento'] ."&nbsp;&nbsp;";
+        $strDivResponsableText .= empty($arrResponsable['nombre']) ? "":$arrResponsable['nombre'] ."<br/>";
+        $strDivResponsableText .= empty($arrResponsable['telefono']) ? "":$arrResponsable['telefono'] ;
+
         $addHtmlRows = '';
         if(count($arrParams['llaves'])){
             foreach ($arrParams['llaves'] as $valueLlave){
@@ -229,31 +247,49 @@ class Registro extends \yii\db\ActiveRecord
                                 <div class=\"table-responsive\">
                                   <table class=\"table\">
                                    <tr>
-                                     <td width='50%'><h3><address>".Yii::$app->params['empresa']."</address></h3></td>
-                                     <td width='50%' align='right'><small class=\"float-right\"> ".date('d/m/Y H:i:s')." </small></td>
+                                     <td align='center'><h3><address>".Yii::$app->params['empresa']."</address></h3></td>
                                    </tr>
                                     <tr>
-                                      <td>
+                                      <td align='center'>
                                         <address>
                                           ".Yii::$app->params['direccion']." 
                                           ".Yii::$app->params['poblacion']."<br>
-                                          Email: ".Yii::$app->params['email']."<br>
-                                          Teléfono: ".Yii::$app->params['telefono']."&nbsp;&nbsp;
+                                          Email: ".Yii::$app->params['email'].". 
+                                          Teléfono: ".Yii::$app->params['telefono'].". &nbsp;&nbsp;
                                           Movíl: ".Yii::$app->params['movil']."&nbsp;&nbsp;
                                         </address>
                                       </td>
-                                        <td align='right'>
-                                            <div class=\"col-sm-4 invoice-col\">
-                                               #".str_pad($objRegistro->id, 6, "0", STR_PAD_LEFT)."<br>
-                                               Usuario: ".$objRegistro->user->userInfo->nombres." ".$objRegistro->user->userInfo->apellidos." <br>
-                                               Fecha Registro: ".util::getDateTimeFormatedSqlToUser($objRegistro->getFechaRegistro())."<br>
-                                            </div>
-                                        </td>
                                     </tr>
+                                    <tr>
+                                     <th align='center' style='padding-top: 15px'><h4><address>ALBARÀ - CONTROL DE LLIURAMENT DE CLAUS</address></h4></th>
+                                   </tr>
                                   </table>
                                 </div>
                               </div>
                             </div>
+                            <div class='row'>
+                                <table class=\"table\">
+                                  <tr>
+                                    <td style='text-align: right; width: 25%;font-weight: bold'>DATA LLIURAMENT:</td>
+                                    <td style='text-align: left; width: 25%'>".util::getDateTimeFormatedSqlToUser($objRegistro->getFechaRegistro())."</td>
+                                    <td style='text-align: right; width: 25%;font-weight: bold'>No. OPERACIÓ:</td>
+                                    <td style='text-align: left; width: 25%'>".str_pad($objRegistro->id, 6, "0", STR_PAD_LEFT)."</td>
+                                  </tr>
+                                </table>
+                            </div>   
+                            <div class='row'>
+                                <div class='table-responsive'>
+                                    <table class='table'>
+                                    <tbody><tr>
+                                        <th style='width:50%;text-align: center'>ENTREGAT PER</th>
+                                        <th style='width:50%;text-align: center'>ENTREGAT A </th>
+                                    </tr><tr>
+                                        <td style='width:50%'>".$objRegistro->user->userInfo->nombres." ".$objRegistro->user->userInfo->apellidos."</td>
+                                        <td style='width:50%;text-align: left'>$strDivResponsableText</td>
+                                    </tr></tbody>
+                                    </table>
+                                </div>
+                            </div>    
                             <!-- /.row -->";
         $strHtmlBody = "<div class=\"row\">
                           <div class=\"col-12 table-responsive\">
@@ -275,52 +311,37 @@ class Registro extends \yii\db\ActiveRecord
                           <!-- /.col -->
                         </div>";
 
-        $arrResponsable['nombre'] = trim(strtoupper($objRegistro->nombre_responsable));
-        $arrResponsable['documento'] = (!empty($objRegistro->tipo_documento) && isset(util::arrTipoDocumentos[$objRegistro->tipo_documento]))?util::arrTipoDocumentos[$objRegistro->tipo_documento].' ':'';
-        $arrResponsable['documento'] .= trim(strtoupper($objRegistro->documento));
-        $arrResponsable['telefono'] = trim(strtoupper($objRegistro->telefono));
-
         $strHtmlFooter = "<div class=\"row\">
-                          <!-- accepted payments column -->
+                          <div class=\"col-12\">
+                            <p style=\"margin-top: 10px; text-align: center \">
+                              INCIDÈNCIES I COMENTARIS
+                            </p>
+                          </div>
+                          <!-- -->
                           <div class=\"col-12\">
                             <p class=\"text-muted well well-sm shadow-none small\" style=\"margin-top: 10px;\">
                               ".$objRegistro->observacion."
                             </p>
                           </div>
-                          <!-- /.col -->
-                          <address class=\"col-12\">
-                             <table class=\"table table-striped\">
-                                <tr>
-                                  <td><address>Empresa/Proveedor</address></td>
-                                  <td><address>Responsable</address></td>
-                                </tr>
-                                <tr>
-                                  <td valign='top'>
-                                    <address>
-                                      <strong>".$objComercial->nombre."</strong><br>
-                                      ".$objComercial->direccion."&nbsp;&nbsp;
-                                      ".$objComercial->cod_postal."&nbsp;&nbsp;".$objComercial->poblacion." <br>
-                                      Email: ".$objComercial->email."&nbsp;&nbsp;
-                                      Teléfono: ".$objComercial->telefono."&nbsp;&nbsp;
-                                      Movíl: ".$objComercial->movil."<br>
-                                    </address>
-                                  </td>
-                                  <td style=\"width:50%\"  valign='top'>
-                                        <address>
-                                            <strong>".$arrResponsable['nombre']."</strong><br>
-                                           Documento : ".$arrResponsable['documento']." <br>
-                                           Teléfono : ".$arrResponsable['telefono']."<br>
-                                        </address>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan='2' style=\"align-content: center; text-align: center; font-size: 10px \">Firma Responsable:<br> 
-                                        ".$strFirma."
-                                    </td>
-                                </tr>
-                             </table>
+                          <div class='row'>
+                            <div class='table-responsive'>
+                                <table class='table'>
+                                <tbody><tr>
+                                    <th  style='width:50%;text-align: center'>FIRMA LLIURADOR</th>
+                                    <th style='width:50%;text-align: center'>FIRMA RECEPTOR</th>
+                                </tr><tr>
+                                    <td style='width:50%'>x.</td>
+                                    <td style='width:50%'>x.".$strFirma."</td>
+                                </tr></tbody>
+                                </table>
+                            </div>
                           </div>
-                          <!-- /.col -->
+                          <!-- -->
+                          <div class=\"col-12\">
+                            <p class=\"text-muted well well-sm shadow-none small\" style=\"margin-top: 10px; text-align: justify \">
+                              Les claus s'han de retornar a SALVADÓ i GUBERT, a la mateixa oficina on s'han lliurat i en un termini de 24 hores des del lliurament. En cas contrari, el receptor ha d'informar de la causa del retard i la data estimada de retorn.
+                            </p>
+                          </div>  
                         </div>";
 
         $strHtml = "<div class=\"wrapper\">
