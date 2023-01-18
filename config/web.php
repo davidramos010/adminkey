@@ -73,7 +73,14 @@ $config = [
             'orientation' => Pdf::ORIENT_PORTRAIT,
             'destination' => Pdf::DEST_BROWSER,
             // refer settings section for all configuration options
-        ]
+        ],
+        'view' => [
+                'theme' => [
+                    'pathMap' => [
+                        '@app/views' => '@vendor/dmstr/yii2-adminlte-asset/example-views/yiisoft/yii2-app'
+                    ],
+                ],
+            ],
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,

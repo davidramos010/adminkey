@@ -40,7 +40,7 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
                     ],
                     [
                         'label' => 'Clientes/Proveedores',
-                        'icon' => 'tachometer-alt',
+                        'icon' => 'shield-alt',
                         'items' => [
                             ['label' => 'Cliente', 'url' => ['comunidad/index'], 'iconStyle' => 'far'],
                             ['label' => 'Llaves', 'url' => ['llave/index'], 'iconStyle' => 'far'],
@@ -51,8 +51,16 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
                         'visible' => ((int) Yii::$app->user->identity->perfiluser->id_perfil==1)
                     ],
                     [
+                        'label' => 'Operaciones',
+                        'icon' => 'file-import',
+                        'items' => [
+                            ['label' => 'Llaves', 'url' => ['operaciones/operaciones'], 'iconStyle' => 'far'],
+                            ['label' => 'Registros', 'url' => ['operaciones/operaciones'], 'iconStyle' => 'far'],
+                        ],
+                    ],
+                    [
                         'label' => 'Reportes',
-                        'icon' => 'fa-solid fa-file-export',
+                        'icon' => 'fa-solid fa-file-contract',
                         'items' => [
                             ['label' => 'Reporte Movimientos', 'url' => ['registro/index'], 'iconStyle' => 'far'],
                             ['label' => 'Llaves', 'url' => ['llave/report'], 'iconStyle' => 'far'],
