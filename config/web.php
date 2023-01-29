@@ -11,7 +11,6 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
-        /*'@plantillas' => "@web/plantillas"*/
     ],
     'language' => 'es',
     'components' => [
@@ -73,15 +72,22 @@ $config = [
             'orientation' => Pdf::ORIENT_PORTRAIT,
             'destination' => Pdf::DEST_BROWSER,
             // refer settings section for all configuration options
-        ]
-        /*
+        ],
+        'view' => [
+                'theme' => [
+                    'pathMap' => [
+                        '@app/views' => '@vendor/dmstr/yii2-adminlte-asset/example-views/yiisoft/yii2-app'
+                    ],
+                ],
+            ],
+        
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];
@@ -99,7 +105,6 @@ if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-        'allowedIPs' => ['*'],
         'generators' => [ // here
             'crud' => [ // generator name
                 'class' => 'yii\gii\generators\crud\Generator', // generator class
