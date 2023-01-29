@@ -234,3 +234,34 @@ function setCopyDataContacto(){
 
     return true;
 }
+
+/**
+ * Tratamos la respuesta en caso de error al subir el fichero
+ * @param mensaje
+ */
+function tratarRespuestaError(mensaje) {
+    $('[data-js-resultado-carga-fichero-error]').html(mensaje.error ? mensaje.error : 'Se ha generado un error, contacta con un administrador.');
+}
+
+/**
+ * Tratmaos la respuesta de exito al subir el fichero
+ * @param mensaje
+ */
+function tratarRespuestaExito(mensaje) {
+    const dom_fileinput = $('#fichero-facturas-rectificativas');
+    const dom_aviso = $('[data-js-resultado-carga-fichero-aviso]');
+    const dom_exito = $('[data-js-resultado-carga-fichero-exito]');
+    const dom_error = $('[data-js-resultado-carga-fichero-error]');
+
+    dom_aviso.html('');
+    dom_error.hide();
+
+    dom_exito.html(mensaje.respuesta);
+    if (mensaje.avisos.length) {
+        dom_aviso.html(mensaje.avisos.join('</br>'));
+    }
+
+    dom_fileinput.fileinput('disable');
+    $('.btn-validar-fichero').attr('disabled', true);
+    $('.btn-seleccionar-fichero').attr('disabled', true);
+}

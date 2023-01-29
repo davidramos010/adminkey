@@ -2,8 +2,13 @@
 
 namespace app\models;
 
+use app\components\ValidadorCsv;
+use app\utils\Ficheros;
+use app\utils\Strings;
 use Yii;
+use yii\base\Exception;
 use yii\helpers\ArrayHelper;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "llave".
@@ -217,9 +222,17 @@ class Llave extends \yii\db\ActiveRecord
         return ArrayHelper::map($result, 'id', 'nombre_propietario');
     }
 
+    /**
+     * Busca el siguente codigo
+     * @return int
+     */
     public function getNext() {
-        $next = $this->find()->where(['id_comunidad' => $this->id_comunidad])->count();
-        return (int)$next+1;
+        $resultData = $this->find()->select('MAX(codigo) as codigo ,COUNT(1) as total')->where(['id_comunidad' => $this->id_comunidad])->one();
+        $strCode = empty($resultData) || empty($resultData->codigo) ? '' : $resultData->codigo;
+        $numCantidad = (int) empty($resultData) || empty($resultData->total) ? 1 : $resultData->total;
+        $arrCode = (empty($strCode)) ? '' : explode('-',$strCode);
+        $arrCode = (int) $arrCode[1];
+        return str_pad(($arrCode<$numCantidad ? $arrCode : $numCantidad) + 1, 3, '0', STR_PAD_LEFT) ;
     }
 
     /**
@@ -290,6 +303,189 @@ class Llave extends \yii\db\ActiveRecord
             WHERE ls.status ='".$strStatus."' and  $strAddWere fecha <='".$strFechaConsultaIni." 23:00:00'; ";
         $resultadosSalida = $query->createCommand($queryString)->queryAll();
      return $resultadosSalida;
+    }
+
+    /**
+     * @param string $fullPath
+     * @return array
+     * @throws Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Calculation\Exception
+     */
+    public static function setLlavesMasivo(string $fullPath ): array
+    {
+        $avisos = [];
+        $llavesOK = 0;
+        $llavesTotal = 0;
+        // ------------------------------
+        // Validamos contenido del CSV
+        $validador = new ValidadorCsv($fullPath);
+        $validador->validarCabeceras(
+            [
+                'CODIGO' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_MIN_LENGTH => 3,
+                    ValidadorCsv::RULE_CAN_BE_NULL => false
+                ],
+                'OFICINA' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_MIN_LENGTH => 3,
+                    ValidadorCsv::RULE_CAN_BE_NULL => false
+                ],
+                'TIPO' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_MIN_LENGTH => 3,
+                    ValidadorCsv::RULE_CAN_BE_NULL => false,
+                    ValidadorCsv::RULE_LIMITED_TO => ['COMUNITAT', 'PROPIETARI', 'COMUNIDAD', 'PROPIETARIO']
+                ],
+                'ACCESO' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_CAN_BE_NULL => false
+                ],
+                'CANTIDAD' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_BIGGER_THAN,
+                    ValidadorCsv::RULE_CAN_BE_NULL => false,
+                    ValidadorCsv::RULE_BIGGER_THAN => 0
+                ],
+                'PROPIETARIO' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_CAN_BE_NULL => false,
+                    ValidadorCsv::RULE_MIN_LENGTH => 3,
+                ],
+                'MOVIL' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_CAN_BE_NULL => true,
+                    ValidadorCsv::RULE_MIN_LENGTH => 6,
+                ],
+                'ALARMA' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_CAN_BE_NULL => false,
+                    ValidadorCsv::RULE_LIMITED_TO => ['SI', 'NO', 'si', 'no', 'Si', 'No']
+                ],
+                'CODIGO_ALARMA' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_CAN_BE_NULL => true
+                ],
+                'CONTRATO' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_CAN_BE_NULL => false,
+                    ValidadorCsv::RULE_LIMITED_TO => ['SI', 'NO', 'si', 'no', 'Si', 'No']
+                ],
+                'COMENTARIOS' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_MIN_LENGTH => 3,
+                    ValidadorCsv::RULE_CAN_BE_NULL => true
+                ],
+            ]
+        );
+        // ------------------------------
+        $validador->validarContenido();
+        // Si falla alguna validación le tiramos el error
+        if ($errors = $validador->getErrors(ValidadorCsv::ERROR_USER)) {
+            //throw new Exception(join($errors, '<br>'));
+            $avisos[] = join($errors, '<br>');
+        }
+        // ------------------------------
+        if (empty($avisos)) {
+            foreach ($validador->getRows() as $file_key => $line) {
+                $llavesTotal++;
+                $strCode = $line['CODIGO'];
+                $strOfic = $line['OFICINA'];
+                $strTipo = $line['TIPO'];
+                $strAcceso = $line['ACCESO'];
+                $numCantidad = (int)$line['CANTIDAD'];
+                $strNombrePropietario = strtoupper($line['PROPIETARIO']);
+                $strMovilPropietario = trim($line['MOVIL']);
+                $numAlarma = strtoupper(trim($line['ALARMA']));
+                $strAlarma = trim($line['CODIGO_ALARMA']);
+                $strFacturable = trim($line['CONTRATO']);
+                $strObservaciones = trim($line['COMENTARIOS']);
+                //Buscar comunidad
+                $arrCode = explode('-', $strCode);
+                $strNomenclatura = "C" . $arrCode[0];
+                $strCodigo = isset($arrCode[1]) ? $arrCode[1] : '';
+                // consultar comunidad
+                $objComunidad = Comunidad::find()->where(['nomenclatura' => $strNomenclatura])->one();
+                // ubicacion
+                $objLlaveUbicacion = LlaveUbicaciones::find()->where(['descripcion_almacen' => $strOfic])->one();
+                // TIPO
+                $objLlaveTipo = TipoLlave::find()->where(['descripcion' => $strTipo])->one();
+                // VALIDATE
+                if (empty($objComunidad) || empty($objLlaveUbicacion) || empty($objLlaveTipo)) {
+                    $avisos[] = 'Error en la linea:' . $file_key . ' - Validar datos de la Comunidad / Ubicacion / Tipo Llave' . '<br>';
+                    continue;
+                }
+                // BUSCAR PARTICULAR Y CREARLO
+                if ($objLlaveTipo->descripcion == 'PARTICULAR') {
+                    $objParticular = Propietarios::find()->where(['like', 'nombre_propietario', $strNombrePropietario])->one();
+                    if (empty($objParticular)) {
+                        $objParticular = new Propietarios();
+                        $objParticular->nombre_propietario = $strNombrePropietario;
+                        $objParticular->direccion = $objComunidad->direccion;
+                        $objParticular->cod_postal = $objComunidad->cod_postal;
+                        $objParticular->poblacion = $objComunidad->poblacion;
+                        $objParticular->telefono = $strMovilPropietario;
+                        $objParticular->movil = $strMovilPropietario;
+                        if ($objParticular->save()) {
+                            $avisos[] = 'Alerta en la linea:' . $file_key . ' - Completar los datos de Propietario:' . $strNombrePropietario . '<br>';
+                        } else {
+                            $avisos[] = 'Error en la linea:' . $file_key . ' - No encuetra datos del Propietario:' . $strNombrePropietario . '<br>';
+                            continue;
+                        }
+                    }
+                }
+                // -------------------------------------------------
+                while ($numCantidad > 0) {
+                    // Crear llave
+                    $objNewLlave = new Llave();
+                    $objNewLlave->id_comunidad = $objComunidad->id;
+                    $objNewLlave->id_tipo = $objLlaveTipo->id;
+                    $objNewLlave->id_llave_ubicacion = $objLlaveUbicacion->id;
+                    $objNewLlave->copia = $numCantidad;
+                    $objNewLlave->descripcion = $strAcceso;
+                    $objNewLlave->alarma = $numAlarma == 'SI' ? 1 : 0;
+                    $objNewLlave->codigo_alarma = $objNewLlave->alarma ? $strAlarma : NULL;
+                    $objNewLlave->observacion = $strObservaciones;
+                    $objNewLlave->facturable = ($strFacturable == 'SI') ? 1 : 0;
+                    if (isset($objParticular) && !empty($objParticular)) {
+                        $objNewLlave->id_propietario = $objParticular->id;
+                    }
+                    // Asignación de ccdigo de la llave
+                    $strCodigo = empty($strCodigo) ? (string)$objNewLlave->getNext() : $strCodigo;// si es vacio consulta el siguente registro
+                    $strCodigoLlave = $strNomenclatura . "-" . $strCodigo;
+                    $strCodigoLlave .= ($numCantidad > 1) ? '-' . $numCantidad : '';
+                    $objNewLlave->codigo = $strCodigoLlave;
+                    try {
+                        if (!$objNewLlave->save()) {
+                            //die('Error:Code:' . $strCodigo);
+                            $avisos[] = 'Error en la linea:' . $file_key . ' - Imposible crear la llave.<br>';
+                        } else {
+                            $llavesOK++;
+                        }
+                    } catch (\yii\db\Exception $e) {
+                        $strMensaje = 'Error en la linea:' . $file_key . '::' . $e->getMessage() . '<br>';
+                        if ($e->getCode() == 23000) {
+                            $strMensaje = 'Error en la linea:' . $file_key . ' - Imposible crear la llave, el codigo ya existe (' . $strCodigo . ').<br>';
+                        }
+                        $avisos[] = $strMensaje;
+                    }
+                    $numCantidad--;
+                }
+            }
+        }
+        // -------------------------------------------------
+        if (empty($avisos)) {
+            $strMensaje = 'Almacenado Correctamente!!';
+            Yii::$app->session->setFlash('success', Yii::t('yii', $strMensaje));
+        } else {
+            $strMensaje = 'No fue posible actualizar los todos registros !! ' . $llavesOK . ' de ' . $llavesTotal . ' Registrados correctamente.<br>';
+        }
+        // -------------------------------------------------
+        return [
+            'respuesta' => $strMensaje,
+            'avisos' => $avisos,
+            'error' => $avisos,
+            'errors' => [],
+        ];
     }
 
 }

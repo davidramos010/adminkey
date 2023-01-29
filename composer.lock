@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f2f6ab2045f3920c83435a06aeee3cb3",
+    "content-hash": "0b1d1e2c07b1fc2c9bf565fed37e5f83",
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -414,7 +414,7 @@
             "version": "v3.9.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fullcalendar/fullcalendar.git",
+                "url": "git@github.com:fullcalendar/fullcalendar.git",
                 "reference": "3ddb3c8d1461c6b841aed3487ba07d8ba338adb6"
             },
             "dist": {
@@ -436,7 +436,7 @@
             "version": "v1.10.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fullcalendar/fullcalendar-scheduler.git",
+                "url": "git@github.com:fullcalendar/fullcalendar-scheduler.git",
                 "reference": "56c3aef7610de850835ac97ad29ff45bf3cbe3cc"
             },
             "dist": {
@@ -477,16 +477,16 @@
         },
         {
             "name": "bower-asset/jquery",
-            "version": "3.6.1",
+            "version": "3.6.3",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jquery/jquery-dist.git",
-                "reference": "3711efedf0ca2e998cd0417324f717f2e0b828ec"
+                "url": "https://github.com/jquery/jquery-dist.git",
+                "reference": "da0f228131a578aea168b799fe4d7fe01764c98b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/3711efedf0ca2e998cd0417324f717f2e0b828ec",
-                "reference": "3711efedf0ca2e998cd0417324f717f2e0b828ec"
+                "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/da0f228131a578aea168b799fe4d7fe01764c98b",
+                "reference": "da0f228131a578aea168b799fe4d7fe01764c98b"
             },
             "type": "bower-asset",
             "license": [
@@ -552,12 +552,12 @@
             "version": "3.x-dev",
             "source": {
                 "type": "git",
-                "url": "https://github.com/swagger-api/swagger-ui.git",
+                "url": "git@github.com:wordnik/swagger-ui.git",
                 "reference": "281f46c4f094e298547fcf39c687d11e2d2ccdb0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swagger-api/swagger-ui/zipball/281f46c4f094e298547fcf39c687d11e2d2ccdb0",
+                "url": "https://api.github.com/repos/wordnik/swagger-ui/zipball/281f46c4f094e298547fcf39c687d11e2d2ccdb0",
                 "reference": "281f46c4f094e298547fcf39c687d11e2d2ccdb0"
             },
             "type": "bower-asset"
@@ -802,12 +802,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "3587ab58646bc515b2e03bbd3cfcd3682e8df5bf"
+                "reference": "ad785217c1e9555a7d6c6c8c9f406395a5e2882b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/3587ab58646bc515b2e03bbd3cfcd3682e8df5bf",
-                "reference": "3587ab58646bc515b2e03bbd3cfcd3682e8df5bf",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/ad785217c1e9555a7d6c6c8c9f406395a5e2882b",
+                "reference": "ad785217c1e9555a7d6c6c8c9f406395a5e2882b",
                 "shasum": ""
             },
             "require": {
@@ -869,25 +869,69 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/annotations/issues",
-                "source": "https://github.com/doctrine/annotations/tree/1.14.0"
+                "source": "https://github.com/doctrine/annotations/tree/1.14.2"
             },
-            "time": "2022-12-11T18:25:48+00:00"
+            "time": "2022-12-15T06:48:22+00:00"
         },
         {
-            "name": "doctrine/lexer",
-            "version": "1.3.x-dev",
+            "name": "doctrine/deprecations",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/doctrine/lexer.git",
-                "reference": "df2c840b0bfd42b86ea60bd07d64ed57b6489539"
+                "url": "https://github.com/doctrine/deprecations.git",
+                "reference": "0e2a4f1f8cdfc7a92ec3b01c9334898c806b30de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/lexer/zipball/df2c840b0bfd42b86ea60bd07d64ed57b6489539",
-                "reference": "df2c840b0bfd42b86ea60bd07d64ed57b6489539",
+                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/0e2a4f1f8cdfc7a92ec3b01c9334898c806b30de",
+                "reference": "0e2a4f1f8cdfc7a92ec3b01c9334898c806b30de",
                 "shasum": ""
             },
             "require": {
+                "php": "^7.1|^8.0"
+            },
+            "require-dev": {
+                "doctrine/coding-standard": "^9",
+                "phpunit/phpunit": "^7.5|^8.5|^9.5",
+                "psr/log": "^1|^2|^3"
+            },
+            "suggest": {
+                "psr/log": "Allows logging deprecations via PSR-3 logger implementation"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Doctrine\\Deprecations\\": "lib/Doctrine/Deprecations"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A small layer on top of trigger_error(E_USER_DEPRECATED) or PSR-3 logging with options to disable all deprecations or selectively for packages.",
+            "homepage": "https://www.doctrine-project.org/",
+            "support": {
+                "issues": "https://github.com/doctrine/deprecations/issues",
+                "source": "https://github.com/doctrine/deprecations/tree/v1.0.0"
+            },
+            "time": "2022-05-02T15:47:09+00:00"
+        },
+        {
+            "name": "doctrine/lexer",
+            "version": "2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/lexer.git",
+                "reference": "e74756f7517d72c238b9163fcd1ed54eb1f92bd0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/lexer/zipball/e74756f7517d72c238b9163fcd1ed54eb1f92bd0",
+                "reference": "e74756f7517d72c238b9163fcd1ed54eb1f92bd0",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/deprecations": "^1.0",
                 "php": "^7.1 || ^8.0"
             },
             "require-dev": {
@@ -897,6 +941,7 @@
                 "psalm/plugin-phpunit": "^0.18.3",
                 "vimeo/psalm": "^4.11 || ^5.0"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -932,7 +977,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/lexer/issues",
-                "source": "https://github.com/doctrine/lexer/tree/1.3.x"
+                "source": "https://github.com/doctrine/lexer/tree/2.1.x"
             },
             "funding": [
                 {
@@ -948,7 +993,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-12-11T21:00:40+00:00"
+            "time": "2022-12-29T09:22:42+00:00"
         },
         {
             "name": "dompdf/dompdf",
@@ -1024,16 +1069,16 @@
         },
         {
             "name": "econea/nusoap",
-            "version": "v0.9.12",
+            "version": "v0.9.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/f00b4r/nusoap.git",
-                "reference": "e83219ee1add324124fea8e448b4cfddf782f8ff"
+                "reference": "c177861ed6232668845a86b4aec40d5b61cab7f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/f00b4r/nusoap/zipball/e83219ee1add324124fea8e448b4cfddf782f8ff",
-                "reference": "e83219ee1add324124fea8e448b4cfddf782f8ff",
+                "url": "https://api.github.com/repos/f00b4r/nusoap/zipball/c177861ed6232668845a86b4aec40d5b61cab7f5",
+                "reference": "c177861ed6232668845a86b4aec40d5b61cab7f5",
                 "shasum": ""
             },
             "require": {
@@ -1064,7 +1109,7 @@
                     "homepage": "https://f3l1x.io"
                 }
             ],
-            "description": "Fixed NuSOAP for PHP 5.4 - 8.1",
+            "description": "Fixed NuSOAP for PHP 5.4 - 8.2",
             "homepage": "https://github.com/pwnlabs/nusoap",
             "keywords": [
                 "client",
@@ -1077,7 +1122,7 @@
             ],
             "support": {
                 "issues": "https://github.com/f00b4r/nusoap/issues",
-                "source": "https://github.com/f00b4r/nusoap/tree/v0.9.12"
+                "source": "https://github.com/f00b4r/nusoap/tree/v0.9.13"
             },
             "funding": [
                 {
@@ -1085,7 +1130,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-02-22T08:55:13+00:00"
+            "time": "2022-12-11T11:15:03+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -1093,21 +1138,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "0170967656f55a87054fde439ef35a22df91468b"
+                "reference": "b531a2311709443320c786feb4519cfaf94af796"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/0170967656f55a87054fde439ef35a22df91468b",
-                "reference": "0170967656f55a87054fde439ef35a22df91468b",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/b531a2311709443320c786feb4519cfaf94af796",
+                "reference": "b531a2311709443320c786feb4519cfaf94af796",
                 "shasum": ""
             },
             "require": {
-                "doctrine/lexer": "^1.2",
+                "doctrine/lexer": "^1.2|^2",
                 "php": ">=7.2",
                 "symfony/polyfill-intl-idn": "^1.15"
             },
             "require-dev": {
-                "php-coveralls/php-coveralls": "^2.2",
                 "phpunit/phpunit": "^8.5.8|^9.3.3",
                 "vimeo/psalm": "^4"
             },
@@ -1146,7 +1190,7 @@
             ],
             "support": {
                 "issues": "https://github.com/egulias/EmailValidator/issues",
-                "source": "https://github.com/egulias/EmailValidator/tree/3.x"
+                "source": "https://github.com/egulias/EmailValidator/tree/3.2.5"
             },
             "funding": [
                 {
@@ -1154,7 +1198,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-09-03T09:54:08+00:00"
+            "time": "2023-01-02T17:26:14+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -1216,114 +1260,6 @@
                 "source": "https://github.com/ezyang/htmlpurifier/tree/v4.16.0"
             },
             "time": "2022-09-18T07:06:19+00:00"
-        },
-        {
-            "name": "factorenergia/jpgraph",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/factorenergia/jpgraph.git",
-                "reference": "6b604d87580ddbded50a31525c695d55d38fb864"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/factorenergia/jpgraph/zipball/6b604d87580ddbded50a31525c695d55d38fb864",
-                "reference": "6b604d87580ddbded50a31525c695d55d38fb864",
-                "shasum": ""
-            },
-            "require": {
-                "ext-gd": "*",
-                "php": ">=7.0.0"
-            },
-            "require-dev": {
-                "codeception/codeception": "^4.0",
-                "codeception/module-asserts": "^1.1",
-                "kint-php/kint": "^3.3",
-                "monolog/monolog": "^2.0",
-                "squizlabs/php_codesniffer": "^3.5",
-                "symfony/dotenv": "~4.2.0",
-                "symfony/event-dispatcher": "~4.2",
-                "symfony/yaml": "4.*"
-            },
-            "default-branch": true,
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "factorenergia\\JpGraph\\": "src/",
-                    "factorenergia\\JpGraph\\Plot\\": "src/plot",
-                    "factorenergia\\JpGraph\\Text\\": "src/text",
-                    "factorenergia\\JpGraph\\Util\\": "src/util",
-                    "factorenergia\\JpGraph\\Graph\\": "src/graph",
-                    "factorenergia\\JpGraph\\Image\\": "src/image",
-                    "factorenergia\\JpGraph\\Themes\\": "src/themes",
-                    "factorenergia\\JpGraph\\UnitTest\\": "tests",
-                    "factorenergia\\JpGraph\\Graph\\Axis\\": "src/graph/axis",
-                    "factorenergia\\JpGraph\\Graph\\Tick\\": "src/graph/tick",
-                    "factorenergia\\JpGraph\\Graph\\Scale\\": "src/graph/scale"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "QPL-1.0"
-            ],
-            "description": "jpGraph, library to make graphs and charts",
-            "homepage": "http://jpgraph.net/",
-            "keywords": [
-                "chart",
-                "data",
-                "graph",
-                "jpgraph",
-                "pie"
-            ],
-            "support": {
-                "issues": "https://github.com/huasofoundries/jpgraph/issues",
-                "source": "https://github.com/factorenergia/jpgraph/tree/5.0.1"
-            },
-            "time": "2020-07-03T09:32:18+00:00"
-        },
-        {
-            "name": "factorenergia/yii2-activerecord-history",
-            "version": "1.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/factorenergia/yii2-activerecord-history.git",
-                "reference": "c7f32fb0959f94c11d441149b8c32490928db48a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/factorenergia/yii2-activerecord-history/zipball/c7f32fb0959f94c11d441149b8c32490928db48a",
-                "reference": "c7f32fb0959f94c11d441149b8c32490928db48a",
-                "shasum": ""
-            },
-            "require": {
-                "yiisoft/yii2": "*"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "nhkey\\arh\\": "src\\"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Mikhail Mikhalev",
-                    "email": "mail@mikhailmikhalev.ru"
-                }
-            ],
-            "description": "Storage history of changes to ActiveRecord",
-            "keywords": [
-                "activerecord",
-                "history",
-                "yii2"
-            ],
-            "support": {
-                "source": "https://github.com/factorenergia/yii2-activerecord-history/tree/1.2.0"
-            },
-            "time": "2017-08-01T14:58:01+00:00"
         },
         {
             "name": "fortawesome/font-awesome",
@@ -4894,12 +4830,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-escaper.git",
-                "reference": "7ca450559d5b133b9e340a90c82f97ee777c9185"
+                "reference": "90e7520039c77e227bb944c9eb1e7b61b15c944e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-escaper/zipball/7ca450559d5b133b9e340a90c82f97ee777c9185",
-                "reference": "7ca450559d5b133b9e340a90c82f97ee777c9185",
+                "url": "https://api.github.com/repos/laminas/laminas-escaper/zipball/90e7520039c77e227bb944c9eb1e7b61b15c944e",
+                "reference": "90e7520039c77e227bb944c9eb1e7b61b15c944e",
                 "shasum": ""
             },
             "require": {
@@ -4912,7 +4848,7 @@
             },
             "require-dev": {
                 "infection/infection": "^0.26.6",
-                "laminas/laminas-coding-standard": "~2.4.0",
+                "laminas/laminas-coding-standard": "~2.5.0",
                 "maglnet/composer-require-checker": "^3.8.0",
                 "phpunit/phpunit": "^9.5.18",
                 "psalm/plugin-phpunit": "^0.18.0",
@@ -4949,7 +4885,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-12-09T01:22:31+00:00"
+            "time": "2023-01-05T17:56:08+00:00"
         },
         {
             "name": "maennchen/zipstream-php",
@@ -5140,16 +5076,16 @@
         },
         {
             "name": "mpdf/mpdf",
-            "version": "v8.1.3",
+            "version": "v8.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mpdf/mpdf.git",
-                "reference": "59ba1a9374211174996d8530a855dedfbd5f5681"
+                "reference": "add590e93b7502efafd9839a68cff99f3497b318"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/59ba1a9374211174996d8530a855dedfbd5f5681",
-                "reference": "59ba1a9374211174996d8530a855dedfbd5f5681",
+                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/add590e93b7502efafd9839a68cff99f3497b318",
+                "reference": "add590e93b7502efafd9839a68cff99f3497b318",
                 "shasum": ""
             },
             "require": {
@@ -5213,7 +5149,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2022-12-08T12:55:58+00:00"
+            "time": "2022-12-15T11:24:39+00:00"
         },
         {
             "name": "mtdowling/jmespath.php",
@@ -5774,16 +5710,16 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "1.25.2",
+            "version": "1.26.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "a317a09e7def49852400a4b3eca4a4b0790ceeb5"
+                "reference": "5b6ceea9705b068f993e268e4debc566c2637063"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/a317a09e7def49852400a4b3eca4a4b0790ceeb5",
-                "reference": "a317a09e7def49852400a4b3eca4a4b0790ceeb5",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/5b6ceea9705b068f993e268e4debc566c2637063",
+                "reference": "5b6ceea9705b068f993e268e4debc566c2637063",
                 "shasum": ""
             },
             "require": {
@@ -5804,7 +5740,7 @@
                 "maennchen/zipstream-php": "^2.1",
                 "markbaker/complex": "^3.0",
                 "markbaker/matrix": "^3.0",
-                "php": "^7.3 || ^8.0",
+                "php": "^7.4 || ^8.0",
                 "psr/http-client": "^1.0",
                 "psr/http-factory": "^1.0",
                 "psr/simple-cache": "^1.0 || ^2.0 || ^3.0"
@@ -5813,14 +5749,14 @@
                 "dealerdirect/phpcodesniffer-composer-installer": "dev-master",
                 "dompdf/dompdf": "^1.0 || ^2.0",
                 "friendsofphp/php-cs-fixer": "^3.2",
-                "mitoteam/jpgraph": "10.2.4",
-                "mpdf/mpdf": "8.1.1",
+                "mitoteam/jpgraph": "^10.2.4",
+                "mpdf/mpdf": "^8.1.1",
                 "phpcompatibility/php-compatibility": "^9.3",
                 "phpstan/phpstan": "^1.1",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^8.5 || ^9.0",
                 "squizlabs/php_codesniffer": "^3.7",
-                "tecnickcom/tcpdf": "6.5"
+                "tecnickcom/tcpdf": "^6.5"
             },
             "suggest": {
                 "dompdf/dompdf": "Option for rendering PDF with PDF Writer",
@@ -5873,9 +5809,9 @@
             ],
             "support": {
                 "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
-                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/1.25.2"
+                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/1.26.0"
             },
-            "time": "2022-09-25T17:21:01+00:00"
+            "time": "2022-12-21T12:22:06+00:00"
         },
         {
             "name": "phpoffice/phpword",
@@ -7636,7 +7572,7 @@
         },
         {
             "name": "tinymce/tinymce",
-            "version": "6.3.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tinymce/tinymce-dist.git",
@@ -7648,6 +7584,7 @@
                 "reference": "bec6271ca90b2f37db48a955697746c1f58b9358",
                 "shasum": ""
             },
+            "default-branch": true,
             "type": "component",
             "extra": {
                 "component": {
@@ -7796,12 +7733,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "a859669013c3ff1175e5037688740dfa692135ea"
+                "reference": "4419e77b27e1fb615308bb4cd9bb32033e4ad42f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/a859669013c3ff1175e5037688740dfa692135ea",
-                "reference": "a859669013c3ff1175e5037688740dfa692135ea",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/4419e77b27e1fb615308bb4cd9bb32033e4ad42f",
+                "reference": "4419e77b27e1fb615308bb4cd9bb32033e4ad42f",
                 "shasum": ""
             },
             "require": {
@@ -7911,7 +7848,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-12-10T09:35:48+00:00"
+            "time": "2023-01-13T06:59:54+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap",
@@ -8469,12 +8406,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "5016342f966fca29dda84455de066c5c90d37941"
+                "reference": "e8c3bb316e385e93a0c7e8b2aa0681079244c381"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/5016342f966fca29dda84455de066c5c90d37941",
-                "reference": "5016342f966fca29dda84455de066c5c90d37941",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/e8c3bb316e385e93a0c7e8b2aa0681079244c381",
+                "reference": "e8c3bb316e385e93a0c7e8b2aa0681079244c381",
                 "shasum": ""
             },
             "require": {
@@ -8532,9 +8469,9 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/3.3.6"
+                "source": "https://github.com/zircote/swagger-php/tree/3.3.7"
             },
-            "time": "2022-05-21T01:52:14+00:00"
+            "time": "2023-01-03T21:17:10+00:00"
         }
     ],
     "packages-dev": [
@@ -8827,27 +8764,28 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "10dcfce151b967d20fde1b34ae6640712c3891bc"
+                "reference": "0a0fa9780f5d4e507415a065172d26a98d02047b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/10dcfce151b967d20fde1b34ae6640712c3891bc",
-                "reference": "10dcfce151b967d20fde1b34ae6640712c3891bc",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/0a0fa9780f5d4e507415a065172d26a98d02047b",
+                "reference": "0a0fa9780f5d4e507415a065172d26a98d02047b",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1 || ^8.0"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^9",
+                "doctrine/coding-standard": "^9 || ^11",
                 "ext-pdo": "*",
                 "ext-phar": "*",
                 "phpbench/phpbench": "^0.16 || ^1",
                 "phpstan/phpstan": "^1.4",
                 "phpstan/phpstan-phpunit": "^1",
                 "phpunit/phpunit": "^7.5 || ^8.5 || ^9.5",
-                "vimeo/psalm": "^4.22"
+                "vimeo/psalm": "^4.30 || ^5.4"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -8873,7 +8811,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/instantiator/issues",
-                "source": "https://github.com/doctrine/instantiator/tree/1.4.x"
+                "source": "https://github.com/doctrine/instantiator/tree/1.5.0"
             },
             "funding": [
                 {
@@ -8889,7 +8827,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-03T08:28:38+00:00"
+            "time": "2022-12-30T00:15:36+00:00"
         },
         {
             "name": "fakerphp/faker",
@@ -8897,12 +8835,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FakerPHP/Faker.git",
-                "reference": "e5e84006c4816d5c0d89f3a42576a20595894558"
+                "reference": "b47968eca3f1b81a7eedc82ee8741eee2af721a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/e5e84006c4816d5c0d89f3a42576a20595894558",
-                "reference": "e5e84006c4816d5c0d89f3a42576a20595894558",
+                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/b47968eca3f1b81a7eedc82ee8741eee2af721a6",
+                "reference": "b47968eca3f1b81a7eedc82ee8741eee2af721a6",
                 "shasum": ""
             },
             "require": {
@@ -8931,7 +8869,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "v1.20-dev"
+                    "dev-main": "v1.21-dev"
                 }
             },
             "autoload": {
@@ -8958,7 +8896,7 @@
                 "issues": "https://github.com/FakerPHP/Faker/issues",
                 "source": "https://github.com/FakerPHP/Faker/tree/main"
             },
-            "time": "2022-12-08T21:08:26+00:00"
+            "time": "2023-01-05T14:50:10+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -9193,12 +9131,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/TypeResolver.git",
-                "reference": "2dc9aff0e6ca4e4600355c68c4a38bfaeccf54e2"
+                "reference": "06f36c92b434ac686de06b6563e88046943bccbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/2dc9aff0e6ca4e4600355c68c4a38bfaeccf54e2",
-                "reference": "2dc9aff0e6ca4e4600355c68c4a38bfaeccf54e2",
+                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/06f36c92b434ac686de06b6563e88046943bccbe",
+                "reference": "06f36c92b434ac686de06b6563e88046943bccbe",
                 "shasum": ""
             },
             "require": {
@@ -9243,7 +9181,7 @@
                 "issues": "https://github.com/phpDocumentor/TypeResolver/issues",
                 "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.x"
             },
-            "time": "2022-11-19T20:09:31+00:00"
+            "time": "2022-12-16T10:25:14+00:00"
         },
         {
             "name": "phpspec/php-diff",
@@ -9356,16 +9294,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.15.0",
+            "version": "1.15.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "6ff970a7101acfe99b3048e4bbfbc094e55c5b04"
+                "reference": "61800f71a5526081d1b5633766aa88341f1ade76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/6ff970a7101acfe99b3048e4bbfbc094e55c5b04",
-                "reference": "6ff970a7101acfe99b3048e4bbfbc094e55c5b04",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/61800f71a5526081d1b5633766aa88341f1ade76",
+                "reference": "61800f71a5526081d1b5633766aa88341f1ade76",
                 "shasum": ""
             },
             "require": {
@@ -9395,9 +9333,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.15.0"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.15.3"
             },
-            "time": "2022-12-07T16:12:39+00:00"
+            "time": "2022-12-20T20:56:55+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -11538,7 +11476,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "kartik-v/yii2-dropdown-x": 20,
-        "factorenergia/jpgraph": 20,
         "bethrezen/yii2-cached-rbac-dbmanager": 20,
         "krisengine/yii2-graylog2": 20,
         "clegginabox/pdf-merger": 20,

@@ -11,7 +11,6 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
-        /*'@plantillas' => "@web/plantillas"*/
     ],
     'language' => 'es',
     'components' => [
@@ -81,14 +80,14 @@ $config = [
                     ],
                 ],
             ],
-        /*
+        
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];
@@ -106,7 +105,6 @@ if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-        'allowedIPs' => ['*'],
         'generators' => [ // here
             'crud' => [ // generator name
                 'class' => 'yii\gii\generators\crud\Generator', // generator class

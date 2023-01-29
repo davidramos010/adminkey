@@ -252,6 +252,7 @@ class SiteController extends BaseController
                 $strMovilPropietario = trim($line[8]);
                 $numAlarma = strtoupper(trim($line[9]));
                 $strAlarma = trim($line[10]);
+                $strFacturable = trim($line[11]);
                 $strObservaciones = trim($line[12]);
                 //Buscar comunidad
                 $arrCode = explode('-',$strCode);
@@ -295,6 +296,7 @@ class SiteController extends BaseController
                     $objNewLlave->alarma = $numAlarma=='SI' ? 1 : 0;
                     $objNewLlave->codigo_alarma = $objNewLlave->alarma ? $strAlarma : NULL;
                     $objNewLlave->observacion = $strObservaciones;
+                    $objNewLlave->facturable = ($strFacturable=='SI')?1:0;
                     if(isset($objParticular) && !empty($objParticular)){
                         $objNewLlave->id_propietario = $objParticular->id;
                     }

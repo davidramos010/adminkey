@@ -54,8 +54,8 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
                         'label' => 'Operaciones',
                         'icon' => 'file-import',
                         'items' => [
-                            ['label' => 'Llaves', 'url' => ['operaciones/operaciones'], 'iconStyle' => 'far'],
-                            ['label' => 'Registros', 'url' => ['operaciones/operaciones'], 'iconStyle' => 'far'],
+                            ['label' => 'Llaves', 'url' => ['operaciones/llaves'], 'iconStyle' => 'far'],
+                            ['label' => 'Registros', 'url' => ['operaciones/registros'], 'iconStyle' => 'far'],
                         ],
                     ],
                     [
