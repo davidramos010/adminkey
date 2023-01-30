@@ -2,8 +2,10 @@
 
 namespace app\models;
 
+use app\components\ValidadorCsv;
 use phpDocumentor\Reflection\Types\This;
 use Yii;
+use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -358,5 +360,181 @@ class Registro extends \yii\db\ActiveRecord
                     </div>
                   <!-- ./wrapper -->";
         return $strHtml;
+    }
+
+    /**
+     * @param string $fullPath
+     * @return array
+     * @throws Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Calculation\Exception
+     */
+    public static function setRegistrosMasivo(string $fullPath): array
+    {
+        $avisos = [];
+        $registrosOK = 0;
+        $registrosTotal = 0;
+        // ------------------------------
+        // Validamos contenido del CSV
+        $validador = new ValidadorCsv($fullPath);
+        $validador->validarCabeceras(
+            [
+                'ID' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_INT,
+                    ValidadorCsv::RULE_CAN_BE_NULL => true
+                ],
+                'TIPO' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_MIN_LENGTH => 1,
+                    ValidadorCsv::RULE_CAN_BE_NULL => false,
+                    ValidadorCsv::RULE_LIMITED_TO => ['E', 'S', 'ENTRADA', 'SALIDA']
+                ],
+                'FECHA' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_DATE,
+                    ValidadorCsv::RULE_CAN_BE_NULL => false
+                ],
+                'HORA' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_CAN_BE_NULL => false
+                ],
+                'CODIGO' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_CAN_BE_NULL => false,
+                    ValidadorCsv::RULE_MIN_LENGTH => 3,
+                ],
+                'USUARIO' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_CAN_BE_NULL => false,
+                    ValidadorCsv::RULE_MIN_LENGTH => 3,
+                ],
+                'COMERCIAL' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_CAN_BE_NULL => false,
+                    ValidadorCsv::RULE_MIN_LENGTH => 3,
+                ],
+                'RESPONSABLE' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_CAN_BE_NULL => false,
+                    ValidadorCsv::RULE_MIN_LENGTH => 3,
+                ],
+                'TELEFONO_RESPONSABLE' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_CAN_BE_NULL => false,
+                    ValidadorCsv::RULE_MIN_LENGTH => 6,
+                ],
+                'DOCUMENTO' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_MIN_LENGTH => 3,
+                    ValidadorCsv::RULE_CAN_BE_NULL => true
+                ],
+                'OBSERVACIONES' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_MIN_LENGTH => 3,
+                    ValidadorCsv::RULE_CAN_BE_NULL => true
+                ],
+            ]
+        );
+        // ------------------------------
+        $validador->validarContenido();
+        // Si falla alguna validación le tiramos el error
+        if ($errors = $validador->getErrors(ValidadorCsv::ERROR_USER)) {
+        //throw new Exception(join($errors, '<br>'));
+            $avisos[] = join('<br>',$errors);
+        }
+        // ------------------------------
+        if (empty($avisos)) {
+            foreach ($validador->getRows() as $file_key => $line) {
+                $registrosTotal++;
+                $numId = $line['ID'];
+                $strFechaReg = $line['FECHA'];
+                $strHoraReg = $line['HORA'];
+                $strStatus = $line['TIPO'];
+                $strCodeLlave = strtoupper(trim($line['CODIGO']));//codigo like  '%035%'
+                $strUser = strtoupper(trim($line['USUARIO']));
+                $strComercial = strtoupper(trim(utf8_decode($line['COMERCIAL'])));
+                $numTipoDoc = 1;
+                $strDocumentoResponsable = strtoupper(trim($line['DOCUMENTO']));;
+                $strNombreResponsable = strtoupper(trim($line['RESPONSABLE']));
+                $strTelefonoResponsable = strtoupper(trim($line['TELEFONO_RESPONSABLE']));
+                $strObservaciones = strtoupper(trim($line['OBSERVACIONES']));
+                //--------------------------------------------
+                // Consultar llave por codigo
+                $objLlave = Llave::find()->andFilterWhere(['like', 'codigo', $strCodeLlave])->orderBy('codigo ASC')->one();
+                if (empty($objLlave)) {
+                    $avisos[] = 'Error en la linea:' . $file_key . ' -Llave no encontrada' . '<br>';
+                    continue;
+                }
+                // Buscar usuario
+                $objUser = User::find()->andFilterWhere(['like', 'username', $strUser])->one();
+                if (empty($objUser)) {
+                    $avisos[] = 'Error en la linea:' . $file_key . ' - Usuario no encontrado' . '<br>';
+                    continue;
+                }
+                // Buscar comercial asignado
+                $objComercial = Comerciales::find()->andFilterWhere(['like', 'nombre', $strComercial])->one();
+                if (empty($objComercial)) {
+                    $avisos[] = 'Error en la linea:' . $file_key . ' - Comercial no encontrado' . '<br>';
+                    continue;
+                }
+                // Validar tipo
+                if (!in_array($strStatus, ['E', 'S', 'ENTRADA', 'SALIDA'])) {
+                    $avisos[] = 'Error en la linea:' . $file_key . ' - El tipo no es valido (E/S)' . '<br>';
+                    continue;
+                }
+                //-------------------------------------------------
+                // Nuevo Registro
+                try {
+                    $newRegistro = new Registro();
+                    $newRegistro->id = empty($numId)?NULL:$numId;
+                    $newRegistro->id_user = $objUser->id;
+                    $newRegistro->id_llave = $objLlave->id;
+                    if ($strStatus == 'S') {
+                        $newRegistro->salida = util::getDateTimeFormatedUserToSql($strFechaReg . ' ' . $strHoraReg);
+                    } else {
+                        $newRegistro->entrada = util::getDateTimeFormatedUserToSql($strFechaReg . ' ' . $strHoraReg);
+                    }
+                    $newRegistro->observacion = $strObservaciones;
+                    $newRegistro->id_comercial = $objComercial->id;
+                    $newRegistro->tipo_documento = $numTipoDoc;
+                    $newRegistro->nombre_responsable = $strNombreResponsable;
+                    $newRegistro->telefono = $strTelefonoResponsable;
+                    $newRegistro->documento = $strDocumentoResponsable;
+                    if ($newRegistro->validate() && $newRegistro->save()) {
+                        $newStatus = new LlaveStatus();
+                        $newStatus->id_llave = $newRegistro->id_llave;
+                        $newStatus->status = substr($strStatus,0,1);
+                        $newStatus->fecha = $newRegistro->getFechaRegistro();
+                        $newStatus->id_registro = $newRegistro->id;
+                        if (!$newStatus->save()) {
+                            $avisos[] = 'Error en la linea:' . $file_key . ' - Registro-status no pudo ser creado' . '<br>';
+                            continue;
+                        }
+                        $registrosOK++;
+                    } else {
+                        $avisos[] = 'Error en la linea:' . $file_key . ' - El Registro no pudo ser creado' . '<br>';
+                        continue;
+                    }
+                } catch (\yii\db\Exception $e) {
+                    $strMensaje = 'Error en la linea:' . $file_key . '::' . $e->getMessage() . '<br>';
+                    if ($e->getCode() == 23000) {
+                        $strMensaje = 'Error en la linea:' . $file_key . ' - Imposible crear el registro, el ID ya existe.<br>';
+                    }
+                    $avisos[] = $strMensaje;
+                }
+            }
+        }
+        // -------------------------------------------------
+        if (empty($avisos)) {
+            $strMensaje = 'Almacenado Correctamente!!';
+            Yii::$app->session->setFlash('success', Yii::t('yii', $strMensaje));
+        } else {
+            $strMensaje = 'No fue posible actualizar los todos registros !! ' . $registrosOK . ' de ' . $registrosTotal . ' Registrados correctamente.<br>';
+        }
+        // -------------------------------------------------
+        return [
+            'respuesta' => $strMensaje,
+            'avisos' => $avisos,
+            'error' => $avisos,
+            'errors' => [],
+        ];
     }
 }

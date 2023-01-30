@@ -43,11 +43,8 @@ $descargarPlantilla = Html::a('Plantilla CSV <i class="glyphicon glyphicon-file"
                 <?php
                 $form = ActiveForm::begin(['action' => ['llaves'], 'id' => 'registration-form', 'enableClientValidation' => true, 'options' => ['enctype' => 'multipart/form-data']]);
                  ?>
-
                 <div>
-
-                    <?=
-                     FileInput::widget([
+                    <?= FileInput::widget([
                         'name' => 'csv_file',
                         'id' => 'csv_file',
                         'options' => ['accept' => 'zip',],
@@ -78,11 +75,9 @@ $descargarPlantilla = Html::a('Plantilla CSV <i class="glyphicon glyphicon-file"
                     echo Html::tag('div', '',
                         ['data-js-resultado-carga-fichero-aviso' => true, 'style' => 'text-align: center;padding-top: 15px;color:red']);
                     ?>
-
                 </div>
                 <hr>
             </div>
-
             <?php ActiveForm::end(); ?>
         </div>
             <!-- /.card-body -->
