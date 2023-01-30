@@ -9,6 +9,7 @@ use app\models\Csv;
 use app\models\Llave;
 use app\models\LlaveUbicaciones;
 use app\models\Propietarios;
+use app\models\Registro;
 use app\models\TipoLlave;
 use app\models\TipoLlaveSearch;
 use app\utils\Ficheros;
@@ -71,7 +72,6 @@ class OperacionesController extends Controller
     public function actionAjaxLoadLlaves()
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        //Yii::$app->response->format = Response::FORMAT_JSON;
         // Validamos que sea un csv
         $file = UploadedFile::getInstanceByName('csv_file');
         if ($file->extension !== 'csv') {
@@ -83,6 +83,31 @@ class OperacionesController extends Controller
         $fullPath = Ficheros::subirFichero($file, sys_get_temp_dir() . '/', $filename);
         //-----
         $arrResult = isset($arrResult['avisos']) ? $arrResult : Llave::setLlavesMasivo($fullPath);
+
+        if(empty($arrResult['avisos'])){
+            Yii::$app->session->setFlash('success', Yii::t('yii', $arrResult['respuesta']));
+        }else{
+            Yii::$app->session->setFlash('warning', Yii::t('yii', $arrResult['respuesta']));
+        }
+
+        return $arrResult;
+    }
+
+
+    public function actionAjaxLoadRegistros()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        // Validamos que sea un csv
+        $file = UploadedFile::getInstanceByName('csv_file');
+        if ($file->extension !== 'csv') {
+            //throw new Exception('No es un fichero .csv!');
+            $arrResult['avisos'] = 'No es un fichero .csv!';
+            $arrResult['respuesta'] = 'No es un fichero .csv!';
+        }
+        $filename = Date('Y-m-d') . '-' . time() . '.csv';
+        $fullPath = Ficheros::subirFichero($file, sys_get_temp_dir() . '/', $filename);
+        //-----
+        $arrResult = !isset($arrResult['avisos']) ? Registro::setRegistrosMasivo($fullPath) : $arrResult;
 
         if(empty($arrResult['avisos'])){
             Yii::$app->session->setFlash('success', Yii::t('yii', $arrResult['respuesta']));

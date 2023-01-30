@@ -11,7 +11,6 @@ use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 /* @var $model \app\models\Csv */
-
 $this->title = 'Registros Movimientos';
 $this->registerJsFile('@web/js/registro.js');
 $descargarPlantilla = Html::a('Plantilla CSV <i class="glyphicon glyphicon-file"></i>', Url::to(['operaciones/descargar-plantilla-movimientos']), [
@@ -44,26 +43,38 @@ $descargarPlantilla = Html::a('Plantilla CSV <i class="glyphicon glyphicon-file"
                 $form = ActiveForm::begin(['action' => ['movimientos'], 'id' => 'registration-form', 'enableClientValidation' => true, 'options' => ['enctype' => 'multipart/form-data']]);
                 ?>
                 <div>
-                    <?= $form->field($model, 'csv_file',['options' => ['class' => 'file-uploader']])->widget(FileInput::class, [
-                        'language' => 'es',
-                        'options' => [
-                            'id' => 'csv_file',
-                            'multiple'=>false
+                    <?=
+                    FileInput::widget([
+                        'name' => 'csv_file',
+                        'id' => 'csv_file',
+                        'options' => ['accept' => 'zip',],
+                        'pluginOptions' => [
+                            'uploadUrl' => Url::to(['operaciones/ajax-load-registros']),
+                            'showCaption' => false,
+                            'showRemove' => false,
+                            'showUpload' => true,
+                            'showPreview' => false,
+                            'showCancel' => false,
+                            'browseClass' => 'btn btn-primary btn-block btn-seleccionar-fichero',
+                            'browseIcon' => '<i class="glyphicon glyphicon-file"></i> ',
+                            'browseLabel' => 'Seleccionar un fichero...',
+                            'uploadClass' => 'btn btn-warning btn-block btn-validar-fichero',
+                            'uploadIcon' => '⏫',
+                            'uploadLabel' => 'Validar y cargar fichero...',
                         ],
-                        'pluginOptions' => array_merge(
-                            [
-                                'showBrowse' => true,
-                                'showCaption' => true,
-                                'showRemove' => true,
-                                'showUpload' => true,
-                                'showPreview' => true,
-                                'initialCaption'=>"Seleccione archivo para subir de movimientos",
-                                'uploadUrl' => Url::to(['operaciones/ajax-load']),
-                                'uploadExtraData' => [
-                                    'movimientos' => true,
-                                ],
-                            ])
-                    ])->label('Plantilla de carga masiva - Movimientos')   ?>
+                        'pluginEvents' => [
+                            'fileuploaded' => new JsExpression('(event, data) => tratarRespuestaExito(data.response)'),
+                            'fileuploaderror' => new JsExpression('(event, data) => tratarRespuestaError(data.response)'),
+                        ]
+                    ]);
+
+                    echo Html::tag('div', '',
+                        ['data-js-resultado-carga-fichero-error' => true, 'style' => 'text-align: center;padding-top: 15px;color:red']);
+                    echo Html::tag('div', '',
+                        ['data-js-resultado-carga-fichero-exito' => true, 'style' => 'text-align: center;padding-top: 15px;color:green']);
+                    echo Html::tag('div', '',
+                        ['data-js-resultado-carga-fichero-aviso' => true, 'style' => 'text-align: center;padding-top: 15px;color:red']);
+                    ?>
                 </div>
                 <hr>
             </div>

@@ -382,7 +382,7 @@ class Llave extends \yii\db\ActiveRecord
         // Si falla alguna validación le tiramos el error
         if ($errors = $validador->getErrors(ValidadorCsv::ERROR_USER)) {
             //throw new Exception(join($errors, '<br>'));
-            $avisos[] = join($errors, '<br>');
+            $avisos[] = join('<br>',$errors);
         }
         // ------------------------------
         if (empty($avisos)) {

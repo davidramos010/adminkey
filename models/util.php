@@ -99,4 +99,15 @@ class util
         }
         return $dateFormated;
     }
+
+    public static function getDateTimeFormatedUserToSql($date)
+    {
+        if (!empty($date)) {
+            $fecha = \DateTime::createFromFormat('d/m/Y H:i', $date);
+            $dateFormated = $fecha->format('Y-m-d H:i:s');
+        } else {
+            $dateFormated = $date;
+        }
+        return $dateFormated;
+    }
 }
