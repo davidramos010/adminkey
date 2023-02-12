@@ -182,6 +182,7 @@ class LlaveController extends Controller
         $arrParam = $this->request->post();
         $comunidad_id = $arrParam['comunidad'];
         $propietario_id = $arrParam['propietario'];
+        $arrInfo = [];
         if(!empty($comunidad_id)){
             $objComunidad = Comunidad::findOne(['id'=>$comunidad_id]);
             $model = new Llave();
@@ -191,8 +192,9 @@ class LlaveController extends Controller
         }
 
         if(!isset($model) && !empty($propietario_id)){
-            $objPropietario = Propietarios::findOne(['id'=>$propietario_id]);
+            $objPropietario = Propietarios::findOne(['id'=> (int) $propietario_id]);
             $model = new Llave();
+            $model->id_propietario = (int) $propietario_id;
             $arrInfo['id'] = (string) $model->getNext();
             $arrInfo['nomenclatura'] = 'P'.$objPropietario->id;
         }

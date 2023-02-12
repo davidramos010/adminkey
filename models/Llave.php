@@ -237,9 +237,9 @@ class Llave extends \yii\db\ActiveRecord
         }
 
         $strCode = empty($resultData) || empty($resultData->codigo) ? '' : $resultData->codigo;
-        $numCantidad = (int) empty($resultData) || empty($resultData->total) ? 1 : $resultData->total;
+        $numCantidad = (int) empty($resultData) || empty($resultData->total) ? 0 : $resultData->total;
         $arrCode = (empty($strCode)) ? '' : explode('-',$strCode);
-        $numNext = (int) $arrCode[1]<$numCantidad ? $arrCode[1] : $numCantidad;
+        $numNext = !empty($strCode) && (int) $arrCode[1]<$numCantidad ? $arrCode[1] : $numCantidad;
 
         return str_pad($numNext + 1, 3, '0', STR_PAD_LEFT) ;
     }

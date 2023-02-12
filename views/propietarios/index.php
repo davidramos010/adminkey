@@ -52,7 +52,7 @@ $this->title = Yii::t('app', 'Propietarios');
                                   'headerOptions' => ['style' => 'width: 5%'],
                                   'format' => 'raw',
                                   'value' => function($model){
-                                      return 'P'.str_pad($model->id, 4, "0", STR_PAD_LEFT); ;
+                                      return $model->getNomenclatura() ;
                                   }
                               ],
                               [

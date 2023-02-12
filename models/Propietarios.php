@@ -26,6 +26,9 @@ use Yii;
 class Propietarios extends \yii\db\ActiveRecord
 {
     const arrTipoDocumentos = [1=>'NIF',2=>'NIE',3=>'PASS',4=>'OTROS'];
+    const strNomenclaturaDefine = 'P';
+    public $nomenclatura = '';
+    public $id_propietario = null;
     /**
      * {@inheritdoc}
      */
@@ -142,4 +145,12 @@ class Propietarios extends \yii\db\ActiveRecord
         $strNombrePropietario = (empty($strNombrePropietario))?strtoupper($this->nombre_representante):$strNombrePropietario;
         return trim($strNombrePropietario);
     }
+
+    /**
+     * @return string
+     */
+    public function getNomenclatura(){
+        return $this->nomenclatura = self::strNomenclaturaDefine.str_pad($this->id, 4, "0", STR_PAD_LEFT);
+    }
+
 }

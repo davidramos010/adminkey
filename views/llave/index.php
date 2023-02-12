@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 use app\models\Llave;
 use kartik\export\ExportMenu;
@@ -90,6 +90,12 @@ $this->registerJsFile('@web/js/llave.js');
                                     break;
                                 case 3:
                                     $class = 'bg-primary';
+                                    break;
+                                case 4:
+                                    $class = 'bg-secondary';
+                                    break;
+                                case 5:
+                                    $class = 'bg-dark';
                                     break;
                                 default:
                                     $class = 'bg-muted';

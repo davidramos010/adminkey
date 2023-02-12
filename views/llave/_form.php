@@ -10,8 +10,9 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 /* @var $view bool */
 
-$strStyleVisiblePropietario = $model->tipo->propietario ? '' : 'none';
-$strStyleVisibleComunidad = $model->tipo->comunidad ? '' : 'none';
+$strStyleVisiblePropietario = isset($model->tipo) && $model->tipo->propietario ? '' : 'none';
+$strStyleVisibleComunidad = isset($model->tipo) && $model->tipo->comunidad ? '' : 'none';
+$strStyleVisibleBtnAdd = $model->isNewRecord ? '' : 'none';
 
 ?>
 <div class="llave-form">
@@ -51,8 +52,8 @@ $strStyleVisibleComunidad = $model->tipo->comunidad ? '' : 'none';
                 <div class="col-md-6 ">
                     <?= $form->field($model, 'id_comunidad')->dropDownList(Llave::getComunidadesDropdownList(), ['class' => 'form-control', 'prompt' => 'Seleccione Uno', 'readonly' => $view, 'data-js-find-nomenclatura'=>'comunidad'])->label('Comunidad'); ?>
                 </div>
-                <div class="col-md-1 ">
-                    <div class="form-group field-id_comunidad_modal">
+                <div class="col-md-1 " style="vertical-align: bottom">
+                    <div class="form-group field-id_comunidad_modal" style="display: <?= $strStyleVisibleBtnAdd ?>">
                         <label class="control-label" for="id_comunidad_modal">Adicionar</label><br/>
                         <?= Html::a('<i class="fas fa-info-circle"></i>', ['comunidad/create-modal'], ['class' => 'btn btn-success', 'id' => 'btn-modal-comunidad', 'title' => Yii::t('app', 'Nueva Comunidad')]); ?>
                     </div>
@@ -63,7 +64,7 @@ $strStyleVisibleComunidad = $model->tipo->comunidad ? '' : 'none';
                     <?= $form->field($model, 'id_propietario')->dropDownList(Llave::getPropietariosDropdownList(), ['id' => 'id_propietario', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'readonly' => $view, 'data-js-find-nomenclatura'=>'propietario'])->label('Propietario'); ?>
                 </div>
                 <div class="col-md-1" style="vertical-align: bottom">
-                    <div class="form-group field-id_propietario_modal">
+                    <div class="form-group field-id_propietario_modal"  style="display: <?= $strStyleVisibleBtnAdd ?>">
                         <label class="control-label" for="id_propietario_modal">Adicionar</label><br/>
                         <?= Html::a('<i class="fas fa-info-circle"></i>', ['propietarios/create-modal'], ['class' => 'btn btn-success', 'id' => 'btn-modal-propietario', 'title' => Yii::t('app', 'Nuevo Propietario')]); ?>
                     </div>
