@@ -40,7 +40,7 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
                     ],
                     [
                         'label' => 'Clientes/Proveedores',
-                        'icon' => 'shield-alt',
+                        'icon' => 'fa-solid fa-address-book',
                         'items' => [
                             ['label' => 'Cliente', 'url' => ['comunidad/index'], 'iconStyle' => 'far'],
                             ['label' => 'Llaves', 'url' => ['llave/index'], 'iconStyle' => 'far'],
@@ -51,23 +51,31 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
                         'visible' => ((int) Yii::$app->user->identity->perfiluser->id_perfil==1)
                     ],
                     [
-                        'label' => 'Operaciones',
-                        'icon' => 'file-import',
+                        'label' => 'Operaciones Masivas',
+                        'icon' => 'fa-solid  fa-file-import',
                         'items' => [
-                            ['label' => 'Llaves', 'url' => ['operaciones/llaves'], 'iconStyle' => 'far'],
-                            ['label' => 'Registros', 'url' => ['operaciones/registros'], 'iconStyle' => 'far'],
+                            ['label' => 'Importar Llaves', 'url' => ['operaciones/llaves'], 'iconStyle' => 'far'],
+                            ['label' => 'Importar Movimientos', 'url' => ['operaciones/registros'], 'iconStyle' => 'far'],
                         ],
+                        'visible' => ((int) Yii::$app->user->identity->perfiluser->id_perfil==1)
                     ],
                     [
                         'label' => 'Reportes',
-                        'icon' => 'fa-solid fa-file-contract',
+                        'icon' => 'fa-solid fa-file-excel',
                         'items' => [
                             ['label' => 'Reporte Movimientos', 'url' => ['registro/index'], 'iconStyle' => 'far'],
                             ['label' => 'Llaves', 'url' => ['llave/report'], 'iconStyle' => 'far'],
                         ],
                     ],
-                    ['label' => 'Registro',  'icon' => 'fas fa-edit', 'url' => ['registro/create']],
-                    ['label' => 'Contratos',  'icon' => 'fas fa-file-contract', 'url' => ['contratos/generar-list']],
+                    [
+                        'label' => 'Administración',
+                        'icon' => 'fa-solid fa-file-invoice',
+                        'items' => [
+                            ['label' => 'Contratos', 'url' => ['contratos/generar-list'], 'iconStyle' => 'far'],
+                        ],
+                        'visible' => ((int) Yii::$app->user->identity->perfiluser->id_perfil==1)
+                    ],
+                    ['label' => 'Registro',  'icon' => 'fa-solid fa-key', 'url' => ['registro/create']],
                     ['label' => 'Login', 'url' => ['site/login'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
                     /*['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank'],
                     ['label' => 'Debug', 'icon' => 'bug', 'url' => ['/debug'], 'target' => '_blank'],*/
@@ -75,6 +83,7 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
             ]);
             ?>
         </nav>
+        <i class="fa-light fa-pen-to-square"></i>
         <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->

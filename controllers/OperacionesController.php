@@ -145,7 +145,7 @@ class OperacionesController extends Controller
      */
     public function actionDescargarPlantillaMovimientos()
     {
-        $fileName = 'REGISTROS_MOVIMIENTOS.csv';
+        $fileName = 'REGISTROS_ENTRADA.csv';
         $filePath =  Yii::getAlias('@webroot').'/documents/';
         $fullPath = $filePath . $fileName;
         $content = 'DOCUMENTO-NO-DISPONIBLE';

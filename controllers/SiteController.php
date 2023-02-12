@@ -146,7 +146,7 @@ class SiteController extends BaseController
                     return $this->redirect('index.php');
                 }
                 if($objPerfil->id_perfil==2 && (int) $model->perfil==2){
-                    return $this->redirect('index.php?r=registro/create');
+                    return $this->redirect('../registro/create');
                 }
             }
         }

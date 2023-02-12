@@ -13,9 +13,9 @@ use yii\web\JsExpression;
 /* @var $model \app\models\Csv */
 $this->title = 'Registros Movimientos';
 $this->registerJsFile('@web/js/registro.js');
-$descargarPlantilla = Html::a('Plantilla CSV <i class="glyphicon glyphicon-file"></i>', Url::to(['operaciones/descargar-plantilla-movimientos']), [
+$descargarPlantilla = Html::a('Descargar Plantilla CSV <i class="glyphicon glyphicon-file"></i>', Url::to(['operaciones/descargar-plantilla-movimientos']), [
     'title' => 'Descargar plantilla de ejemplo',
-    'download'  => 'REGISTROS_MOVIMIENTOS.csv',
+    'download'  => 'REGISTROS_ENTRADA.csv',
     'class' => 'btn-sm btn-primary '
 ]);
 ?>
@@ -26,7 +26,9 @@ $descargarPlantilla = Html::a('Plantilla CSV <i class="glyphicon glyphicon-file"
                 <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
                     <?php
                     echo Html::ul([
-                        'Ingreso masivo de movientos.'
+                        'Ingreso masivo de movientos.',
+                        'Para la carga masiva de llaves es necesario ingresar obligatoriamente un archivo con extesion CSV, como el que se ve en el ejemplo.',
+                        '<label>Importante</label> : Este proceso no evalua el estado actual de la llave procesada.',
                     ], ['encode' => false]);
                     echo Html::ul([
                         $descargarPlantilla,
@@ -77,6 +79,30 @@ $descargarPlantilla = Html::a('Plantilla CSV <i class="glyphicon glyphicon-file"
                     ?>
                 </div>
                 <hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card-header border-0">
+                            <h3 class="card-title">Descripción de columnas.</h3>
+                        </div>
+                        <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
+                            <?php
+                            echo Html::ul([
+                                ' ID: No es obligatorio, si se ingresa debe ser unico.',
+                                ' TIPO: ENTRADA / SALIDA.',
+                                ' FECHA: dd/mm/aaaa',
+                                ' HORA: hh:mm',
+                                ' CODIGO: Codigo Llave.',
+                                ' USUARIO: Usuario del sistema que genera la operación.',
+                                ' COMERCIAL: Nombre exacto del comercail relacionado a la operación.',
+                                ' RESPONSABLE: Nombre de la persona que recibe en mano la llave.',
+                                ' TELEFONO_RESPONSABLE: Telefono/Movil de la persona que recibe en mano la llave.',
+                                ' DOCUMENTO: identificación de la persona que recibe en mano la llave.',
+                                ' OBSERVACIONES: Observaciones / Notas de importantes de la operación.',
+                            ], ['encode' => false]);
+                            ?>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <?php ActiveForm::end(); ?>

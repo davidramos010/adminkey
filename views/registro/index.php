@@ -50,7 +50,7 @@ $this->registerJsFile('@web/js/registro.js');
                         'headerOptions' => ['style' => 'width: 5%'],
                     ],
                     [
-                        'attribute' => 'id_user',
+                        'attribute' => 'username',
                         'label' => 'Usuario Sistema',
                         'format' => 'raw',
                         'enableSorting'=>false,

@@ -14,7 +14,7 @@ use yii\web\JsExpression;
 
 $this->title = 'Llaves';
 $this->registerJsFile('@web/js/registro.js');
-$descargarPlantilla = Html::a('Plantilla CSV <i class="glyphicon glyphicon-file"></i>', Url::to(['operaciones/descargar-plantilla-llave']), [
+$descargarPlantilla = Html::a('Descargar Plantilla CSV <i class="glyphicon glyphicon-file"></i>', Url::to(['operaciones/descargar-plantilla-llave']), [
     'title' => 'Descargar plantilla de ejemplo',
     'download'  => 'REGISTROS_LLAVE.csv',
     'class' => 'btn-sm btn-primary '
@@ -27,7 +27,8 @@ $descargarPlantilla = Html::a('Plantilla CSV <i class="glyphicon glyphicon-file"
                 <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
                     <?php
                     echo Html::ul([
-                        'Ingreso masivo de llaves.'
+                        'Ingreso masivo de llaves.',
+                        'Para la carga masiva de llaves es necesario ingresar obligatoriamente un archivo con extesion CSV, como el que se ve en el ejemplo.'
                     ], ['encode' => false]);
                     echo Html::ul([
                         $descargarPlantilla,
@@ -77,6 +78,35 @@ $descargarPlantilla = Html::a('Plantilla CSV <i class="glyphicon glyphicon-file"
                     ?>
                 </div>
                 <hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card-header border-0">
+                            <h3 class="card-title">Descripción de columnas.</h3>
+                        </div>
+                        <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
+                            <?php
+
+                            echo Html::ul([
+                                ' CODIGO: Correponde a la nomenclatura usada por la comunidad, ejemplo C001. Puedes ser vacio si no tiene comunidad asignada.',
+                                ' OFICINA: Lugar de almacenamiento fisico de la llave.',
+                                ' TIPO: Comunidad / Particular.',
+                                ' ACCESO: Descripción del acceso que da la llave.',
+                                ' CANTIDAD: Cantidad de copias almacenadas de la misma llave.',
+                                ' PROPIETARIO_CODIGO: Codigo del propietario de la llave, ejemplo P001. Puede ser vacio si no tiene propietario asignado',
+                                ' PROPIETARIO: Nombre completo del propietario, si no tengo el codigo, busco por nombre o si es nuevo ingreso el nombre completo.',
+                                ' ALARMA: SI / NO.',
+                                ' CODIGO_ALARMA: Si tiene alarma sera obligatorio el codigo de acceso de la alarma.',
+                                ' CONTRATO: SI / NO - Identificador de facturable.',
+                                ' COMENTARIOS: Detalles de la llave.',
+                                ' MOVIL: Movil / Telefono de contacto.',
+                                ' DIRECCION: Dirección del inmueble, solo sera obligatorio en caso que la llave no cuente con Comunidad / Propietario existente',
+                                ' CODIGO_POSTAL: Codigo postal del inmuebe, solo sera obligatorio en caso que la llave no cuente con Comunidad / Propietario existente.',
+
+                            ], ['encode' => false]);
+                            ?>
+                        </div>
+                    </div>
+                </div>
             </div>
             <?php ActiveForm::end(); ?>
         </div>

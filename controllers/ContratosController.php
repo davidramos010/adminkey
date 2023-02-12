@@ -14,6 +14,7 @@ use PhpOffice\PhpWord\TemplateProcessor;
 use Yii;
 use app\models\Contratos;
 use app\models\ContratosSearch;
+use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -359,7 +360,12 @@ class ContratosController extends Controller
         $numLLaves = count($objContratoLogLlave);
         $arrLlaves = [];
         if($numLLaves){
-            $templateProcessor->cloneRow('codigo_llave', $numLLaves);
+            try {
+                //$templateProcessor->cloneRow('codigo_llave', $numLLaves);
+            }catch (Exception $exception ){
+                // no aplica
+            }
+
             $numRowLlave = 0;
             foreach ($objContratoLogLlave as $llave_key){
                 $numRowLlave++;
@@ -370,7 +376,7 @@ class ContratosController extends Controller
         }
 
         // Consultar Cliente
-        $arrNombreClientes = null;
+        $arrNombreClientes = [];
         $infoCliente = Comunidad::find()->alias('c')->select('c.nombre')->distinct();
         $infoCliente->innerJoin('llave l','l.id_comunidad = c.id');
         $infoCliente->where(['IN','l.id',$arrLlaves])->orderBy('c.nombre asc');
@@ -396,12 +402,15 @@ class ContratosController extends Controller
                                                                                         WHEN p.documento_propietario IS NOT NULL THEN p.documento_propietario
                                                                                         WHEN p.documento_representante IS NOT NULL THEN p.documento_representante
                                                                                         ELSE NULL END) as documento_propietario')->distinct();
-        $infoPropietario->innerJoin('llave l','l.id_propietario= p.id');
-        $infoPropietario = $infoPropietario->where(['IN','l.id',$arrLlaves])->orderBy('p.nombre_propietario asc')->all();
-        if(count($infoPropietario)){
-            foreach ($infoPropietario as $keyPropietario){
-                $arrPropietarioNombre[] = strtoupper($keyPropietario->nombre_propietario);
-                $arrPropietarioNombreIdentificacion[] = Propietarios::getTipoDocmento($keyPropietario->tipo_documento_propietario).' '.$keyPropietario->documento_propietario;
+        $infoPropietario->innerJoin('llave l', 'l.id_propietario= p.id');
+        $infoPropietario = $infoPropietario->where(['IN', 'l.id', $arrLlaves])->orderBy('p.nombre_propietario asc')->all();
+        if (count($infoPropietario)) {
+            foreach ($infoPropietario as $keyPropietario) {
+                $strNombrePropietario = (!empty($keyPropietario->nombre_propietario)) ? strtoupper($keyPropietario->nombre_propietario) : '';
+                $strDocumentoPropietario = (!empty($keyPropietario->tipo_documento_propietario)) ? Propietarios::getTipoDocmento($keyPropietario->tipo_documento_propietario) : '';
+
+                $arrPropietarioNombre[] = $strNombrePropietario;
+                $arrPropietarioNombreIdentificacion[] = $strDocumentoPropietario . ' ' . $keyPropietario->documento_propietario;
             }
         }
         // ---------------------

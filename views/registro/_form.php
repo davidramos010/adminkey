@@ -103,18 +103,19 @@ use yii\widgets\ActiveForm;
                                 </div>
                             </div>
                         </div>
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                <div class="row">
-                                    <div class="col-md-5">
+                        <div class="card-header" >
+                                <div class="row" >
+                                    <div class="col-md-2">
                                         <?= Html::textInput('id_llave', '', ['id' => 'id_llave', 'class' => 'form-control']); ?>
                                         <?= Html::hiddenInput('id_operacion', 'S', ['id' => 'id_operacion', 'class' => 'form-control']); ?>
                                     </div>
-                                    <div class="col-md-7">
+                                    <div class="col-md-3">
                                         <?= Html::button('Adicionar', ['class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { addKey() })();']); ?>
                                     </div>
+                                    <div class="col-md-4" >
+                                        <?= Html::button('Adicionar Manualmente', ['class' => 'btn btn-success', 'onclick' => 'addManual()']); ?>
+                                    </div>
                                 </div>
-                            </h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -202,7 +203,7 @@ use yii\widgets\ActiveForm;
                                 <?php //echo Html::button(Yii::t('app', 'Guardar'), ['id' => 'btn_guardar', 'class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { fnGuardarCuadroFirma() })();']); ?>
                             </div>
                             <div class="card-footer text-muted">
-                                <?= SignatureWidget::widget(['clear' => true, 'url' => '/index.php?r=registro/add-firma', 'save_server' => true]); ?>
+                                <?= SignatureWidget::widget(['clear' => true, 'url' => '../registro/add-firma', 'save_server' => true]); ?>
                             </div>
                         </div>
                     </div>

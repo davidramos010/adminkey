@@ -6,7 +6,7 @@ var listKeySalida = [];
  */
 function addKey()
 {
-    let url = '/index.php?r=registro/ajax-add-key';
+    let url = '../registro/ajax-add-key';
     let code = $('#id_llave').val();
     let operacion = $('#id_operacion').val();
     var strTable = 'tblKeyEntrada';
@@ -114,7 +114,7 @@ function delKey(id)
  */
 function sendForm()
 {   //https://github.com/inquid/yii2-signature/blob/master/assets/app.js
-    let url = '/index.php?r=registro/ajax-register-motion';
+    let url = '../registro/ajax-register-motion';
     let numIdRegistro = null;
 
     var form = $('#form-registro');
@@ -184,7 +184,7 @@ function fnGuardarCuadroFirma(numIdRegistro){
  * Genera pdf de registro
  */
 function generatePdfRegistro(numIdRegistro){
-    var win = window.open('/index.php?r=registro/print-register&id='+numIdRegistro, '_blank');
+    var win = window.open('/registro/print-register?id='+numIdRegistro, '_blank');
     if (win) {
         //Browser has allowed it to be opened
         win.focus();
@@ -215,7 +215,7 @@ function procesarResultadosComercial(data) {
 function setCopyDataContacto(){
 
     let numIdResponsable = $('#id_comercial').val();
-    let url = '/index.php?r=registro/ajax-find-comercial';
+    let url = '../registro/ajax-find-comercial';
     $.ajax({
         url: url,
         dataType: 'JSON',
@@ -264,4 +264,8 @@ function tratarRespuestaExito(mensaje) {
     dom_fileinput.fileinput('disable');
     $('.btn-validar-fichero').attr('disabled', true);
     $('.btn-seleccionar-fichero').attr('disabled', true);
+}
+
+function addManual(){
+    alert('111');
 }
