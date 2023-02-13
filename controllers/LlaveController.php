@@ -230,6 +230,34 @@ class LlaveController extends Controller
     }
 
     /**
+     * buscar movimientos - retorna un arreglo con los resgistros de los movimientos
+     * @return false|string
+     */
+    public function actionAjaxFindManual():string
+    {
+        $arrParam   = $this->request->post();
+        $strTableTr = "";
+        $searchModel = new LlaveSearch();
+        $dataProvider = $searchModel->searchManual($arrParam);
+
+        if(count($dataProvider)){
+            foreach ($dataProvider as $modelLlave){
+                $modelLlave->llaveLastStatus = ($modelLlave->llaveLastStatus=='S')?'<span class="float-none badge bg-danger">'.Yii::t('app','Exit').'</span>':'<span class="float-none badge bg-success">'.Yii::t('app','Entry').'</span>';
+                $strTableTr .= "<tr>";
+                $strTableTr .= "<td style='font-size: 12px; font-weight: bold'>".$modelLlave->codigo."</td>";
+                $strTableTr .= "<td style='font-size: 13px; '>". !empty($modelLlave->comunidad) && isset($modelLlave->comunidad->nombre) ? $modelLlave->comunidad->nombre : '' ."</td>";
+                $strTableTr .= "<td style='font-size: 13px; '>". !empty($modelLlave->propietarios) && isset($modelLlave->propietarios->id) ? $modelLlave->propietarios->getNombre() : ''."</td>";
+                $strTableTr .= "<td style='font-size: 13px; '>". !empty($modelLlave->tipo) && isset($modelLlave->tipo->descripcion) ? $modelLlave->tipo->descripcion : ''."</td>";
+                $strTableTr .= "<td style='font-size: 12px;'>".$modelLlave->llaveLastStatus."</td></tr>";
+            }
+        }else{
+            $strTableTr = "<tr><td colspan='5' class='text-black-50 text-md-center' >".Yii::t('yii','No results found.')."</td></tr>";
+        }
+
+        return $strTableTr;
+    }
+
+    /**
      * Funcion que retorna los atributos de una tipo de llave
      * @return false|string
      */

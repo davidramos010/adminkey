@@ -21,7 +21,7 @@ use Yii;
 /**
  * RegistroController implements the CRUD actions for Registro model.
  */
-class RegistroController extends Controller
+class RegistroController extends BaseController
 {
     /**
      * @inheritDoc

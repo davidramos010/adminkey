@@ -213,26 +213,6 @@ class SiteController extends BaseController
         }
     }
 
-    /**
-     * @param $local
-     * @return Response
-     * @throws \yii\web\BadRequestHttpException
-     */
-    public function actionChangeLang($local)
-    {
-        $available_locales = ['es', 'ca', 'en' ];
-        if (!in_array($local, $available_locales)) {
-            throw new \yii\web\BadRequestHttpException();
-        }
-
-        $session = Yii::$app->session;
-        !$session->isActive ? $session->open() : $session->close();
-        $session->set('language', $local);
-        $session->close();
-
-        return isset($_SERVER['HTTP_REFERER']) ? $this->redirect($_SERVER['HTTP_REFERER']) : $this->redirect(Yii::$app->homeUrl);
-    }
-
     public function actionTestCargaLlavesMasivo()
     {
         $fileHandler=fopen("../web/documents/SGA_CONTROL_CLAUS.csv","r");

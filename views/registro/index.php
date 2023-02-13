@@ -18,6 +18,10 @@ $this->registerJsFile('@web/js/registro.js');
 ?>
 <div class="registro-index">
 
+    <!-- form start -->
+    <?= $this->render('info') ?>
+    <!-- form end -->
+
     <div class="ribbon_wrap" >
         <div class="row">
             <div class="col-md-10">
@@ -51,7 +55,7 @@ $this->registerJsFile('@web/js/registro.js');
                     ],
                     [
                         'attribute' => 'username',
-                        'label' => 'Usuario Sistema',
+                        'label' => Yii::t('app','Usuario Sistema'),
                         'format' => 'raw',
                         'enableSorting'=>false,
                         'value' => function($model){
@@ -60,7 +64,7 @@ $this->registerJsFile('@web/js/registro.js');
                     ],
                     [
                         'attribute' => 'comercial',
-                        'label' => 'Empresa/Proveedor',
+                        'label' => Yii::t('app','Empresa/Proveedor'),
                         'format' => 'raw',
                         'enableSorting'=>false,
                         'value' => function($model){
@@ -69,7 +73,7 @@ $this->registerJsFile('@web/js/registro.js');
                     ],
                     [
                         'attribute' => 'llaves',
-                        'label' => 'Llaves',
+                        'label' => Yii::t('app','Llaves'),
                         'format' => 'raw',
                         'enableSorting'=>false,
                         'value' => function($model){
@@ -82,7 +86,7 @@ $this->registerJsFile('@web/js/registro.js');
                     ],
                     [
                         'attribute' => 'propietarios',
-                        'label' => 'Propietario',
+                        'label' => Yii::t('app','Propietario'),
                         'format' => 'raw',
                         'enableSorting'=>false,
                         'value' => function($model){
@@ -91,7 +95,7 @@ $this->registerJsFile('@web/js/registro.js');
                     ],
                     [
                         'attribute' => 'clientes',
-                        'label' => 'Cliente',
+                        'label' =>  Yii::t('app','Cliente'),
                         'format' => 'raw',
                         'enableSorting'=>false,
                         'value' => function($model){
@@ -148,12 +152,12 @@ $this->registerJsFile('@web/js/registro.js');
                     ],
                     [
                         'attribute' => 'id',
-                        'label' => 'Soporte',
+                        'label' => Yii::t('app', 'Soporte'),
                         'headerOptions' => ['style' => 'width: 5%'],
                         'enableSorting'=>false,
                         'format' => 'raw',
                         'value' => function($model){
-                            return Html::button('<i class="fas fa-download"></i> Descargar', ['id' => 'btn_registrar', 'class' => 'btn btn-primary float-left btn-sm', 'onclick' => '(function ( $event ) { generatePdfRegistro( '.$model->id.' ) })();', 'style'=>'margin-right: 5px;']);
+                            return Html::button('<i class="fas fa-download"></i> '.Yii::t('app', 'Descargar'), ['id' => 'btn_registrar', 'class' => 'btn btn-primary float-left btn-sm', 'onclick' => '(function ( $event ) { generatePdfRegistro( '.$model->id.' ) })();', 'style'=>'margin-right: 5px;']);
                         }
                     ],
                     [

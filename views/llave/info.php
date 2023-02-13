@@ -13,7 +13,7 @@ $this->registerJsFile('@web/js/llave.js');
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Información de movimientos la llave</h4>
+                <h4 class="modal-title">Información movimientos de llave</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>

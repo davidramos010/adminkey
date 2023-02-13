@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Registro */
 
-$this->title = 'Registrar Movimiento de llave';
+$this->title = Yii::t('app','Registrar Movimiento de llave');
 $this->params['breadcrumbs'][] = ['label' => 'Registros', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');

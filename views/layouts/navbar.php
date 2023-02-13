@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 ?>
 <!-- Navbar -->
@@ -25,9 +26,9 @@ use yii\helpers\Html;
                     <?= Yii::t('app','Lang') ?><span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu small" style="width: 50px">
-                    <li class="small" ><a href="index.php?r=site/change-lang&local=en">ENGLISH</a></li>
-                    <li class="small" ><a href="index.php?r=site/change-lang&local=ca">CATALAN</a></li>
-                    <li class="small" ><a href="index.php?r=site/change-lang&local=es">CALTELLANO</a></li>
+                    <li class="small" ><a href="<?= Url::toRoute(['change-lang', 'local' => 'en']) ?>">ENGLISH</a></li>
+                    <li class="small" ><a href="<?= Url::toRoute(['change-lang', 'local' => 'ca']) ?>">CATALAN</a></li>
+                    <li class="small" ><a href="<?= Url::toRoute(['change-lang', 'local' => 'es']) ?>">CALTELLANO</a></li>
                 </ul>
             </div>
         </li>

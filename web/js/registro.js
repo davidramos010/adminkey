@@ -266,6 +266,19 @@ function tratarRespuestaExito(mensaje) {
     $('.btn-seleccionar-fichero').attr('disabled', true);
 }
 
+/**
+ * Adicionar llaves manualmente al registros de movimientos
+ */
 function addManual(){
-    alert('111');
+    let url = '../llave/ajax-find-manual';
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+            "numIdLlave": 1,
+        },
+        success: function (data) {
+            $('#modal-llaves-contenido-table').html(data);
+        }
+    });
 }
