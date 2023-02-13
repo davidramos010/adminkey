@@ -182,6 +182,7 @@ class LlaveController extends Controller
         $arrParam = $this->request->post();
         $comunidad_id = $arrParam['comunidad'];
         $propietario_id = $arrParam['propietario'];
+        $arrInfo = [];
         if(!empty($comunidad_id)){
             $objComunidad = Comunidad::findOne(['id'=>$comunidad_id]);
             $model = new Llave();
@@ -191,8 +192,9 @@ class LlaveController extends Controller
         }
 
         if(!isset($model) && !empty($propietario_id)){
-            $objPropietario = Propietarios::findOne(['id'=>$propietario_id]);
+            $objPropietario = Propietarios::findOne(['id'=> (int) $propietario_id]);
             $model = new Llave();
+            $model->id_propietario = (int) $propietario_id;
             $arrInfo['id'] = (string) $model->getNext();
             $arrInfo['nomenclatura'] = 'P'.$objPropietario->id;
         }
@@ -219,6 +221,34 @@ class LlaveController extends Controller
                 $strTableTr .= "<td style='font-size: 13px; '>".$modelStatus->registro->comerciales->nombre."</td>";
                 $strTableTr .= "<td style='font-size: 13px; '>".$modelStatus->registro->nombre_responsable."</td>";
                 $strTableTr .= "<td style='font-size: 12px;'>".$modelStatus->registro->observacion."</td></tr>";
+            }
+        }else{
+            $strTableTr = "<tr><td colspan='5' class='text-black-50 text-md-center' >".Yii::t('yii','No results found.')."</td></tr>";
+        }
+
+        return $strTableTr;
+    }
+
+    /**
+     * buscar movimientos - retorna un arreglo con los resgistros de los movimientos
+     * @return false|string
+     */
+    public function actionAjaxFindManual():string
+    {
+        $arrParam   = $this->request->post();
+        $strTableTr = "";
+        $searchModel = new LlaveSearch();
+        $dataProvider = $searchModel->searchManual($arrParam);
+
+        if(count($dataProvider)){
+            foreach ($dataProvider as $modelLlave){
+                $modelLlave->llaveLastStatus = ($modelLlave->llaveLastStatus=='S')?'<span class="float-none badge bg-danger">'.Yii::t('app','Exit').'</span>':'<span class="float-none badge bg-success">'.Yii::t('app','Entry').'</span>';
+                $strTableTr .= "<tr>";
+                $strTableTr .= "<td style='font-size: 12px; font-weight: bold'>".$modelLlave->codigo."</td>";
+                $strTableTr .= "<td style='font-size: 13px; '>". !empty($modelLlave->comunidad) && isset($modelLlave->comunidad->nombre) ? $modelLlave->comunidad->nombre : '' ."</td>";
+                $strTableTr .= "<td style='font-size: 13px; '>". !empty($modelLlave->propietarios) && isset($modelLlave->propietarios->id) ? $modelLlave->propietarios->getNombre() : ''."</td>";
+                $strTableTr .= "<td style='font-size: 13px; '>". !empty($modelLlave->tipo) && isset($modelLlave->tipo->descripcion) ? $modelLlave->tipo->descripcion : ''."</td>";
+                $strTableTr .= "<td style='font-size: 12px;'>".$modelLlave->llaveLastStatus."</td></tr>";
             }
         }else{
             $strTableTr = "<tr><td colspan='5' class='text-black-50 text-md-center' >".Yii::t('yii','No results found.')."</td></tr>";

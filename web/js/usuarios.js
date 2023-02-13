@@ -1,7 +1,7 @@
 
 function findCode()
 {
-    let url = '/index.php?r=llave/ajax-find-code';
+    let url = '../llave/ajax-find-code';
     let comunidad = $('#llave-id_comunidad').val();
 
     $.ajax({

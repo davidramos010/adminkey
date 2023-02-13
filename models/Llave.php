@@ -227,12 +227,21 @@ class Llave extends \yii\db\ActiveRecord
      * @return int
      */
     public function getNext() {
-        $resultData = $this->find()->select('MAX(codigo) as codigo ,COUNT(1) as total')->where(['id_comunidad' => $this->id_comunidad])->one();
+
+        if(!empty($this->id_comunidad)){
+            $resultData = $this->find()->select('MAX(codigo) as codigo ,COUNT(1) as total')->where(['id_comunidad' => $this->id_comunidad])->one();
+        }
+
+        if(empty($resultData) && !empty($this->id_propietario)){
+            $resultData = $this->find()->select('MAX(codigo) as codigo ,COUNT(1) as total')->where(['id_propietario' => $this->id_propietario])->one();
+        }
+
         $strCode = empty($resultData) || empty($resultData->codigo) ? '' : $resultData->codigo;
-        $numCantidad = (int) empty($resultData) || empty($resultData->total) ? 1 : $resultData->total;
+        $numCantidad = (int) empty($resultData) || empty($resultData->total) ? 0 : $resultData->total;
         $arrCode = (empty($strCode)) ? '' : explode('-',$strCode);
-        $arrCode = (int) $arrCode[1];
-        return str_pad(($arrCode<$numCantidad ? $arrCode : $numCantidad) + 1, 3, '0', STR_PAD_LEFT) ;
+        $numNext = !empty($strCode) && (int) $arrCode[1]<$numCantidad ? $arrCode[1] : $numCantidad;
+
+        return str_pad($numNext + 1, 3, '0', STR_PAD_LEFT) ;
     }
 
     /**
@@ -324,7 +333,7 @@ class Llave extends \yii\db\ActiveRecord
                 'CODIGO' => [
                     ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
                     ValidadorCsv::RULE_MIN_LENGTH => 3,
-                    ValidadorCsv::RULE_CAN_BE_NULL => false
+                    ValidadorCsv::RULE_CAN_BE_NULL => true
                 ],
                 'OFICINA' => [
                     ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
@@ -335,7 +344,7 @@ class Llave extends \yii\db\ActiveRecord
                     ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
                     ValidadorCsv::RULE_MIN_LENGTH => 3,
                     ValidadorCsv::RULE_CAN_BE_NULL => false,
-                    ValidadorCsv::RULE_LIMITED_TO => ['COMUNITAT', 'PROPIETARI', 'COMUNIDAD', 'PROPIETARIO']
+                    ValidadorCsv::RULE_LIMITED_TO => ['COMUNITAT', 'PROPIETARI', 'COMUNIDAD', 'PARTICULAR']
                 ],
                 'ACCESO' => [
                     ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
@@ -346,15 +355,15 @@ class Llave extends \yii\db\ActiveRecord
                     ValidadorCsv::RULE_CAN_BE_NULL => false,
                     ValidadorCsv::RULE_BIGGER_THAN => 0
                 ],
+                'PROPIETARIO_CODIGO' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_MIN_LENGTH => 3,
+                    ValidadorCsv::RULE_CAN_BE_NULL => true
+                ],
                 'PROPIETARIO' => [
                     ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
-                    ValidadorCsv::RULE_CAN_BE_NULL => false,
-                    ValidadorCsv::RULE_MIN_LENGTH => 3,
-                ],
-                'MOVIL' => [
-                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
                     ValidadorCsv::RULE_CAN_BE_NULL => true,
-                    ValidadorCsv::RULE_MIN_LENGTH => 6,
+                    ValidadorCsv::RULE_MIN_LENGTH => 3,
                 ],
                 'ALARMA' => [
                     ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
@@ -375,6 +384,21 @@ class Llave extends \yii\db\ActiveRecord
                     ValidadorCsv::RULE_MIN_LENGTH => 3,
                     ValidadorCsv::RULE_CAN_BE_NULL => true
                 ],
+                'MOVIL' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_CAN_BE_NULL => true,
+                    ValidadorCsv::RULE_MIN_LENGTH => 6,
+                ],
+                'DIRECCION' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_CAN_BE_NULL => true,
+                    ValidadorCsv::RULE_MIN_LENGTH => 1,
+                ],
+                'CODIGO_POSTAL' => [
+                    ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
+                    ValidadorCsv::RULE_CAN_BE_NULL => true,
+                    ValidadorCsv::RULE_MIN_LENGTH => 5,
+                ],
             ]
         );
         // ------------------------------
@@ -393,51 +417,81 @@ class Llave extends \yii\db\ActiveRecord
                 $strTipo = $line['TIPO'];
                 $strAcceso = $line['ACCESO'];
                 $numCantidad = (int)$line['CANTIDAD'];
+                $strCodPropietario = strtoupper($line['PROPIETARIO_CODIGO']);
                 $strNombrePropietario = strtoupper($line['PROPIETARIO']);
-                $strMovilPropietario = trim($line['MOVIL']);
+                $strMovil = trim($line['MOVIL']);
                 $numAlarma = strtoupper(trim($line['ALARMA']));
                 $strAlarma = trim($line['CODIGO_ALARMA']);
                 $strFacturable = trim($line['CONTRATO']);
                 $strObservaciones = trim($line['COMENTARIOS']);
-                //Buscar comunidad
-                $arrCode = explode('-', $strCode);
-                $strNomenclatura = "C" . $arrCode[0];
-                $strCodigo = isset($arrCode[1]) ? $arrCode[1] : '';
-                // consultar comunidad
-                $objComunidad = Comunidad::find()->where(['nomenclatura' => $strNomenclatura])->one();
-                // ubicacion
-                $objLlaveUbicacion = LlaveUbicaciones::find()->where(['descripcion_almacen' => $strOfic])->one();
-                // TIPO
-                $objLlaveTipo = TipoLlave::find()->where(['descripcion' => $strTipo])->one();
-                // VALIDATE
-                if (empty($objComunidad) || empty($objLlaveUbicacion) || empty($objLlaveTipo)) {
-                    $avisos[] = 'Error en la linea:' . $file_key . ' - Validar datos de la Comunidad / Ubicacion / Tipo Llave' . '<br>';
-                    continue;
+                $strDireccion = trim($line['DIRECCION']);
+                $strCodigoPostal = trim($line['CODIGO_POSTAL']);
+                // ------------------------------
+                $objComunidad = NULL;
+                $strCodigo = "";
+                // ------------------------------
+                if (!empty($strCode)) { //COMUNIDAD
+                    $isContainString = strpos($strCode, 'C');
+                    //Buscar comunidad
+                    $arrCode = explode('-', $strCode);
+                    $strNomenclatura = ($isContainString === false) ? "C" : "";
+                    $strNomenclatura .= $arrCode[0];
+                    $strCodigo = isset($arrCode[1]) ? $arrCode[1] : '';
+                    // consultar comunidad
+                    $objComunidad = Comunidad::find()->where(['nomenclatura' => $strNomenclatura])->one();
                 }
-                // BUSCAR PARTICULAR Y CREARLO
-                if ($objLlaveTipo->descripcion == 'PARTICULAR') {
-                    $objParticular = Propietarios::find()->where(['like', 'nombre_propietario', $strNombrePropietario])->one();
+                // ------------------------------
+                if ($strTipo == 'PARTICULAR' && (!empty($strCodPropietario) || !empty($strNombrePropietario))) {
+                    if (!empty($strCodPropietario)) {// buscar por codigo
+                        $strCodPropietario = str_replace('P', '', $strCodPropietario);
+                        $objParticular = Propietarios::find()->where(['id' => (int)$strCodPropietario])->one();
+                    } else { // buscar por nombre
+                        $objParticular = Propietarios::find()->where(['like', 'nombre_propietario', $strNombrePropietario])->one();
+                    }
+                    // Si no tiene registros los crea
                     if (empty($objParticular)) {
+                        //Conultar codpostal y provincia
+                        $strDireccion = (isset($objComunidad) && !empty($objComunidad->direccion))?$objComunidad->direccion:$strDireccion;
+                        $strCodigoPostal = (isset($objComunidad) && !empty($objComunidad->cod_postal))?$objComunidad->cod_postal:$strCodigoPostal;
+                        $objCodPostal = Codipostal::find()->where(['cp'=>$strCodigoPostal])->one();
+                        $strPoblacion = (isset($objCodPostal) && !empty($objCodPostal->provincia))?$objCodPostal->provincia:'';
+                        $strPoblacion = (empty($strPoblacion) && isset($objComunidad) && isset($objComunidad->poblacion))?$objComunidad->poblacion:'';
+
                         $objParticular = new Propietarios();
                         $objParticular->nombre_propietario = $strNombrePropietario;
-                        $objParticular->direccion = $objComunidad->direccion;
-                        $objParticular->cod_postal = $objComunidad->cod_postal;
-                        $objParticular->poblacion = $objComunidad->poblacion;
-                        $objParticular->telefono = $strMovilPropietario;
-                        $objParticular->movil = $strMovilPropietario;
+                        $objParticular->direccion = $strDireccion;
+                        $objParticular->cod_postal = $strCodigoPostal;
+                        $objParticular->poblacion = $strPoblacion;
+                        $objParticular->telefono = $strMovil;
+                        $objParticular->movil = $strMovil;
                         if ($objParticular->save()) {
+                            $strCodigo = "001";
                             $avisos[] = 'Alerta en la linea:' . $file_key . ' - Completar los datos de Propietario:' . $strNombrePropietario . '<br>';
                         } else {
                             $avisos[] = 'Error en la linea:' . $file_key . ' - No encuetra datos del Propietario:' . $strNombrePropietario . '<br>';
                             continue;
                         }
                     }
+                    // Asignacion de codigo a la llave
+                    if(isset($objParticular) && !empty($objParticular->id)){
+                        $strNomenclatura = "P".str_pad($objParticular->id, 3, '0', STR_PAD_LEFT);
+                    }
+
+                }
+                // ------------------------------ Ubicacion
+                $objLlaveUbicacion = LlaveUbicaciones::find()->where(['descripcion_almacen' => $strOfic])->one();
+                // ------------------------------ TIPO
+                $objLlaveTipo = TipoLlave::find()->where(['descripcion' => $strTipo])->one();
+                // VALIDATE
+                if ((empty($objComunidad) && empty($objParticular)) || empty($objLlaveUbicacion) || empty($objLlaveTipo)) {
+                    $avisos[] = 'Error en la linea:' . $file_key . ' - Validar datos de la Comunidad / Ubicacion / Tipo Llave' . '<br>';
+                    continue;
                 }
                 // -------------------------------------------------
                 while ($numCantidad > 0) {
                     // Crear llave
                     $objNewLlave = new Llave();
-                    $objNewLlave->id_comunidad = $objComunidad->id;
+                    $objNewLlave->id_comunidad = empty($objComunidad)? $objComunidad : $objComunidad->id;
                     $objNewLlave->id_tipo = $objLlaveTipo->id;
                     $objNewLlave->id_llave_ubicacion = $objLlaveUbicacion->id;
                     $objNewLlave->copia = $numCantidad;
@@ -446,11 +500,11 @@ class Llave extends \yii\db\ActiveRecord
                     $objNewLlave->codigo_alarma = $objNewLlave->alarma ? $strAlarma : NULL;
                     $objNewLlave->observacion = $strObservaciones;
                     $objNewLlave->facturable = ($strFacturable == 'SI') ? 1 : 0;
-                    if (isset($objParticular) && !empty($objParticular)) {
+                    if (isset($objParticular) && isset($objParticular->id)) {
                         $objNewLlave->id_propietario = $objParticular->id;
                     }
                     // Asignación de ccdigo de la llave
-                    $strCodigo = empty($strCodigo) ? (string)$objNewLlave->getNext() : $strCodigo;// si es vacio consulta el siguente registro
+                    $strCodigo = empty($strCodigo) ? (string) $objNewLlave->getNext() : $strCodigo;// si es vacio consulta el siguente registro
                     $strCodigoLlave = $strNomenclatura . "-" . $strCodigo;
                     $strCodigoLlave .= ($numCantidad > 1) ? '-' . $numCantidad : '';
                     $objNewLlave->codigo = $strCodigoLlave;

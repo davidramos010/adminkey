@@ -18,7 +18,7 @@ class RegistroSearch extends Registro
     {
         return [
             [['id', 'id_user', 'id_llave'], 'integer'],
-            [['entrada', 'salida', 'observacion', 'codigo', 'username','comunidad','comercial','propietarios','clientes','llaves','llaves_e','llaves_s'], 'safe'],
+            [['username','entrada', 'salida', 'observacion', 'codigo', 'username','comunidad','comercial','propietarios','clientes','llaves','llaves_e','llaves_s'], 'safe'],
         ];
     }
 
@@ -94,8 +94,11 @@ class RegistroSearch extends Registro
             'id_user' => $this->id_user,
             'id_llave' => $this->id_llave,
             'u.username' => $this->username,
-            'cm.nombre' => $this->comercial,
         ]);
+
+        if($this->comercial){
+            $query->andFilterWhere(['LIKE', 'cm.nombre', $this->comercial]);
+        }
 
         if($this->salida){
             $query->andFilterWhere([

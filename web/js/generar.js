@@ -42,7 +42,7 @@ function delKey(idLlave)
  */
 function fnFindLlave(idLlave)
 {
-    let url = '/index.php?r=contratos/ajax-find-llave';
+    let url = '../contratos/ajax-find-llave';
     let infoLlave = [];
 
     $.ajax({
@@ -76,7 +76,7 @@ function fnFindLlave(idLlave)
  */
 function getInfoLlaveCard(infoLlaveId){
 
-    let url = '/index.php?r=contratos/ajax-find-llave';
+    let url = '../contratos/ajax-find-llave';
     $.ajax({
         url: url,
         dataType: 'JSON',

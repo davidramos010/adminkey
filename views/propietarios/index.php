@@ -46,7 +46,15 @@ $this->title = Yii::t('app', 'Propietarios');
                 <?php Pjax::begin(); ?>
                 <?php
                   $gridColumns = [
-                              ['class' => 'yii\grid\SerialColumn'],
+                              [
+                                  'attribute' => 'Id',
+                                  'label' => 'Cod',
+                                  'headerOptions' => ['style' => 'width: 5%'],
+                                  'format' => 'raw',
+                                  'value' => function($model){
+                                      return $model->getNomenclatura() ;
+                                  }
+                              ],
                               [
                                   'attribute' => 'nombre_propietario',
                                   'label' => 'Nombre Prop.',

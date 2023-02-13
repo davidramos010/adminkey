@@ -146,7 +146,7 @@ class SiteController extends BaseController
                     return $this->redirect('index.php');
                 }
                 if($objPerfil->id_perfil==2 && (int) $model->perfil==2){
-                    return $this->redirect('index.php?r=registro/create');
+                    return $this->redirect('../registro/create');
                 }
             }
         }
@@ -211,26 +211,6 @@ class SiteController extends BaseController
         } else {
             throw new \yii\web\NotFoundHttpException("{$file} is not found!");
         }
-    }
-
-    /**
-     * @param $local
-     * @return Response
-     * @throws \yii\web\BadRequestHttpException
-     */
-    public function actionChangeLang($local)
-    {
-        $available_locales = ['es', 'ca', 'en' ];
-        if (!in_array($local, $available_locales)) {
-            throw new \yii\web\BadRequestHttpException();
-        }
-
-        $session = Yii::$app->session;
-        !$session->isActive ? $session->open() : $session->close();
-        $session->set('language', $local);
-        $session->close();
-
-        return isset($_SERVER['HTTP_REFERER']) ? $this->redirect($_SERVER['HTTP_REFERER']) : $this->redirect(Yii::$app->homeUrl);
     }
 
     public function actionTestCargaLlavesMasivo()

@@ -17,21 +17,25 @@ use yii\widgets\ActiveForm;
 
 <div class="registro-form">
 
+    <!-- form start -->
+    <?= $this->render('info') ?>
+    <!-- form end -->
+
     <div id="div_msm" style="display:none" class="callout callout-success">
         <h5><i class="fas fa-info-circle"></i> OK</h5>
-        Registro almacenado correctamente.
+        <?= Yii::t('app','Registro almacenado correctamente.'); ?>
     </div>
 
     <div id="div_info" class="callout callout-info" >
         <h5><i class="fas fa-info"></i> Note:</h5>
-        Este registro estara asociado al usuario en sesion <label class="exampleInputBorder">( <?= Yii::$app->user->identity->name ?> ) </label>.<br/>
-        Las llaves se irán registrando según su último estado de disponibilidad.
+        <?= Yii::t('app','Este registro estara asociado al usuario en sesion') ?> <label class="exampleInputBorder">( <?= Yii::$app->user->identity->name ?> ) </label>.<br/>
+        <?= Yii::t('app','Las llaves se irán registrando según su último estado de disponibilidad.') ?>
     </div>
     <div class="col-md-12">
         <!-- general form elements -->
         <div class="card card-primary">
             <div class="card-header">
-                <h3 class="card-title">Registrar</h3>
+                <h3 class="card-title"><?= Yii::t('app','Registrar') ?></h3>
             </div>
             <!-- /.card-header -->
             <?php $form = ActiveForm::begin(['id' => 'form-registro', 'enableClientValidation' => true, 'enableAjaxValidation' => false]); ?>
@@ -69,7 +73,7 @@ use yii\widgets\ActiveForm;
                                                                                                 } }'),
                                         ],
                                     ]
-                                )->label('Empresa/Proveedor'); ?>
+                                )->label(Yii::t('app','Empresa/Proveedor')); ?>
                             </div>
                             <div class="col-md-2">
                                 <label class="control-label" for="id_comercial_adicionar">&nbsp;</label><br/>
@@ -78,18 +82,18 @@ use yii\widgets\ActiveForm;
                         </div>
                         <div class="row">
                             <div class="col-md-2">
-                                <?= $form->field($model, 'tipo_documento')->dropDownList( util::arrTipoDocumentos , ['class'=>'form-control', 'prompt' => 'Seleccione Uno' ])->label('Tipo Doc.'); ?>
+                                <?= $form->field($model, 'tipo_documento')->dropDownList( util::arrTipoDocumentos , ['class'=>'form-control', 'prompt' => 'Seleccione Uno' ])->label(Yii::t('app','Tipo').' Doc.'); ?>
                             </div>
                             <div class="col-md-2">
-                                <?= $form->field($model, 'documento')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Documento Identidad') ?>
+                                <?= $form->field($model, 'documento')->textInput(['maxlength' => true,'class'=>'form-control'])->label(Yii::t('app','Documento Identidad')) ?>
                             </div>
                             <div class="col-md-3">
-                                <?= $form->field($model, 'telefono')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Teléfono') ?>
+                                <?= $form->field($model, 'telefono')->textInput(['maxlength' => true,'class'=>'form-control'])->label(Yii::t('app','Telefono')) ?>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <?= $form->field($model, 'nombre_responsable')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Nombre Responsable') ?>
+                                <?= $form->field($model, 'nombre_responsable')->textInput(['maxlength' => true,'class'=>'form-control'])->label(Yii::t('app','Nombre Responsable')) ?>
                             </div>
                         </div>
                     </div>
@@ -99,22 +103,23 @@ use yii\widgets\ActiveForm;
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-5">
-                                    Ingresar Referencia
+                                    <?= Yii::t('app','Ingresar Referencia') ?>
                                 </div>
                             </div>
                         </div>
                         <div class="card-header">
-                            <h3 class="card-title">
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        <?= Html::textInput('id_llave', '', ['id' => 'id_llave', 'class' => 'form-control']); ?>
-                                        <?= Html::hiddenInput('id_operacion', 'S', ['id' => 'id_operacion', 'class' => 'form-control']); ?>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <?= Html::button('Adicionar', ['class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { addKey() })();']); ?>
-                                    </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <?= Html::textInput('id_llave', '', ['id' => 'id_llave', 'class' => 'form-control']); ?>
+                                    <?= Html::hiddenInput('id_operacion', 'S', ['id' => 'id_operacion', 'class' => 'form-control']); ?>
                                 </div>
-                            </h3>
+                                <div class="col-md-3">
+                                    <?= Html::button(Yii::t('app', 'Adicionar'), ['class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { addKey() })();']); ?>
+                                </div>
+                                <div class="col-md-4">
+                                    <?= Html::button(Yii::t('app', 'Adicionar Manualmente'), ['data-toggle' => 'modal', 'data-target' => '#modal-llave-manual', 'class' => 'btn btn-success', 'onclick' => 'addManual()']); ?>
+                                </div>
+                            </div>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -126,13 +131,13 @@ use yii\widgets\ActiveForm;
                                             <a class="nav-link active" id="custom-tabs-salida-tab" data-toggle="pill"
                                                href="#custom-tabs-salida" role="tab" aria-controls="custom-tabs-salida"
                                                aria-selected="false" onclick="fnSetOperacion('S')"><i
-                                                        class="fas fa-angle-double-up text-success"></i> Entrega/Salida de Llave </a>
+                                                        class="fas fa-angle-double-up text-success"></i> <?= Yii::t('app','Entrega/Salida de Llave') ?> </a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" id="custom-tabs-entrada-tab" data-toggle="pill"
                                                href="#custom-tabs-entrada" role="tab" aria-controls="custom-tabs-entrada"
                                                aria-selected="true" onclick="fnSetOperacion('E')"><i
-                                                        class="fas fa-angle-double-down text-danger"></i> Devolución de LLave </a>
+                                                        class="fas fa-angle-double-down text-danger"></i> <?= Yii::t('app','Devolución de LLave') ?> </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -144,9 +149,9 @@ use yii\widgets\ActiveForm;
                                             <table id="tblKeySalida" class="table table-bordered table-striped">
                                                 <thead>
                                                 <tr>
-                                                    <th style="width: 20%">Código</th>
-                                                    <th style="width: 40%">Descripción</th>
-                                                    <th style="width: 35%">Cliente</th>
+                                                    <th style="width: 20%"><?= Yii::t('app','Codigo')?></th>
+                                                    <th style="width: 40%"><?= Yii::t('app','Descripción')?></th>
+                                                    <th style="width: 35%"><?= Yii::t('app','Cliente')?></th>
                                                     <th style="width: 5%"></th>
                                                 </tr>
                                                 </thead>
@@ -165,9 +170,9 @@ use yii\widgets\ActiveForm;
                                             <table id="tblKeyEntrada" class="table table-bordered table-striped">
                                                 <thead>
                                                 <tr>
-                                                    <th style="width: 20%">Código</th>
-                                                    <th style="width: 40%">Descripción</th>
-                                                    <th style="width: 35%">Cliente</th>
+                                                    <th style="width: 20%"><?= Yii::t('app','Codigo')?></th>
+                                                    <th style="width: 40%"><?= Yii::t('app','Descripción')?></th>
+                                                    <th style="width: 35%"><?= Yii::t('app','Cliente')?></th>
                                                     <th style="width: 5%"></th>
                                                 </tr>
                                                 </thead>
@@ -202,13 +207,13 @@ use yii\widgets\ActiveForm;
                                 <?php //echo Html::button(Yii::t('app', 'Guardar'), ['id' => 'btn_guardar', 'class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { fnGuardarCuadroFirma() })();']); ?>
                             </div>
                             <div class="card-footer text-muted">
-                                <?= SignatureWidget::widget(['clear' => true, 'url' => '/index.php?r=registro/add-firma', 'save_server' => true]); ?>
+                                <?= SignatureWidget::widget(['clear' => true, 'url' => '../registro/add-firma', 'save_server' => true]); ?>
                             </div>
                         </div>
                     </div>
                     <div style="padding-top: 15px">
-                        <?= Html::button('Registrar Movimiento', ['id' => 'btn_registrar', 'class' => 'btn btn-success', 'onclick' => '(function ( $event ) { sendForm() })();']); ?>
-                        <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
+                        <?= Html::button(Yii::t('app', 'Registrar Movimiento') , ['id' => 'btn_registrar', 'class' => 'btn btn-success', 'onclick' => '(function ( $event ) { sendForm() })();']); ?>
+                        <?= Html::a(Yii::t('app', Yii::t('app', 'Cancelar')), ['index'], ['class' => 'btn btn-default ']) ?>
                     </div>
                 </div>
             <?php ActiveForm::end(); ?>
