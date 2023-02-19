@@ -68,6 +68,10 @@ return [
     'Limpiar'=>'Netejar',
     'Selección manual de llaves' => 'Selecció manual de claus',
     'Seleccionar'=>'Seleccionar',
+    'Reiniciar Formulario' => 'Reiniciar Formulari',
+    'Buscar' => 'Cerca',
+    'Almacenada' => 'Guardat',
+    'Prestada' => 'Prestada',
 
 
     '<b>¡Felicidades!</b> ¡Has firmado un nuevo contrato con <a href="#">{id}</a>!' => '',

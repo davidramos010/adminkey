@@ -9,6 +9,7 @@ use app\models\LlaveStatus;
 use app\models\Propietarios;
 use app\models\TipoLlave;
 use app\models\util;
+use kartik\helpers\Html;
 use Yii;
 use yii\helpers\UnsetArrayValue;
 use yii\web\Controller;
@@ -242,16 +243,32 @@ class LlaveController extends Controller
 
         if(count($dataProvider)){
             foreach ($dataProvider as $modelLlave){
-                $modelLlave->llaveLastStatus = ($modelLlave->llaveLastStatus=='S')?'<span class="float-none badge bg-danger">'.Yii::t('app','Exit').'</span>':'<span class="float-none badge bg-success">'.Yii::t('app','Entry').'</span>';
-                $strTableTr .= "<tr>";
-                $strTableTr .= "<td style='font-size: 12px; font-weight: bold'>".$modelLlave->codigo."</td>";
-                $strTableTr .= "<td style='font-size: 13px; '>". !empty($modelLlave->comunidad) && isset($modelLlave->comunidad->nombre) ? $modelLlave->comunidad->nombre : '' ."</td>";
-                $strTableTr .= "<td style='font-size: 13px; '>". !empty($modelLlave->propietarios) && isset($modelLlave->propietarios->id) ? $modelLlave->propietarios->getNombre() : ''."</td>";
-                $strTableTr .= "<td style='font-size: 13px; '>". !empty($modelLlave->tipo) && isset($modelLlave->tipo->descripcion) ? $modelLlave->tipo->descripcion : ''."</td>";
-                $strTableTr .= "<td style='font-size: 12px;'>".$modelLlave->llaveLastStatus."</td></tr>";
+                // ---------------------------
+                $strCodigo = $modelLlave->codigo;
+                $strOperacion = ($modelLlave->llaveLastStatus=='S')?'S':'E';
+                $strOperacionClick = ($strOperacion=='S')?'E':'S';
+                $strComunidad = !empty($modelLlave->comunidad) && isset($modelLlave->comunidad->nombre) ? $modelLlave->comunidad->nombre : '';
+                $strPropietario = !empty($modelLlave->propietarios) && isset($modelLlave->propietarios->id) ? $modelLlave->propietarios->getNombre() : '';
+                $strTipo = !empty($modelLlave->tipo) && isset($modelLlave->tipo->descripcion) ? $modelLlave->tipo->descripcion : '';
+                $strStatus = ($strOperacion=='S')?'<span class="float-none badge bg-danger">'.Yii::t('app','Prestada').'</span>':'<span class="float-none badge bg-success">'.Yii::t('app','Almacenada').'</span>';
+                $strDescripcion = trim($modelLlave->descripcion);
+                $strCallFunction = " addKeyForm('$modelLlave->codigo','$strOperacionClick',true) ";
+                $strButton = ($strOperacion=='S')?
+                    Html::button('<i class="fas fa-arrow-circle-right"></i>', ['id' => 'btn_add', 'title'=>Yii::t('app','Devolución de LLave'), 'class' => 'btn-xs btn-success', 'onclick' => $strCallFunction]) :
+                    Html::button('<i class="fas fa-arrow-circle-left"></i>', ['id' => 'btn_add', 'title'=>Yii::t('app','Entrega/Salida de Llave'), 'class' => 'btn-xs btn-danger', 'onclick' => $strCallFunction]);
+                // ---------------------------
+                $strTableTr .= "<tr id='tr_".$strCodigo."' >";
+                $strTableTr .= "    <td style='font-size: 10px; '>" . $strButton . "</td>";
+                $strTableTr .= "    <td style='font-size: 10px; font-weight: bold'>" . $strCodigo . "</td>";
+                $strTableTr .= "    <td style='font-size: 12px; '>" . $strComunidad . "</td>";
+                $strTableTr .= "    <td style='font-size: 12px; '>" . $strPropietario . "</td>";
+                $strTableTr .= "    <td style='font-size: 10px; '>" . $strTipo . "</td>";
+                $strTableTr .= "    <td style='font-size: 10px;'>" . $strStatus . "</td>";
+                $strTableTr .= "    <td style='font-size: 12px;'>" . $strDescripcion . "</td>";
+                $strTableTr .= "</tr>";
             }
         }else{
-            $strTableTr = "<tr><td colspan='5' class='text-black-50 text-md-center' >".Yii::t('yii','No results found.')."</td></tr>";
+            $strTableTr = "<tr><td colspan='7' class='text-black-50 text-md-center' >".Yii::t('yii','No results found.')."</td></tr>";
         }
 
         return $strTableTr;

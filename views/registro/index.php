@@ -18,10 +18,6 @@ $this->registerJsFile('@web/js/registro.js');
 ?>
 <div class="registro-index">
 
-    <!-- form start -->
-    <?= $this->render('info') ?>
-    <!-- form end -->
-
     <div class="ribbon_wrap" >
         <div class="row">
             <div class="col-md-10">

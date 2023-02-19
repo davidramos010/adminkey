@@ -65,6 +65,10 @@ return [
     'Limpiar'=>'Clear',
     'Selección manual de llaves' => 'Manual selection of keys',
     'Seleccionar'=>'Seleccionar',
+    'Reiniciar Formulario' => 'Reset Form',
+    'Buscar' => 'Search',
+    'Almacenada' => 'Stored',
+    'Prestada' => 'Borrowed',
 
     'arrLlavesFecha15'=> 'Start key recovery process - Urgent!!',
     'arrLlavesFecha10'=> 'Start steps to recover keys - Alert',

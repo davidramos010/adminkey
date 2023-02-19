@@ -335,4 +335,6 @@ class RegistroController extends BaseController
         $rows = Comerciales::find()->where(['id'=>$arrParam['numIdResponsable']])->asArray()->all();
         return json_encode($rows);
     }
+
+
 }

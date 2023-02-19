@@ -39,6 +39,13 @@ $config = [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => false,
             'enableSession' => true,
+            'authTimeout' => 3600, // auth expire
+        ],
+        'session' => [
+            'class' => 'yii\web\Session',
+            'cookieParams' => ['httponly' => true, 'lifetime' => 3600 * 4],
+            'timeout' => 3600*4, //session expire
+            'useCookies' => true,
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -80,11 +87,16 @@ $config = [
                     ],
                 ],
             ],
-        
+
         'urlManager' => [
+            'hostInfo' => 'http://localhost:81/',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '<controller:\w+>/<id:\d+>' => '<controller>/view',
+                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+                '<module>/<controller>/<action>/<id:\d+>' => '<module>/<controller>/<action>',
             ],
         ],
 

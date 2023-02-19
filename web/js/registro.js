@@ -2,13 +2,21 @@ var listKeyEntrada = [];
 var listKeySalida = [];
 
 /**
- *
+ * adicion de llave
  */
 function addKey()
 {
-    let url = '../registro/ajax-add-key';
     let code = $('#id_llave').val();
     let operacion = $('#id_operacion').val();
+    addKeyForm(code,operacion,false);
+}
+
+/**
+ * Funcionalidad de adiciond de llaves al listado
+ */
+function addKeyForm(code,operacion,modal)
+{
+    let url = '../registro/ajax-add-key';
     var strTable = 'tblKeyEntrada';
     if(operacion=='E'){
         strTable = 'tblKeyEntrada';
@@ -39,6 +47,11 @@ function addKey()
             if(!!data.error){
                 toastr.error(data.error);
                 return true;
+            }
+
+            if(modal==true){
+                toastr.success('Llave '+code+' Seleccionada.');
+                $('#tr_'+code).hide(500,'');
             }
 
             if(operacion=='E'){
@@ -79,7 +92,6 @@ function addKey()
                     listKeySalida.push(data.llave.id);
                 }
             }
-
             $('#id_llave').val('');
         }
     });
@@ -269,16 +281,33 @@ function tratarRespuestaExito(mensaje) {
 /**
  * Adicionar llaves manualmente al registros de movimientos
  */
-function addManual(){
+function findManualKeys() {
     let url = '../llave/ajax-find-manual';
+    let formFindKays = $('#formFindKeys').serialize();
+    let dom_resultado = $('#modal-llaves-contenido-table');
+
+    dom_resultado.html('<i class="fa fa-spinner fa-spin"></i> Search...');
+    dom_resultado.prop('disabled', true);
+
     $.ajax({
         url: url,
         type: 'POST',
-        data: {
-            "numIdLlave": 1,
-        },
-        success: function (data) {
-            $('#modal-llaves-contenido-table').html(data);
-        }
-    });
+        data: formFindKays,
+    })
+        .always(() => $(this).html('Final...'))
+        .done((res) => {
+            dom_resultado.html(res);
+        })
+        .fail((res) => {
+            toastr.warning('Algo no ha funcionado bien!');
+            dom_resultado.html(res ? res.responseText : 'Algo no ha funcionado bien!')
+        });
+
+}
+
+/**
+ *
+ */
+function addSelectionKey(estado,idLlave){
+    alert(idLlave);
 }

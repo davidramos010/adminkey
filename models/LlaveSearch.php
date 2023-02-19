@@ -160,6 +160,7 @@ class LlaveSearch extends Llave
         $query->andFilterWhere([
             'll.id' => $this->id,
             'll.id_comunidad' => $this->id_comunidad,
+            'll.id_propietario' => $this->id_propietario,
             'll.id_tipo' => $this->id_tipo,
             'll.copia' => $this->copia,
             'll.activa' =>  $this->activa,

@@ -170,12 +170,13 @@ class Llave extends \yii\db\ActiveRecord
     }
 
     /**
+     * Lista de comunidades activas
      * @return array
      * @throws \yii\db\Exception
      */
     public static function getComunidadesDropdownList()
     {
-        $query = "SELECT id, nombre FROM comunidad order by nombre";
+        $query = "SELECT id, nombre FROM comunidad WHERE estado=1 order by nombre";
         $result = Yii::$app->db
             ->createCommand($query)
             ->queryAll();
