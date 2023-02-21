@@ -11,12 +11,17 @@ class BaseController extends Controller
 
     public function beforeAction($action)
     {
+
+        if (Yii::$app->user->isGuest && Yii::$app->controller->action->id != "login") {
+            Yii::$app->user->loginRequired();
+        }
+
         if (!parent::beforeAction($action))
             return false;
 
         $session = Yii::$app->session;
         !$session->isActive ? $session->open() : $session->close();
-        Yii::$app->language = $session->get('language');
+        Yii::$app->language = !empty($session->get('language')) ? $session->get('language'):'es';
         $session->close();
 
         return true;

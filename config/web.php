@@ -36,16 +36,16 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
+            'class'=>'yii\web\User',
             'identityClass' => 'app\models\User',
+            'loginUrl'=>['site/login'],
             'enableAutoLogin' => false,
             'enableSession' => true,
-            'authTimeout' => 3600, // auth expire
+            'authTimeout' => 30,
         ],
         'session' => [
             'class' => 'yii\web\Session',
-            'cookieParams' => ['httponly' => true, 'lifetime' => 3600 * 4],
-            'timeout' => 3600*4, //session expire
-            'useCookies' => true,
+            'timeout' => 30, //session expire 4 hours 3600*4
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -101,6 +101,7 @@ $config = [
         ],
 
     ],
+
     'params' => $params,
 ];
 

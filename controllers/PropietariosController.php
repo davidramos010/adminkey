@@ -7,6 +7,7 @@ use app\modules\contratacion\models\CodigosPostales;
 use Yii;
 use app\models\Propietarios;
 use app\models\PropietariosSearch;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -15,7 +16,7 @@ use yii\filters\VerbFilter;
 /**
  * PropietariosController implements the CRUD actions for Propietarios model.
  */
-class PropietariosController extends Controller
+class PropietariosController extends BaseController
 {
     /**
      * {@inheritdoc}
@@ -23,6 +24,17 @@ class PropietariosController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['logout'],
+                'rules' => [
+                    [
+                        'actions' => ['logout'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

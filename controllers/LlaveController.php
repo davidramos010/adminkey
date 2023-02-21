@@ -11,6 +11,7 @@ use app\models\TipoLlave;
 use app\models\util;
 use kartik\helpers\Html;
 use Yii;
+use yii\filters\AccessControl;
 use yii\helpers\UnsetArrayValue;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -19,7 +20,7 @@ use yii\filters\VerbFilter;
 /**
  * LlaveController implements the CRUD actions for Llave model.
  */
-class LlaveController extends Controller
+class LlaveController extends BaseController
 {
     /**
      * @inheritDoc
@@ -29,6 +30,17 @@ class LlaveController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'only' => ['logout'],
+                    'rules' => [
+                        [
+                            'actions' => ['logout'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [

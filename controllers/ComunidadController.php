@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Comunidad;
 use app\models\ComunidadSearch;
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * ComunidadController implements the CRUD actions for comunidad model.
  */
-class ComunidadController extends Controller
+class ComunidadController extends BaseController
 {
     /**
      * @inheritDoc
@@ -22,6 +23,17 @@ class ComunidadController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'only' => ['logout'],
+                    'rules' => [
+                        [
+                            'actions' => ['logout'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [

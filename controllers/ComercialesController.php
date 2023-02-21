@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Comerciales;
 use app\models\ComercialesSearch;
 use yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * ComercialesController implements the CRUD actions for Comerciales model.
  */
-class ComercialesController extends Controller
+class ComercialesController extends BaseController
 {
     /**
      * @inheritDoc
@@ -22,6 +23,17 @@ class ComercialesController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'only' => ['logout'],
+                    'rules' => [
+                        [
+                            'actions' => ['logout'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
