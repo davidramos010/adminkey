@@ -16,6 +16,7 @@ use app\utils\Ficheros;
 use Yii;
 use yii\base\Response;
 use yii\console\Exception;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
@@ -25,7 +26,7 @@ use yii\web\UploadedFile;
 /**
  * OperacionesController implements the CRUD actions for Llave,Registros model.
  */
-class OperacionesController extends Controller
+class OperacionesController extends BaseController
 {
     /**
      * @inheritDoc
@@ -35,6 +36,17 @@ class OperacionesController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'only' => ['logout'],
+                    'rules' => [
+                        [
+                            'actions' => ['logout'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [

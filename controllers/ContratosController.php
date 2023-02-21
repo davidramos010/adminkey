@@ -15,6 +15,7 @@ use Yii;
 use app\models\Contratos;
 use app\models\ContratosSearch;
 use yii\db\Exception;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -23,7 +24,7 @@ use yii\web\UploadedFile;
 /**
  * ContratosController implements the CRUD actions for Contratos model.
  */
-class ContratosController extends Controller
+class ContratosController extends BaseController
 {
     /**
      * {@inheritdoc}
@@ -31,6 +32,17 @@ class ContratosController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['logout'],
+                'rules' => [
+                    [
+                        'actions' => ['logout'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

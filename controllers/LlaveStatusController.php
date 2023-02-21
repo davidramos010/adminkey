@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\LlaveStatus;
 use app\models\LlaveStatusSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -11,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * LlaveStatusController implements the CRUD actions for LlaveStatus model.
  */
-class LlaveStatusController extends Controller
+class LlaveStatusController extends BaseController
 {
     /**
      * @inheritDoc
@@ -21,6 +22,17 @@ class LlaveStatusController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'only' => ['logout'],
+                    'rules' => [
+                        [
+                            'actions' => ['logout'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [

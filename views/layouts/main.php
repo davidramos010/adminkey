@@ -30,6 +30,7 @@ $this->registerJsFile($publishedRes[1].'/control_sidebar.js', ['depends' => '\ha
 <?php $this->beginBody() ?>
 
 <div class="wrapper">
+
     <!-- Navbar -->
     <?php if(!empty(Yii::$app->user) && isset(Yii::$app->user) && !empty(Yii::$app->user->identity)): ?>
        <?= $this->render('navbar', ['assetDir' => $assetDir]) ?>
