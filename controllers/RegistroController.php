@@ -8,6 +8,7 @@ use app\models\Comerciales;
 use app\models\Comunidad;
 use app\models\Llave;
 use app\models\LlaveStatus;
+use app\models\Propietarios;
 use app\models\Registro;
 use app\models\RegistroSearch;
 use app\models\User;
@@ -196,11 +197,14 @@ class RegistroController extends BaseController
             // solo el administrador puede ingresar llaves de otros usuario
             $userSession = Yii::$app->user->id;
             $userPerfil = Yii::$app->user->identity->perfiluser->id_perfil;
+            $strCliente = "";
 
             $numId = $arrModelLlave['id'];
             $arrModelStatus = (object) LlaveStatus::find()->where(['id_llave' => $numId])->orderBy(['id' => SORT_DESC])->asArray()->one();
             $arrComunidadLlave = (!empty($arrModelLlave)) ? Comunidad::find()->where(['id' => $arrModelLlave['id_comunidad']])->asArray()->one() : null;
+            $arrPropietario = (!empty($arrModelLlave['id_propietario'])) ? Propietarios::find()->where(['id' => $arrModelLlave['id_propietario']])->one() : null;
             $strEstado = (empty($arrModelStatus) || !isset($arrModelStatus->status)) ? 'E' : $arrModelStatus->status;
+            $strCliente = (!empty($arrComunidadLlave))?$arrComunidadLlave['nombre']:$arrPropietario->nombre;
 
             if($userPerfil!=1 && $strEstado=='S'){ // si no es admin, evalua quien creo el registro
                 $objRegistro = Registro::findOne(['id'=>$arrModelStatus->id_registro]);
@@ -210,7 +214,7 @@ class RegistroController extends BaseController
             }
         }
 
-        return json_encode(['llave' => $arrModelLlave, 'status' => $arrModelStatus, 'comunidad' => $arrComunidadLlave, 'estado' => $strEstado, 'error' => $strError]);
+        return json_encode(['llave' => $arrModelLlave, 'status' => $arrModelStatus, 'cliente' => $strCliente, 'estado' => $strEstado, 'error' => $strError]);
     }
 
     /**

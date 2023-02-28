@@ -266,8 +266,8 @@ class LlaveController extends BaseController
                 $strDescripcion = trim($modelLlave->descripcion);
                 $strCallFunction = " addKeyForm('$modelLlave->codigo','$strOperacionClick',true) ";
                 $strButton = ($strOperacion=='S')?
-                    Html::button('<i class="fas fa-arrow-circle-right"></i>', ['id' => 'btn_add', 'title'=>Yii::t('app','Devolución de LLave'), 'class' => 'btn-xs btn-success', 'onclick' => $strCallFunction]) :
-                    Html::button('<i class="fas fa-arrow-circle-left"></i>', ['id' => 'btn_add', 'title'=>Yii::t('app','Entrega/Salida de Llave'), 'class' => 'btn-xs btn-danger', 'onclick' => $strCallFunction]);
+                    Html::button('<i class="fas fa-arrow-circle-right"></i>', ['id' => 'btn_add', 'title'=>Yii::t('app','Devolución de LLave'), 'class' => 'btn-xs btn-danger', 'onclick' => $strCallFunction]) :
+                    Html::button('<i class="fas fa-arrow-circle-left"></i>', ['id' => 'btn_add', 'title'=>Yii::t('app','Entrega/Salida de Llave'), 'class' => 'btn-xs btn-success', 'onclick' => $strCallFunction]);
                 // ---------------------------
                 $strTableTr .= "<tr id='tr_".$strCodigo."' >";
                 $strTableTr .= "    <td style='font-size: 10px; '>" . $strButton . "</td>";

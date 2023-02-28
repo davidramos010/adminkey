@@ -82,7 +82,7 @@ function addKeyForm(code,operacion,modal)
                     .children('tr:first') // select row we just created
                     .append('<td>'+strDiv+' '+data.llave.codigo+'</div></td>\n' +
                         '<td>'+data.llave.descripcion+'</td>\n' +
-                        '<td>'+data.comunidad.nombre+'</td>\n' +
+                        '<td>'+data.cliente+'</td>\n' +
                         '<td><button type="button" class="btn btn-outline-danger btn-block btn-sm" onclick="delKey('+data.llave.id+')"><i class="fas fa-times-circle"></i></button> </td>') // append four table cells to the row we created
 
 
