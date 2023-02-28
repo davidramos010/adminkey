@@ -34,6 +34,17 @@ return [
     'Llaves por fuera' => 'Llaves Entregadas',
     'Propietario' => 'Propietario',
 
+    'Registros de Salida' => 'Registros de Salida',
+    'Registros de Entrada' => 'Registros de Entrada',
+    'Responsable' => 'Responsable',
+    'Fecha Registro' => 'Fecha Registro',
+    'Empresa' => 'Empresa',
+    'Tipo Documento' => 'Tipo Documento',
+    'Documento' => 'Documento',
+    'Nombre Reponsable' => 'Nombre Reponsable',
+    'Telefono' => 'Telefono',
+    'Observaciones' => 'Observaciones',
+
     'arrLlavesFecha15'=> 'Iniciar proceso de recuperación de llaves - Urgente!!',
     'arrLlavesFecha10'=> 'Iniciar gestiones para recuperación de llaves - Alerta',
 
@@ -351,7 +362,7 @@ return [
     'Email' => '',
     'Email Enviado' => '',
     'Email2' => '',
-    'Empresa' => '',
+
     'Empresa Correos' => '',
     'Empresas' => '',
     'End Date' => '',

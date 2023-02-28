@@ -73,6 +73,17 @@ return [
     'Almacenada' => 'Guardat',
     'Prestada' => 'Prestada',
 
+    'Registros de Salida' => 'Registres de sortida',
+    'Registros de Entrada' => 'Registres d-entrada',
+    'Responsable' => 'Responsable',
+    'Fecha Registro' => 'Data Registre',
+    'Empresa' => 'Empresa',
+    'Tipo Documento' => 'Tipus Document',
+    'Documento' => 'Document',
+    'Nombre Reponsable' => 'Nom reponsable',
+    'Telefono' => 'Telèfon',
+    'Observaciones' => 'Observacions',
+
 
     '<b>¡Felicidades!</b> ¡Has firmado un nuevo contrato con <a href="#">{id}</a>!' => '',
     'A: Altas B:bajas P:Promocion C:Contratacion X:Ilocalizados D:domesticos F:formularioWeb' => '',
@@ -226,7 +237,7 @@ return [
     'Cod Oferta' => '',
     'Cod Oferta2' => '',
     'Code' => '',
-    'Codigo' => '',
+    'Codigo' => 'Codi',
     'Codigo Estado' => '',
     'Codigo Oferta Gife' => '',
     'Codigo Oferta Novacion' => '',

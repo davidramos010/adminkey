@@ -70,6 +70,17 @@ return [
     'Almacenada' => 'Stored',
     'Prestada' => 'Borrowed',
 
+    'Registros de Salida' => 'Output Records',
+    'Registros de Entrada' => 'Input Records',
+    'Responsable' => 'Responsible',
+    'Fecha Registro' => 'Registration Date',
+    'Empresa' => 'Company',
+    'Tipo Documento' => 'Document Type',
+    'Documento' => 'Document',
+    'Nombre Reponsable' => 'Responsible Name',
+    'Telefono' => 'Phone',
+    'Observaciones' => 'Observations',
+
     'arrLlavesFecha15'=> 'Start key recovery process - Urgent!!',
     'arrLlavesFecha10'=> 'Start steps to recover keys - Alert',
     'Comunidad' => 'Community',

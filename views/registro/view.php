@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 $arrColumns = [[
     'attribute' => 'id',
-    'label' => 'Codigo',
+    'label' => Yii::t('app', 'Codigo'),
     'headerOptions' => ['style' => 'width: 10%'],
     'format' => 'raw',
     'value' => function ($model) {
@@ -26,7 +26,7 @@ $arrColumns = [[
     }],
     [
         'attribute' => 'id',
-        'label' => 'Descripción',
+        'label' => Yii::t('app', 'Descripción'),
         'headerOptions' => ['style' => 'width: 40%'],
         'format' => 'raw',
         'value' => function ($model) {
@@ -35,7 +35,7 @@ $arrColumns = [[
     ],
     [
         'attribute' => 'id',
-        'label' => 'Cliente',
+        'label' => Yii::t('app', 'Cliente'),
         'headerOptions' => ['style' => 'width: 25%'],
         'format' => 'raw',
         'value' => function ($model) {
@@ -44,7 +44,7 @@ $arrColumns = [[
     ],
     [
         'attribute' => 'id',
-        'label' => 'Propietario',
+        'label' => Yii::t('app', 'Propietario'),
         'headerOptions' => ['style' => 'width: 25%'],
         'format' => 'raw',
         'value' => function ($model) {
@@ -61,7 +61,7 @@ $bolVisibleGridEntrada = $arrInfoStatusE->getTotalCount()>0 ? 'inline' : 'none';
         <!-- general form elements -->
         <div class="card card-primary" style="display:<?= $bolVisibleGridSalida ?>">
             <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-angle-double-up text-danger"></i> Registros de Salida</h3>
+                <h3 class="card-title"><i class="fas fa-angle-double-up text-danger"></i> <?= Yii::t('app', 'Registros de Salida') ?></h3>
             </div>
             <div class="card-body">
                 <?= GridView::widget([
@@ -72,7 +72,7 @@ $bolVisibleGridEntrada = $arrInfoStatusE->getTotalCount()>0 ? 'inline' : 'none';
         </div>
         <div class="card card-primary" style="display:<?= $bolVisibleGridEntrada ?>">
             <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-angle-double-down text-success"></i> Registros de Entrada</h3>
+                <h3 class="card-title"><i class="fas fa-angle-double-down text-success"></i> <?= Yii::t('app', 'Registros de Entrada') ?></h3>
             </div>
             <div class="card-body">
                 <?= GridView::widget([
@@ -83,7 +83,7 @@ $bolVisibleGridEntrada = $arrInfoStatusE->getTotalCount()>0 ? 'inline' : 'none';
         </div>
         <div class="card card-primary">
             <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-user-tag text-white"></i> Responsable</h3>
+                <h3 class="card-title"><i class="fas fa-user-tag text-white"></i> <?= Yii::t('app', 'Responsable') ?></h3>
             </div>
             <div class="card-body">
                 <div class="form-group">
@@ -91,24 +91,24 @@ $bolVisibleGridEntrada = $arrInfoStatusE->getTotalCount()>0 ? 'inline' : 'none';
                     <?php $form = ActiveForm::begin(); ?>
                     <div class="row">
                         <div class="col-md-3 ">
-                            <?= $form->field($model, 'entrada')->textInput(['id'=>'fecha_registro','maxlength' => true,'class'=>'form-control','readonly' => true, 'value'=> util::getDateTimeFormatedSqlToUser($model->getFechaRegistro()) ])->label('Fecha Registro') ?>
+                            <?= $form->field($model, 'entrada')->textInput(['id'=>'fecha_registro','maxlength' => true,'class'=>'form-control','readonly' => true, 'value'=> util::getDateTimeFormatedSqlToUser($model->getFechaRegistro()) ])->label(Yii::t('app', 'Fecha Registro')) ?>
                         </div>
                         <div class="col-md-9 ">
-                            <?= $form->field($model, 'id_comercial')->dropDownList(Registro::getComercialesDropdownList(), ['id' => 'id_comercial', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'disabled' => true])->label('Empresa'); ?>
+                            <?= $form->field($model, 'id_comercial')->dropDownList(Registro::getComercialesDropdownList(), ['id' => 'id_comercial', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'disabled' => true])->label(Yii::t('app', 'Empresa')); ?>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-1 ">
-                            <?= $form->field($model, 'tipo_documento')->dropDownList(util::arrTipoDocumentos, ['id' => 'tipo_documento_reponsable', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'disabled' => true])->label('Tipo Documento'); ?>
+                            <?= $form->field($model, 'tipo_documento')->dropDownList(util::arrTipoDocumentos, ['id' => 'tipo_documento_reponsable', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'disabled' => true])->label(Yii::t('app', 'Tipo Documento')); ?>
                         </div>
                         <div class="col-md-2 ">
-                            <?= $form->field($model, 'documento')->textInput(['id'=>'documento_reponsable','maxlength' => true,'class'=>'form-control','readonly' => true])->label('Documento') ?>
+                            <?= $form->field($model, 'documento')->textInput(['id'=>'documento_reponsable','maxlength' => true,'class'=>'form-control','readonly' => true])->label(Yii::t('app', 'Documento')) ?>
                         </div>
                         <div class="col-md-6 ">
-                            <?= $form->field($model, 'nombre_responsable')->textInput(['id'=>'nombre_responsable','maxlength' => true,'class'=>'form-control','readonly' => true, 'value'=> trim(strtoupper( $model->nombre_responsable )) ])->label('Nombre Responsable') ?>
+                            <?= $form->field($model, 'nombre_responsable')->textInput(['id'=>'nombre_responsable','maxlength' => true,'class'=>'form-control','readonly' => true, 'value'=> trim(strtoupper( $model->nombre_responsable )) ])->label(Yii::t('app', 'Nombre Reponsable')) ?>
                         </div>
                         <div class="col-md-3 ">
-                            <?= $form->field($model, 'telefono')->textInput(['id' => 'telefono_responsable', 'class' => 'form-control', 'style' => 'width:100%', 'readonly' => true])->label('Teléfono') ?>
+                            <?= $form->field($model, 'telefono')->textInput(['id' => 'telefono_responsable', 'class' => 'form-control', 'style' => 'width:100%', 'readonly' => true])->label(Yii::t('app', 'Telefono')) ?>
                         </div>
                     </div>
                     <div class="row">
@@ -116,7 +116,7 @@ $bolVisibleGridEntrada = $arrInfoStatusE->getTotalCount()>0 ? 'inline' : 'none';
                     </div>
                     <div class="row">
                         <div class="col-md-12 ">
-                            <?= $form->field($model, 'observacion')->textArea(['id' => 'txt_observacion', 'class' => 'form-control', 'style' => 'width:100%', 'readonly' => true])->label('Observaciones') ?>
+                            <?= $form->field($model, 'observacion')->textArea(['id' => 'txt_observacion', 'class' => 'form-control', 'style' => 'width:100%', 'readonly' => true])->label(Yii::t('app', 'Observaciones')) ?>
                         </div>
                     </div>
                     <?php ActiveForm::end(); ?>
