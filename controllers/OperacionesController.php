@@ -78,7 +78,7 @@ class OperacionesController extends BaseController
     }
 
     /**
-     * Carga de codumentro masivo de llaves
+     * Carga de documento masivo de llaves
      *
      */
     public function actionAjaxLoadLlaves()

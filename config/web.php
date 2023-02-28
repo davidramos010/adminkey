@@ -41,11 +41,11 @@ $config = [
             'loginUrl'=>['site/login'],
             'enableAutoLogin' => false,
             'enableSession' => true,
-            'authTimeout' => 30,
+            'authTimeout' => (3600*4),
         ],
         'session' => [
             'class' => 'yii\web\Session',
-            'timeout' => 30, //session expire 4 hours 3600*4
+            'timeout' => (3600*4), //session expire 4 hours 3600*4
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
