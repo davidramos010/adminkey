@@ -305,7 +305,21 @@ $strFileIsVisible = $model_log->isNewRecord ? 'none' : 'inline';
     <!--.card-->
 </div>
 
-<?php $this->registerJs(
+
+<?php
+
+$this->registerJs('
+        var fieldsChanged = false;
+        $(document).on("change", "#generar-form :input", function(){
+            fieldsChanged = true;
+        });
+        $(window).on("beforeunload", function(){
+            if(fieldsChanged)
+               return "Tiene cambios sin guardar, ¿está seguro de que desea salir de esta página?";
+        });
+');
+
+$this->registerJs(
     "$(document).on('click', '[data-js-id]', function () {
             selectChk($(this).data('js-id')) ;
         });

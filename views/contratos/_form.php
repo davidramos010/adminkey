@@ -111,3 +111,16 @@ use yii\web\JsExpression;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+$this->registerJs('
+        var fieldsChanged = false;
+        $(document).on("change", "#contrato-form :input", function(){
+            fieldsChanged = true;
+        });
+        $(window).on("beforeunload", function(){
+            if(fieldsChanged)
+               return "Tiene cambios sin guardar, ¿está seguro de que desea salir de esta página?";
+        });
+');
+?>

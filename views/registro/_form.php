@@ -228,6 +228,16 @@ use yii\widgets\ActiveForm;
 </div>
 
 <?php
+$this->registerJs('
+        var fieldsChanged = false;
+        $(document).on("change", "#form-registro :input", function(){
+            fieldsChanged = true;
+        });
+        $(window).on("beforeunload", function(){
+            if(fieldsChanged)
+               return "Tiene cambios sin guardar, ¿está seguro de que desea salir de esta página?";
+        });
+');
 
 $this->registerJs(
     '$(document).on("click", "[data-js-set-contacto]", function (e) {
