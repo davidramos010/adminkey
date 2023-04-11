@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="row">
                             <div class="col-md-4 " >
-                                <?= $form->field($model, 'tipo_documento_propietario')->textInput(['value'=>(!empty($model->tipo_documento_propietario))?$model->arrTipoDocumentos[ $model->tipo_documento_propietario ]:'', 'maxlength' => true,'class'=>'form-control','readonly' => true])->label('Documento Propietario') ?>
+                                <?= $form->field($model, 'tipo_documento_propietario')->textInput(['value'=>(!empty($model->tipo_documento_propietario))?$model::arrTipoDocumentos[ $model->tipo_documento_propietario ]:'', 'maxlength' => true,'class'=>'form-control','readonly' => true])->label('Documento Propietario') ?>
                             </div>
                             <div class="col-md-8 "  >
                                 <?= $form->field($model, 'documento_propietario')->textInput(['maxlength' => true,'class'=>'form-control','readonly' => true])->label('Documento Propietario') ?>
@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="row">
                             <div class="col-md-4 " >
-                                <?= $form->field($model, 'tipo_documento_representante')->textInput(['value'=>(!empty($model->tipo_documento_representante))?$model->arrTipoDocumentos[$model->tipo_documento_representante]:'', 'maxlength' => true,'class'=>'form-control','readonly' => true])->label('Documento Propietario') ?>
+                                <?= $form->field($model, 'tipo_documento_representante')->textInput(['value'=>(!empty($model->tipo_documento_representante))?$model::arrTipoDocumentos[$model->tipo_documento_representante]:'', 'maxlength' => true,'class'=>'form-control','readonly' => true])->label('Documento Propietario') ?>
                             </div>
                             <div class="col-md-8 "  >
                                 <?= $form->field($model, 'documento_representante')->textInput(['maxlength' => true,'class'=>'form-control','readonly' => true])->label('Documento Representante') ?>
