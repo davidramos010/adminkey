@@ -15,10 +15,10 @@ use yii\widgets\ActiveForm;
 $this->registerJsFile('@web/js/comerciales.js');
 
 ?>
-
-<div class="comerciales-form">
-
-    <div class="col-md-6">
+<br>
+<div class="comerciales-form row">
+    <div class="col-md-2">&nbsp;</div>
+    <div class="col-md-8">
         <!-- general form elements -->
         <div class="card card-primary">
             <div class="card-header">

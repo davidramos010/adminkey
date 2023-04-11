@@ -61,6 +61,8 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return [
             [['username', 'password', 'authKey'], 'required', 'message'=> Yii::t('yii',  '{attribute} no es valido')],
             [['name','username', 'password', 'authKey', 'accessToken','password_new','authKey_new'], 'string', 'max' => 255],
+            [['password_new'], 'string', 'min' => 6, 'max' => 255,'message' => 'Debe tener mas de 6 caracteres.'],
+            [['authKey_new'], 'number', 'min' => 99999, 'max' => 9999999, 'message' => 'Debe tener entre 6 y 7 números.'],
             [['idPerfil'], 'integer'],
             [['username'], 'unique'],
         ];

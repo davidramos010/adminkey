@@ -82,10 +82,9 @@ $strStyleVisibleBtnAdd = $model->isNewRecord ? '' : 'none';
                         <?= $form->field($model, 'nomenclatura')->textInput(['id' => 'llave-nomenclatura', 'maxlength' => true, 'class' => 'form-control', 'readonly' => true])->label('_') ?>
                     </div>
                 <?php endif; ?>
-                <div class="col-md-1 ">
+                <div class="<?= (!$view)?'col-md-2':'col-md-1' ?>  ">
                     <?= $form->field($model, 'codigo')->textInput(['id' => 'llave-codigo', 'maxlength' => true, 'class' => 'form-control', 'readonly' => $view])->label('Código Llave') ?>
                 </div>
-                <div class="col-md-1 ">&nbsp;</div>
                 <div class="col-md-1 ">
                     <?php if (!$view): ?>
                         <?= $form->field($model, 'alarma')->widget(SwitchInput::class, ['id' => 'alarma', 'pluginOptions' => ['id' => 'alarma', 'size' => 'small', 'onText' => 'SI', 'offText' => 'NO'], 'pluginEvents' => ["switchChange.bootstrapSwitch" => "function(item) { if($(item.currentTarget).is(':checked')){ $('#codigo_alarma').val('').prop('readonly', false); }else{ $('#codigo_alarma').val('').prop('readonly', true);} }"]])->label('Alarma'); ?>
