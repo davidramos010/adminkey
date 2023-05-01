@@ -47,7 +47,10 @@ class UserInfo extends \yii\db\ActiveRecord
             [['documento'], 'string', 'max' => 20],
             [['codigo'], 'string', 'max' => 100],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
-            [['id_comercial'], 'exist', 'skipOnError' => true, 'targetClass' => Comerciales::className(), 'targetAttribute' => ['id_comercial' => 'id']]
+            [['id_comercial'], 'exist', 'skipOnError' => true, 'targetClass' => Comerciales::className(), 'targetAttribute' => ['id_comercial' => 'id']],
+            [['nombres'], 'required', 'when' => function($model) {
+                return $model->isNewRecord;
+            }],
         ];
     }
 

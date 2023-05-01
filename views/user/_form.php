@@ -29,56 +29,54 @@ $this->registerJsFile('@web/js/usuarios.js');
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4">
-                        <?= $form->field($model, 'id')->hiddenInput(['id'=>'id'])->label(false); ?>
-                        <?= $form->field($model, 'username')->textInput(['id'=>'username', 'maxlength' => true,'class'=>'form-control','autocomplete'=>'off','style'=>'width:40%','readonly'=>!$model->isNewRecord])->label('*Username') ?>
+                        <?= $form->field($model, 'id')->hiddenInput(['id' => 'id'])->label(false); ?>
+                        <?= $form->field($model, 'username')->textInput(['id' => 'username', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'style' => 'width:40%; text-transform: uppercase', 'readonly' => !$model->isNewRecord])->label('*Username') ?>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-2">
-                        <?= $form->field($model_info, 'tipo_documento')->dropDownList( util::arrTipoDocumentos , ['class'=>'form-control', 'prompt' => 'Seleccione Uno' ])->label('Tipo Doc.'); ?>
+                        <?= $form->field($model_info, 'tipo_documento')->dropDownList(util::arrTipoDocumentos, ['class' => 'form-control', 'prompt' => 'Seleccione Uno'])->label('Tipo Doc.'); ?>
                     </div>
                     <div class="col-md-4">
-                        <?= $form->field($model_info, 'documento')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Documento Identidad') ?>
+                        <?= $form->field($model_info, 'documento')->textInput(['maxlength' => true, 'class' => 'form-control'])->label('Documento Identidad') ?>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <?= $form->field($model_info, 'nombres')->textInput(['id'=>'nombres','maxlength' => true,'class'=>'form-control','autocomplete'=>'off','style'=>'text-transform: uppercase'])->label('*Nombres') ?>
+                        <?= $form->field($model_info, 'nombres')->textInput(['id' => 'nombres', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'style' => 'text-transform: uppercase'])->label('*Nombres') ?>
                     </div>
                     <div class="col-md-6">
-                        <?= $form->field($model_info, 'apellidos')->textInput(['id'=>'apellidos','maxlength' => true,'class'=>'form-control','autocomplete'=>'off','style'=>'text-transform: uppercase'])->label('*Apellidos') ?>
+                        <?= $form->field($model_info, 'apellidos')->textInput(['id' => 'apellidos', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'style' => 'text-transform: uppercase'])->label('*Apellidos') ?>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-                        <?= $form->field($model_info, 'telefono')->textInput(['id'=>'telefono','inputmode'=>'text' ,'maxlength' => 10,'class'=>'form-control','autocomplete'=>'off'])->label('Teléfono') ?>
+                        <?= $form->field($model_info, 'telefono')->textInput(['id' => 'telefono', 'inputmode' => 'text', 'maxlength' => 10, 'class' => 'form-control', 'autocomplete' => 'off'])->label('Teléfono') ?>
                     </div>
                     <div class="col-md-9">
-                        <?= $form->field($model_info, 'email')->textInput(['id'=>'email','maxlength' => true,'class'=>'form-control','autocomplete'=>'off'])->label('Email') ?>
+                        <?= $form->field($model_info, 'email')->textInput(['id' => 'email', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off'])->label('Email') ?>
                     </div>
                 </div>
                 <div class="form-group">
-                    <?= $form->field($model_info, 'direccion')->textInput(['maxlength' => true,'class'=>'form-control','autocomplete'=>'off','style'=>'text-transform: uppercase'])->label('Dirección') ?>
+                    <?= $form->field($model_info, 'direccion')->textInput(['maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'style' => 'text-transform: uppercase'])->label('Dirección') ?>
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-
-                        <?= $form->field($model, 'password_new')->passwordInput(['id'=>'password_new','maxlength' => true,'class'=>'form-control','value' =>'','autocomplete'=>'off'])->label('Password') ?>
+                        <?= $form->field($model, 'password_new')->passwordInput(['id' => 'password_new', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'placeholder' => 'Password'])->label('Password') ?>
                     </div>
                     <div class="col-md-3">
-
-                        <?= $form->field($model, 'authKey_new')->passwordInput(['id'=>'authKey_new','maxlength' => true,'class'=>'form-control','value' =>'','autocomplete'=>'off'])->label('AuthKey') ?>
+                        <?= $form->field($model, 'authKey_new')->passwordInput(['id' => 'authKey_new', 'maxlength' => true, 'class' => 'form-control', 'value' => '', 'autocomplete' => 'off', 'onblur' => '(function ( $event ) { valideteKey() })();' ])->label('AuthKey') ?>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-                        <?= $form->field($model, 'idPerfil')->dropDownList(User::getPerfilesDropdownList() , ['id'=>'idPerfil','class'=>'form-control','prompt' => 'Seleccione Perfil','value'=> (isset($model->perfiluser))?$model->perfiluser->id_perfil:null ])->label('Perfil'); ?>
+                        <?= $form->field($model, 'idPerfil')->dropDownList(User::getPerfilesDropdownList(), ['id' => 'idPerfil', 'class' => 'form-control', 'prompt' => 'Seleccione Perfil', 'value' => (isset($model->perfiluser)) ? $model->perfiluser->id_perfil : null])->label('Perfil'); ?>
                     </div>
                     <div class="col-md-3">
-                        <?= $form->field($model_info, 'codigo')->textInput(['maxlength' => true,'class'=>'form-control','autocomplete'=>'off','style'=>'text-transform: uppercase'])->label('Cod. Interno') ?>
+                        <?= $form->field($model_info, 'codigo')->textInput(['maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'style' => 'text-transform: uppercase'])->label('Cod. Interno') ?>
                     </div>
                     <div class="col-md-3">
-                        <?= $form->field($model_info, 'estado')->widget(SwitchInput::class, ['pluginOptions'=>['size'=>'small','onText'=>'Activo','offText'=>'Inactivo']])->label('Estado') ; ?>
+                        <?= $form->field($model_info, 'estado')->widget(SwitchInput::class, ['pluginOptions' => ['size' => 'small', 'onText' => 'Activo', 'offText' => 'Inactivo']])->label('Estado'); ?>
                     </div>
                 </div>
                 <h6 class="text-muted" ><?= Yii::t('app','titulo_usuario_relacion_comercial') ?></h6>

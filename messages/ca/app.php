@@ -626,7 +626,7 @@ return [
     'Importe Optimizacion' => '',
     'Incidencia' => '',
     'Incidencia  Cups' => '',
-    'Inactivo' => 'inactiu',
+    'Inactivo' => 'Inactiu',
     'Ine' => '',
     'Información' => '',
     'Información adicional' => '',

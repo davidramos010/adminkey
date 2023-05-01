@@ -1,21 +1,34 @@
 
-function findCode()
+function valideteKey()
 {
-    let url = '../llave/ajax-find-code';
-    let comunidad = $('#llave-id_comunidad').val();
+    let url = '../ajax-validate-key';
+    let authKey = $('#authKey_new').val();
+    bolError = false;
 
-    $.ajax({
-        url: url,
-        dataType: 'JSON',
-        type: 'POST',
-        data: {
-            "comunidad": comunidad,
-        },
+    if($('#authKey_new').val()!='' && ( $('#authKey_new').val()< 99999 || $('#authKey_new').val()>9999999)) {
+        toastr.error('El AuthKey bebe tener entre 6 y 7 números.');
+        $('#authKey_new').focus();
+        bolError=true;
+    }
 
-        success: function (data) {
-            $('#llave-codigo').val(data);
-        }
-    });
+    if(bolError==false){
+        $.ajax({
+            url: url,
+            dataType: 'JSON',
+            type: 'POST',
+            data: {
+                "authKey": authKey,
+            },
+            success: function (data) {
+                if(data.authkey=='true' || data.authkey==true){
+                    toastr.error('El authKey ya esta en uso por otro usuario, este registro debe ser unico.');
+                    $('#authKey_new').focus();
+                    $('#authKey_new').val('');
+                }
+            }
+        });
+    }
+
 }
 
 
@@ -81,6 +94,12 @@ function fnSubmit()
     if($('#id').val()==''){
         $('#password').val($('#password_new').val());
         $('#authKey').val($('#authKey_new').val());
+    }
+
+    if($('#authKey_new').val()!='' && ( $('#authKey_new').val()< 99999 || $('#authKey_new').val()>9999999)) {
+        toastr.error('El AuthKey bebe tener entre 6 y 7 números..');
+        $('#authKey_new').focus();
+        bolError=true;
     }
 
     if($('#idPerfil').val()==''){
