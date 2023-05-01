@@ -1,13 +1,16 @@
 <?php
 
+use Yii;
 use hail812\adminlte\widgets\Menu;
 use yii\helpers\Html;
+
+/* @var $assetDir Url */
 $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::$app->user->identity) && isset(Yii::$app->user->identity->username)) ? Yii::$app->user->identity->username:null;
 ?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index.php" class="brand-link">
-        <img src="<?= $assetDir?>/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <a href="<?= Yii::$app->getHomeUrl() ?>" class="brand-link">
+        <img src="<?= $assetDir ?>/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">AdminKeys</span>
     </a>
 
