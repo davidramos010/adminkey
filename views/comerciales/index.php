@@ -23,8 +23,8 @@ $this->title = 'Proveedores';
                 <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
                     <?php
                     echo Html::ul([
-                        'En cada formulario el sistema validara que no se repitan los campos:',
-                        'En caso que esta combinación ya exista, el sistema recomienda editar el registro existente para no crear un nuevo registro.'
+                        Yii::t('app', 'En cada formulario el sistema validara que no se repitan los campos:'),
+                        Yii::t('app','En caso que esta combinación ya exista, el sistema recomienda editar el registro existente para no crear un nuevo registro.')
                     ], ['encode' => false]);
 
                     ?>
@@ -74,11 +74,11 @@ $this->title = 'Proveedores';
                                         'label' => 'Estado',
                                         'headerOptions' => ['style' => 'width: 10%'],
                                         'value' => function ($model) {
-                                            return ($model->estado==1)?'<span class="float-none badge bg-success">ACTIVO</span>':'<span class="float-none badge bg-danger">INACTIVO</span>' ;
+                                            return ($model->estado==1)?'<span class="float-none badge bg-success">'.Yii::t('app', 'Activo').'</span>':'<span class="float-none badge bg-danger">'.Yii::t('app', 'Inactivo').'</span>' ;
                                         },
                                         'format' => 'raw',
                                         'filterType' => GridView::FILTER_SELECT2,
-                                        'filter' => [ '1' => 'ACTIVO', '0' => 'INACTIVO'],
+                                        'filter' => [ '1' => Yii::t('app', 'Activo'), '0' => Yii::t('app', 'Inactivo')],
                                         'filterWidgetOptions' => [
                                             'theme' => Select2::THEME_BOOTSTRAP,
                                             'size' => Select2::SMALL,

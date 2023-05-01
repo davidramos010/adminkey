@@ -75,56 +75,51 @@ class SiteController extends BaseController
      */
     public function actionIndex()
     {
-        $srtNotificacion = NULL;
         $arrParam = [];
         if (!Yii::$app->user->identity) {
-            $model = new LoginForm();
-            if ($model->load(Yii::$app->request->post())) {
-                if($model->login()){
-
-                    $session = Yii::$app->session;
-                    !$session->isActive ? $session->open() : $session->close();
-                    $session->set('language', 'es');
-                    $session->close();
-
-                    $objPerfil = PerfilesUsuario::find()->where(['id_user'=>Yii::$app->user->identity->id ])->one();
-                    $strReturn = PerfilesUsuario::getIndexPerfil($objPerfil,$model);
-                    if(!empty($strReturn)){
-                        return $this->redirect($strReturn);
-                    }
-                    $srtNotificacion .= "Validar los permisos asignados. \n";
-                }
-                $srtNotificacion .= "Validar los parámetros ingresados. \n";
-                Yii::$app->user->logout();
-                Yii::$app->user->logout(true);
-            }
-
-            return $this->render('login', [
-                'model' => $model,
-                'notificacion' => $srtNotificacion
-            ]);
+            self::setValidateUser();
         }
-
         // --------------------------------
         // Parametros para usuarios que ya iniciaron sesion
         if (Yii::$app->user->identity) {
-            $searchModelStatus = new LlaveStatusSearch();
             // Cantidad de llave y llaves prestadas
-            $arrParam['llaves'] = Llave::getInfoDashboard();
-            // --------------------------------------------
-            // Lista de llaves prestadas
-            $searchModelStatus->status = 'S';
-            $arrParam['llavesDataProvider'][5] = (count($arrParam['llaves']['arrLlavesFecha'][5]))?$searchModelStatus->searchBetween([],5):null;
-            $arrParam['llavesDataProvider'][10] = (count($arrParam['llaves']['arrLlavesFecha'][10]))?$searchModelStatus->searchBetween([],10):null;
-            $arrParam['llavesDataProvider'][15] = (count($arrParam['llaves']['arrLlavesFecha'][15]))?$searchModelStatus->searchBetween([],15):null;
-            // --------------------------------------------
-            // Contador de llaves
-            $arrParam['llavesDataProvider']['cliente'] = $searchModelStatus->searchDataByCliente();
-            $arrParam['llavesDataProvider']['propietario'] = $searchModelStatus->searchDataByPropietario();
-
+            $arrParam = Llave::getDataHome();
         }
 
         return $this->render('index',['params'=>$arrParam]);
+    }
+
+    /**
+     * Validar user - sesion
+     * @return string|Response
+     */
+    private function setValidateUser(){
+        $model = new LoginForm();
+        $srtNotificacion = '';
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->login()){
+
+                $session = Yii::$app->session;
+                !$session->isActive ? $session->open() : $session->close();
+                $session->set('language', 'es');
+                $session->close();
+
+                $objPerfil = PerfilesUsuario::find()->where(['id_user'=>Yii::$app->user->identity->id ])->one();
+                $strReturn = PerfilesUsuario::getIndexPerfil($objPerfil,$model);
+                if(!empty($strReturn)){
+                    return $this->redirect($strReturn);
+                }
+                $srtNotificacion .= "Validar los permisos asignados. \n";
+            }
+            $srtNotificacion .= "Validar los parámetros ingresados. \n";
+            Yii::$app->user->logout();
+            Yii::$app->user->logout(true);
+        }
+
+        return $this->render('login', [
+            'model' => $model,
+            'notificacion' => $srtNotificacion
+        ]);
     }
 
     /**

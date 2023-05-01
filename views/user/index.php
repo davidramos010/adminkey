@@ -23,8 +23,8 @@ $this->title = 'Usuarios';
                 <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
                     <?php
                     echo Html::ul([
-                        'Este módulo solo esta habilitado para el administrador.',
-                        'Permite editar la información del usuario y su perfil.',
+                         Yii::t('app', 'Este módulo solo esta habilitado para el administrador.'),
+                        Yii::t('app', 'Permite editar la información del usuario y su perfil.'),
                     ], ['encode' => false]);
                     ?>
                 </div>
@@ -32,7 +32,7 @@ $this->title = 'Usuarios';
             <div class="col-md-2">
                 <div class="d-flex justify-content-end">
                     <?php
-                    echo Html::a('Crear Registro',['create'],['class' => 'btn btn-success']);
+                    echo Html::a(Yii::t('app', 'Crear Registro'),['create'],['class' => 'btn btn-success']);
                     ?>
                 </div>
             </div>
@@ -95,7 +95,7 @@ $this->title = 'Usuarios';
                            'headerOptions' => array('style' => 'width: 10%'),
                            'format' => 'raw',
                            'value' => function($model){
-                               return ($model->estado==1)? '<span class="float-none badge bg-success">ACTIVO</span>':'<span class="float-none badge bg-danger">INACTIVO</span>' ;
+                               return ($model->estado==1)? '<span class="float-none badge bg-success">'.Yii::t('app', 'Activo' ).'</span>':'<span class="float-none badge bg-danger">'.Yii::t('app', 'Inactivo' ).'</span>' ;
                            },
                            'filterType' => GridView::FILTER_SELECT2,
                            'filter' => array('1' => 'ACTIVO', '0' => 'INACTIVO'),

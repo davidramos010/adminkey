@@ -202,7 +202,7 @@ use yii\widgets\ActiveForm;
                 <!-- .fin table -->
                 <hr class="mt-2 mb-3"/>
                 <div class="form-group">
-                    <?= $form->field($model, 'observacion')->textArea(['id' => 'txt_observacion', 'class' => 'form-control', 'style' => 'width:100%'])->label('Observaciones') ?>
+                    <?= $form->field($model, 'observacion')->textArea(['id' => 'txt_observacion', 'class' => 'form-control', 'style' => 'width:100%'])->label(Yii::t('app', 'Observaciones')) ?>
 
                     <div class="card text-center">
                         <div class="card-header">
