@@ -33,55 +33,55 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
             echo Menu::widget([
                 'items' => [
                     [
-                        'label' => 'Administrador',
+                        'label' => Yii::t('app', 'Administrador'),
                         'icon' => 'tachometer-alt',
                         'items' => [
-                            ['label' => 'Usuarios', 'url' => ['user/index'], 'iconStyle' => 'far'],
-                            ['label' => 'Tipo Llave', 'url' => ['tipo-llave/index'], 'iconStyle' => 'far'],
+                            ['label' => Yii::t('app','Usuarios'), 'url' => ['user/index'], 'iconStyle' => 'far'],
+                            ['label' => Yii::t('app','Tipo Llave'), 'url' => ['tipo-llave/index'], 'iconStyle' => 'far'],
                         ],
                         'visible' => ((int) Yii::$app->user->identity->perfiluser->id_perfil==1)
                     ],
                     [
-                        'label' => 'Clientes/Proveedores',
+                        'label' => Yii::t('app', 'Clientes').'/'.Yii::t('app', 'Proveedores'),
                         'icon' => 'fa-solid fa-address-book',
                         'items' => [
-                            ['label' => 'Cliente', 'url' => ['comunidad/index'], 'iconStyle' => 'far'],
-                            ['label' => 'Llaves', 'url' => ['llave/index'], 'iconStyle' => 'far'],
-                            ['label' => 'Propietarios', 'url' => ['propietarios/index'], 'iconStyle' => 'far'],
-                            ['label' => 'Proveedor', 'url' => ['comerciales/index'], 'iconStyle' => 'far'],
-                            ['label' => 'Contratos', 'url' => ['contratos/index'], 'iconStyle' => 'far'],
+                            ['label' => Yii::t('app', 'Clientes'), 'url' => ['comunidad/index'], 'iconStyle' => 'far'],
+                            ['label' => Yii::t('app', 'Llaves'), 'url' => ['llave/index'], 'iconStyle' => 'far'],
+                            ['label' => Yii::t('app', 'Propietarios'), 'url' => ['propietarios/index'], 'iconStyle' => 'far'],
+                            ['label' => Yii::t('app', 'Proveedores'), 'url' => ['comerciales/index'], 'iconStyle' => 'far'],
+                            ['label' => Yii::t('app', 'Contratos'), 'url' => ['contratos/index'], 'iconStyle' => 'far'],
                         ],
                         'visible' => ((int) Yii::$app->user->identity->perfiluser->id_perfil==1)
                     ],
                     [
-                        'label' => 'Operaciones Masivas',
+                        'label' => Yii::t('app', 'Operaciones Masivas'),
                         'icon' => 'fa-solid  fa-file-import',
                         'items' => [
-                            ['label' => 'Importar Llaves', 'url' => ['operaciones/llaves'], 'iconStyle' => 'far'],
-                            ['label' => 'Importar Movimientos', 'url' => ['operaciones/registros'], 'iconStyle' => 'far'],
+                            ['label' => Yii::t('app','Importar Llaves'), 'url' => ['operaciones/llaves'], 'iconStyle' => 'far'],
+                            ['label' => Yii::t('app','Importar Movimientos'), 'url' => ['operaciones/registros'], 'iconStyle' => 'far'],
                         ],
                         'visible' => ((int) Yii::$app->user->identity->perfiluser->id_perfil==1)
                     ],
                     [
-                        'label' => 'Reportes',
+                        'label' => Yii::t('app','Reportes'),
                         'icon' => 'fa-solid fa-file-excel',
                         'items' => [
-                            ['label' => 'Reporte Movimientos', 'url' => ['registro/index'], 'iconStyle' => 'far'],
-                            ['label' => 'Llaves', 'url' => ['llave/report'], 'iconStyle' => 'far'],
+                            ['label' => Yii::t('app','Reporte Movimientos'), 'url' => ['registro/index'], 'iconStyle' => 'far'],
+                            ['label' => Yii::t('app','Llaves'), 'url' => ['llave/report'], 'iconStyle' => 'far'],
                         ],
                     ],
                     [
-                        'label' => 'Administración',
+                        'label' => Yii::t('app','Administración'),
                         'icon' => 'fa-solid fa-file-invoice',
                         'items' => [
-                            ['label' => 'Contratos', 'url' => ['contratos/generar-list'], 'iconStyle' => 'far'],
+                            ['label' => Yii::t('app','Contratos'), 'url' => ['contratos/generar-list'], 'iconStyle' => 'far'],
                         ],
                         'visible' => ((int) Yii::$app->user->identity->perfiluser->id_perfil==1)
                     ],
-                    ['label' => 'Registro',  'icon' => 'fa-solid fa-key', 'url' => ['registro/create']],
+                    ['label' => Yii::t('app','Registro'),  'icon' => 'fa-solid fa-key', 'url' => ['registro/create']],
                     ['label' => 'Login', 'url' => ['site/login'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
-                    /*['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank'],
-                    ['label' => 'Debug', 'icon' => 'bug', 'url' => ['/debug'], 'target' => '_blank'],*/
+                    ['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank','visible' => YII_ENV_DEV],
+                    ['label' => 'Debug', 'icon' => 'bug', 'url' => ['/debug'], 'target' => '_blank','visible' => YII_ENV_DEV],
                 ],
             ]);
             ?>

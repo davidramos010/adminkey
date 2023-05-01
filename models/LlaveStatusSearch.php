@@ -6,6 +6,7 @@ use app\models\LlaveStatus;
 use app\models\Llave;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\db\Query;
 
 /**
  * LlaveStatusSearch represents the model behind the search form of `app\models\LlaveStatus`.
@@ -120,31 +121,37 @@ class LlaveStatusSearch extends LlaveStatus
     }
 
     /**
+     * Sub consulta para listar clientes con llaves en prestamo
      * @return ActiveDataProvider
      */
     public function searchDataByCliente()
     {
-        $query = Llave::find()->alias('l');
-        $query->select(["COUNT(1) AS total, l.id_comunidad, c.nombre as descripcion,
+        $subQuery = Llave::find()->alias('l');
+        $subQuery->select(["COUNT(1) AS total, l.id_comunidad, c.nombre as descripcion,
                             (SELECT COUNT(ls.id_llave) as numSalida
                                 FROM llave_status ls
                                 INNER JOIN ( SELECT MAX(id) AS indice ,id_llave FROM llave_status GROUP BY id_llave  ) AS lsb ON ( lsb.indice = ls.id )
                                 INNER JOIN llave l2 on (ls.id_llave = l2.id )
                                 WHERE ls.status ='S' and l2.id_comunidad = l.id_comunidad
                             ) AS salida" ]);
-        $query->leftJoin('comunidad c','l.id_comunidad = c.id ');
+        $subQuery->leftJoin('comunidad c','l.id_comunidad = c.id ');
+
+
+        $subQuery->where(['l.activa'=>1]);
+        $subQuery->andWhere(['IS NOT', 'l.id_comunidad', NULL]);
+        $subQuery->groupBy('l.id_comunidad');
+        // Ordenamos por fecha de creación por defecto
+        if (!isset($params['sort'])) {
+            $subQuery->orderBy('salida DESC,c.nombre ASC');
+        }
+        // Select All
+        $query = (new Query())->select('r.total as total,r.id_comunidad, r.descripcion, r.salida as salida')->from(['r' => $subQuery]);
+        $query->where(['>','r.salida',0]);
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
-        $query->where(['l.activa'=>1]);
-        $query->andWhere(['IS NOT', 'l.id_comunidad', NULL]);
-        $query->groupBy('l.id_comunidad');
-        // Ordenamos por fecha de creación por defecto
-        if (!isset($params['sort'])) {
-            $query->orderBy('salida DESC,c.nombre ASC');
-        }
         return $dataProvider;
     }
 
@@ -153,8 +160,8 @@ class LlaveStatusSearch extends LlaveStatus
      */
     public function searchDataByPropietario()
     {
-        $query = Llave::find()->alias('l');
-        $query->select(["COUNT(1) AS total, l.id_propietario,
+        $subQuery = Llave::find()->alias('l');
+        $subQuery->select(["COUNT(1) AS total, l.id_propietario,
                             ( CASE
                                 WHEN p.nombre_propietario IS NOT NULL THEN p.nombre_propietario
                                 WHEN p.nombre_representante IS NOT NULL THEN p.nombre_representante
@@ -166,20 +173,25 @@ class LlaveStatusSearch extends LlaveStatus
                                 INNER JOIN llave l2 on (ls.id_llave = l2.id )
                                 WHERE ls.status ='S' and l2.id_propietario = l.id_propietario
                             ) AS salida" ]);
-        $query->leftJoin('propietarios p','l.id_propietario  = p.id');
+        $subQuery->leftJoin('propietarios p','l.id_propietario  = p.id');
+
+        $subQuery->where(['l.activa'=>1]);
+        $subQuery->andWhere(['IS NOT', 'l.id_propietario', NULL]);
+        $subQuery->groupBy('l.id_propietario');
+        // Ordenamos por fecha de creación por defecto
+        if (!isset($params['sort'])) {
+            $subQuery->orderBy('salida DESC,p.nombre_propietario ASC, p.nombre_representante');
+        }
+
+        // Select All
+        $query = (new Query())->select('r.*')->from(['r' => $subQuery]);
+        $query->where(['>','r.salida',0]);
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
-        $query->where(['l.activa'=>1]);
-        $query->andWhere(['IS NOT', 'l.id_propietario', NULL]);
-        $query->groupBy('l.id_propietario');
-        // Ordenamos por fecha de creación por defecto
-        if (!isset($params['sort'])) {
-            $query->orderBy('salida DESC,p.nombre_propietario ASC, p.nombre_representante');
-        }
-
         return $dataProvider;
+
     }
 }

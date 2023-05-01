@@ -31,7 +31,7 @@ $gridColumns = [
         'format' => 'raw',
         'enableSorting' => false,
         'value' => function($model){
-            return $model->llave->descripcion;
+            return isset($model->llave)?$model->llave->descripcion:'NA';
         }
     ],
     [
@@ -296,7 +296,7 @@ $gridColumns = [
                         'format' => 'raw',
                         'enableSorting' => false,
                         'value' => function($model){
-                            return $model->descripcion;
+                            return isset($model['descripcion'])?$model['descripcion']:'NA';
                         }
                     ],
                     [
@@ -306,7 +306,7 @@ $gridColumns = [
                         'format' => 'raw',
                         'enableSorting' => false,
                         'value' => function($model){
-                            return $model->total;
+                            return isset($model['total'])?$model['total']:'NA';
                         }
                     ],
                     [
@@ -316,7 +316,7 @@ $gridColumns = [
                         'format' => 'raw',
                         'enableSorting' => false,
                         'value' => function($model){
-                            return $model->salida;
+                            return isset($model['salida'])?$model['salida']:'NA' ;
                         }
                     ],
                     [
@@ -326,9 +326,10 @@ $gridColumns = [
                         'format' => 'raw',
                         'enableSorting' => false,
                         'value' => function($model){
-                            $numPrc = round(((100/$model->total)*$model->salida),2);
+                            $numTotal = (int) $model['total'];
+                            $numPrc = round(((100/$numTotal)* $model['salida']),2);
 
-                            switch ($numPrc){
+                            switch ((int) $numPrc){
                                 case ($numPrc>10 && $numPrc<=30):
                                     $strColor = 'info';
                                     break;
@@ -404,7 +405,7 @@ $gridColumns = [
                     'format' => 'raw',
                     'enableSorting' => false,
                     'value' => function($model){
-                        return $model->descripcion;
+                        return $model['descripcion'];
                     }
                 ],
                 [
@@ -414,7 +415,7 @@ $gridColumns = [
                     'format' => 'raw',
                     'enableSorting' => false,
                     'value' => function($model){
-                        return $model->total;
+                        return $model['total'];
                     }
                 ],
                 [
@@ -424,7 +425,7 @@ $gridColumns = [
                     'format' => 'raw',
                     'enableSorting' => false,
                     'value' => function($model){
-                        return $model->salida;
+                        return $model['salida'];
                     }
                 ],
                 [
@@ -434,7 +435,7 @@ $gridColumns = [
                     'format' => 'raw',
                     'enableSorting' => false,
                     'value' => function($model){
-                        $numPrc = round(((100/$model->total)*$model->salida),2);
+                        $numPrc = round(((100/(int) $model['total'])* (int) $model['salida']),2);
                         switch ($numPrc){
                             case ($numPrc>10 && $numPrc<=30):
                                 $strColor = 'info';
@@ -496,9 +497,4 @@ $gridColumns = [
         <!-- /.card-body -->
     </div>
 </div>
-<?php $this->registerJs(
-    "$(document).on('onclick', '[data-js-url]', function () {
-         //alert($(this).data('js-url'));
-        }); "
-);
-?>
+

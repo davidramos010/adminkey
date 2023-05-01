@@ -213,6 +213,7 @@ class UserController extends BaseController
 
             if($bolInserPerfil && $bolInserUser && $bolInserUserInfo){
                 $transaction->commit();
+                Yii::$app->session->setFlash('success', Yii::t('yii', 'Se actualiza correctamente.'));
                 return $this->redirect(['update', 'id' => $model->id]);
             }else{
                 $transaction->rollBack();
@@ -256,5 +257,17 @@ class UserController extends BaseController
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * valida si existe el key
+     * @return false|string
+     */
+    public function actionAjaxValidateKey()
+    {
+        $arrParam = $this->request->post();
+        $authKey = $arrParam['authKey'];
+        $arrResult = User::findOne(['authKey' => $authKey]);
+        return json_encode(['authkey' => !empty($arrResult)]);
     }
 }

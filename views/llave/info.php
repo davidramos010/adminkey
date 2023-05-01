@@ -13,7 +13,7 @@ $this->registerJsFile('@web/js/llave.js');
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Información movimientos de llave</h4>
+                <h4 class="modal-title"><?= Yii::t('app', 'Información movimientos de llave') ?></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -23,7 +23,7 @@ $this->registerJsFile('@web/js/llave.js');
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Historial de movimientos</h3>
+                                <h3 class="card-title"><?= Yii::t('app', 'Historial de movimientos') ?></h3>
                                 <div class="card-tools">
                                     <div class="input-group input-group-sm" style="width: 150px;">
                                     </div>
@@ -34,11 +34,11 @@ $this->registerJsFile('@web/js/llave.js');
                                 <table class="table table-head-fixed text-nowrap" id="dataTable">
                                     <thead>
                                     <tr>
-                                        <th style="width: 10%">Operación</th>
-                                        <th style="width: 10%">Fecha</th>
-                                        <th style="width: 23%">Empresa</th>
-                                        <th style="width: 23%">Responsable</th>
-                                        <th style="width: 34%">Observación</th>
+                                        <th style="width: 10%"><?= Yii::t('app', 'Operación') ?></th>
+                                        <th style="width: 10%"><?= Yii::t('app', 'Fecha') ?></th>
+                                        <th style="width: 23%"><?= Yii::t('app', 'Empresa') ?></th>
+                                        <th style="width: 23%"><?= Yii::t('app', 'Responsable') ?></th>
+                                        <th style="width: 34%"><?= Yii::t('app', 'Observación') ?></th>
                                     </tr>
                                     </thead>
                                     <tbody id="modal-email-contenido-table">
@@ -50,7 +50,7 @@ $this->registerJsFile('@web/js/llave.js');
                 </div>
             </div>
             <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><?= Yii::t('app', 'Cerrar') ?></button>
                 <?= Html::button('Exportar Csv', [ 'class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { fnExcelReport("dataTable") })();' ]); ?>
             </div>
         </div>
