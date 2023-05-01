@@ -75,25 +75,29 @@ class SiteController extends BaseController
      */
     public function actionIndex()
     {
-        $arrParam = [];
+        $arrParam = ['params'=>[]];
+        $strActionForm = 'index';
         if (!Yii::$app->user->identity) {
-            self::setValidateUser();
+            $arrReturn = self::setValidateUser();
+            $strActionForm = $arrReturn[0];
+            $arrParam = $arrReturn[1];
         }
         // --------------------------------
         // Parametros para usuarios que ya iniciaron sesion
         if (Yii::$app->user->identity) {
             // Cantidad de llave y llaves prestadas
-            $arrParam = Llave::getDataHome();
+            $arrParam = ['params'=>Llave::getDataHome()];
         }
 
-        return $this->render('index',['params'=>$arrParam]);
+        return $this->render($strActionForm,$arrParam);
     }
 
     /**
      * Validar user - sesion
      * @return string|Response
      */
-    private function setValidateUser(){
+    private function setValidateUser(): array
+    {
         $model = new LoginForm();
         $srtNotificacion = '';
         if ($model->load(Yii::$app->request->post())) {
@@ -116,10 +120,10 @@ class SiteController extends BaseController
             Yii::$app->user->logout(true);
         }
 
-        return $this->render('login', [
+        return ['login', [
             'model' => $model,
             'notificacion' => $srtNotificacion
-        ]);
+        ]];
     }
 
     /**

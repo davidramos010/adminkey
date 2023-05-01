@@ -1,6 +1,5 @@
 <?php
 
-use Yii;
 use hail812\adminlte\widgets\Menu;
 use yii\helpers\Html;
 
