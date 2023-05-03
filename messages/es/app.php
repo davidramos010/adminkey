@@ -44,6 +44,7 @@ return [
     'Nombre Reponsable' => 'Nombre Reponsable',
     'Telefono' => 'Teléfono',
     'Observaciones' => 'Observaciones',
+    'No. OPERACION' => 'No. OPERACIÓN',
 
     'arrLlavesFecha15'=> 'Iniciar proceso de recuperación de llaves - Urgente!!',
     'arrLlavesFecha10'=> 'Iniciar gestiones para recuperación de llaves - Alerta',

@@ -85,6 +85,8 @@ return [
     'Usuarios' => 'Usuaris',
     'Tipo Llave' => 'Tipus Clau',
 
+    'Entrada' => 'Entrada',
+    'Salida' => 'Sortida',
 
     'Registros de Salida' => 'Registres de sortida',
     'Registros de Entrada' => 'Registres d-entrada',
@@ -96,7 +98,23 @@ return [
     'Nombre Reponsable' => 'Nom reponsable',
     'Telefono' => 'Telèfon',
     'Observaciones' => 'Observacions',
-    'Observaciones' => 'Observacions',
+
+    'ALBARÁ - CONTROL DE ENTREGA DE LLAVES' => 'ALBARÀ - CONTROL DE LLIURAMENT DE CLAUS',
+    'FECHA ENTREGA' => 'DATA LLIURAMENT',
+    'No. OPERACION' => 'No. OPERACIÓ',
+    'ENTREGADO POR' => 'ENTREGAT PER',
+    'ENTREGADO A' => 'ENTREGAT A',
+    'Acción' => 'Acció',
+    'Código' => 'Codi',
+    'Descripción' => 'Descripció',
+    'Cliente' => 'Client',
+    'Propietario' => 'Propietari',
+    'INCIDENCIAS Y COMENTARIOS' => 'INCIDÈNCIES I COMENTARIS',
+    'FIRMA ENTREGA' => 'FIRMA LLIURADOR',
+    'FIRMA RECEPTOR' => 'FIRMA RECEPTOR',
+    'Las claves deben devolverse a' => 'Les claus s\'han de retornar a ',
+    ', en la misma oficina donde se han entregado y en un plazo de 24 horas desde la entrega. En caso contrario, el receptor informará de la causa del retraso y la fecha estimada de retorno.' => ',a la mateixa oficina on s\'han lliurat i en un termini de 24 hores des del lliurament. En cas contrari, el receptor ha d\'informar de la causa del retard i la data estimada de retorn.',
+
 
     'Información movimientos de llave' => 'Informació moviments de clau',
     'Historial de movimientos' => 'Historial de moviments',
@@ -480,7 +498,6 @@ return [
     'Fecha Comision' => '',
     'Fecha Creacion Imp' => '',
     'Fecha Efecto' => '',
-    'Fecha Entrega' => '',
     'Fecha Envio' => '',
     'Fecha Envio Carta' => '',
     'Fecha Error' => '',
