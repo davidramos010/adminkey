@@ -55,6 +55,7 @@ return [
     'Las llaves se irán registrando según su último estado de disponibilidad.'=>'The keys will be registered according to their last state of availability.',
     'Registro almacenado correctamente.'=>'Record stored successfully.',
     'Nombre Responsable'=>'Responsible Name',
+    'Nombre de quien retira la llave' => 'Name of the person who picks up the key',
     'Ingresar Referencia'=> 'Enter Reference',
     'Adicionar Manualmente' => 'Add Manually',
     'Adicionar Manualmente' => 'Add',

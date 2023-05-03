@@ -435,21 +435,22 @@ class Llave extends \yii\db\ActiveRecord
         // ------------------------------
         if (empty($avisos)) {
             foreach ($validador->getRows() as $file_key => $line) {
-                $llavesTotal++;
+                $numFilaArchivo = ($file_key+2);
                 $strCode = $line['CODIGO'];
                 $strOfic = $line['OFICINA'];
                 $strTipo = $line['TIPO'];
-                $strAcceso = $line['ACCESO'];
+                $strAcceso = utf8_decode($line['ACCESO']);
                 $numCantidad = (int)$line['CANTIDAD'];
                 $strCodPropietario = strtoupper($line['PROPIETARIO_CODIGO']);
-                $strNombrePropietario = strtoupper($line['PROPIETARIO']);
+                $strNombrePropietario = strtoupper(utf8_decode($line['PROPIETARIO']));
                 $strMovil = trim($line['MOVIL']);
                 $numAlarma = strtoupper(trim($line['ALARMA']));
                 $strAlarma = trim($line['CODIGO_ALARMA']);
                 $strFacturable = trim($line['CONTRATO']);
-                $strObservaciones = trim($line['COMENTARIOS']);
-                $strDireccion = trim($line['DIRECCION']);
+                $strObservaciones = trim(utf8_decode($line['COMENTARIOS']));
+                $strDireccion = trim(utf8_decode($line['DIRECCION']));
                 $strCodigoPostal = trim($line['CODIGO_POSTAL']);
+                $llavesTotal += $numCantidad;
                 // ------------------------------
                 $objComunidad = NULL;
                 $strCodigo = "";
@@ -457,8 +458,9 @@ class Llave extends \yii\db\ActiveRecord
                 if (!empty($strCode)) { //COMUNIDAD
                     $isContainString = strpos($strCode, 'C');
                     //Buscar comunidad
+                    $strPrefijo = ($strTipo == 'PARTICULAR')?"P":"C";
                     $arrCode = explode('-', $strCode);
-                    $strNomenclatura = ($isContainString === false) ? "C" : "";
+                    $strNomenclatura = ($isContainString === false) ? $strPrefijo : "";
                     $strNomenclatura .= $arrCode[0];
                     $strCodigo = isset($arrCode[1]) ? $arrCode[1] : '';
                     // consultar comunidad
@@ -480,7 +482,7 @@ class Llave extends \yii\db\ActiveRecord
                         $objCodPostal = Codipostal::find()->where(['cp'=>$strCodigoPostal])->one();
                         $strPoblacion = (isset($objCodPostal) && !empty($objCodPostal->provincia))?$objCodPostal->provincia:'';
                         $strPoblacion = (empty($strPoblacion) && isset($objComunidad) && isset($objComunidad->poblacion))?$objComunidad->poblacion:'';
-
+                        // ------------------------------
                         $objParticular = new Propietarios();
                         $objParticular->nombre_propietario = $strNombrePropietario;
                         $objParticular->direccion = $strDireccion;
@@ -490,17 +492,19 @@ class Llave extends \yii\db\ActiveRecord
                         $objParticular->movil = $strMovil;
                         if ($objParticular->save()) {
                             $strCodigo = "001";
-                            $avisos[] = 'Alerta en la linea:' . $file_key . ' - Completar los datos de Propietario:' . $strNombrePropietario . '<br>';
+                            $avisos[] = 'Alerta en la linea:' . $numFilaArchivo . ' - Completar los datos de Propietario:' . $strNombrePropietario . '<br>';
                         } else {
-                            $avisos[] = 'Error en la linea:' . $file_key . ' - No encuetra datos del Propietario:' . $strNombrePropietario . '<br>';
+                            $avisos[] = 'Error en la linea:' . $numFilaArchivo . ' - No encuetra datos del Propietario:' . $strNombrePropietario . '<br>';
                             continue;
                         }
                     }
+                    // ------------------------------
                     // Asignacion de codigo a la llave
-                    if(isset($objParticular) && !empty($objParticular->id)){
+                    if(isset($objParticular) && !empty($objParticular->id) && empty($strCode)){
                         $strNomenclatura = "P".str_pad($objParticular->id, 3, '0', STR_PAD_LEFT);
                     }
-
+                }else{
+                    $objParticular = null;
                 }
                 // ------------------------------ Ubicacion
                 $objLlaveUbicacion = LlaveUbicaciones::find()->where(['descripcion_almacen' => $strOfic])->one();
@@ -508,7 +512,7 @@ class Llave extends \yii\db\ActiveRecord
                 $objLlaveTipo = TipoLlave::find()->where(['descripcion' => $strTipo])->one();
                 // VALIDATE
                 if ((empty($objComunidad) && empty($objParticular)) || empty($objLlaveUbicacion) || empty($objLlaveTipo)) {
-                    $avisos[] = 'Error en la linea:' . $file_key . ' - Validar datos de la Comunidad / Ubicacion / Tipo Llave' . '<br>';
+                    $avisos[] = 'Error en la linea:' . $numFilaArchivo . ' - Validar datos de la Comunidad / Ubicacion / Tipo Llave' . '<br>';
                     continue;
                 }
                 // -------------------------------------------------
@@ -535,14 +539,14 @@ class Llave extends \yii\db\ActiveRecord
                     try {
                         if (!$objNewLlave->save()) {
                             //die('Error:Code:' . $strCodigo);
-                            $avisos[] = 'Error en la linea:' . $file_key . ' - Imposible crear la llave.<br>';
+                            $avisos[] = 'Error en la linea:' . $numFilaArchivo . ' - Imposible crear la llave.<br>';
                         } else {
                             $llavesOK++;
                         }
                     } catch (\yii\db\Exception $e) {
-                        $strMensaje = 'Error en la linea:' . $file_key . '::' . $e->getMessage() . '<br>';
+                        $strMensaje = 'Error en la linea:' . $numFilaArchivo . '::' . $e->getMessage() . '<br>';
                         if ($e->getCode() == 23000) {
-                            $strMensaje = 'Error en la linea:' . $file_key . ' - Imposible crear la llave, el codigo ya existe (' . $strCodigo . ').<br>';
+                            $strMensaje = 'Error en la linea:' . $numFilaArchivo . ' - Imposible crear la llave, el codigo ya existe (' . $strCodigoLlave . ').<br>';
                         }
                         $avisos[] = $strMensaje;
                     }

@@ -102,12 +102,12 @@ class RegistroController extends BaseController
             $model->loadDefaultValues();
         }
 
-        $objUser = User::findOne(Yii::$app->user->id);
+        /*$objUser = User::findOne(Yii::$app->user->id);
         $model->nombre_responsable = trim($objUser->userInfo->nombres . ' ' . $objUser->userInfo->apellidos);
         $model->telefono = $objUser->userInfo->telefono;
         $model->tipo_documento = $objUser->userInfo->tipo_documento;
         $model->documento = $objUser->userInfo->documento;
-        $model->id_comercial = $objUser->userInfo->id_comercial;
+        $model->id_comercial = $objUser->userInfo->id_comercial;*/
 
         return $this->render('create', [
             'model' => $model,

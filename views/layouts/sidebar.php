@@ -79,8 +79,8 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
                     ],
                     ['label' => Yii::t('app','Registro'),  'icon' => 'fa-solid fa-key', 'url' => ['registro/create']],
                     ['label' => 'Login', 'url' => ['site/login'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
-                    ['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank','visible' => YII_ENV_DEV],
-                    ['label' => 'Debug', 'icon' => 'bug', 'url' => ['/debug'], 'target' => '_blank','visible' => YII_ENV_DEV],
+                    /*['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank','visible' => YII_ENV_DEV],
+                    ['label' => 'Debug', 'icon' => 'bug', 'url' => ['/debug'], 'target' => '_blank','visible' => YII_ENV_DEV],*/
                 ],
             ]);
             ?>

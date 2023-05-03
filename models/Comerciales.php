@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property string|null $nombre
  * @property string|null $telefono
+ * @property string|null $movil
  * @property string|null $contacto
  * @property string|null $cod_postal
  * @property string|null $poblacion
@@ -39,7 +40,7 @@ class Comerciales extends \yii\db\ActiveRecord
             [['id_tipo_documento','estado'], 'integer'],
             [['direccion','nombre','direccion','poblacion','email','observacion'], 'string', 'max' => 255],
             [['documento'], 'string', 'max' => 255],
-            [['telefono', 'contacto'], 'string', 'max' => 100],
+            [['telefono', 'telefono', 'contacto'], 'string', 'max' => 100],
             [['cod_postal'], 'string', 'max' => 6],
             [['email'], 'email','message'=> Yii::t('yii',  '{attribute} no es valido')],
             [['nombre','contacto','direccion'], 'required', 'message'=> Yii::t('yii',  '{attribute} es requerido')],
@@ -55,6 +56,7 @@ class Comerciales extends \yii\db\ActiveRecord
             'id' => 'ID',
             'nombre' => 'Nombre',
             'telefono' => 'Teléfono',
+            'movil' => 'Movil',
             'contacto' => 'Contacto',
             'direccion' => 'Dirección',
             'identificacion' => 'Identificación',

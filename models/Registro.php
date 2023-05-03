@@ -418,7 +418,7 @@ class Registro extends \yii\db\ActiveRecord
                 ],
                 'TELEFONO_RESPONSABLE' => [
                     ValidadorCsv::RULE_TYPE => ValidadorCsv::RULE_TYPE_STRING,
-                    ValidadorCsv::RULE_CAN_BE_NULL => false,
+                    ValidadorCsv::RULE_CAN_BE_NULL => true,
                     ValidadorCsv::RULE_MIN_LENGTH => 6,
                 ],
                 'DOCUMENTO' => [
@@ -444,7 +444,11 @@ class Registro extends \yii\db\ActiveRecord
         if (empty($avisos)) {
             foreach ($validador->getRows() as $file_key => $line) {
                 $registrosTotal++;
+                $numFilaArchivo = ($file_key+2);
                 $numId = $line['ID'];
+                if((int) $numId == 65){
+                    $n = 1;
+                }
                 $strFechaReg = $line['FECHA'];
                 $strHoraReg = $line['HORA'];
                 $strStatus = $line['TIPO'];
@@ -453,31 +457,41 @@ class Registro extends \yii\db\ActiveRecord
                 $strComercial = strtoupper(trim(utf8_decode($line['COMERCIAL'])));
                 $numTipoDoc = 1;
                 $strDocumentoResponsable = strtoupper(trim($line['DOCUMENTO']));;
-                $strNombreResponsable = strtoupper(trim($line['RESPONSABLE']));
+                $strNombreResponsable = strtoupper(trim(utf8_decode($line['RESPONSABLE'])));
                 $strTelefonoResponsable = strtoupper(trim($line['TELEFONO_RESPONSABLE']));
                 $strObservaciones = strtoupper(trim($line['OBSERVACIONES']));
                 //--------------------------------------------
                 // Consultar llave por codigo
                 $objLlave = Llave::find()->andFilterWhere(['like', 'codigo', $strCodeLlave])->orderBy('codigo ASC')->one();
                 if (empty($objLlave)) {
-                    $avisos[] = 'Error en la linea:' . $file_key . ' -Llave no encontrada' . '<br>';
+                    $avisos[] = 'Error en la linea:' . $numFilaArchivo . ' -Llave no encontrada - '.$strCodeLlave.' ' . '<br>';
                     continue;
                 }
                 // Buscar usuario
                 $objUser = User::find()->andFilterWhere(['like', 'username', $strUser])->one();
                 if (empty($objUser)) {
-                    $avisos[] = 'Error en la linea:' . $file_key . ' - Usuario no encontrado' . '<br>';
+                    $avisos[] = 'Error en la linea:' . $numFilaArchivo . ' - Usuario no encontrado - '.$strUser.' ' . '<br>';
                     continue;
                 }
                 // Buscar comercial asignado
                 $objComercial = Comerciales::find()->andFilterWhere(['like', 'nombre', $strComercial])->one();
                 if (empty($objComercial)) {
-                    $avisos[] = 'Error en la linea:' . $file_key . ' - Comercial no encontrado' . '<br>';
+                    $objComercial = new Comerciales();
+                    $objComercial->nombre = $strComercial;
+                    $objComercial->telefono = empty($strTelefonoResponsable)?'999999999':$strTelefonoResponsable;
+                    $objComercial->movil = $objComercial->telefono;
+                    $objComercial->direccion = 'Pendiente';
+                    $objComercial->contacto = empty($strNombreResponsable)?'Pendiente':$strNombreResponsable;
+                    if(!$objComercial->save()){
+                        $avisos[] = 'Error en la linea:' . $numFilaArchivo . ' - Comercial no encontrado  - '.$strComercial.' ' . '<br>';
+                    }else{
+                        $avisos[] = 'Alerta en la linea:' . $numFilaArchivo . ' - Comercial pendiente por editar  - '.$strComercial.' ' . '<br>';
+                    }
                     continue;
                 }
                 // Validar tipo
                 if (!in_array($strStatus, ['E', 'S', 'ENTRADA', 'SALIDA'])) {
-                    $avisos[] = 'Error en la linea:' . $file_key . ' - El tipo no es valido (E/S)' . '<br>';
+                    $avisos[] = 'Error en la linea:' . $numFilaArchivo . ' - El tipo no es valido (E/S)' . '<br>';
                     continue;
                 }
                 //-------------------------------------------------
@@ -505,18 +519,18 @@ class Registro extends \yii\db\ActiveRecord
                         $newStatus->fecha = $newRegistro->getFechaRegistro();
                         $newStatus->id_registro = $newRegistro->id;
                         if (!$newStatus->save()) {
-                            $avisos[] = 'Error en la linea:' . $file_key . ' - Registro-status no pudo ser creado' . '<br>';
+                            $avisos[] = 'Error en la linea:' . $numFilaArchivo . ' - Registro-status no pudo ser creado' . '<br>';
                             continue;
                         }
                         $registrosOK++;
                     } else {
-                        $avisos[] = 'Error en la linea:' . $file_key . ' - El Registro no pudo ser creado' . '<br>';
+                        $avisos[] = 'Error en la linea:' . $numFilaArchivo . ' - El Registro no pudo ser creado' . '<br>';
                         continue;
                     }
                 } catch (\yii\db\Exception $e) {
-                    $strMensaje = 'Error en la linea:' . $file_key . '::' . $e->getMessage() . '<br>';
+                    $strMensaje = 'Error en la linea:' . $numFilaArchivo . '::' . $e->getMessage() . '<br>';
                     if ($e->getCode() == 23000) {
-                        $strMensaje = 'Error en la linea:' . $file_key . ' - Imposible crear el registro, el ID ya existe.<br>';
+                        $strMensaje = 'Error en la linea:' . $numFilaArchivo . ' - Imposible crear el registro, el ID ya existe.<br>';
                     }
                     $avisos[] = $strMensaje;
                 }
