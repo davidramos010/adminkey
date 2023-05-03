@@ -1,15 +1,15 @@
 <?php
 
 return [
-    'dominio' => 'http://localhost:81/',
-    'adminEmail' => 'admin@example.com',
-    'senderEmail' => 'noreply@example.com',
-    'senderName' => 'Example.com mailer',
-    'contacto' => 'Salvadó & Gubert - Telf. 992 236 254 - Palamós',
+    'dominio' => 'http://adminkeys.es/',
+    'adminEmail' => 'info@sga.cat',
+    'senderEmail' => 'info@sga.cat',
+    'senderName' => 'www.sga.cat',
+    'contacto' => 'Salvadó & Gubert - Telf. 972 600 411 - Palamós',
     'empresa' => 'Salvadó & Gubert',
-    'email' => 'contacto@mail.com',
-    'telefono' => '992 236 254',
-    'movil' => '611 258 147',
+    'email' => 'info@sga.cat',
+    'telefono' => '972 600 411',
+    'movil' => '972 819 338',
     'direccion' => 'Carrer López i Puigcerver, 111',
     'poblacion' => '17230 Palamós, Girona',
     'bsVersion' => '4.x', // this will set globally `bsVersion` to Bootstrap 5.x for all Krajee Extensions

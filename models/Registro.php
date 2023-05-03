@@ -222,9 +222,9 @@ class Registro extends \yii\db\ActiveRecord
         $strDivResponsableText .= empty($objComercial->cod_postal) ? "":$objComercial->cod_postal."&nbsp;&nbsp;";
         $strDivResponsableText .= empty($objComercial->poblacion) ? "":$objComercial->poblacion."&nbsp;&nbsp;";
         $strDivResponsableText .= empty($objComercial->email) ? "":"Email: ".$objComercial->email."&nbsp;&nbsp;";
-        $strDivResponsableText .= empty($objComercial->email) ? "":"Teléfono: ".$objComercial->telefono."&nbsp;&nbsp;";
+        $strDivResponsableText .= empty($objComercial->email) ? "":Yii::t('app', 'Telefono').": ".$objComercial->telefono."&nbsp;&nbsp;";
         $strDivResponsableText .= empty($objComercial->email) ? "":"Movíl: ".$objComercial->movil."<br/>";
-        $strDivResponsableText .= "<strong>Responsable</strong><br/>";
+        $strDivResponsableText .= "<strong>".Yii::t('app', 'Responsable')."</strong><br/>";
         $strDivResponsableText .= empty($arrResponsable['documento']) ? "":$arrResponsable['documento'] ."&nbsp;&nbsp;";
         $strDivResponsableText .= empty($arrResponsable['nombre']) ? "":$arrResponsable['nombre'] ."<br/>";
         $strDivResponsableText .= empty($arrResponsable['telefono']) ? "":$arrResponsable['telefono'] ;
@@ -232,7 +232,7 @@ class Registro extends \yii\db\ActiveRecord
         $addHtmlRows = '';
         if(count($arrParams['llaves'])){
             foreach ($arrParams['llaves'] as $valueLlave){
-                $valueLlave->status = ($valueLlave->status=='E')?'Entrada':'Salida';
+                $valueLlave->status = ($valueLlave->status=='E')?Yii::t('app', 'Entrada'):Yii::t('app', 'Salida') ;
                 $addHtmlRows .="<tr>
                                  <td>".$valueLlave->status."</td>
                                  <td>".$valueLlave->codigo."</td>
@@ -257,13 +257,13 @@ class Registro extends \yii\db\ActiveRecord
                                           ".Yii::$app->params['direccion']." 
                                           ".Yii::$app->params['poblacion']."<br>
                                           Email: ".Yii::$app->params['email'].". 
-                                          Teléfono: ".Yii::$app->params['telefono'].". &nbsp;&nbsp;
-                                          Movíl: ".Yii::$app->params['movil']."&nbsp;&nbsp;
+                                          ".Yii::t('app', 'Telefono').": ".Yii::$app->params['telefono'].". &nbsp;&nbsp;
+                                           ".Yii::$app->params['movil']."&nbsp;&nbsp;
                                         </address>
                                       </td>
                                     </tr>
                                     <tr>
-                                     <th align='center' style='padding-top: 15px'><h4><address>ALBARÀ - CONTROL DE LLIURAMENT DE CLAUS</address></h4></th>
+                                     <th align='center' style='padding-top: 15px'><h4><address>".Yii::t('app', 'ALBARÁ - CONTROL DE ENTREGA DE LLAVES')."</address></h4></th>
                                    </tr>
                                   </table>
                                 </div>
@@ -272,9 +272,9 @@ class Registro extends \yii\db\ActiveRecord
                             <div class='row'>
                                 <table class=\"table\">
                                   <tr>
-                                    <td style='text-align: right; width: 25%;font-weight: bold'>DATA LLIURAMENT:</td>
+                                    <td style='text-align: right; width: 25%;font-weight: bold'>".Yii::t('app', 'FECHA ENTREGA').":</td>
                                     <td style='text-align: left; width: 25%'>".util::getDateTimeFormatedSqlToUser($objRegistro->getFechaRegistro())."</td>
-                                    <td style='text-align: right; width: 25%;font-weight: bold'>No. OPERACIÓ:</td>
+                                    <td style='text-align: right; width: 25%;font-weight: bold'>".Yii::t('app', 'No. OPERACION').":</td>
                                     <td style='text-align: left; width: 25%'>".str_pad($objRegistro->id, 6, "0", STR_PAD_LEFT)."</td>
                                   </tr>
                                 </table>
@@ -283,8 +283,8 @@ class Registro extends \yii\db\ActiveRecord
                                 <div class='table-responsive'>
                                     <table class='table'>
                                     <tbody><tr>
-                                        <th style='width:50%;text-align: center'>ENTREGAT PER</th>
-                                        <th style='width:50%;text-align: center'>ENTREGAT A </th>
+                                        <th style='width:50%;text-align: center'>".Yii::t('app', 'ENTREGADO POR')."</th>
+                                        <th style='width:50%;text-align: center'>".Yii::t('app', 'ENTREGADO A')."</th>
                                     </tr><tr>
                                         <td style='width:50%'>".$objRegistro->user->userInfo->nombres." ".$objRegistro->user->userInfo->apellidos."</td>
                                         <td style='width:50%;text-align: left'>$strDivResponsableText</td>
@@ -298,11 +298,11 @@ class Registro extends \yii\db\ActiveRecord
                             <table class=\"table table-striped small\">
                               <thead>
                               <tr>
-                                <th style=\"width:9% \">Acción</th>
-                                <th style=\"width:10%\">Código</th>
-                                <th style=\"width:31%\">Descripción</th>
-                                <th style=\"width:25%\">Cliente</th>
-                                <th style=\"width:25%\">Propietario</th>
+                                <th style=\"width:9% \">".Yii::t('app', 'Acción')."</th>
+                                <th style=\"width:10%\">".Yii::t('app', 'Código')."</th>
+                                <th style=\"width:31%\">".Yii::t('app', 'Descripción')."</th>
+                                <th style=\"width:25%\">".Yii::t('app', 'Cliente')."</th>
+                                <th style=\"width:25%\">".Yii::t('app', 'Propietario')."</th>
                               </tr>
                               </thead>
                               <tbody>
@@ -316,7 +316,7 @@ class Registro extends \yii\db\ActiveRecord
         $strHtmlFooter = "<div class=\"row\">
                           <div class=\"col-12\">
                             <p style=\"margin-top: 10px; text-align: center \">
-                              INCIDÈNCIES I COMENTARIS
+                              ".Yii::t('app', 'INCIDENCIAS Y COMENTARIOS')."
                             </p>
                           </div>
                           <!-- -->
@@ -329,8 +329,8 @@ class Registro extends \yii\db\ActiveRecord
                             <div class='table-responsive'>
                                 <table class='table'>
                                 <tbody><tr>
-                                    <th  style='width:50%;text-align: center'>FIRMA LLIURADOR</th>
-                                    <th style='width:50%;text-align: center'>FIRMA RECEPTOR</th>
+                                    <th  style='width:50%;text-align: center'>".Yii::t('app', 'FIRMA ENTREGA')."</th>
+                                    <th style='width:50%;text-align: center'>".Yii::t('app', 'FIRMA RECEPTOR')."</th>
                                 </tr><tr>
                                     <td style='width:50%'>x.</td>
                                     <td style='width:50%'>x.".$strFirma."</td>
@@ -341,7 +341,9 @@ class Registro extends \yii\db\ActiveRecord
                           <!-- -->
                           <div class=\"col-12\">
                             <p class=\"text-muted well well-sm shadow-none small\" style=\"margin-top: 10px; text-align: justify \">
-                              Les claus s'han de retornar a SALVADÓ i GUBERT, a la mateixa oficina on s'han lliurat i en un termini de 24 hores des del lliurament. En cas contrari, el receptor ha d'informar de la causa del retard i la data estimada de retorn.
+                              ".Yii::t('app', 'Las claves deben devolverse a')."
+                              ".Yii::$app->params['empresa']."
+                              ".Yii::t('app', ', en la misma oficina donde se han entregado y en un plazo de 24 horas desde la entrega. En caso contrario, el receptor informará de la causa del retraso y la fecha estimada de retorno.')."
                             </p>
                           </div>  
                         </div>";

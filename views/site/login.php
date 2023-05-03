@@ -111,7 +111,7 @@ $this->registerCssFile("@web/css/login.css", []);
 </div>
     <!-- /.login-card-body -->
     <div class=" h-100 d-flex align-items-center justify-content-center" >
-        <?= Html::img('@web/img/empresa.jpg', ['width' => 320, 'alt' => 'Empresa']); ?><br>
+        <?= Html::img('@web/img/empresa_V.png', ['width' => 200, 'alt' => 'Empresa']); ?><br>
     </div>
 <?php
 
