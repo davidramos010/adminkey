@@ -304,10 +304,3 @@ function findManualKeys() {
         });
 
 }
-
-/**
- *
- */
-function addSelectionKey(estado,idLlave){
-    alert(idLlave);
-}

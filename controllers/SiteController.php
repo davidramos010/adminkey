@@ -286,7 +286,6 @@ class SiteController extends BaseController
                     $numCantidad--;
                 }
 
-
             }
         }
     }
@@ -314,28 +313,29 @@ class SiteController extends BaseController
                 $strDocumento = null;
                 $strNombreResponsable = strtoupper(trim($line[11]));
                 $strTelefonoResponsable= strtoupper(trim($line[12]));
-
                 $strObservaciones = strtoupper(trim($line[13]));
-
 
                 // consultar llave por codigo
                 $objLlave = Llave::find()->andFilterWhere(['like', 'codigo', $strCodeLlave])->orderBy('codigo ASC')->one();
                 if(empty($objLlave)){
-                    echo "FILA $numRow - Llave no encontrada \n";
+                    echo "FILA $numRow - Llave no encontrada - ".addslashes($strCodeLlave)." \n";
                     continue;
                 }
                 // buscar usuario
                 $objUser = User::find()->andFilterWhere(['like', 'username', $strUser])->one();
                 if(empty($objUser)){
-                    echo "FILA $numRow - Usuario no encontrado \n";
+                    echo "FILA $numRow - Usuario no encontrado - ".addslashes($strUser)." \n";
                     continue;
                 }
                 // buscar comercial asignado
                 $objComercial = Comerciales::find()->andFilterWhere(['like', 'nombre', $strComercial])->one();
                 if(empty($objComercial)){
-                    echo "FILA $numRow - Comercial no encontrado \n";
+                    echo "FILA $numRow - Comercial no encontrado - ".addslashes($strComercial)." \n";
                     continue;
                 }
+
+                //$connection = Yii::$app->db;
+                //$transaction = $connection->beginTransaction();
                 // nuevo registr
                 $newRegistro = new Registro();
                 $newRegistro->id = $numId;
@@ -355,11 +355,9 @@ class SiteController extends BaseController
                     $newStatus->id_registro = $newRegistro->id;
                     if(!$newStatus->save()){
                         echo "FILA $numRow - Registro-status no creado \n";
-                        continue;
                     }
                 }else{
                     echo "FILA $numRow - Registro no creado \n";
-                    continue;
                 }
             }
         }

@@ -728,6 +728,7 @@ return [
     'Nombre Persona Retira' => '',
     'Nombre de la campaña' => '',
     'Nombre empresa' => '',
+    'Nombre de quien retira la llave' => 'Nom de qui retira la clau',
     'Norton' => '',
     'Nota' => '',
     'Nota  Satisfaccion' => '',

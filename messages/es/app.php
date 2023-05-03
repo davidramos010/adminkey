@@ -42,7 +42,7 @@ return [
     'Tipo Documento' => 'Tipo Documento',
     'Documento' => 'Documento',
     'Nombre Reponsable' => 'Nombre Reponsable',
-    'Telefono' => 'Telefono',
+    'Telefono' => 'Teléfono',
     'Observaciones' => 'Observaciones',
 
     'arrLlavesFecha15'=> 'Iniciar proceso de recuperación de llaves - Urgente!!',

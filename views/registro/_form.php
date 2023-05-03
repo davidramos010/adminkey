@@ -82,6 +82,11 @@ use yii\widgets\ActiveForm;
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-6">
+                            <?= $form->field($model, 'nombre_responsable')->textInput(['maxlength' => true, 'class' => 'form-control'])->label(Yii::t('app', 'Nombre de quien retira la llave')) ?>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-2">
                             <?= $form->field($model, 'tipo_documento')->dropDownList(util::arrTipoDocumentos, ['class' => 'form-control', 'prompt' => 'Seleccione Uno'])->label(Yii::t('app', 'Tipo') . ' Doc.'); ?>
                         </div>
@@ -92,11 +97,7 @@ use yii\widgets\ActiveForm;
                             <?= $form->field($model, 'telefono')->textInput(['maxlength' => true, 'class' => 'form-control'])->label(Yii::t('app', 'Telefono')) ?>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <?= $form->field($model, 'nombre_responsable')->textInput(['maxlength' => true, 'class' => 'form-control'])->label(Yii::t('app', 'Nombre Responsable')) ?>
-                        </div>
-                    </div>
+
                 </div>
                 <hr class="mt-2 mb-3"/>
                 <!-- .ini table -->
@@ -210,7 +211,6 @@ use yii\widgets\ActiveForm;
                         </div>
                         <div class="card-body">
                             <?= Html::button(Yii::t('app', 'Limpiar'), ['id' => 'btn_limpiar', 'class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { fnLimpiarCuadroFirma() })();']); ?>
-                            <?php //echo Html::button(Yii::t('app', 'Guardar'), ['id' => 'btn_guardar', 'class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { fnGuardarCuadroFirma() })();']); ?>
                         </div>
                         <div class="card-footer text-muted">
                             <?= SignatureWidget::widget(['clear' => true, 'url' => '../registro/add-firma', 'save_server' => true]); ?>
@@ -230,13 +230,13 @@ use yii\widgets\ActiveForm;
 <?php
 $this->registerJs('
         var fieldsChanged = false;
-        $(document).on("change", "#form-registro :input", function(){
+        /*$(document).on("change", "#form-registro :input", function(){
             fieldsChanged = true;
         });
         $(window).on("beforeunload", function(){
             if(fieldsChanged)
                return "Tiene cambios sin guardar, ¿está seguro de que desea salir de esta página?";
-        });
+        });*/
 ');
 
 $this->registerJs(
