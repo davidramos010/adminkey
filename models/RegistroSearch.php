@@ -78,6 +78,7 @@ class RegistroSearch extends Registro
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
         ]);
 
         $this->load($params);
@@ -129,7 +130,7 @@ class RegistroSearch extends Registro
             $query->andHaving("propietarios like :P",[':P' => "%".$this->propietarios."%"]);
         }
 
-        $query->orderBy('r.id DESC');
+        //$query->orderBy('r.id DESC');
 
         return $dataProvider;
     }
