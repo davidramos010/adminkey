@@ -65,13 +65,13 @@ $this->registerJsFile('@web/js/llave.js');
                         }
                     ],
                     [
-                        'attribute' => 'id_comunidad',
+                        'attribute' => 'cliente_comunidad',
                         'label' => 'Cliente',
                         'headerOptions' => ['style' => 'width: 15%'],
                         'enableSorting'=>false,
                         'format' => 'raw',
                         'value' => function($model){
-                            return (isset($model->comunidad))?strtoupper($model->comunidad->nombre):'' ;
+                            return (isset($model->cliente_comunidad))?strtoupper($model->cliente_comunidad):'' ;
                         }
                     ],
                     [
