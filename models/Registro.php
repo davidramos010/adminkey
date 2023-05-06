@@ -41,6 +41,9 @@ class Registro extends \yii\db\ActiveRecord
     public $llaves_e = null;
     public $llaves_s = null;
     public $fecha_registro = null;
+
+    private CONST ARR_SALIDAS = ['S','SALIDA'];
+    private CONST ARR_ENTRADAS = ['E','ENTRADA'];
     /**
      * {@inheritdoc}
      */
@@ -448,9 +451,6 @@ class Registro extends \yii\db\ActiveRecord
                 $registrosTotal++;
                 $numFilaArchivo = ($file_key+2);
                 $numId = $line['ID'];
-                if((int) $numId == 65){
-                    $n = 1;
-                }
                 $strFechaReg = $line['FECHA'];
                 $strHoraReg = $line['HORA'];
                 $strStatus = $line['TIPO'];
@@ -502,8 +502,8 @@ class Registro extends \yii\db\ActiveRecord
                     $newRegistro = new Registro();
                     $newRegistro->id = empty($numId)?NULL:$numId;
                     $newRegistro->id_user = $objUser->id;
-                    $newRegistro->id_llave = $objLlave->id;
-                    if ($strStatus == 'S') {
+                    $newRegistro->id_llave = $objLlave->id; 
+                    if (in_array(strtoupper($strStatus),self::ARR_SALIDAS)) {
                         $newRegistro->salida = util::getDateTimeFormatedUserToSql($strFechaReg . ' ' . $strHoraReg);
                     } else {
                         $newRegistro->entrada = util::getDateTimeFormatedUserToSql($strFechaReg . ' ' . $strHoraReg);
