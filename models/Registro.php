@@ -203,7 +203,6 @@ class Registro extends \yii\db\ActiveRecord
         return $query->all();
     }
 
-
     /**
      * Retrono HTML de certificado de entrga y/o devolución
      * @return string
@@ -212,7 +211,10 @@ class Registro extends \yii\db\ActiveRecord
 
         $objComercial = $arrParams['comercial'];
         $objRegistro = $arrParams['registro'];
+
         $strFirma =  (!empty($objRegistro->firma_soporte))?"<img src='".Url::to('@app/web/firmas/'.$objRegistro->firma_soporte)."' width='150'>":"";
+        $strCodeBarra64 = (!empty($arrParams['code']))?str_replace(' ','+',$arrParams['code']):'';
+        $strCodBarra =  (!empty($strCodeBarra64))?"<img src='data:image/png;base64,".$strCodeBarra64."' width='200'>":"";
 
         $arrResponsable['nombre'] = trim(strtoupper($objRegistro->nombre_responsable));
         $arrResponsable['documento'] = (!empty($objRegistro->documento) && !empty($objRegistro->tipo_documento) && isset(util::arrTipoDocumentos[$objRegistro->tipo_documento]))?util::arrTipoDocumentos[$objRegistro->tipo_documento].' ':'';
@@ -267,6 +269,9 @@ class Registro extends \yii\db\ActiveRecord
                                     </tr>
                                     <tr>
                                      <th align='center' style='padding-top: 15px'><h4><address>".Yii::t('app', 'ALBARÁ - CONTROL DE ENTREGA DE LLAVES')."</address></h4></th>
+                                   </tr>
+                                   <tr>
+                                     <th align='center' style='padding-top: 15px'>". $strCodBarra ."</th>
                                    </tr>
                                   </table>
                                 </div>

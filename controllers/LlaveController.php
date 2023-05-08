@@ -216,7 +216,7 @@ class LlaveController extends BaseController
     }
 
     /**
-     * buscar movimientos - retorna un arreglo con los resgistros de los movimientos
+     * buscar movimientos - retorna un arreglo con los registros de los movimientos
      * @return false|string
      */
     public function actionAjaxFindStatus():string
@@ -224,7 +224,7 @@ class LlaveController extends BaseController
         $arrParam   = $this->request->post();
         $numIdLlave = $arrParam['numIdLlave'];
         $strTableTr = "";
-        $arrStatus = LlaveStatus::find()->where(['id_llave'=>$numIdLlave])->orderBy('id DESC')->all();
+        $arrStatus = LlaveStatus::find()->where(['id_llave'=>$numIdLlave])->orderBy('fecha DESC')->all();
         if(count($arrStatus)){
             foreach ($arrStatus as $modelStatus){
                 $modelStatus->status = ($modelStatus->status=='S')?'<span class="float-none badge bg-danger">'.Yii::t('app','Exit').'</span>':'<span class="float-none badge bg-success">'.Yii::t('app','Entry').'</span>';

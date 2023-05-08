@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use barcode\barcode\BarcodeGenerator as BarcodeGenerator;
+use barcode\barcode\BarcodeGenerator;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Comunidad */

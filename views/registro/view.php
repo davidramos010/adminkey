@@ -1,7 +1,9 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 <?php
 
 use app\models\Registro;
 use app\models\util;
+use barcode\barcode\BarcodeGenerator;
 use kartik\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -55,9 +57,46 @@ $arrColumns = [[
 $bolVisibleGridSalida = $arrInfoStatusS->getTotalCount()>0 ? 'inline' : 'none';
 $bolVisibleGridEntrada = $arrInfoStatusE->getTotalCount()>0 ? 'inline' : 'none';
 
+$optionsArray = array(
+    'elementId'=> 'showBarcode', /* div or canvas id*/
+    'value'=> strtoupper(str_pad($model->codigo, 8, " ", STR_PAD_LEFT)),  /* value for EAN 13 be careful to set right values for each barcode type */
+    'type'=>'code39',/*supported types  ean8, ean13, upc, std25, int25, code11, code39, code93, code128, codabar, msi, datamatrix*/
+    'settings'=>array(
+        'output'=>'css' /*css, bmp, canvas note- bmp and canvas incompatible wtih IE*/,
+        /*if the output setting canvas*/
+        'posX' => 10,
+        'posY' => 20,
+        /* */
+        'bgColor'=>'1', /*background color*/
+        'color' => '#000', /*"1" Bars color*/
+        'barWidth' => 2,
+        'barHeight' => 20,
+        'fontSize' => 12,
+        /*-----------below settings only for datamatrix--------------------*/
+        'moduleSize' => 6,
+        'addQuietZone' => 0, /*Quiet Zone Modules */
+    ),
+);
+
+echo BarcodeGenerator::widget($optionsArray);
 ?>
+<!-- Este div almacena la imagen que se transfiere al pdf -->
+<div id="copyDiv" style="display: none"></div>
 <div class="registro-view">
     <div class="ribbon_wrap">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="d-flex justify-content-center" id="showBarcodeImg">
+                        <table style="max-width: 200px; max-height: 170px;">
+                            <tr> <td style=" text-align: center; height: 15px">Registro: <?= str_pad($model->id, 8, "0", STR_PAD_LEFT) ?></td></tr>
+                            <tr> <td style="height: 26px"><div id="showBarcode" ></div></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- general form elements -->
         <div class="card card-primary" style="display:<?= $bolVisibleGridSalida ?>">
             <div class="card-header">
@@ -135,10 +174,22 @@ $bolVisibleGridEntrada = $arrInfoStatusE->getTotalCount()>0 ? 'inline' : 'none';
                     </div>
                 </div>
                 <div style="padding-top: 15px">
+
+                    <?= Html::button('<i class="fas fa-download"></i> Imprimir', ['id' => 'btn_print', 'class' => 'btn btn-primary float-left', 'onclick' => '(function ( $event ) { generatePdfRegistro( ' . $model->id . ' ) })();', 'style' => 'margin-right: 5px;']); ?>
+                    <?= Html::button('<i class="fas fa-key"></i> Procesar Registros', ['id' => 'btn_print', 'class' => 'btn btn-info float-left', 'onclick' => '(function ( $event ) { generatePdfRegistro( ' . $model->id . ' ) })();', 'style' => 'margin-right: 5px;']); ?>
                     <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
-                    <?= Html::button('<i class="fas fa-download"></i> Imprimir', ['id' => 'btn_registrar', 'class' => 'btn btn-primary float-left', 'onclick' => '(function ( $event ) { generatePdfRegistro( ' . $model->id . ' ) })();', 'style' => 'margin-right: 5px;']); ?>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<?php
+
+$this->registerJs(
+    '$("document").ready(function(){ 
+            getBase64Image();
+         });'
+);
+
+?>

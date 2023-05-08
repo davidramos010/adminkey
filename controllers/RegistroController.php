@@ -280,7 +280,7 @@ class RegistroController extends BaseController
      * Generacion de reoprte pdf
      * @return mixed
      */
-    public function actionPrintRegister($id = null)
+    public function actionPrintRegister($id = null,$code='')
     {
         if (empty($id)) {
             return false;
@@ -289,12 +289,13 @@ class RegistroController extends BaseController
         $newObjRegistro = new Registro();
         $newObjRegistro->id = $id;
         $arrParams = $newObjRegistro->getInfoRegistro($id);
+        $arrParams['code'] = $code;
         // get your HTML raw content without any layouts or scripts
         $content = $newObjRegistro->getHtmlAceptacion($arrParams);
         // setup kartik\mpdf\Pdf component
         $pdf = new Pdf([
             // set to use core fonts only
-            'mode' => Pdf::MODE_CORE,
+            'mode' => Pdf::MODE_UTF8,
             // A4 paper format
             'format' => Pdf::FORMAT_A4,
             // portrait orientation

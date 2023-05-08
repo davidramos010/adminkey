@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use barcode\barcode\BarcodeGenerator as BarcodeGenerator;
+use barcode\barcode\BarcodeGenerator;
 use yii\bootstrap\Modal;
 
 $this->registerJsFile('@web/js/llave.js');
