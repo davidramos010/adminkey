@@ -1,5 +1,6 @@
 var listKeyEntrada = [];
 var listKeySalida = [];
+var dataURL;
 
 /**
  * adicion de llave
@@ -196,7 +197,8 @@ function fnGuardarCuadroFirma(numIdRegistro){
  * Genera pdf de registro
  */
 function generatePdfRegistro(numIdRegistro){
-    var win = window.open('/registro/print-register?id='+numIdRegistro, '_blank');
+    var code64 = getBase64ImageCode();
+    var win = window.open('/registro/print-register?id='+numIdRegistro+'&code='+code64, '_blank');
     if (win) {
         //Browser has allowed it to be opened
         win.focus();
@@ -303,4 +305,20 @@ function findManualKeys() {
             dom_resultado.html(res ? res.responseText : 'Algo no ha funcionado bien!')
         });
 
+}
+
+function getBase64Image() {
+    var element = $("#showBarcode"); // global variable
+    var getCanvas; // global variable
+    html2canvas(element, {
+        onrendered: function (canvas) {
+            $("#copyDiv").append(canvas);
+            getCanvas = canvas;
+            dataURL = canvas.toDataURL("image/png");
+        }
+    });
+}
+
+function getBase64ImageCode(){
+    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
 }
