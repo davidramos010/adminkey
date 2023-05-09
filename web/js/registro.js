@@ -105,7 +105,7 @@ function addKeyForm(code,operacion,modal)
  */
 function fnLoadRegistro(numIdRegistro)
 {
-    let url = '../ajax-find-keys-register';
+    let url = strAjaxFindKeys;
     var strTable = 'tblKeyEntrada';
     var bolInserRow = true;
 
@@ -298,7 +298,7 @@ function procesarResultadosComercial(data) {
 function setCopyDataContacto(){
 
     let numIdResponsable = $('#id_comercial').val();
-    let url = '../registro/ajax-find-comercial';
+    let url = strAjaxFindComercial;//'../registro/ajax-find-comercial';
     $.ajax({
         url: url,
         dataType: 'JSON',
@@ -353,7 +353,7 @@ function tratarRespuestaExito(mensaje) {
  * Adicionar llaves manualmente al registros de movimientos
  */
 function findManualKeys() {
-    let url = '../llave/ajax-find-manual';
+    let url = strAjaxFindManual;//'../llave/ajax-find-manual';
     let formFindKays = $('#formFindKeys').serialize();
     let dom_resultado = $('#modal-llaves-contenido-table');
 
