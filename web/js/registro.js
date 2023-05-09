@@ -2,6 +2,7 @@ var listKeyEntrada = [];
 var listKeySalida = [];
 var dataURL;
 
+
 /**
  * adicion de llave
  */
@@ -17,7 +18,7 @@ function addKey()
  */
 function addKeyForm(code,operacion,modal)
 {
-    let url = '../registro/ajax-add-key';
+    let url = strAjaxAddKey;
     var strTable = 'tblKeyEntrada';
     if(operacion=='E'){
         strTable = 'tblKeyEntrada';
@@ -36,7 +37,7 @@ function addKeyForm(code,operacion,modal)
         },
 
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             //Validar que no exista
             var bolInserRow = true;
 
@@ -98,6 +99,77 @@ function addKeyForm(code,operacion,modal)
     });
 }
 
+
+/**
+ * Funcionalidad de adiciond de llaves al listado, esta se ejecuta cargando toda la info del movimiento
+ */
+function fnLoadRegistro(numIdRegistro)
+{
+    let url = '../ajax-find-keys-register';
+    var strTable = 'tblKeyEntrada';
+    var bolInserRow = true;
+
+    $.ajax({
+        url: url,
+        dataType: 'JSON',
+        type: 'GET',
+        data: {
+            "numIdRegistro": numIdRegistro
+        },
+        success: function (data) {
+            data.all.forEach(function(data) {
+                bolInserRow = true;
+                if (data.status != data.llaveLastStatus) {
+                    let strEstado = (data.llaveLastStatus == 'E') ? 'Entrada' : 'Salida';
+                    toastr.warning('La llave ' + data.codigo + ' tiene una ' + strEstado + ' activa, valide el estado actual.');
+                    bolInserRow = false;
+                    return;
+                }
+                //Validar operacion - inversa
+                operacion = data.status == 'E' ? 'S' : 'E';
+                if (operacion == 'E') { // Entrada-retorno
+                    strTable = 'tblKeyEntrada';
+                    $('#custom-tabs-entrada-tab').click();
+                    strDiv = '<div class="alert alert-danger alert-dismissible"><i class="fas fa-plus"></i>';
+                } else { // prestamo - entrega de llave a externos
+                    strTable = 'tblKeySalida';
+                    strDiv = '<div class="alert alert-success alert-dismissible"><i class="fas fa-plus"></i>';
+                }
+
+                if (operacion == 'E') {
+                    listKeyEntrada.forEach(function (key, index, object) {
+                        if (parseInt(key) === parseInt(data.llave_id)) {
+                            bolInserRow = false;
+                        }
+                    });
+                } else {
+                    listKeySalida.forEach(function (key, index, object) {
+                        if (parseInt(key) === parseInt(data.llave_id)) {
+                            bolInserRow = false;
+                        }
+                    });
+                }
+
+                if(bolInserRow==true){
+                    $('#'+strTable+' tbody') // select table tbody
+                        .prepend('<tr id="tr_'+data.llave_id+'" />') // prepend table row
+                        .children('tr:first') // select row we just created
+                        .append('<td>'+strDiv+' '+data.codigo+'</div></td>\n' +
+                            '<td>'+data.descripcion_llave+'</td>\n' +
+                            '<td>'+data.cliente+'</td>\n' +
+                            '<td><button type="button" class="btn btn-outline-danger btn-block btn-sm" onclick="delKey('+data.llave_id+')"><i class="fas fa-times-circle"></i></button> </td>') // append four table cells to the row we created
+
+                    if(operacion=='E'){
+                        listKeyEntrada.push(data.llave_id);
+                    }else{
+                        listKeySalida.push(data.llave_id);
+                    }
+                }
+            });
+        }
+    });
+}
+
 /**
  * Eliminar fila del resgitro
  * @param id
@@ -126,10 +198,8 @@ function delKey(id)
  * Envio de formulario
  */
 function sendForm()
-{   //https://github.com/inquid/yii2-signature/blob/master/assets/app.js
-    let url = '../registro/ajax-register-motion';
-    let numIdRegistro = null;
-
+{
+    let url = strAjaxRegisterMotion;
     var form = $('#form-registro');
     var formData = form.serialize();
 
@@ -139,7 +209,6 @@ function sendForm()
         type: 'POST',
         data: formData+"&listKeyEntrada="+JSON.parse(JSON.stringify(listKeyEntrada))+"&listKeySalida="+JSON.parse(JSON.stringify(listKeySalida)),
         success: function (data) {
-            numIdRegistro = 9;//data.registro_id;
             listKeyEntrada.forEach(function(key, index, object) {
              object.splice(index, 1);
              $('#tr_'+index).remove();
@@ -158,12 +227,11 @@ function sendForm()
             $('#btn_registrar').attr('readonly', true);
 
             if (!signaturePad.isEmpty()) {
-                fnGuardarCuadroFirma(numIdRegistro);
+                fnGuardarCuadroFirma();
             }else {
                 toastr.warning('El registro no incluye firma digital.');
-                setTimeout("location.reload(true);",600);
+                setTimeout("window.location = strUrl;",600);
             }
-
         }
     });
 }
@@ -187,10 +255,11 @@ function fnLimpiarCuadroFirma(){
 /**
  * guardar firma
  */
-function fnGuardarCuadroFirma(numIdRegistro){
+function fnGuardarCuadroFirma(){
     var objButtonClear = $(".signature-pad--actions").find("[data-action='save-server']");
     objButtonClear.click();
-    setTimeout("location.reload(true);",600);
+    setTimeout("window.location = strUrl",600);
+
 }
 
 /**

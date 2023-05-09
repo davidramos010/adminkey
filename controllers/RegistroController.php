@@ -2,8 +2,6 @@
 
 namespace app\controllers;
 
-use app\components\ValidadorCsv;
-use app\models\Codipostal;
 use app\models\Comerciales;
 use app\models\Comunidad;
 use app\models\Llave;
@@ -11,13 +9,11 @@ use app\models\LlaveStatus;
 use app\models\Propietarios;
 use app\models\Registro;
 use app\models\RegistroSearch;
-use app\models\User;
 use kartik\mpdf\Pdf;
 use yii\filters\AccessControl;
-use yii\web\Controller;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\Response;
 use Yii;
 
 /**
@@ -94,6 +90,8 @@ class RegistroController extends BaseController
     public function actionCreate()
     {
         $model = new Registro();
+        $strSalida = '';
+        $strEntrada = '';
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -102,8 +100,16 @@ class RegistroController extends BaseController
             $model->loadDefaultValues();
         }
 
+        //Cargar datos de un albaran existente
+        if(!empty($this->request->get()) && isset($this->request->get()['id'])){
+            $nunIdMov = !empty($this->request->get()['id'])? (int) $this->request->get()['id'] : null;
+            $model = $nunIdMov ? $this->findModel($nunIdMov) : $model;
+        }
+
         return $this->render('create', [
             'model' => $model,
+            'tabla_salida'=> $strSalida,
+            'tabla_entrada'=> $strEntrada,
         ]);
     }
 
@@ -169,6 +175,17 @@ class RegistroController extends BaseController
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+
+    /**
+     * ajax-find-keys-register
+     * @return void
+     */
+    public function actionAjaxFindKeysRegister(){
+        $numIdRegistro = (!empty($this->request->get()) && isset($this->request->get()['numIdRegistro'])) ? (int) trim($this->request->get()['numIdRegistro']) : null;
+        $model = $numIdRegistro ? $this->findModel($numIdRegistro) : null;
+        $arrParamsAll = $model->getInfoByParamsStatus();
+        return json_encode(['all' => $arrParamsAll]);
     }
 
     /**

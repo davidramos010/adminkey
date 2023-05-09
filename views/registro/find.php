@@ -1,11 +1,12 @@
 <?php
 
 use app\models\Llave;
+use app\models\LlaveSearch;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 
 $this->registerJsFile('@web/js/registro.js');
-$model = new \app\models\LlaveSearch();
+$model = new LlaveSearch();
 ?>
 <!-- form start -->
 <!-- info modal -->
@@ -30,17 +31,20 @@ $model = new \app\models\LlaveSearch();
                     <div class="card-body login-card-body">
                         <div class="row">
                             <div class="col-3">
-                                <?= $form->field($model, 'codigo')->label('Cod') ?>
+                                <?= $form->field($model, 'codigo')->label('Cod Llave') ?>
                             </div>
                             <div class="col-9">
                                 <?= $form->field($model, 'descripcion')->label('Descripción') ?>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-2">
+                                <?= $form->field($model, 'nomenclatura')->textInput(['maxlength' => true])->label('Cod Cliente') ?>
+                            </div>
+                            <div class="col-5">
                                 <?= $form->field($model, 'id_comunidad')->dropDownList(Llave::getComunidadesDropdownList(), ['class' => 'form-control', 'prompt' => 'Seleccione Uno', 'data-js-find-nomenclatura' => 'comunidad'])->label(Yii::t('app', 'Comunidad')); ?>
                             </div>
-                            <div class="col-6">
+                            <div class="col-5">
                                 <?= $form->field($model, 'id_propietario')->dropDownList(Llave::getPropietariosDropdownList(), ['id' => 'id_propietario', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'data-js-find-nomenclatura' => 'propietario'])->label(Yii::t('app', 'Propietario')); ?>
                             </div>
                         </div>
