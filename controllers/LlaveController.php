@@ -228,10 +228,11 @@ class LlaveController extends BaseController
         if(count($arrStatus)){
             foreach ($arrStatus as $modelStatus){
                 $modelStatus->status = ($modelStatus->status=='S')?'<span class="float-none badge bg-danger">'.Yii::t('app','Exit').'</span>':'<span class="float-none badge bg-success">'.Yii::t('app','Entry').'</span>';
+                $strComercial = !empty($modelStatus->registro->id_comercial) ? $modelStatus->registro->comerciales->nombre : '';
                 $strTableTr .= "<tr>";
                 $strTableTr .= "<td >".$modelStatus->status."</td>";
                 $strTableTr .= "<td style='font-size: 12px; font-weight: bold'>". substr(util::getDateTimeFormatedSqlToUser($modelStatus->fecha),0,10)   ."</td>";
-                $strTableTr .= "<td style='font-size: 13px; '>".$modelStatus->registro->comerciales->nombre."</td>";
+                $strTableTr .= "<td style='font-size: 13px; '>".$strComercial."</td>";
                 $strTableTr .= "<td style='font-size: 13px; '>".$modelStatus->registro->nombre_responsable."</td>";
                 $strTableTr .= "<td style='font-size: 12px;'>".$modelStatus->registro->observacion."</td></tr>";
             }

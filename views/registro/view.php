@@ -176,7 +176,7 @@ echo BarcodeGenerator::widget($optionsArray);
                 <div style="padding-top: 15px">
 
                     <?= Html::button('<i class="fas fa-download"></i> Imprimir', ['id' => 'btn_print', 'class' => 'btn btn-primary float-left', 'onclick' => '(function ( $event ) { generatePdfRegistro( ' . $model->id . ' ) })();', 'style' => 'margin-right: 5px;']); ?>
-                    <?= Html::button('<i class="fas fa-key"></i> Procesar Registros', ['id' => 'btn_print', 'class' => 'btn btn-info float-left', 'onclick' => '(function ( $event ) { generatePdfRegistro( ' . $model->id . ' ) })();', 'style' => 'margin-right: 5px;']); ?>
+                    <?= Html::a('<i class="fas fa-key"></i> '.Yii::t('app', 'Procesar Registros'), ['registro/create/'.$model->id], ['id' => 'btn_print', 'class' => 'btn btn-info float-left','style' => 'margin-right: 5px;']) ?>
                     <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
                 </div>
             </div>

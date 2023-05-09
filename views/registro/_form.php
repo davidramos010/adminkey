@@ -2,7 +2,6 @@
 
 use app\models\Registro;
 use app\models\util;
-use diggindata\signaturepad\SignaturePadWidget;
 use inquid\signature\SignatureWidget;
 use kartik\widgets\Select2;
 use yii\helpers\Html;
@@ -13,6 +12,12 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\Registro */
 /* @var $form yii\widgets\ActiveForm */
+
+$url_registro_create = Url::toRoute(['registro/create']);
+$ajax_register_motion = Url::toRoute(['registro/ajax-register-motion']);
+$ajax_add_key = Url::toRoute(['registro/ajax-add-key']);
+$url_add_firma = Url::toRoute(['registro/add-firma']);
+
 ?>
 
 <div class="registro-form">
@@ -213,13 +218,13 @@ use yii\widgets\ActiveForm;
                             <?= Html::button(Yii::t('app', 'Limpiar'), ['id' => 'btn_limpiar', 'class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { fnLimpiarCuadroFirma() })();']); ?>
                         </div>
                         <div class="card-footer text-muted">
-                            <?= SignatureWidget::widget(['clear' => true, 'url' => '../registro/add-firma', 'save_server' => true]); ?>
+                            <?= SignatureWidget::widget(['clear' => true, 'url' => $url_add_firma, 'save_server' => true]); ?>
                         </div>
                     </div>
                 </div>
                 <div style="padding-top: 15px">
                     <?= Html::button(Yii::t('app', 'Registrar Movimiento'), ['id' => 'btn_registrar', 'class' => 'btn btn-success', 'onclick' => '(function ( $event ) { sendForm() })();']); ?>
-                    <?= Html::a(Yii::t('app', Yii::t('app', 'Cancelar')), ['index'], ['class' => 'btn btn-default ']) ?>
+                    <?= Html::a(Yii::t('app', Yii::t('app', 'Cancelar')), ['create'], ['class' => 'btn btn-default ']) ?>
                 </div>
             </div>
             <?php ActiveForm::end(); ?>
@@ -228,16 +233,11 @@ use yii\widgets\ActiveForm;
 </div>
 
 <?php
-$this->registerJs('
+
+
+$this->registerJs("
         var fieldsChanged = false;
-        /*$(document).on("change", "#form-registro :input", function(){
-            fieldsChanged = true;
-        });
-        $(window).on("beforeunload", function(){
-            if(fieldsChanged)
-               return "Tiene cambios sin guardar, ¿está seguro de que desea salir de esta página?";
-        });*/
-');
+");
 
 $this->registerJs(
     '$(document).on("click", "[data-js-set-contacto]", function (e) {
@@ -253,8 +253,27 @@ $this->registerJs(
                 }
             });
          });
-         var wrapper = document.getElementById("signature-pad");'
+         var wrapper = document.getElementById("signature-pad");
+         '
 );
 
 $this->registerCss(".signature-pad--actions{ display:none; } ");
+if(!empty($model->id)){
+    $this->registerJs(
+        "$('document').ready(function(){ 
+             fnLoadRegistro($model->id);
+         });"
+    );
+}
+
+$this->registerJs(
+    <<<JS
+    const strUrl = '$url_registro_create';
+    const strAjaxRegisterMotion = '$ajax_register_motion';
+    const strAjaxAddKey = '$ajax_add_key';
+    
+
+JS
+    , $this::POS_HEAD);
+
 ?>

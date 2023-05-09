@@ -18,6 +18,8 @@ class LlaveSearch extends Llave
         return [
             [['id', 'id_comunidad', 'id_tipo', 'copia', 'activa','alarma','id_propietario','facturable'], 'integer'],
             [['codigo', 'descripcion', 'observacion','codigo_alarma','llaveLastStatus','nombre_propietario','cliente_comunidad'], 'safe'],
+            [['nomenclatura'], 'string',  'max' => 4],
+
         ];
     }
 
@@ -50,7 +52,8 @@ class LlaveSearch extends Llave
                 WHEN pp.nombre_propietario IS NOT NULL THEN pp.nombre_propietario
                 WHEN pp.nombre_representante IS NOT NULL THEN pp.nombre_representante
                 ELSE NULL
-            END) as nombre_propietario"
+            END) as nombre_propietario",
+
         ]);
         $query->leftJoin('llave_status ls','ls.id_llave = ll.id and ls.id = (
            SELECT MAX(st.id) 
@@ -109,6 +112,7 @@ class LlaveSearch extends Llave
                 ['like', 'pp.nombre_representante', $this->nombre_propietario]]);
         }
 
+
         return $dataProvider;
     }
 
@@ -133,7 +137,12 @@ class LlaveSearch extends Llave
                 WHEN pp.nombre_propietario IS NOT NULL THEN pp.nombre_propietario
                 WHEN pp.nombre_representante IS NOT NULL THEN pp.nombre_representante
                 ELSE NULL
-            END) as nombre_propietario"
+            END) as nombre_propietario",
+            "(CASE
+                WHEN cc.nomenclatura IS NOT NULL THEN cc.nomenclatura
+                WHEN pp.id IS NOT NULL THEN pp.id
+                ELSE NULL
+              END) as nomenclatura"
         ]);
         $query->leftJoin('llave_status ls','ls.id_llave = ll.id and ls.id = (
            SELECT MAX(st.id) 
@@ -192,8 +201,17 @@ class LlaveSearch extends Llave
                 ['like', 'pp.nombre_propietario', $this->nombre_propietario],
                 ['like', 'pp.nombre_representante', $this->nombre_propietario]]);
         }
+        // ======================================================
+        // Nomenclatura
+        if(!empty($this->nomenclatura)){
+            $strFindNomenclatura = str_replace(['C','P'],'',$this->nomenclatura);
+            $strFindNomenclatura = str_pad($strFindNomenclatura, 3, "0", STR_PAD_LEFT);
+            $query->andWhere(['or',
+                ['like', 'll.codigo', 'C'.$strFindNomenclatura. '%', false],
+                ['like', 'll.codigo', 'P'.$strFindNomenclatura. '%', false ]]);
+        }
 
-        $query->limit(15);
+        $query->limit(30);
 
         return $query->all();
     }

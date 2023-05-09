@@ -91,4 +91,5 @@ class LlaveStatus extends \yii\db\ActiveRecord
     {
         return new LlaveStatusQuery(get_called_class());
     }
+
 }

@@ -6,6 +6,7 @@ use app\components\ValidadorCsv;
 use phpDocumentor\Reflection\Types\This;
 use Yii;
 use yii\base\Exception;
+use yii\db\Query;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -41,6 +42,7 @@ class Registro extends \yii\db\ActiveRecord
     public $llaves_e = null;
     public $llaves_s = null;
     public $fecha_registro = null;
+    public $status = null;
 
     private CONST ARR_SALIDAS = ['S','SALIDA'];
     private CONST ARR_ENTRADAS = ['E','ENTRADA'];
@@ -81,7 +83,6 @@ class Registro extends \yii\db\ActiveRecord
             'entrada' => 'Entrada',
             'salida' => 'Salida',
             'observacion' => 'Observacion',
-            'id_' => 'Observacion',
             'firma_soporte' => 'Firma Soporte',
             'tipo_documento' => 'Tipo Documento',
             'documento' => 'Documento',
@@ -199,6 +200,57 @@ class Registro extends \yii\db\ActiveRecord
         }
 
         $query->orderBy('r.id DESC');
+
+        return $query->all();
+    }
+
+    /**
+     * Esta funcion retorna datos de la llave
+     * @param $params
+     * @return Registro[]|array|null
+     */
+    public function getInfoByParamsStatus(string $strStatus = '')
+    {
+        $query = new Query();
+        $query->select([
+            'sta.id as id',
+            'sta.fecha as fecha_registro',
+            'r.firma_soporte',
+            'll.codigo',
+            'll.descripcion as descripcion_llave',
+            'u.username',
+            'll.id as llave_id',
+            'cm.nombre as comercial',
+            'sta.status as status',
+            '(CASE
+                WHEN com.nombre IS NOT NULL THEN com.nombre
+                WHEN p.nombre_propietario IS NOT NULL THEN p.nombre_propietario
+                WHEN p.nombre_representante IS NOT NULL THEN p.nombre_representante
+                ELSE NULL
+              END) as cliente',
+            'ls.status as llaveLastStatus',
+        ]);
+        $query->from('llave_status sta');
+        $query->leftJoin('registro r','sta.id_registro = r.id');
+        $query->leftJoin('llave ll','sta.id_llave = ll.id');
+        $query->leftJoin('User u','r.id_user = u.id');
+        $query->leftJoin('comerciales cm','r.id_comercial = cm.id');
+        $query->leftJoin('propietarios p','p.id = ll.id_propietario');
+        $query->leftJoin('comunidad com','com.id = ll.id_comunidad');
+        $query->leftJoin('llave_status ls','ls.id_llave = ll.id and ls.id = (
+           SELECT MAX(st.id) FROM llave_status st WHERE st.id_llave = ll.id
+        )');
+
+        if(!empty( $this->id )){
+            $query->where(['r.id' => $this->id]);
+            $query->andWhere('sta.id_registro =r.id');
+        }
+
+        if(!empty($strStatus)){
+            $query->andWhere(['IN','sta.status',$strStatus]);
+        }
+
+        $query->orderBy('sta.fecha DESC,sta.id DESC');
 
         return $query->all();
     }

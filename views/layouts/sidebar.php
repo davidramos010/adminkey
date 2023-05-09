@@ -62,14 +62,6 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
                         'visible' => ((int) Yii::$app->user->identity->perfiluser->id_perfil==1)
                     ],
                     [
-                        'label' => Yii::t('app','Reportes'),
-                        'icon' => 'fa-solid fa-file-excel',
-                        'items' => [
-                            ['label' => Yii::t('app','Reporte Movimientos'), 'url' => ['registro/index'], 'iconStyle' => 'far'],
-                            ['label' => Yii::t('app','Llaves'), 'url' => ['llave/report'], 'iconStyle' => 'far'],
-                        ],
-                    ],
-                    [
                         'label' => Yii::t('app','Administración'),
                         'icon' => 'fa-solid fa-file-invoice',
                         'items' => [
@@ -77,10 +69,18 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
                         ],
                         'visible' => ((int) Yii::$app->user->identity->perfiluser->id_perfil==1)
                     ],
+                    [
+                        'label' => Yii::t('app','Reportes'),
+                        'icon' => 'fa-solid fa-file-excel',
+                        'items' => [
+                            ['label' => Yii::t('app','Reporte Movimientos'), 'url' => ['registro/index'], 'iconStyle' => 'far'],
+                            ['label' => Yii::t('app','Llaves'), 'url' => ['llave/report'], 'iconStyle' => 'far'],
+                        ],
+                    ],
                     ['label' => Yii::t('app','Registro'),  'icon' => 'fa-solid fa-key', 'url' => ['registro/create']],
                     ['label' => 'Login', 'url' => ['site/login'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
-                    /*['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank','visible' => YII_ENV_DEV],
-                    ['label' => 'Debug', 'icon' => 'bug', 'url' => ['/debug'], 'target' => '_blank','visible' => YII_ENV_DEV],*/
+                    ['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank','visible' => YII_ENV_DEV],
+                    ['label' => 'Debug', 'icon' => 'bug', 'url' => ['/debug'], 'target' => '_blank','visible' => YII_DEBUG],
                 ],
             ]);
             ?>
