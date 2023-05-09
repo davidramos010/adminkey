@@ -15,8 +15,14 @@ use yii\widgets\ActiveForm;
 
 $url_registro_create = Url::toRoute(['registro/create']);
 $ajax_register_motion = Url::toRoute(['registro/ajax-register-motion']);
+$ajax_find_keys = Url::toRoute(['registro/ajax-find-keys-register']);
+$ajax_find_manual = Url::toRoute(['../llave/ajax-find-manual']);
+$ajax_find_comercial = Url::toRoute(['registro/ajax-find-comercial']);
+
 $ajax_add_key = Url::toRoute(['registro/ajax-add-key']);
 $url_add_firma = Url::toRoute(['registro/add-firma']);
+
+
 
 ?>
 
@@ -271,8 +277,10 @@ $this->registerJs(
     const strUrl = '$url_registro_create';
     const strAjaxRegisterMotion = '$ajax_register_motion';
     const strAjaxAddKey = '$ajax_add_key';
+    const strAjaxFindKeys = '$ajax_find_keys';
+    const strAjaxFindManual = '$ajax_find_manual';
+    const strAjaxFindComercial = '$ajax_find_comercial';
     
-
 JS
     , $this::POS_HEAD);
 

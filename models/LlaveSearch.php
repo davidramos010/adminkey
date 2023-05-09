@@ -211,7 +211,7 @@ class LlaveSearch extends Llave
                 ['like', 'll.codigo', 'P'.$strFindNomenclatura. '%', false ]]);
         }
 
-        $query->limit(30);
+        $query->limit(100);
 
         return $query->all();
     }
