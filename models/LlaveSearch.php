@@ -56,9 +56,10 @@ class LlaveSearch extends Llave
 
         ]);
         $query->leftJoin('llave_status ls','ls.id_llave = ll.id and ls.id = (
-           SELECT MAX(st.id) 
+           SELECT st.id
            FROM llave_status st 
            WHERE st.id_llave = ll.id
+           ORDER BY st.fecha DESC limit 1
         )');
 
         $query->leftJoin('propietarios pp','ll.id_propietario = pp.id');
@@ -145,9 +146,10 @@ class LlaveSearch extends Llave
               END) as nomenclatura"
         ]);
         $query->leftJoin('llave_status ls','ls.id_llave = ll.id and ls.id = (
-           SELECT MAX(st.id) 
+           SELECT st.id
            FROM llave_status st 
            WHERE st.id_llave = ll.id
+           ORDER BY st.fecha DESC limit 1
         )');
 
         $query->leftJoin('propietarios pp','ll.id_propietario = pp.id');

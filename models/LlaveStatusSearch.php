@@ -80,7 +80,12 @@ class LlaveStatusSearch extends LlaveStatus
         $fecha_actual = date("d-m-Y");
         $query = LlaveStatus::find()->alias('ls');
         $query->select(["ls.*" ]);
-        $query->innerJoin('( SELECT MAX(id) AS indice ,id_llave FROM llave_status  GROUP BY id_llave  ) lsb','lsb.indice = ls.id');
+        $query->innerJoin('llave_status ls2','ls2.id = ls.id and ls.id_llave = ls2.id_llave and ls2.id = (
+           SELECT st.id
+           FROM llave_status st 
+           WHERE st.id_llave = ls.id_llave
+           ORDER BY st.fecha DESC limit 1
+        )');
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -93,30 +98,29 @@ class LlaveStatusSearch extends LlaveStatus
             // $query->where('0=1');
             return $dataProvider;
         }
+
         // Filtro de fechas
         switch ($numDias){
             case 5:
                 $strFechaConsultaIni = date("Y-m-d 23:00:00",strtotime($fecha_actual."- ".$numDias." days"));
                 $strFechaConsultaFin = date("Y-m-d 00:00:00",strtotime($fecha_actual."- ".($numDias+5)." days"));
-                $query->where(['between', 'fecha', $strFechaConsultaFin, $strFechaConsultaIni]);
+                $query->where(['between', 'ls.fecha', $strFechaConsultaFin, $strFechaConsultaIni]);
                 break;
 
             case 10:
                 $strFechaConsultaIni = date("Y-m-d 23:00:00",strtotime($fecha_actual."- ".($numDias+1)." days"));
                 $strFechaConsultaFin = date("Y-m-d 00:00:00",strtotime($fecha_actual."- ".($numDias+5)." days"));
-                $query->where(['between', 'fecha', $strFechaConsultaFin, $strFechaConsultaIni]);
+                $query->where(['between', 'ls.fecha', $strFechaConsultaFin, $strFechaConsultaIni]);
                 break;
 
             case 15:
             default:
                 $strFechaConsultaIni = date("Y-m-d 23:00:00",strtotime($fecha_actual."- ".$numDias." days"));
-                $query->where(['<=', 'fecha', $strFechaConsultaIni]);
+                $query->where(['<=', 'ls.fecha', $strFechaConsultaIni]);
                 break;
-
         }
 
-        $query->andFilterWhere(['like', 'status', $this->status]);
-
+        $query->andWhere(['like', 'ls.status', $this->status]);
         return $dataProvider;
     }
 
@@ -130,7 +134,9 @@ class LlaveStatusSearch extends LlaveStatus
         $subQuery->select(["COUNT(1) AS total, l.id_comunidad, c.nombre as descripcion,
                             (SELECT COUNT(ls.id_llave) as numSalida
                                 FROM llave_status ls
-                                INNER JOIN ( SELECT MAX(id) AS indice ,id_llave FROM llave_status GROUP BY id_llave  ) AS lsb ON ( lsb.indice = ls.id )
+                                INNER JOIN  llave_status ls2 ON (ls2.id = ls.id and ls2.id_llave = ls.id_llave and ls2.id = (
+                                                                SELECT st.id FROM llave_status st WHERE st.id_llave = ls.id_llave ORDER BY st.fecha DESC limit 1
+                                                                ))
                                 INNER JOIN llave l2 on (ls.id_llave = l2.id )
                                 WHERE ls.status ='S' and l2.id_comunidad = l.id_comunidad
                             ) AS salida" ]);
@@ -169,7 +175,9 @@ class LlaveStatusSearch extends LlaveStatus
                               END) AS descripcion,
                             ( SELECT COUNT(ls.id_llave) as numSalida
                                 FROM llave_status ls
-                                INNER JOIN ( SELECT MAX(id) AS indice ,id_llave FROM llave_status GROUP BY id_llave  ) AS lsb ON ( lsb.indice = ls.id )
+                                INNER JOIN  llave_status ls2 ON (ls2.id = ls.id and ls2.id_llave = ls.id_llave and ls2.id = (
+                                 SELECT st.id FROM llave_status st WHERE st.id_llave = ls.id_llave ORDER BY st.fecha DESC limit 1
+                                ))
                                 INNER JOIN llave l2 on (ls.id_llave = l2.id )
                                 WHERE ls.status ='S' and l2.id_propietario = l.id_propietario
                             ) AS salida" ]);

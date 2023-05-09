@@ -283,7 +283,9 @@ class Llave extends \yii\db\ActiveRecord
         $queryString = '
             SELECT ls.id_llave ,ls.id AS lastid, ls.status
             FROM llave_status ls
-            INNER JOIN ( SELECT MAX(id) AS indice ,id_llave FROM llave_status GROUP BY id_llave  ) AS lsb ON ( lsb.indice = ls.id )
+            INNER JOIN  llave_status ls2 ON (ls2.id = ls.id and ls2.id_llave = ls.id_llave and ls2.id = (
+                SELECT st.id FROM llave_status st WHERE st.id_llave = ls.id_llave ORDER BY st.fecha DESC limit 1
+                ))
             WHERE ls.status ="S"; ';
         $resultadosSalida = $query->createCommand($queryString)->queryAll();
         $numLlavesSalida = (int) count($resultadosSalida);
@@ -325,15 +327,17 @@ class Llave extends \yii\db\ActiveRecord
         }
         // ---------------------------
         // Generar rangos
-        $strAddWere = (!empty($strFechaConsultaFin))? " fecha >='".$strFechaConsultaFin." 00:00:00' AND ":" ";
+        $strAddWere = (!empty($strFechaConsultaFin))? " ls.fecha >='".$strFechaConsultaFin." 00:00:00' AND ":" ";
 
         // ---------------------------
         // Array de llaves con salida en el rango de fechas
         $queryString = "
             SELECT ls.id_llave ,ls.id AS lastid, ls.status,ls.fecha
             FROM llave_status ls
-            INNER JOIN ( SELECT MAX(id) AS indice ,id_llave FROM llave_status GROUP BY id_llave  ) AS lsb ON ( lsb.indice = ls.id )
-            WHERE ls.status ='".$strStatus."' and  $strAddWere fecha <='".$strFechaConsultaIni." 23:00:00'; ";
+            INNER JOIN  llave_status ls2 ON (ls2.id = ls.id and ls2.id_llave = ls.id_llave and ls2.id = (
+                SELECT st.id FROM llave_status st WHERE st.id_llave = ls.id_llave ORDER BY st.fecha DESC limit 1
+                ))
+            WHERE ls.status ='".$strStatus."' and  $strAddWere ls.fecha <='".$strFechaConsultaIni." 23:00:00'; ";
         $resultadosSalida = $query->createCommand($queryString)->queryAll();
      return $resultadosSalida;
     }

@@ -238,7 +238,10 @@ class Registro extends \yii\db\ActiveRecord
         $query->leftJoin('propietarios p','p.id = ll.id_propietario');
         $query->leftJoin('comunidad com','com.id = ll.id_comunidad');
         $query->leftJoin('llave_status ls','ls.id_llave = ll.id and ls.id = (
-           SELECT MAX(st.id) FROM llave_status st WHERE st.id_llave = ll.id
+           SELECT st.id
+           FROM llave_status st 
+           WHERE st.id_llave = ll.id
+           ORDER BY st.fecha DESC limit 1
         )');
 
         if(!empty( $this->id )){
