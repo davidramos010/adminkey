@@ -143,7 +143,10 @@ class LlaveSearch extends Llave
                 WHEN cc.nomenclatura IS NOT NULL THEN cc.nomenclatura
                 WHEN pp.id IS NOT NULL THEN pp.id
                 ELSE NULL
-              END) as nomenclatura"
+              END) as nomenclatura",
+            "cm.nombre as comercial",
+            "rg.nombre_responsable as responsable",
+            "rg.observacion as observacion",
         ]);
         $query->leftJoin('llave_status ls','ls.id_llave = ll.id and ls.id = (
            SELECT st.id
@@ -154,6 +157,8 @@ class LlaveSearch extends Llave
 
         $query->leftJoin('propietarios pp','ll.id_propietario = pp.id');
         $query->leftJoin('comunidad cc','ll.id_comunidad = cc.id');
+        $query->leftJoin('registro rg','ls.status is not null and ls.id_registro = rg.id');
+        $query->leftJoin('comerciales cm','rg.id is not null and rg.id_comercial = cm.id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

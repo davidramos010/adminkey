@@ -377,7 +377,7 @@ function findManualKeys() {
 }
 
 function getBase64Image() {
-    var element = $("#showBarcode"); // global variable
+    /*var element = $("#showBarcode"); // global variable
     var getCanvas; // global variable
     html2canvas(element, {
         onrendered: function (canvas) {
@@ -385,9 +385,10 @@ function getBase64Image() {
             getCanvas = canvas;
             dataURL = canvas.toDataURL("image/png");
         }
-    });
+    });*/
 }
 
 function getBase64ImageCode(){
-    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+    /*return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");*/
+    return '';
 }

@@ -73,8 +73,8 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
                         'label' => Yii::t('app','Reportes'),
                         'icon' => 'fa-solid fa-file-excel',
                         'items' => [
-                            ['label' => Yii::t('app','Reporte Movimientos'), 'url' => ['registro/index'], 'iconStyle' => 'far'],
-                            ['label' => Yii::t('app','Llaves'), 'url' => ['llave/report'], 'iconStyle' => 'far'],
+                            ['label' => Yii::t('app','Albaranes'), 'url' => ['registro/index'], 'iconStyle' => 'far'],
+                            ['label' => Yii::t('app','Existencias Llaves'), 'url' => ['llave/report'], 'iconStyle' => 'far'],
                         ],
                     ],
                     ['label' => Yii::t('app','Registro'),  'icon' => 'fa-solid fa-key', 'url' => ['registro/create']],

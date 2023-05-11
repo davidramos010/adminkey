@@ -71,11 +71,12 @@ $model = new LlaveSearch();
                                     <tr>
                                         <th style="width: 3%"></th>
                                         <th style="width: 7%"><?= Yii::t('app','Cod')?></th>
-                                        <th style="width: 20%"><?= Yii::t('app','Comunidad')?></th>
-                                        <th style="width: 20%"><?= Yii::t('app','Propietario')?></th>
+                                        <th style="width: 20%"><?= Yii::t('app','Comunidad').'/'.Yii::t('app','Propietario')?></th>
+                                        <th style="width: 20%"><?= Yii::t('app','Descripción')?></th>
                                         <th style="width: 10%"><?= Yii::t('app','Tipo')?></th>
                                         <th style="width: 10%"><?= Yii::t('app','Estado')?></th>
-                                        <th style="width: 30%"><?= Yii::t('app','Descripción')?></th>
+                                        <th style="width: 15%"><?= Yii::t('app','Empresa').'/'.Yii::t('app','Proveedor')?></th>
+                                        <th style="width: 15%"><?= Yii::t('app','Responsable')?></th>
                                     </tr>
                                     </thead>
                                     <tbody id="modal-llaves-contenido-table">
