@@ -262,6 +262,9 @@ class LlaveController extends BaseController
                 $strOperacionClick = ($strOperacion=='S')?'E':'S';
                 $strComunidad = !empty($modelLlave->comunidad) && isset($modelLlave->comunidad->nombre) ? $modelLlave->comunidad->nombre : '';
                 $strPropietario = !empty($modelLlave->propietarios) && isset($modelLlave->propietarios->id) ? $modelLlave->propietarios->getNombre() : '';
+                $strCliente = $strComunidad;
+                $strCliente .= !empty($strPropietario) && !empty($strCliente) ? ' / ':'';
+                $strCliente .= !empty($strPropietario) ? $strPropietario:'';
                 $strTipo = !empty($modelLlave->tipo) && isset($modelLlave->tipo->descripcion) ? $modelLlave->tipo->descripcion : '';
                 $strStatus = ($strOperacion=='S')?'<span class="float-none badge bg-danger">'.Yii::t('app','Prestada').'</span>':'<span class="float-none badge bg-success">'.Yii::t('app','Almacenada').'</span>';
                 $strDescripcion = trim($modelLlave->descripcion);
@@ -269,15 +272,19 @@ class LlaveController extends BaseController
                 $strButton = ($strOperacion=='S')?
                     Html::button('<i class="fas fa-arrow-circle-right"></i>', ['id' => 'btn_add', 'title'=>Yii::t('app','Devolución de LLave'), 'class' => 'btn-xs btn-danger', 'onclick' => $strCallFunction]) :
                     Html::button('<i class="fas fa-arrow-circle-left"></i>', ['id' => 'btn_add', 'title'=>Yii::t('app','Entrega/Salida de Llave'), 'class' => 'btn-xs btn-success', 'onclick' => $strCallFunction]);
+
+                $strEmpresa = ($strOperacion=='S')? $modelLlave->comercial : '';
+                $strResponsable = ($strOperacion=='S')? $modelLlave->responsable : '';
                 // ---------------------------
                 $strTableTr .= "<tr id='tr_".$strCodigo."' >";
                 $strTableTr .= "    <td style='font-size: 10px; '>" . $strButton . "</td>";
                 $strTableTr .= "    <td style='font-size: 10px; font-weight: bold'>" . $strCodigo . "</td>";
-                $strTableTr .= "    <td style='font-size: 12px; '>" . $strComunidad . "</td>";
-                $strTableTr .= "    <td style='font-size: 12px; '>" . $strPropietario . "</td>";
-                $strTableTr .= "    <td style='font-size: 10px; '>" . $strTipo . "</td>";
-                $strTableTr .= "    <td style='font-size: 10px;'>" . $strStatus . "</td>";
+                $strTableTr .= "    <td style='font-size: 12px; '>" . trim($strCliente) . "</td>";
                 $strTableTr .= "    <td style='font-size: 12px;'>" . $strDescripcion . "</td>";
+                $strTableTr .= "    <td style='font-size: 10px; '>" . $strTipo . "</td>";
+                $strTableTr .= "    <td style='font-size: 14px;'>" . $strStatus . "</td>";
+                $strTableTr .= "    <td style='font-size: 12px;'>" . $strEmpresa . "</td>";
+                $strTableTr .= "    <td style='font-size: 12px;'>" . $strResponsable . "</td>";
                 $strTableTr .= "</tr>";
             }
         }else{

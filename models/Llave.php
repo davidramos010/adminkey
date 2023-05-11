@@ -43,6 +43,10 @@ class Llave extends \yii\db\ActiveRecord
     public $cliente_comunidad = null;
     public $nomenclatura = null;
 
+    public $comercial = null;
+    public $responsable = null;
+    public $observacion = null;
+
     public $total = null;
     public $salida = null;
 
