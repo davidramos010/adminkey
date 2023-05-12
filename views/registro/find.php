@@ -30,11 +30,14 @@ $model = new LlaveSearch();
                 <div class="card">
                     <div class="card-body login-card-body">
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-2">
                                 <?= $form->field($model, 'codigo')->label('Cod Llave') ?>
                             </div>
-                            <div class="col-9">
+                            <div class="col-5">
                                 <?= $form->field($model, 'descripcion')->label('Descripción') ?>
+                            </div>
+                            <div class="col-5">
+                                <?= $form->field($model, 'comercial')->dropDownList(Llave::getComunidadesDropdownList(), ['class' => 'form-control', 'prompt' => 'Seleccione Uno', 'data-js-find-nomenclatura' => 'comunidad'])->label(Yii::t('app', 'Empresa').'/'.Yii::t('app', 'Proveedor')); ?>
                             </div>
                         </div>
                         <div class="row">
