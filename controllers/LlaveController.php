@@ -288,7 +288,7 @@ class LlaveController extends BaseController
                 $strTableTr .= "</tr>";
             }
         }else{
-            $strTableTr = "<tr><td colspan='7' class='text-black-50 text-md-center' >".Yii::t('yii','No results found.')."</td></tr>";
+            $strTableTr = "<tr><td colspan='8' class='text-black-50 text-md-center' >".Yii::t('yii','No results found.')."</td></tr>";
         }
 
         return $strTableTr;

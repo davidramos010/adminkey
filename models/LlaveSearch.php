@@ -18,7 +18,7 @@ class LlaveSearch extends Llave
         return [
             [['id', 'id_comunidad', 'id_tipo', 'copia', 'activa','alarma','id_propietario','facturable'], 'integer'],
             [['codigo', 'descripcion', 'observacion','codigo_alarma','llaveLastStatus','nombre_propietario','cliente_comunidad'], 'safe'],
-            [['nomenclatura'], 'string',  'max' => 4],
+            [['nomenclatura','comercial'], 'string',  'max' => 4],
 
         ];
     }
@@ -187,6 +187,7 @@ class LlaveSearch extends Llave
         $query->andFilterWhere(['like', 'll.codigo', $this->codigo])
             ->andFilterWhere(['like', 'll.descripcion', $this->descripcion])
             ->andFilterWhere(['like', 'cc.nombre', $this->cliente_comunidad])
+            ->andFilterWhere(['like', 'cm.nombre', $this->comercial])
             ->andFilterWhere(['like', 'll.observacion', $this->observacion]);
 
         // ======================================================
