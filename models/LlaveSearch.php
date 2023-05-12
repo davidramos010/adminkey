@@ -187,7 +187,6 @@ class LlaveSearch extends Llave
         $query->andFilterWhere(['like', 'll.codigo', $this->codigo])
             ->andFilterWhere(['like', 'll.descripcion', $this->descripcion])
             ->andFilterWhere(['like', 'cc.nombre', $this->cliente_comunidad])
-            ->andFilterWhere(['like', 'cm.nombre', $this->comercial])
             ->andFilterWhere(['like', 'll.observacion', $this->observacion]);
 
         // ======================================================
@@ -200,6 +199,12 @@ class LlaveSearch extends Llave
 
         if($this->llaveLastStatus=='S'){
             $query->andFilterWhere(['ls.status'=> $this->llaveLastStatus]);
+        }
+
+        // ======================================================
+        // Comercial
+        if(!empty($this->comercial)){
+            $query->andWhere(['IN', 'cm.id', $this->comercial]);
         }
 
         // ======================================================

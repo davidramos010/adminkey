@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Comerciales;
 use app\models\Llave;
 use app\models\LlaveSearch;
 use yii\widgets\ActiveForm;
@@ -37,7 +38,7 @@ $model = new LlaveSearch();
                                 <?= $form->field($model, 'descripcion')->label('Descripción') ?>
                             </div>
                             <div class="col-5">
-                                <?= $form->field($model, 'comercial')->dropDownList(Llave::getComunidadesDropdownList(), ['class' => 'form-control', 'prompt' => 'Seleccione Uno', 'data-js-find-nomenclatura' => 'comunidad'])->label(Yii::t('app', 'Empresa').'/'.Yii::t('app', 'Proveedor')); ?>
+                                <?= $form->field($model, 'comercial')->dropDownList(Comerciales::getComercialesDropdownList(), ['class' => 'form-control', 'prompt' => 'Seleccione Uno', 'data-js-find-nomenclatura' => 'comunidad'])->label(Yii::t('app', 'Empresa').'/'.Yii::t('app', 'Proveedor')); ?>
                             </div>
                         </div>
                         <div class="row">

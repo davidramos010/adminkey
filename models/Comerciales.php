@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "comerciales".
@@ -89,6 +90,20 @@ class Comerciales extends \yii\db\ActiveRecord
         $this->direccion = trim(strtoupper($this->direccion));
 
         return true;
+    }
+
+    /**
+     * Lista de comunidades activas
+     * @return array
+     * @throws \yii\db\Exception
+     */
+    public static function getComercialesDropdownList()
+    {
+        $query = "SELECT id, nombre FROM comerciales WHERE estado=1 order by nombre";
+        $result = Yii::$app->db
+            ->createCommand($query)
+            ->queryAll();
+        return ArrayHelper::map($result, 'id', 'nombre');
     }
 
 }

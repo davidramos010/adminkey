@@ -212,7 +212,7 @@ $this->registerJsFile('@web/js/registro.js');
                 ]);
                 echo "<br><br>";
                 // You can choose to render your own GridView separately
-                echo \kartik\grid\GridView::widget([
+                echo GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'columns' => $gridColumns,
