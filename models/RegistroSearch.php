@@ -17,8 +17,8 @@ class RegistroSearch extends Registro
     public function rules()
     {
         return [
-            [['id', 'id_user', 'id_llave'], 'integer'],
-            [['username','entrada', 'salida', 'observacion', 'codigo', 'username','comunidad','comercial','propietarios','clientes','llaves','llaves_e','llaves_s'], 'safe'],
+            [['id', 'id_user', 'id_llave', 'pendientes' ], 'integer'],
+            [['username','entrada', 'salida', 'observacion', 'codigo', 'username','comunidad','comercial','propietarios','clientes','llaves','llaves_e','llaves_s','llaves_st','llaves_sp'], 'safe'],
         ];
     }
 
@@ -69,7 +69,14 @@ class RegistroSearch extends Registro
                 SELECT DISTINCT l.id_propietario FROM llave l 
                        INNER JOIN llave_status stb ON ( stb.id_llave=l.id ) 
                        WHERE stb.id_registro = r.id
-                    ) ) AS propietarios"
+                    ) ) AS propietarios",
+            "( SELECT count(1) FROM llave_status st WHERE st.id_registro = r.id and st.status = 'S') AS llaves_st",
+            "( SELECT count(1) 
+             FROM llave_status lsp 
+             WHERE lsp.id_registro >= r.id AND 
+             lsp.status='E' AND 
+             lsp.id_llave IN ( SELECT st.id_llave FROM llave_status st WHERE st.id_registro = r.id AND st.status = 'S' )
+              ) AS llaves_sp "
         ]);
         $query->leftJoin('llave ll','r.id_llave = ll.id');
         $query->leftJoin('User u','r.id_user = u.id');
@@ -130,7 +137,10 @@ class RegistroSearch extends Registro
             $query->andHaving("propietarios like :P",[':P' => "%".$this->propietarios."%"]);
         }
 
-        //$query->orderBy('r.id DESC');
+        if(isset($params['pendientes']) && !empty($params['pendientes']) ){
+            $this->pendientes = $params['pendientes'];
+            $query->andHaving("llaves_st > llaves_sp");
+        }
 
         return $dataProvider;
     }

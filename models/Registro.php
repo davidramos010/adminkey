@@ -41,8 +41,12 @@ class Registro extends \yii\db\ActiveRecord
     public $llaves = null;
     public $llaves_e = null;
     public $llaves_s = null;
+    public $llaves_sp = null;
+    public $llaves_st = null;
     public $fecha_registro = null;
     public $status = null;
+    public $pendientes = null;
+
 
     private CONST ARR_SALIDAS = ['S','SALIDA'];
     private CONST ARR_ENTRADAS = ['E','ENTRADA'];
