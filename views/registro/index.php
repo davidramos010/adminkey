@@ -15,6 +15,19 @@ use app\models\util;
 
 $this->title = 'Registros';
 $this->registerJsFile('@web/js/registro.js');
+
+
+$buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
+        'pendientes=1') ? '✅' : ''),
+    Url::current([
+        'pendientes' => strpos(Url::current(),
+            'pendientes=1') ? '' : '1'
+    ]), [
+        'class' => 'btn btn-default ' . (strpos(Url::current(),
+                'pendientes=1') ? 'active' : ''),
+        'title' => Yii::t('app', 'Filtrar por registros pendiente de devolución')
+    ]);
+
 ?>
 <div class="registro-index">
 
@@ -214,6 +227,11 @@ $this->registerJsFile('@web/js/registro.js');
                 // You can choose to render your own GridView separately
                 echo GridView::widget([
                     'dataProvider' => $dataProvider,
+                    'rowOptions'=>function($model){
+                        if((int) $model->llaves_st > (int) $model->llaves_sp){
+                            return ['class' => 'table-danger'];
+                        }
+                    },
                     'filterModel' => $searchModel,
                     'columns' => $gridColumns,
                     'formatter' => array('class' => 'yii\i18n\Formatter', 'nullDisplay' => ''),
@@ -233,6 +251,7 @@ $this->registerJsFile('@web/js/registro.js');
                     'toolbar' => [
                         [
                             'content' =>
+                                $buttonFiltroPendientes. ' ' .
                                 Html::a('Recargar', Url::current(), [
                                     'class' => 'btn bg-orange',
                                     'title' => Yii::t('Common', 'Recargar manteniendo filtros')
@@ -241,7 +260,6 @@ $this->registerJsFile('@web/js/registro.js');
                                     'title' => Yii::t('Common', 'Limpiar filtros')
                                 ]),
                         ],
-                        //count($dataProvider->models) < 100 ? '{toggleData}' : '',
                     ],
                     'panelPrefix' => 'panel mb-0 panel-',
                     'panel' => [

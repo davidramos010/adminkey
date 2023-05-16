@@ -17,7 +17,7 @@ class LlaveSearch extends Llave
     {
         return [
             [['id', 'id_comunidad', 'id_tipo', 'copia', 'activa','alarma','id_propietario','facturable'], 'integer'],
-            [['codigo', 'descripcion', 'observacion','codigo_alarma','llaveLastStatus','nombre_propietario','cliente_comunidad'], 'safe'],
+            [['codigo', 'descripcion', 'observacion','codigo_alarma','llaveLastStatus','nombre_propietario','cliente_comunidad','responsable'], 'safe'],
             [['nomenclatura','comercial'], 'string',  'max' => 4],
 
         ];
@@ -190,7 +190,14 @@ class LlaveSearch extends Llave
             ->andFilterWhere(['like', 'll.observacion', $this->observacion]);
 
         // ======================================================
-        // find satatus
+        // Comercial
+        if (!empty($this->comercial)) {
+            $query->andWhere(['cm.id' => $this->comercial]);
+            $this->llaveLastStatus = 'S';
+        }
+
+        // ======================================================
+        // find status
         if($this->llaveLastStatus=='E'){
             $query->andWhere(['or',
                 ['ls.status'=> $this->llaveLastStatus],
@@ -200,11 +207,10 @@ class LlaveSearch extends Llave
         if($this->llaveLastStatus=='S'){
             $query->andFilterWhere(['ls.status'=> $this->llaveLastStatus]);
         }
-
         // ======================================================
-        // Comercial
-        if(!empty($this->comercial)){
-            $query->andWhere(['IN', 'cm.id', $this->comercial]);
+        // Responsable
+        if(!empty($this->responsable)){
+            $query->andWhere(['like', 'rg.nombre_responsable', $this->responsable]);
         }
 
         // ======================================================

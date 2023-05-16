@@ -53,6 +53,18 @@ $model = new LlaveSearch();
                             </div>
                         </div>
                         <div class="row">
+                            <div class="col-2">
+
+                                <?= $form->field($model, 'llaveLastStatus')->dropDownList(['S'=>Yii::t('app', 'Solo Prestadas'),'E'=>Yii::t('app', 'Solo Almacenadas')], ['class' => 'form-control', 'prompt' => 'Seleccione Uno', 'data-js-find-nomenclatura' => 'comunidad'])->label(Yii::t('app', 'Estado')); ?>
+                            </div>
+                            <div class="col-5">
+                                <?= $form->field($model, 'responsable')->textInput(['maxlength' => true])->label('Responsable') ?>
+                            </div>
+                            <div class="col-5">
+
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-12">
                                 <div class="btn-toolbar kv-grid-toolbar toolbar-container float-right btn-sm" >
                                     <div class="btn-group" >
