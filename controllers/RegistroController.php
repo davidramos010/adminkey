@@ -74,11 +74,13 @@ class RegistroController extends BaseController
         $searchModel = new RegistroSearch();
         $arrInfoStatusE = $searchModel->search_status($id, 'E');
         $arrInfoStatusS = $searchModel->search_status($id, 'S');
+        $bolActiveBotonProcess = $arrInfoStatusS->getTotalCount();
 
         return $this->render('view', [
             'model' => $this->findModel($id),
             'arrInfoStatusE' => $arrInfoStatusE,
-            'arrInfoStatusS' => $arrInfoStatusS
+            'arrInfoStatusS' => $arrInfoStatusS,
+            'bolActiveBotonProcess' => $bolActiveBotonProcess
         ]);
     }
 
