@@ -3,6 +3,7 @@
 use app\models\Registro;
 use app\models\util;
 use inquid\signature\SignatureWidget;
+use kartik\widgets\DateTimePicker;
 use kartik\widgets\Select2;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -12,9 +13,13 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\Registro */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $action string */
 
 $url_registro_create = Url::toRoute(['registro/create']);
+$url_registro_list = Url::toRoute(['registro/index']);
 $ajax_register_motion = Url::toRoute(['registro/ajax-register-motion']);
+$ajax_update_motion = Url::toRoute(['registro/ajax-update-motion']);
+$ajax_delete_motion = Url::toRoute(['registro/ajax-delete-motion']);
 $ajax_find_keys = Url::toRoute(['registro/ajax-find-keys-register']);
 $ajax_find_manual = Url::toRoute(['../llave/ajax-find-manual']);
 $ajax_find_comercial = Url::toRoute(['registro/ajax-find-comercial']);
@@ -22,7 +27,13 @@ $ajax_find_comercial = Url::toRoute(['registro/ajax-find-comercial']);
 $ajax_add_key = Url::toRoute(['registro/ajax-add-key']);
 $url_add_firma = Url::toRoute(['registro/add-firma']);
 
+$strAddNota = isset($action) && $action == 'update' ? "<br/>".Yii::t('app', 'Solo puede Editar / Eliminar registros creados con su usuario.') : '';
+$strAddNota .= !empty($strAddNota) ? "<br/>".Yii::t('app', '<label class="exampleInputBorder">Importante:</label> Validar el último estado de las llaves relacionadas.') : '';
 
+$strAddBotonRegistrar = isset($action) && $action == 'update' ? '' : Html::button(Yii::t('app', 'Registrar Movimiento'), ['id' => 'btn_registrar', 'class' => 'btn btn-success', 'onclick' => '(function ( $event ) { sendForm() })();']);
+$strAddBotonCancelar =  Html::a(Yii::t('app', Yii::t('app', 'Cancelar')), ['create'], ['class' => 'btn btn-default ']);
+$strAddBotonEditar = isset($action) && $action == 'update' ? Html::button(Yii::t('app', 'Editar Movimiento'), ['id' => 'btn_editar', 'class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { sendUpdateForm() })();']) : '';
+$strAddBotonEliminar = isset($action) && $action == 'update' ? Html::button(Yii::t('app', 'Eliminar Movimiento'), ['id' => 'btn_eliminar', 'class' => 'btn btn-danger', 'onclick' => '(function ( $event ) { sendDeleteForm() })();']) : '';
 
 ?>
 
@@ -38,10 +49,12 @@ $url_add_firma = Url::toRoute(['registro/add-firma']);
     </div>
 
     <div id="div_info" class="callout callout-info">
-        <h5><i class="fas fa-info"></i> Note:</h5>
+        <h5><i class="fas fa-info"></i> Nota:</h5>
         <?= Yii::t('app', 'Este registro estara asociado al usuario en sesion') ?> <label
                 class="exampleInputBorder">( <?= Yii::$app->user->identity->name ?> ) </label>.<br/>
         <?= Yii::t('app', 'Las llaves se irán registrando según su último estado de disponibilidad.') ?>
+        <?= $strAddNota ?>
+
     </div>
     <div class="col-md-12">
         <!-- general form elements -->
@@ -214,7 +227,29 @@ $url_add_firma = Url::toRoute(['registro/add-firma']);
                 <!-- .fin table -->
                 <hr class="mt-2 mb-3"/>
                 <div class="form-group">
-                    <?= $form->field($model, 'observacion')->textArea(['id' => 'txt_observacion', 'class' => 'form-control', 'style' => 'width:100%'])->label(Yii::t('app', 'Observaciones')) ?>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <?= $form->field($model,
+                                'entrada')->widget(DateTimePicker::class,
+                                [
+                                    'value' => empty($model->entrada)?$model->salida:$model->entrada,
+                                    'options' => [
+                                        'autocomplete' => 'off',
+                                    ],
+                                    'pluginOptions' => [
+                                        'format' => 'dd-mm-yyyy hh:ii',
+                                        'daysOfWeekDisabled' => [0, 6],
+                                        'autoclose' => true,
+                                        'startDate' => date("d-m-Y",strtotime(date("d-m-Y")."- 30 days")),
+                                    ],
+                                ])->label('Fecha Registro'); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?= $form->field($model, 'observacion')->textArea(['id' => 'txt_observacion', 'class' => 'form-control', 'style' => 'width:100%'])->label(Yii::t('app', 'Observaciones')) ?>
+                        </div>
+                    </div>
 
                     <div class="card text-center">
                         <div class="card-header">
@@ -229,8 +264,8 @@ $url_add_firma = Url::toRoute(['registro/add-firma']);
                     </div>
                 </div>
                 <div style="padding-top: 15px">
-                    <?= Html::button(Yii::t('app', 'Registrar Movimiento'), ['id' => 'btn_registrar', 'class' => 'btn btn-success', 'onclick' => '(function ( $event ) { sendForm() })();']); ?>
-                    <?= Html::a(Yii::t('app', Yii::t('app', 'Cancelar')), ['create'], ['class' => 'btn btn-default ']) ?>
+                    <?= $form->field($model, 'id')->hiddenInput(['id' => 'id_registro'])->label(false); ?>
+                    <?= $strAddBotonRegistrar .' '. $strAddBotonEditar .' '. $strAddBotonEliminar .' '. $strAddBotonCancelar ?>
                 </div>
             </div>
             <?php ActiveForm::end(); ?>
@@ -264,10 +299,11 @@ $this->registerJs(
 );
 
 $this->registerCss(".signature-pad--actions{ display:none; } ");
+$strAction = isset($action) && !empty($action) ? $action : '';
 if(!empty($model->id)){
     $this->registerJs(
         "$('document').ready(function(){ 
-             fnLoadRegistro($model->id);
+             fnLoadRegistro($model->id,'$strAction');
          });"
     );
 }
@@ -275,13 +311,16 @@ if(!empty($model->id)){
 $this->registerJs(
     <<<JS
     const strUrl = '$url_registro_create';
+    const strUrlList = '$url_registro_list';
     const strAjaxRegisterMotion = '$ajax_register_motion';
+    const strAjaxUpdateMotion = '$ajax_update_motion';
+    const strAjaxDeleteMotion = '$ajax_delete_motion';
     const strAjaxAddKey = '$ajax_add_key';
     const strAjaxFindKeys = '$ajax_find_keys';
     const strAjaxFindManual = '$ajax_find_manual';
     const strAjaxFindComercial = '$ajax_find_comercial';
     
+    
 JS
     , $this::POS_HEAD);
-
 ?>

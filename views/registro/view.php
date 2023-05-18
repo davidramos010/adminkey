@@ -13,6 +13,9 @@ use yii\widgets\ActiveForm;
 /* @var $arrInfoStatusE array */
 /* @var $arrInfoStatusS array */
 /* @var $bolActiveBotonProcess boolean */
+/* @var $bolActiveBotonUpdate boolean */
+
+
 
 $this->registerJsFile('@web/js/registro.js');
 $this->title = $model->id;
@@ -58,7 +61,7 @@ $arrColumns = [[
 $bolVisibleGridSalida = $arrInfoStatusS->getTotalCount()>0 ? 'inline' : 'none';
 $bolVisibleGridEntrada = $arrInfoStatusE->getTotalCount()>0 ? 'inline' : 'none';
 $strHtmlActiveBotonProcess = empty($bolActiveBotonProcess) ? '' : Html::a('<i class="fas fa-key"></i> '.Yii::t('app', 'Ejecutar Devolución'), ['registro/create/'.$model->id], ['target'=>'_blank','id' => 'btn_process', 'class' => 'btn btn-info float-left','style' => 'margin-right: 5px;']);
-$strHtmlActiveBotonUpdate = empty($bolActiveBotonProcess) ? '' : Html::a('<i class="fas fa-key"></i> '.Yii::t('app', 'Editar / Eliminar'), ['registro/update/'.$model->id], ['target'=>'_blank','id' => 'btn_process', 'class' => 'btn btn-warning float-left','style' => 'margin-right: 5px;']);
+$strHtmlActiveBotonUpdate = empty($bolActiveBotonUpdate) ? '' : Html::a('<i class="fas fa-key"></i> '.Yii::t('app', 'Editar / Eliminar'), ['registro/update/'.$model->id], ['target'=>'_blank','id' => 'btn_process', 'class' => 'btn btn-warning float-left','style' => 'margin-right: 5px;']);
 
 $optionsArray = array(
     'elementId'=> 'showBarcode', /* div or canvas id*/

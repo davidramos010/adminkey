@@ -2,12 +2,15 @@
 
 namespace app\controllers;
 
+use app\components\Tools;
 use app\models\Comerciales;
 use app\models\Comunidad;
 use app\models\Llave;
 use app\models\LlaveStatus;
+use app\models\LlaveStatusLog;
 use app\models\Propietarios;
 use app\models\Registro;
+use app\models\RegistroLog;
 use app\models\RegistroSearch;
 use kartik\mpdf\Pdf;
 use yii\filters\AccessControl;
@@ -65,23 +68,31 @@ class RegistroController extends BaseController
 
     /**
      * Displays a single Registro model.
+     * $bolActiveBotonUpdate : Solo puede editar sus propios registros
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-        $searchModel = new RegistroSearch();
-        $arrInfoStatusE = $searchModel->search_status($id, 'E');
-        $arrInfoStatusS = $searchModel->search_status($id, 'S');
-        $bolActiveBotonProcess = $arrInfoStatusS->getTotalCount();
+        try {
+            $modelRegistro = Registro::findOne(['id'=>$id]);
+            $searchModel = new RegistroSearch();
+            $arrInfoStatusE = $searchModel->search_status($id, 'E');
+            $arrInfoStatusS = $searchModel->search_status($id, 'S');
+            $bolActiveBotonProcess = $arrInfoStatusS->getTotalCount();
+            $bolActiveBotonUpdate = isset(Yii::$app->user) && !empty(Yii::$app->user->getIdentity()) && strtoupper(Yii::$app->user->identity->username) == strtoupper($modelRegistro->user->username);
 
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-            'arrInfoStatusE' => $arrInfoStatusE,
-            'arrInfoStatusS' => $arrInfoStatusS,
-            'bolActiveBotonProcess' => $bolActiveBotonProcess
-        ]);
+            return $this->render('view', [
+                'model' => $modelRegistro,
+                'arrInfoStatusE' => $arrInfoStatusE,
+                'arrInfoStatusS' => $arrInfoStatusS,
+                'bolActiveBotonProcess' => $bolActiveBotonProcess,
+                'bolActiveBotonUpdate' => $bolActiveBotonUpdate,
+            ]);
+        }catch (\Exception $exception){
+            $this->redirect(['index']);
+        }
     }
 
     /**
@@ -125,10 +136,6 @@ class RegistroController extends BaseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
 
         return $this->render('update', [
             'model' => $model,
@@ -247,6 +254,7 @@ class RegistroController extends BaseController
     }
 
     /**
+     * Nuevo registro
      * @return false|string
      */
     public function actionAjaxRegisterMotion()
@@ -256,13 +264,15 @@ class RegistroController extends BaseController
             null : explode(',', $arrParam['listKeyEntrada']);
         $arrKeysSalida = (empty($arrParam['listKeySalida']) || !isset($arrParam['listKeySalida'])) ?
             null : explode(',', $arrParam['listKeySalida']);
+        $strFechaOperacion = isset($arrParam['Registro']['entrada']) && !empty($arrParam['Registro']['entrada']) ? Tools::getDateTimeFormatedUserToSql($arrParam['Registro']['entrada']) : date('Y-m-d H:i:s');
+
 
         if (!empty($arrKeysEntrada) || !empty($arrKeysSalida)) {
             $newRegistro = new Registro();
             $newRegistro->load($arrParam);
             $newRegistro->id_user = (int)Yii::$app->user->id;
-            $newRegistro->entrada = (!empty($arrKeysEntrada)) ? date('Y-m-d H:i:s') : NULL;
-            $newRegistro->salida = (!empty($arrKeysSalida)) ? date('Y-m-d H:i:s') : NULL;
+            $newRegistro->entrada = (!empty($arrKeysEntrada)) ? $strFechaOperacion : NULL;
+            $newRegistro->salida = (!empty($arrKeysSalida)) ? $strFechaOperacion : NULL;
             if ($newRegistro->save()) {
                 Yii::$app->session->set('lastRegistro', $newRegistro->id);
             }
@@ -293,6 +303,86 @@ class RegistroController extends BaseController
         }
 
         return json_encode(['result' => 'OK']);
+    }
+
+    /**
+     * Eliminar registro y crear log
+     * @return false|string
+     * @throws NotFoundHttpException
+     * @throws \yii\db\Exception
+     */
+    public function actionAjaxDeleteMotion()
+    {
+        $bolError = false;
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $numIdRegistro = (!empty($this->request->post()) && isset($this->request->post()['numIdRegistro'])) ? (int) trim($this->request->post()['numIdRegistro']) : null;
+            $objOldRegistro = $this->findModel($numIdRegistro);
+            $objOldLlavesStatus = LlaveStatus::find()->where(['id_registro'=>$numIdRegistro])->all();
+            $newRegistroLog = new RegistroLog();
+            $newRegistroLog->id_registro = $numIdRegistro;
+            $newRegistroLog->id_user = $objOldRegistro->id_user;
+            $newRegistroLog->id_llave = $objOldRegistro->id_llave;
+            $newRegistroLog->entrada = $objOldRegistro->entrada;
+            $newRegistroLog->salida = $objOldRegistro->salida;
+            $newRegistroLog->observacion = $objOldRegistro->observacion;
+            $newRegistroLog->id_comercial = $objOldRegistro->id_comercial;
+            $newRegistroLog->firma_soporte = $objOldRegistro->firma_soporte;
+            $newRegistroLog->tipo_documento = $objOldRegistro->tipo_documento;
+            $newRegistroLog->documento = $objOldRegistro->documento;
+            $newRegistroLog->nombre_responsable = $objOldRegistro->nombre_responsable;
+            $newRegistroLog->telefono = $objOldRegistro->telefono;
+            $newRegistroLog->action = 'deleted';
+            if($newRegistroLog->validate() && $newRegistroLog->save()){
+                foreach ($objOldLlavesStatus as $value) {
+                    $newRegistroStatus = new LlaveStatusLog();
+                    $newRegistroStatus->load(['LlaveStatusLog'=>$value->getAttributes()]);
+                    $newRegistroStatus->id_registro_log = $newRegistroLog->id;
+                    if(!$newRegistroStatus->save()){
+                        $bolError = true;
+                        continue;
+                    }
+                }
+            }else{
+                $bolError=true;
+            }
+
+            //Eliminar registros
+            if(!$bolError){
+                LlaveStatus::deleteAll('id_registro = :id_registro', array(':id_registro' => $numIdRegistro));
+                $this->findModel($numIdRegistro)->delete();
+            }
+
+        }catch (\Exception $e){
+            $bolError=true;
+        }
+
+        if(!$bolError){
+            $transaction->commit();
+        }else{
+            $transaction->rollBack();
+        }
+
+        return json_encode(['result' => $bolError ? 'KO':'OK']);
+    }
+
+    /**
+     * @return false|string
+     * @throws \Throwable
+     * @throws \yii\db\Exception
+     */
+    public function actionAjaxUpdateMotion()
+    {
+        $bolError = false;
+        try {
+            $register = $this->actionAjaxRegisterMotion();
+            $registerLog = $this->actionAjaxDeleteMotion();
+
+        }catch (\Exception $e){
+            $bolError=true;
+        }
+
+        return json_encode(['result' => $bolError ? 'KO':'OK']);
     }
 
     /**
