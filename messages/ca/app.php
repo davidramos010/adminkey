@@ -438,6 +438,7 @@ return [
     'Dual' => '',
     'Dudoso' => '',
     'Edad' => '',
+    'Ejecutar Devolución' => 'Executar Devolució',
     'error_url_modal' => 'No es pot carregar correctament aquesta pàgina, comuniqueu-ho amb l-administrador.',
     'Email' => '',
     'Email Enviado' => '',

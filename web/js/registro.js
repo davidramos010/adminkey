@@ -103,7 +103,7 @@ function addKeyForm(code,operacion,modal)
 /**
  * Funcionalidad de adiciond de llaves al listado, esta se ejecuta cargando toda la info del movimiento
  */
-function fnLoadRegistro(numIdRegistro)
+function fnLoadRegistro(numIdRegistro,strAction)
 {
     let url = strAjaxFindKeys;
     var strTable = 'tblKeyEntrada';
@@ -125,8 +125,14 @@ function fnLoadRegistro(numIdRegistro)
                     bolInserRow = false;
                     return;
                 }
-                //Validar operacion - inversa
-                operacion = data.status == 'E' ? 'S' : 'E';
+
+                if(strAction=='update'){
+                    operacion = data.status ;
+                }else{
+                    //Validar operacion - inversa
+                    operacion = data.status == 'E' ? 'S' : 'E';
+                }
+
                 if (operacion == 'E') { // Entrada-retorno
                     strTable = 'tblKeyEntrada';
                     $('#custom-tabs-entrada-tab').click();
@@ -391,4 +397,72 @@ function getBase64Image() {
 function getBase64ImageCode(){
     /*return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");*/
     return '';
+}
+
+/**
+ * Eliminar registro
+ */
+function sendDeleteForm(){
+
+    let numIdRegistro = $('#id_registro').val();
+
+    $.ajax({
+        url: strAjaxDeleteMotion,
+        dataType: 'JSON',
+        type: 'POST',
+        data: {
+            "numIdRegistro": numIdRegistro,
+        },
+        success: function (data) {
+            if(data.result == 'OK'){
+                toastr.success('Registro eliminado correctamente.');
+                setTimeout("window.location = strUrlList;",600);
+            }else{
+                toastr.error('El registro no se puede eliminar, comunique al administrador.');
+                return false;
+            }
+        }
+    });
+}
+
+/**
+ * sendUpdateForm
+ */
+function sendUpdateForm()
+{
+    let url = strAjaxUpdateMotion;
+    var form = $('#form-registro');
+    var formData = form.serialize();
+    let numIdRegistro = $('#id_registro').val();
+
+    $.ajax({
+        url: url,
+        dataType: 'JSON',
+        type: 'POST',
+        data: formData+"&numIdRegistro="+numIdRegistro+"&listKeyEntrada="+JSON.parse(JSON.stringify(listKeyEntrada))+"&listKeySalida="+JSON.parse(JSON.stringify(listKeySalida)),
+        success: function (data) {
+            listKeyEntrada.forEach(function(key, index, object) {
+                object.splice(index, 1);
+                $('#tr_'+index).remove();
+            });
+            listKeySalida.forEach(function(key, index, object) {
+                object.splice(index, 1);
+                $('#tr_'+index).remove();
+            });
+
+            toastr.success('Registro Actualizado correctamente.');
+            $('#div_msm').show("slow");
+            $('#div_info').hide();
+
+            $('#txt_observacion').val('');
+            $('#id_llave').attr('readonly', true);
+            $('#btn_registrar').attr('readonly', true);
+
+            if (!signaturePad.isEmpty()) {
+                fnGuardarCuadroFirma();
+            }else {
+                setTimeout("window.location = strUrl;",600);
+            }
+        }
+    });
 }
