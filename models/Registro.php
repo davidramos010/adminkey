@@ -274,6 +274,7 @@ class Registro extends \yii\db\ActiveRecord
         $strFirma =  (!empty($objRegistro->firma_soporte))?"<img src='".Url::to('@app/web/firmas/'.$objRegistro->firma_soporte)."' width='150'>":"";
         $strCodeBarra64 = (!empty($arrParams['code']))?str_replace(' ','+',$arrParams['code']):'';
         $strCodBarra =  (!empty($strCodeBarra64))?"<img src='data:image/png;base64,".$strCodeBarra64."' width='200'>":"";
+        $strLogoAlbaran = "<img src='".Url::to('@app/web/img/empresa_V.png')."' width='100'>";
 
         $arrResponsable['nombre'] = trim(strtoupper($objRegistro->nombre_responsable));
         $arrResponsable['documento'] = (!empty($objRegistro->documento) && !empty($objRegistro->tipo_documento) && isset(util::arrTipoDocumentos[$objRegistro->tipo_documento]))?util::arrTipoDocumentos[$objRegistro->tipo_documento].' ':'';
@@ -313,9 +314,10 @@ class Registro extends \yii\db\ActiveRecord
                                 <div class=\"table-responsive\">
                                   <table class=\"table\">
                                    <tr>
-                                     <td align='center'><h3><address>".Yii::$app->params['empresa']."</address></h3></td>
+                                     <td align='center' width='20%' rowspan='3' > $strLogoAlbaran </td>
+                                     <td align='center'><h4><address>".Yii::$app->params['empresa']."</address></h4></td>
                                    </tr>
-                                    <tr>
+                                   <tr>
                                       <td align='center'>
                                         <address>
                                           ".Yii::$app->params['direccion']." 
@@ -326,8 +328,8 @@ class Registro extends \yii\db\ActiveRecord
                                         </address>
                                       </td>
                                     </tr>
-                                    <tr>
-                                     <th align='center' style='padding-top: 15px'><h4><address>".Yii::t('app', 'ALBARÁ - CONTROL DE ENTREGA DE LLAVES')."</address></h4></th>
+                                   <tr>
+                                     <th align='center' style='padding-top: 10px'><h4><address>".Yii::t('app', 'ALBARÁ - CONTROL DE ENTREGA DE LLAVES')."</address></h4></th>
                                    </tr>
                                    <tr>
                                      <th align='center' style='padding-top: 15px'>". $strCodBarra ."</th>
@@ -350,11 +352,11 @@ class Registro extends \yii\db\ActiveRecord
                                 <div class='table-responsive'>
                                     <table class='table'>
                                     <tbody><tr>
-                                        <th style='width:50%;text-align: center'>".Yii::t('app', 'ENTREGADO POR')."</th>
-                                        <th style='width:50%;text-align: center'>".Yii::t('app', 'ENTREGADO A')."</th>
+                                        <th style='width:40%;text-align: center'>".Yii::t('app', 'ENTREGADO POR')."</th>
+                                        <th style='width:60%;text-align: center'>".Yii::t('app', 'ENTREGADO A')."</th>
                                     </tr><tr>
-                                        <td style='width:50%'>".$objRegistro->user->userInfo->nombres." ".$objRegistro->user->userInfo->apellidos."</td>
-                                        <td style='width:50%;text-align: left'>$strDivResponsableText</td>
+                                        <td style=''>".$objRegistro->user->userInfo->nombres." ".$objRegistro->user->userInfo->apellidos."<br/>Email:".$objRegistro->user->userInfo->email."<br/>Teléfono:".$objRegistro->user->userInfo->telefono."</td>
+                                        <td style='text-align: left'>$strDivResponsableText</td>
                                     </tr></tbody>
                                     </table>
                                 </div>
@@ -388,7 +390,7 @@ class Registro extends \yii\db\ActiveRecord
                           </div>
                           <!-- -->
                           <div class=\"col-12\">
-                            <p class=\"text-muted well well-sm shadow-none small\" style=\"margin-top: 10px;\">
+                            <p class=\"text-muted well well-sm shadow-none small\">
                               ".$objRegistro->observacion."
                             </p>
                           </div>
