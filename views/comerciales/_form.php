@@ -8,9 +8,10 @@ use yii\helpers\Url;
 use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
 
+
 /* @var $this yii\web\View */
 /* @var $model app\models\Comerciales */
-/* @var $form yii\widgets\ActiveForm */
+/* @var $form yii\bootstrap4\ActiveForm */
 
 $this->registerJsFile('@web/js/comerciales.js');
 
@@ -94,9 +95,7 @@ $this->registerJsFile('@web/js/comerciales.js');
                         <?= $form->field($model, 'observacion')->textArea(['id' => 'observaciones', 'class' => 'form-control', 'style' => 'width:100%'])->label('Notas/Observaciones') ?>
                     </div>
                 </div>
-                <div class="form-group">
-                    <?= $form->field($model, 'estado')->widget(SwitchInput::class, ['pluginOptions'=>['size'=>'small','onText'=>'Activo','offText'=>'Inactivo']])->label('Estado') ; ?>
-                </div>
+              
 
                 <div  style="padding-top: 15px" >
                     <?= Html::submitButton('Guardar Proveedor', ['class' => 'btn btn-success ']) ?>

@@ -401,8 +401,10 @@ class RegistroController extends BaseController
         $arrParams['code'] = $code;
         // get your HTML raw content without any layouts or scripts
         $content = $newObjRegistro->getHtmlAceptacion($arrParams);
+        $strSetFooter = Yii::$app->params['adminEmail'].' - '.Yii::$app->params['senderName'];
         // setup kartik\mpdf\Pdf component
         $pdf = new Pdf([
+            'filename' => 'MOV_'.$id.'.pdf',
             // set to use core fonts only
             'mode' => Pdf::MODE_UTF8,
             // A4 paper format
@@ -419,11 +421,11 @@ class RegistroController extends BaseController
             // any css to be embedded if required
             'cssInline' => '.kv-heading-1{font-size:18px}',
             // set mPDF properties on the fly
-            'options' => ['title' => 'Krajee Report Title'],
+            'options' => ['title' => Yii::t('app', 'Información movimientos de llave')],
             // call mPDF methods on the fly
             'methods' => [
-                'SetHeader' => [Yii::$app->params['contacto']],
-                'SetFooter' => ['{PAGENO}'],
+                'SetHeader' => ['{PAGENO}'],
+                'SetFooter' => [$strSetFooter],
             ]
         ]);
 
