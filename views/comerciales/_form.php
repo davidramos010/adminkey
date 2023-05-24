@@ -95,7 +95,9 @@ $this->registerJsFile('@web/js/comerciales.js');
                         <?= $form->field($model, 'observacion')->textArea(['id' => 'observaciones', 'class' => 'form-control', 'style' => 'width:100%'])->label('Notas/Observaciones') ?>
                     </div>
                 </div>
-              
+                <div class="form-group">
+                    <?= $form->field($model, 'estado')->widget(SwitchInput::class, ['pluginOptions'=>['size'=>'small','onText'=>'Activo','offText'=>'Inactivo']])->label('Estado') ; ?>
+                </div>
 
                 <div  style="padding-top: 15px" >
                     <?= Html::submitButton('Guardar Proveedor', ['class' => 'btn btn-success ']) ?>
