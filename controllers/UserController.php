@@ -8,11 +8,8 @@ use Yii;
 use app\models\User;
 use app\models\UserSearch;
 use yii\filters\AccessControl;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use hail812\adminlte\widgets\Menu;
-use hail812\adminlte\widgets\FlashAlert;
 
 /**
  * UserController implements the CRUD actions for User model.
