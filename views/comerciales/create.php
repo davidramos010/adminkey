@@ -9,9 +9,18 @@ $this->title = 'Proveedores';
 $this->params['breadcrumbs'][] = ['label' => 'Proveedor', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="comerciales-create">
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
-
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <?=$this->render('_form', [
+                        'model' => $model
+                    ]) ?>
+                </div>
+            </div>
+        </div>
+        <!--.card-body-->
+    </div>
+    <!--.card-->
 </div>

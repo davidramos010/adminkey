@@ -1,29 +1,29 @@
 <?php
 
+use app\models\User;
 use app\models\util;
 use kartik\widgets\Select2;
-use kartik\widgets\SwitchInput;
 use yii\helpers\Html;
+use yii\bootstrap4\ActiveForm;
+use kartik\widgets\SwitchInput;
 use yii\helpers\Url;
 use yii\web\JsExpression;
-use yii\widgets\ActiveForm;
 
+/** @var yii\web\View $this */
+/** @var app\models\Comerciales $model */
+/** @var yii\bootstrap4\ActiveForm $form */
 
-/* @var $this yii\web\View */
-/* @var $model app\models\Comerciales */
-/* @var $form yii\bootstrap4\ActiveForm */
 
 $this->registerJsFile('@web/js/comerciales.js');
 
 ?>
 <br>
 <div class="comerciales-form row">
-    <div class="col-md-2">&nbsp;</div>
     <div class="col-md-8">
         <!-- general form elements -->
         <div class="card card-primary">
             <div class="card-header">
-                <h3 class="card-title">Proveedor</h3>
+                <h3 class="card-title"><?= Yii::t('app','Proveedor') ?></h3>
             </div>
             <!-- /.card-header -->
             <!-- form start -->
@@ -32,16 +32,16 @@ $this->registerJsFile('@web/js/comerciales.js');
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <?= $form->field($model, 'nombre')->textInput(['maxlength' => true,'class'=>'form-control','style'=>'text-transform: uppercase'])->label('Nombre / Razón Social') ?>
+                        <?= $form->field($model, 'nombre')->textInput(['maxlength' => true,'class'=>'form-control','style'=>'text-transform: uppercase'])->label(Yii::t('app', 'Nombre / Razón Social') ) ?>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-3">
-                        <?= $form->field($model, 'id_tipo_documento')->dropDownList( util::arrTipoDocumentos , ['class'=>'form-control', 'prompt' => 'Seleccione Uno' ])->label('Tipo Doc.'); ?>
+                        <?= $form->field($model, 'id_tipo_documento')->dropDownList( util::arrTipoDocumentos , ['class'=>'form-control', 'prompt' => 'Seleccione Uno' ])->label(Yii::t('app', 'Tipo Doc.')); ?>
                     </div>
                     <div class="col-md-9">
-                        <?= $form->field($model, 'documento')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Documento Identidad') ?>
+                        <?= $form->field($model, 'documento')->textInput(['maxlength' => true,'class'=>'form-control'])->label(Yii::t('app', 'Documento Identidad')) ?>
                     </div>
                 </div>
                 <div class="row">
@@ -70,45 +70,41 @@ $this->registerJsFile('@web/js/comerciales.js');
                                 ],
                                 'pluginEvents' => ['select2:select' => new JsExpression('({params}) => popularLocalidadProvincia(params)')]
                             ]
-                        )  ?>
+                        )->label(Yii::t('app', 'Cód. Postal'))  ?>
                     </div>
                     <div class="col-md-8 "  >
-                        <?= $form->field($model, 'poblacion')->textInput(['id'=>'comunidad-poblacion','maxlength' => true,'class'=>'form-control','readonly' => true])->label('Población') ?>
+                        <?= $form->field($model, 'poblacion')->textInput(['id'=>'comunidad-poblacion','maxlength' => true,'class'=>'form-control','readonly' => true])->label(Yii::t('app', 'Población')) ?>
                     </div>
                 </div>
                 <div class="form-group">
-                    <?= $form->field($model, 'direccion')->textInput(['maxlength' => true,'class'=>'form-control','style'=>'text-transform: uppercase'])->label('Dirección') ?>
+                    <?= $form->field($model, 'direccion')->textInput(['maxlength' => true,'class'=>'form-control','style'=>'text-transform: uppercase'])->label(Yii::t('app', 'Dirección')) ?>
                 </div>
                 <div class="row">
                     <div class="col-md-4 " >
-                        <?= $form->field($model, 'telefono')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Teléfono') ?>
+                        <?= $form->field($model, 'telefono')->textInput(['maxlength' => true,'class'=>'form-control'])->label(Yii::t('app', 'Teléfono')) ?>
                     </div>
                     <div class="col-md-8 " >
-                        <?= $form->field($model, 'email')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Email') ?>
+                        <?= $form->field($model, 'email')->textInput(['maxlength' => true,'class'=>'form-control'])->label(Yii::t('app', 'Email')) ?>
                     </div>
                 </div>
                 <div class="form-group">
-                    <?= $form->field($model, 'contacto')->textInput(['maxlength' => true,'class'=>'form-control','style'=>'text-transform: uppercase'])->label('Nombre Persona/Contacto') ?>
+                    <?= $form->field($model, 'contacto')->textInput(['maxlength' => true,'class'=>'form-control','style'=>'text-transform: uppercase'])->label(Yii::t('app', 'Nombre Persona / Contacto')) ?>
                 </div>
                 <div class="row">
                     <div class="col-md-12 "  >
-                        <?= $form->field($model, 'observacion')->textArea(['id' => 'observaciones', 'class' => 'form-control', 'style' => 'width:100%'])->label('Notas/Observaciones') ?>
+                        <?= $form->field($model, 'observacion')->textArea(['id' => 'observaciones', 'class' => 'form-control', 'style' => 'width:100%'])->label(Yii::t('app', 'Notas').' / '.Yii::t('app', 'Observaciones')) ?>
                     </div>
                 </div>
                 <div class="form-group">
-                    <?= $form->field($model, 'estado')->widget(SwitchInput::class, ['pluginOptions'=>['size'=>'small','onText'=>'Activo','offText'=>'Inactivo']])->label('Estado') ; ?>
+                    <?= $form->field($model, 'estado')->widget(SwitchInput::class, ['pluginOptions'=>['size'=>'small','onText'=>'Activo','offText'=>'Inactivo']])->label(Yii::t('app', 'Estado')) ; ?>
                 </div>
-
                 <div  style="padding-top: 15px" >
-                    <?= Html::submitButton('Guardar Proveedor', ['class' => 'btn btn-success ']) ?>
+                    <?= Html::submitButton(Yii::t('app', 'Guardar').' '.Yii::t('app', 'Proveedor'), ['class' => 'btn btn-success ']) ?>
                     <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
                 </div>
             </div>
 
             <?php ActiveForm::end(); ?>
-
         </div>
-
     </div>
-
 </div>

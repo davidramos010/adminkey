@@ -3,9 +3,8 @@
  *  Al seleccionar un CP se llenan los campos localidad y provincia
  * @param params
  */
-function popularLocalidadProvincia(params) {
+function fnLocalidadProvincia(params) {
     if (params && params.data) {
-        //$("#altasin-dir_poblac").val(params.data.localidad);
         $("#comunidad-poblacion").val(params.data.poblacio+ ', '+params.data.provincia);
     }
 }
