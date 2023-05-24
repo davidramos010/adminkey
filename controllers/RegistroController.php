@@ -136,7 +136,8 @@ class RegistroController extends BaseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        $model->fecha_registro = empty($model->entrada)?$model->salida:$model->entrada;
+        $model->fecha_registro = !empty($model->fecha_registro)?Tools::getDateTimeShortFormatedSqlToUser( $model->fecha_registro ,'-'):'';
         return $this->render('update', [
             'model' => $model,
         ]);
@@ -314,45 +315,51 @@ class RegistroController extends BaseController
     public function actionAjaxDeleteMotion()
     {
         $bolError = false;
+        $strMensaje = '';
         $transaction = Yii::$app->db->beginTransaction();
         try {
             $numIdRegistro = (!empty($this->request->post()) && isset($this->request->post()['numIdRegistro'])) ? (int) trim($this->request->post()['numIdRegistro']) : null;
-            $objOldRegistro = $this->findModel($numIdRegistro);
-            $objOldLlavesStatus = LlaveStatus::find()->where(['id_registro'=>$numIdRegistro])->all();
-            $newRegistroLog = new RegistroLog();
-            $newRegistroLog->id_registro = $numIdRegistro;
-            $newRegistroLog->id_user = $objOldRegistro->id_user;
-            $newRegistroLog->id_llave = $objOldRegistro->id_llave;
-            $newRegistroLog->entrada = $objOldRegistro->entrada;
-            $newRegistroLog->salida = $objOldRegistro->salida;
-            $newRegistroLog->observacion = $objOldRegistro->observacion;
-            $newRegistroLog->id_comercial = $objOldRegistro->id_comercial;
-            $newRegistroLog->firma_soporte = $objOldRegistro->firma_soporte;
-            $newRegistroLog->tipo_documento = $objOldRegistro->tipo_documento;
-            $newRegistroLog->documento = $objOldRegistro->documento;
-            $newRegistroLog->nombre_responsable = $objOldRegistro->nombre_responsable;
-            $newRegistroLog->telefono = $objOldRegistro->telefono;
-            $newRegistroLog->action = 'deleted';
-            if($newRegistroLog->validate() && $newRegistroLog->save()){
-                foreach ($objOldLlavesStatus as $value) {
-                    $newRegistroStatus = new LlaveStatusLog();
-                    $newRegistroStatus->load(['LlaveStatusLog'=>$value->getAttributes()]);
-                    $newRegistroStatus->id_registro_log = $newRegistroLog->id;
-                    if(!$newRegistroStatus->save()){
-                        $bolError = true;
-                        continue;
+            // validar si por lo menos una de las llaves tiene movimientos
+            $bolLlavesConMovimiento = Registro::getLlavesConMovimiento($numIdRegistro);
+            if(!$bolLlavesConMovimiento){
+                $objOldRegistro = $this->findModel($numIdRegistro);
+                $objOldLlavesStatus = LlaveStatus::find()->where(['id_registro'=>$numIdRegistro])->all();
+                $newRegistroLog = new RegistroLog();
+                $newRegistroLog->id_registro = $numIdRegistro;
+                $newRegistroLog->id_user = $objOldRegistro->id_user;
+                $newRegistroLog->id_llave = $objOldRegistro->id_llave;
+                $newRegistroLog->entrada = $objOldRegistro->entrada;
+                $newRegistroLog->salida = $objOldRegistro->salida;
+                $newRegistroLog->observacion = $objOldRegistro->observacion;
+                $newRegistroLog->id_comercial = $objOldRegistro->id_comercial;
+                $newRegistroLog->firma_soporte = $objOldRegistro->firma_soporte;
+                $newRegistroLog->tipo_documento = $objOldRegistro->tipo_documento;
+                $newRegistroLog->documento = $objOldRegistro->documento;
+                $newRegistroLog->nombre_responsable = $objOldRegistro->nombre_responsable;
+                $newRegistroLog->telefono = $objOldRegistro->telefono;
+                $newRegistroLog->action = 'deleted';
+                if($newRegistroLog->validate() && $newRegistroLog->save()){
+                    foreach ($objOldLlavesStatus as $value) {
+                        $newRegistroStatus = new LlaveStatusLog();
+                        $newRegistroStatus->load(['LlaveStatusLog'=>$value->getAttributes()]);
+                        $newRegistroStatus->id_registro_log = $newRegistroLog->id;
+                        if(!$newRegistroStatus->save()){
+                            $bolError = true;
+                            continue;
+                        }
                     }
+                }else{
+                    $bolError=true;
+                }
+                //Eliminar registros
+                if(!$bolError){
+                    LlaveStatus::deleteAll('id_registro = :id_registro', array(':id_registro' => $numIdRegistro));
+                    $this->findModel($numIdRegistro)->delete();
                 }
             }else{
-                $bolError=true;
+                $strMensaje = 'Por lo menos una de la llaves tiene más movimientos posteriores a este registro.';
+                $bolError = true;
             }
-
-            //Eliminar registros
-            if(!$bolError){
-                LlaveStatus::deleteAll('id_registro = :id_registro', array(':id_registro' => $numIdRegistro));
-                $this->findModel($numIdRegistro)->delete();
-            }
-
         }catch (\Exception $e){
             $bolError=true;
         }
@@ -363,7 +370,7 @@ class RegistroController extends BaseController
             $transaction->rollBack();
         }
 
-        return json_encode(['result' => $bolError ? 'KO':'OK']);
+        return json_encode(['result' => $bolError ? 'KO':'OK','mensaje'=>$strMensaje]);
     }
 
     /**
@@ -377,7 +384,6 @@ class RegistroController extends BaseController
         try {
             $register = $this->actionAjaxRegisterMotion();
             $registerLog = $this->actionAjaxDeleteMotion();
-
         }catch (\Exception $e){
             $bolError=true;
         }

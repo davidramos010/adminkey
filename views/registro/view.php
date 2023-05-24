@@ -15,8 +15,6 @@ use yii\widgets\ActiveForm;
 /* @var $bolActiveBotonProcess boolean */
 /* @var $bolActiveBotonUpdate boolean */
 
-
-
 $this->registerJsFile('@web/js/registro.js');
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Registros', 'url' => ['index']];
@@ -28,7 +26,8 @@ $arrColumns = [[
     'headerOptions' => ['style' => 'width: 10%'],
     'format' => 'raw',
     'value' => function ($model) {
-        return (isset($model->llave->codigo)) ? strtoupper($model->llave->codigo) : '';
+        $strDevuelta = $model->status == 'S' && (int) $model->llaves_e>0 ? '<label class=" text-success" title="'.Yii::t('app', 'Llaves Devueltas').'">* '.strtoupper($model->llave->codigo).'</label>' : strtoupper($model->llave->codigo);
+        return (isset($model->llave->codigo)) ? $strDevuelta : '';
     }],
     [
         'attribute' => 'id',
@@ -114,6 +113,10 @@ echo BarcodeGenerator::widget($optionsArray);
                     'columns' => $arrColumns
                 ]) ?>
             </div>
+            <div class="card-footer">
+                <label class="text-success" title="<?= Yii::t('app', 'Llaves Devueltas') ?>">* <?= Yii::t('app', 'Llaves Devueltas') ?></label>
+            </div>
+
         </div>
         <div class="card card-primary" style="display:<?= $bolVisibleGridEntrada ?>">
             <div class="card-header">

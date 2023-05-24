@@ -27,6 +27,8 @@ class LlaveStatus extends \yii\db\ActiveRecord
     public $fecha_registro = null;
     public $firma_soporte = null;
     public $descripcion_llave = null;
+    public $llaves_e = null;
+
 
     /**
      * {@inheritdoc}

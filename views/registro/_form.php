@@ -1,5 +1,6 @@
 <?php
 
+use app\components\Tools;
 use app\models\Registro;
 use app\models\util;
 use inquid\signature\SignatureWidget;
@@ -230,9 +231,8 @@ $strAddBotonEliminar = isset($action) && $action == 'update' ? Html::button(Yii:
                     <div class="row">
                         <div class="col-md-2">
                             <?= $form->field($model,
-                                'entrada')->widget(DateTimePicker::class,
+                                'fecha_registro')->widget(DateTimePicker::class,
                                 [
-                                    'value' => empty($model->entrada)?$model->salida:$model->entrada,
                                     'options' => [
                                         'autocomplete' => 'off',
                                     ],

@@ -178,11 +178,22 @@ class Tools
         return $dateFormated;
     }
 
-    public static function getDateTimeFormatedSqlToUser($date)
+    public static function getDateTimeFormatedSqlToUser($date,$strFormat = '/')
     {
         if (!empty($date)) {
             $fecha = \DateTime::createFromFormat('Y-m-d H:i:s', $date);
-            $dateFormated = $fecha->format('d/m/Y H:i:s');
+            $dateFormated = ($strFormat == '/') ? $fecha->format('d/m/Y H:i:s') : $fecha->format('d-m-Y H:i:s');
+        } else {
+            $dateFormated = $date;
+        }
+        return $dateFormated;
+    }
+
+    public static function getDateTimeShortFormatedSqlToUser($date,$strFormat = '/')
+    {
+        if (!empty($date)) {
+            $fecha = \DateTime::createFromFormat('Y-m-d H:i:s', $date);
+            $dateFormated = ($strFormat == '/') ? $fecha->format('d/m/Y H:i') : $fecha->format('d-m-Y H:i');
         } else {
             $dateFormated = $date;
         }
@@ -338,46 +349,6 @@ class Tools
             ] : ['class' => 'col-xs-12 col-sm-6 col-lg-4  vv-dashboard']);
     }
 
-    /*public static function getPreviewConfigFileInput($previewUrl, $previewType, $fileName)
-    {
-        $options = [
-            'initialPreviewShowDelete' => false,
-            'showBrowse' => false,
-            'showRemove' => false,
-            'showClose' => false,
-            'fileActionSettings' => [
-                'showDrag' => false,
-                'showRemove' => false,
-            ],
-            'showCaption' => false,
-            'showUpload' => false,
-        ];
-        $possiblePreview = in_array($previewType, ['pdf', 'img']);
-
-
-        if (!empty($previewUrl) && $possiblePreview) {
-            $options['initialPreview'] = $previewUrl;
-            $options['initialPreviewAsData'] = true;
-        } else {
-            $options['initialPreview'] = self::iconAssociaton($previewType);
-            $options['initialPreviewAsData'] = false;
-
-        }
-
-        if (!empty($previewType) || !empty($fileName)) {
-            $initialPreviewConfig['key'] = 1;
-            if (!empty($previewType) && $possiblePreview) {
-                $initialPreviewConfig['type'] = self::$type_association[$previewType];
-            }
-            $initialPreviewConfig['caption'] = $fileName;
-        }
-        $options['initialPreviewConfig'][] = $initialPreviewConfig;
-        $options['previewFileIconSettings'] = [
-            'zip' => Icon::show('file-archive-o'),
-            'xls' => Icon::show('file-o')
-        ];
-        return $options;
-    }*/
 
     /**
      * @param string $previewUrl Ther preview url

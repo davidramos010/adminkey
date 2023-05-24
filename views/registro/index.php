@@ -116,7 +116,7 @@ $buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
                         'headerOptions' => ['style' => 'width: 10%'],
                         'enableSorting'=>false,
                         'value' => function ($model) {
-                            return (isset($model->salida))? util::getDateTimeFormatedSqlToUser($model->salida) :'' ;
+                            return (isset($model->salida))? util::getDateTimeFormatedSqlToUser($model->salida) :  util::getDateTimeFormatedSqlToUser($model->entrada);
                         },
                         'filterType' => GridView::FILTER_DATE,
                         'filterWidgetOptions' => [
@@ -130,32 +130,9 @@ $buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
                         ],
                         'filterInputOptions' => [
                             'class' => 'form-control',
-                            'placeholder' => Yii::t('app', 'Fecha Salida'),
+                            'placeholder' => Yii::t('app', 'Fecha').' '.Yii::t('app', 'Operación'),
                         ],
-                        'label' => Yii::t('app', 'Fecha Salida'),
-                        'headerOptions' => ['class' => 'col-xs-2'],
-                        'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; ']
-                    ],
-                    [
-                        'attribute' => 'entrada',
-                        'headerOptions' => ['style' => 'width: 20%'],
-                        'enableSorting'=>false,
-                        'value' => function ($model) {
-                            return (isset($model->entrada))? util::getDateTimeFormatedSqlToUser($model->entrada) :'' ;
-                        },
-                        'filterType' => GridView::FILTER_DATE,
-                        'filterWidgetOptions' => [
-                            'pluginOptions' => [
-                                'autoclose' => true,
-                                'format' => 'dd-mm-yyyy'
-                            ],
-
-                        ],
-                        'filterInputOptions' => [
-                            'class' => 'form-control',
-                            'placeholder' => Yii::t('app', 'Fecha Devolución'),
-                        ],
-                        'label' => Yii::t('app', 'Fecha Devolución'),
+                        'label' => Yii::t('app', 'Fecha').' '.Yii::t('app', 'Operación'),
                         'headerOptions' => ['class' => 'col-xs-2'],
                         'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; ']
                     ],
@@ -228,9 +205,16 @@ $buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
                 echo GridView::widget([
                     'dataProvider' => $dataProvider,
                     'rowOptions'=>function($model){
-                        if((int) $model->llaves_st > (int) $model->llaves_sp){
-                            return ['class' => 'table-danger'];
+                        $arrClass = [];
+                        $numLlaveSt = (int) $model->llaves_st ;
+                        $numLlaveSp = (int) $model->llaves_sp ;
+                        if($numLlaveSt > $numLlaveSp){ // pendientes
+                            $arrClass = ['class' => 'table-danger'];
                         }
+                        if(empty($arrClass) && !empty($numLlaveSt) && !empty($numLlaveSp) && $numLlaveSt <= $numLlaveSp){ // terminados
+                            $arrClass = ['class' => 'table-success'];
+                        }
+                        return $arrClass;
                     },
                     'filterModel' => $searchModel,
                     'columns' => $gridColumns,
