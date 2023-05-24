@@ -66,7 +66,7 @@ class Registro extends \yii\db\ActiveRecord
         return [
             [['id_user'], 'required'],
             [['id_user', 'id_llave', 'id_comercial','tipo_documento'], 'integer'],
-            [['entrada', 'salida','signature'], 'safe'],
+            [['entrada', 'salida','signature','fecha_registro'], 'safe'],
             [['documento','telefono'], 'string', 'max' => 20],
             [['nombre_responsable', 'observacion','codigo','username','firma_soporte'], 'string', 'max' => 255],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
@@ -355,7 +355,7 @@ class Registro extends \yii\db\ActiveRecord
                                         <th style='width:40%;text-align: center'>".Yii::t('app', 'ENTREGADO POR')."</th>
                                         <th style='width:60%;text-align: center'>".Yii::t('app', 'ENTREGADO A')."</th>
                                     </tr><tr>
-                                        <td style=''>".$objRegistro->user->userInfo->nombres." ".$objRegistro->user->userInfo->apellidos."<br/>Email:".$objRegistro->user->userInfo->email."<br/>Teléfono:".$objRegistro->user->userInfo->telefono."</td>
+                                        <td style=''>".$objRegistro->user->userInfo->nombres." ".$objRegistro->user->userInfo->apellidos."<br/>Email:".$objRegistro->user->userInfo->email."</td>
                                         <td style='text-align: left'>$strDivResponsableText</td>
                                     </tr></tbody>
                                     </table>
@@ -618,5 +618,24 @@ class Registro extends \yii\db\ActiveRecord
             'error' => $avisos,
             'errors' => [],
         ];
+    }
+
+    /**
+     * Buscar si un grupo de llaves de un registro, tienen mas movimiento
+     * @param int $numIdRegistro
+     * @return bool
+     */
+    public static function getLlavesConMovimiento(int $numIdRegistro ):bool
+    {
+        $query = LlaveStatus::find()->alias('r')
+            ->select([
+                "r.*",
+                "( SELECT count(1) 
+                     FROM llave_status lsp 
+                     WHERE lsp.id_registro > r.id_registro AND 
+                     lsp.id_llave = r.id_llave) AS llaves_e "
+            ])->where(['id_registro'=>$numIdRegistro]);
+        $query->andHaving("llaves_e > 1");
+        return !empty((int) $query->count());
     }
 }

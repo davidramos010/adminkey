@@ -418,6 +418,9 @@ function sendDeleteForm(){
                 toastr.success('Registro eliminado correctamente.');
                 setTimeout("window.location = strUrlList;",600);
             }else{
+                if(data.mensaje != ''){
+                    toastr.error(data.mensaje);
+                }
                 toastr.error('El registro no se puede eliminar, comunique al administrador.');
                 return false;
             }

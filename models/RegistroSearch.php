@@ -18,7 +18,7 @@ class RegistroSearch extends Registro
     {
         return [
             [['id', 'id_user', 'id_llave', 'pendientes' ], 'integer'],
-            [['username','entrada', 'salida', 'observacion', 'codigo', 'username','comunidad','comercial','propietarios','clientes','llaves','llaves_e','llaves_s','llaves_st','llaves_sp'], 'safe'],
+            [['username','entrada', 'salida', 'fecha_registro','observacion', 'codigo', 'username','comunidad','comercial','propietarios','clientes','llaves','llaves_e','llaves_s','llaves_st','llaves_sp'], 'safe'],
         ];
     }
 
@@ -44,6 +44,7 @@ class RegistroSearch extends Registro
         $query = Registro::find()->alias('r');
         $query->select([
             'r.*',
+            '(CASE WHEN r.salida IS NOT NULL THEN r.salida ELSE r.entrada END) as fecha_registro ',
             'll.codigo',
             'u.username',
             'cm.nombre as comercial',
@@ -82,7 +83,6 @@ class RegistroSearch extends Registro
         $query->leftJoin('User u','r.id_user = u.id');
         $query->leftJoin('comerciales cm','r.id_comercial = cm.id');
         // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
@@ -120,6 +120,15 @@ class RegistroSearch extends Registro
             ]);
         }
 
+        if($this->fecha_registro){
+            $query->andFilterWhere([
+                'LIKE', 'entrada', Date('Y-m-d', strtotime($this->fecha_registro))
+            ]);
+            $query->andFilterWhere([
+                'LIKE', 'salida', Date('Y-m-d', strtotime($this->fecha_registro))
+            ]);
+        }
+
         // ======================================================
         $query->andFilterWhere(['like', 'observacion', $this->observacion]);
         $query->andFilterWhere(['like', 'll.codigo', $this->codigo]);
@@ -151,7 +160,15 @@ class RegistroSearch extends Registro
      */
     public function search_status($idRegistro, $strStatus)
     {
-        $query = LlaveStatus::find()->where(['id_registro'=>$idRegistro,'status'=>$strStatus]);
+        $query = LlaveStatus::find()->alias('r')
+            ->select([
+                "r.*",
+                "( SELECT count(1) 
+                     FROM llave_status lsp 
+                     WHERE lsp.id_registro >= r.id_registro AND 
+                     lsp.id_llave = r.id_llave AND
+                     lsp.status='E') AS llaves_e "
+            ])->where(['id_registro'=>$idRegistro,'status'=>$strStatus]);
         $query->orderBy('id DESC');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
