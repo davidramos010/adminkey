@@ -18,7 +18,7 @@ class RegistroSearch extends Registro
     {
         return [
             [['id', 'id_user', 'id_llave', 'pendientes' ], 'integer'],
-            [['username','entrada', 'salida', 'fecha_registro','observacion', 'codigo', 'username','comunidad','comercial','propietarios','clientes','llaves','llaves_e','llaves_s','llaves_st','llaves_sp'], 'safe'],
+            [['username','entrada', 'salida', 'fecha_registro','observacion', 'codigo', 'username','comunidad','comercial','propietarios','clientes','llaves','llaves_e','llaves_s','llaves_st','llaves_sp','nombre_responsable'], 'safe'],
         ];
     }
 
@@ -98,10 +98,12 @@ class RegistroSearch extends Registro
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'id_user' => $this->id_user,
+            'r.id' => $this->id,
+            'r.id_user' => $this->id_user,
             'id_llave' => $this->id_llave,
             'u.username' => $this->username,
+            'r.nombre_responsable' => $this->nombre_responsable,
+
         ]);
 
         if($this->comercial){

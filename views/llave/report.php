@@ -38,7 +38,7 @@ $this->title = 'Reporte de Llaves';
 
         <div class="card card-primary">
             <div class="card-body">
-                <?php Pjax::begin(); ?>
+                <?php Pjax::begin(['timeout' => false, 'enablePushState' => false, 'clientOptions' => ['method' => 'GET']]); ?>
                 <?php
 
                 $gridColumns = [
@@ -99,7 +99,7 @@ $this->title = 'Reporte de Llaves';
                     [
                         'attribute' => 'codigo',
                         'label' => 'Código',
-                        'headerOptions' => ['style' => 'width: 5%'],
+                        'headerOptions' => ['style' => 'width: 8%'],
                         'enableSorting'=>false,
                     ],
                     [
@@ -111,7 +111,7 @@ $this->title = 'Reporte de Llaves';
                     [
                         'attribute' => 'observacion',
                         'label' => 'Observación',
-                        'headerOptions' => ['style' => 'width: 20%'],
+                        'headerOptions' => ['style' => 'width: 17%'],
                         'enableSorting'=>false,
                     ],
                     [
@@ -240,23 +240,13 @@ $this->title = 'Reporte de Llaves';
                 ]);
                 ?>
                 <br><br>
-                <?= \kartik\grid\GridView::widget([
+                <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'formatter' => array('class' => 'yii\i18n\Formatter', 'nullDisplay' => ''),
                     'resizableColumns' => false,
                     'condensed' => true,
                     'floatHeader' => false,
-                    'pjax' => true,
-                    'pjaxSettings' => [
-                        'options' => [
-                            'timeout' => false,
-                            'enablePushState' => false,
-                            'clientOptions' => [
-                                'method' => 'GET'
-                            ]
-                        ]
-                    ],
                     'columns' => $gridColumns,
                     'toolbar' => [
                         [

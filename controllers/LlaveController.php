@@ -74,6 +74,7 @@ class LlaveController extends BaseController
     {
         $searchModel = new LlaveSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->pagination->pageSize = 50;
 
         return $this->render('report', [
             'searchModel' => $searchModel,

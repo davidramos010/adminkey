@@ -178,7 +178,7 @@ $this->registerJsFile('@web/js/llave.js');
                         'headerOptions' => ['style' => 'width: 5%'],
                         'enableSorting'=>false,
                         'value' => function ($model) {
-                            return ($model->activa==0)?'<span class="float-none badge bg-danger">Inactiva</span>':'<span class="float-none badge bg-success">Aactiva</span>' ;
+                            return ($model->activa==0)?'<span class="float-none badge bg-danger">Inactiva</span>':'<span class="float-none badge bg-success">Activa</span>' ;
                         },
                         'format' => 'raw',
                         'filterType' => GridView::FILTER_SELECT2,
@@ -198,6 +198,7 @@ $this->registerJsFile('@web/js/llave.js');
                         'headerOptions' => ['style' => 'width: 5%'],
                         'enableSorting'=>false,
                         'format' => 'raw',
+                        'filter'=>false,
                         'value' => function($model){
                             return '<button type="button" class="btn btn-outline-info btn-block btn-sm" data-toggle="modal" data-target="#modal-default" onclick="getInfoLlaveCard('.$model->id.')"><i class="fas fa-info-circle"></i></button> ';
                         }
