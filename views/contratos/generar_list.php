@@ -142,7 +142,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 $strReturn = Html::a('<i class="fas fa-download"></i> Descargar' , $url, ['title'=>'Descargar Plantilla', 'target' => '_blank', 'class' => 'btn btn-primary float-right btn-sm', 'style'=>'margin-right: 5px;', 'data' => ['tooltip' => true, 'pjax' => 0 ]])  ;
                             }
                             return $strReturn;
-                        }
+                        },
+                        'options' => [
+                            'hideSearch' => true
+                        ]
                     ],
                     [
                         'class' => '\kartik\grid\ActionColumn',

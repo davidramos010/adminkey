@@ -64,13 +64,11 @@ class LlaveSearch extends Llave
 
         $query->leftJoin('propietarios pp','ll.id_propietario = pp.id');
         $query->leftJoin('comunidad cc','ll.id_comunidad = cc.id');
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
         $this->load($params);
-
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
@@ -113,6 +111,10 @@ class LlaveSearch extends Llave
                 ['like', 'pp.nombre_representante', $this->nombre_propietario]]);
         }
 
+        // Ordenamos por Codigo
+        if (!isset($params['sort'])) {
+            $query->orderBy('ll.codigo ASC');
+        }
 
         return $dataProvider;
     }

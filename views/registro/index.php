@@ -53,7 +53,7 @@ $buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
         <div class="card card-primary">
             <!-- /.card-header -->
             <div class="card-body">
-                <?php Pjax::begin(); ?>
+                <?php Pjax::begin(['timeout' => false, 'enablePushState' => false, 'clientOptions' => ['method' => 'GET']]); ?>
                 <?php
 
                 $gridColumns = [
@@ -64,13 +64,15 @@ $buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
                     ],
                     [
                         'attribute' => 'username',
-                        'label' => Yii::t('app','Usuario Sistema'),
+                        'label' => Yii::t('app','User'),
+                        'headerOptions' => ['style' => 'width: 10%;'],
                         'format' => 'raw',
                         'enableSorting'=>false,
                         'value' => function($model){
                             return (isset($model->user))?strtoupper($model->user->username):'No Encontrado' ;
                         }
                     ],
+
                     [
                         'attribute' => 'comercial',
                         'label' => Yii::t('app','Empresa/Proveedor'),
@@ -137,11 +139,22 @@ $buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
                         'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; ']
                     ],
                     [
+                        'attribute' => 'nombre_responsable',
+                        'label' => Yii::t('app','Responsable'),
+                        'headerOptions' => ['style' => 'width: 15%'],
+                        'format' => 'raw',
+                        'enableSorting'=>false,
+                        'value' => function($model){
+                            return (isset($model->nombre_responsable))?strtoupper($model->nombre_responsable):'' ;
+                        }
+                    ],
+                    [
                         'attribute' => 'id',
                         'label' => Yii::t('app', 'Soporte'),
                         'headerOptions' => ['style' => 'width: 5%'],
                         'enableSorting'=>false,
                         'format' => 'raw',
+                        'filter'=>false,
                         'value' => function($model){
                             return Html::button('<i class="fas fa-download"></i> '.Yii::t('app', 'Descargar'), ['id' => 'btn_registrar', 'class' => 'btn btn-primary float-left btn-sm', 'onclick' => '(function ( $event ) { generatePdfRegistro( '.$model->id.' ) })();', 'style'=>'margin-right: 5px;']);
                         }
@@ -222,16 +235,7 @@ $buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
                     'resizableColumns' => false,
                     'condensed' => true,
                     'floatHeader' => false,
-                    'pjax' => true,
-                    'pjaxSettings' => [
-                        'options' => [
-                            'timeout' => false,
-                            'enablePushState' => false,
-                            'clientOptions' => [
-                                'method' => 'GET'
-                            ]
-                        ]
-                    ],
+
                     'toolbar' => [
                         [
                             'content' =>
