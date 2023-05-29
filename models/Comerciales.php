@@ -39,10 +39,10 @@ class Comerciales extends \yii\db\ActiveRecord
     {
         return [
             [['id_tipo_documento','estado'], 'integer'],
-            [['nombre','contacto','direccion'], 'required', 'message'=> Yii::t('yii',  '{attribute} es requerido')],
+            [['nombre','direccion'], 'required', 'message'=> Yii::t('yii',  '{attribute} es requerido')],
             [['direccion','nombre','direccion','poblacion','email','observacion'], 'string', 'max' => 255],
             [['documento'], 'string', 'max' => 255],
-            [['telefono', 'telefono', 'contacto'], 'string', 'max' => 100],
+            [['telefono', 'movil', 'contacto'], 'string', 'max' => 100],
             [['cod_postal'], 'string', 'max' => 6],
             [['email'], 'email','message'=> Yii::t('yii',  '{attribute} no es valido')],
         ];
@@ -86,8 +86,8 @@ class Comerciales extends \yii\db\ActiveRecord
         }
 
         $this->nombre = trim(strtoupper($this->nombre));
-        $this->contacto = trim(strtoupper($this->contacto));
         $this->direccion = trim(strtoupper($this->direccion));
+        $this->contacto = !empty($this->contacto) ? trim(strtoupper($this->contacto)) : null;
 
         return true;
     }

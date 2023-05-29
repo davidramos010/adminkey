@@ -18,7 +18,7 @@ class ComercialesSearch extends Comerciales
     {
         return [
             [['id'], 'integer'],
-            [['nombre', 'telefono', 'contacto'], 'safe'],
+            [['nombre', 'telefono', 'contacto', 'estado'], 'safe'],
         ];
     }
 
@@ -59,13 +59,16 @@ class ComercialesSearch extends Comerciales
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'estado' => $this->estado
         ]);
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre])
             ->andFilterWhere(['like', 'telefono', $this->telefono])
             ->andFilterWhere(['like', 'contacto', $this->contacto]);
 
-        $query->orderBy('nombre ASC');
+        if(!isset($params['sort'])){
+            $query->orderBy('nombre ASC');
+        }
 
         return $dataProvider;
     }

@@ -68,7 +68,7 @@ $this->registerJsFile('@web/js/comerciales.js');
                                     'templateResult' => new JsExpression('(params) => params.loading ? "Buscando..." : params.id + " - " + params.poblacio'),
                                     'templateSelection' => new JsExpression('(cp) => cp.text'),
                                 ],
-                                'pluginEvents' => ['select2:select' => new JsExpression('({params}) => popularLocalidadProvincia(params)')]
+                                'pluginEvents' => ['select2:select' => new JsExpression('({params}) => fnLocalidadProvincia(params)')]
                             ]
                         )->label(Yii::t('app', 'Cód. Postal'))  ?>
                     </div>
@@ -80,10 +80,13 @@ $this->registerJsFile('@web/js/comerciales.js');
                     <?= $form->field($model, 'direccion')->textInput(['maxlength' => true,'class'=>'form-control','style'=>'text-transform: uppercase'])->label(Yii::t('app', 'Dirección')) ?>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 " >
+                    <div class="col-md-3 " >
                         <?= $form->field($model, 'telefono')->textInput(['maxlength' => true,'class'=>'form-control'])->label(Yii::t('app', 'Teléfono')) ?>
                     </div>
-                    <div class="col-md-8 " >
+                    <div class="col-md-3 " >
+                        <?= $form->field($model, 'movil')->textInput(['maxlength' => true,'class'=>'form-control'])->label(Yii::t('app', 'Movil')) ?>
+                    </div>
+                    <div class="col-md-6 " >
                         <?= $form->field($model, 'email')->textInput(['maxlength' => true,'class'=>'form-control'])->label(Yii::t('app', 'Email')) ?>
                     </div>
                 </div>
