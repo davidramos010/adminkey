@@ -102,9 +102,12 @@ class RegistroSearch extends Registro
             'r.id_user' => $this->id_user,
             'id_llave' => $this->id_llave,
             'u.username' => $this->username,
-            'r.nombre_responsable' => $this->nombre_responsable,
 
         ]);
+
+        if($this->nombre_responsable){
+            $query->andFilterWhere(['LIKE', 'r.nombre_responsable', $this->nombre_responsable]);
+        }
 
         if($this->comercial){
             $query->andFilterWhere(['LIKE', 'cm.nombre', $this->comercial]);
