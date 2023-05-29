@@ -1,14 +1,10 @@
 <?php
 
-use app\models\Comerciales;
-use kartik\grid\ActionColumn;
 use kartik\grid\GridView;
 use kartik\widgets\Select2;
 use yii\helpers\Html;
-use yii\helpers\Url;
 use kartik\export\ExportMenu;
 use yii\widgets\Pjax;
-
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ComercialesSearch */
@@ -48,33 +44,37 @@ $this->title = 'Proveedores';
                 <?php Pjax::begin(); ?>
                 <?php
                     $gridColumns =[
-                                    ['class' => 'yii\grid\SerialColumn'],
+                                    [
+                                        'attribute' => 'id',
+                                        'label' => '#',
+                                        'headerOptions' => ['style' => 'width: 6%']
+                                    ],
                                     [
                                         'attribute' => 'nombre',
                                         'label' => 'Nombre',
-                                        'headerOptions' => ['style' => 'width: 20%']
+                                        'headerOptions' => ['style' => 'width: 22%']
                                     ],
                                     [
                                         'attribute' => 'contacto',
                                         'label' => 'Persona/Contacto',
-                                        'headerOptions' => ['style' => 'width: 20%']
+                                        'headerOptions' => ['style' => 'width: 18%']
                                     ],
                                     [
                                         'attribute' => 'telefono',
                                         'label' => 'Teléfono',
-                                        'headerOptions' => ['style' => 'width: 20%']
+                                        'headerOptions' => ['style' => 'width: 18%']
                                     ],
                                     [
                                         'attribute' => 'direccion',
                                         'label' => 'Dirección',
-                                        'headerOptions' => ['style' => 'width: 20%']
+                                        'headerOptions' => ['style' => 'width: 22%']
                                     ],
                                     [
                                         'attribute' => 'estado',
                                         'label' => 'Estado',
-                                        'headerOptions' => ['style' => 'width: 10%'],
+                                        'headerOptions' => ['style' => 'width: 5%'],
                                         'value' => function ($model) {
-                                            return ($model->estado==1)?'<span class="float-none badge bg-success">'.Yii::t('app', 'Activo').'</span>':'<span class="float-none badge bg-danger">'.Yii::t('app', 'Inactivo').'</span>' ;
+                                            return ($model->estado==1)?'<span class="float-none badge bg-success">ACTIVO</span>':'<span class="float-none badge bg-danger">INACTIVO</span>' ;
                                         },
                                         'format' => 'raw',
                                         'filterType' => GridView::FILTER_SELECT2,

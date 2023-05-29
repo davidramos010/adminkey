@@ -93,7 +93,7 @@ $this->title = 'Clientes';
                             },
                             'format' => 'raw',
                             'filterType' => GridView::FILTER_SELECT2,
-                            'filter' => [ '1' => 'ACTIVO', '0' => 'INACTIVO'],
+                            'filter' => [ '1' => Yii::t('app', 'Activo'), '0' => Yii::t('app', 'Inactivo')],
                             'filterWidgetOptions' => [
                                 'theme' => Select2::THEME_BOOTSTRAP,
                                 'size' => Select2::SMALL,
