@@ -29,8 +29,8 @@ $this->registerJsFile('@web/js/llave.js');
                 <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
                     <?php
                     echo Html::ul([
-                        'El codigo de barras de cada llave se genera Automaticamente',
-                        'El codigo de la llave hace referencia a una codificación interna del usuario.'
+                        Yii::t('app','El codigo de barras de cada llave se genera Automaticamente'),
+                            Yii::t('app','El codigo de la llave hace referencia a una codificación interna del usuario.')
                     ], ['encode' => false]);
                     ?>
                 </div>
@@ -46,7 +46,7 @@ $this->registerJsFile('@web/js/llave.js');
 
         <div class="card card-primary">
             <div class="card-header">
-                <h3 class="card-title"><?= $this->title; ?></h3>
+                <h3 class="card-title"><?= Yii::t('app','Llaves') ?></h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -56,7 +56,7 @@ $this->registerJsFile('@web/js/llave.js');
                 $gridColumns = [
                      [
                         'attribute' => 'nombre_propietario',
-                        'label' => 'Propietario',
+                        'label' => Yii::t('app','Propietario'),
                         'headerOptions' => ['style' => 'width: 15%'],
                         'enableSorting'=>false,
                         'format' => 'raw',
@@ -66,7 +66,7 @@ $this->registerJsFile('@web/js/llave.js');
                     ],
                     [
                         'attribute' => 'cliente_comunidad',
-                        'label' => 'Cliente',
+                        'label' => Yii::t('app','Edificio'),
                         'headerOptions' => ['style' => 'width: 15%'],
                         'enableSorting'=>false,
                         'format' => 'raw',
@@ -76,7 +76,7 @@ $this->registerJsFile('@web/js/llave.js');
                     ],
                     [
                         'attribute' => 'id_tipo',
-                        'label' => 'Tipo Llave',
+                        'label' => Yii::t('app','Tipo Llave'),
                         'headerOptions' => ['style' => 'width: 5%'],
                         'enableSorting'=>false,
                         'value' => function ($model) {
@@ -116,25 +116,25 @@ $this->registerJsFile('@web/js/llave.js');
                     ],
                     [
                         'attribute' => 'codigo',
-                        'label' => 'Código',
+                        'label' => Yii::t('app','Código'),
                         'headerOptions' => ['style' => 'width: 5%'],
                         'enableSorting'=>false,
                     ],
                     [
                         'attribute' => 'descripcion',
-                        'label' => 'Descripción',
+                        'label' => Yii::t('app','Descripción'),
                         'headerOptions' => ['style' => 'width: 20%'],
                         'enableSorting'=>false,
                     ],
                     [
                         'attribute' => 'observacion',
-                        'label' => 'Observación',
+                        'label' => Yii::t('app','Observación'),
                         'headerOptions' => ['style' => 'width: 15%'],
                         'enableSorting'=>false,
                     ],
                     [
                         'attribute' => 'alarma',
-                        'label' => 'Alarma',
+                        'label' => Yii::t('app','Alarma'),
                         'headerOptions' => ['style' => 'width: 5%'],
                         'enableSorting'=>false,
                         'value' => function ($model) {
@@ -154,11 +154,11 @@ $this->registerJsFile('@web/js/llave.js');
                     ],
                     [
                         'attribute' => 'llaveLastStatus',
-                        'label' => 'Estado',
+                        'label' => Yii::t('app','Estado'),
                         'headerOptions' => ['style' => 'width: 5%'],
                         'enableSorting'=>false,
                         'value' => function ($model) {
-                            return ($model->llaveLastStatus=='S')?'<span class="float-none badge bg-danger">Prestada</span>':'<span class="float-none badge bg-success">Almacenada</span>' ;
+                            return ($model->llaveLastStatus=='S')?'<span class="float-none badge bg-danger">'.Yii::t('app','Prestada').'</span>':'<span class="float-none badge bg-success">'.Yii::t('app','Almacenada').'</span>' ;
                         },
                         'format' => 'raw',
                         'filterType' => GridView::FILTER_SELECT2,
@@ -178,7 +178,7 @@ $this->registerJsFile('@web/js/llave.js');
                         'headerOptions' => ['style' => 'width: 5%'],
                         'enableSorting'=>false,
                         'value' => function ($model) {
-                            return ($model->activa==0)?'<span class="float-none badge bg-danger">Inactiva</span>':'<span class="float-none badge bg-success">Activa</span>' ;
+                            return ($model->activa==0)?'<span class="float-none badge bg-danger">'.Yii::t('app','Inactiva').'</span>':'<span class="float-none badge bg-success">'.Yii::t('app','Activa').'</span>' ;
                         },
                         'format' => 'raw',
                         'filterType' => GridView::FILTER_SELECT2,

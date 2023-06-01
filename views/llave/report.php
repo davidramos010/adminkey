@@ -44,7 +44,7 @@ $this->title = 'Reporte de Llaves';
                 $gridColumns = [
                      [
                         'attribute' => 'nombre_propietario',
-                        'label' => 'Propietario',
+                        'label' => Yii::t('app', 'Propietario'),
                         'headerOptions' => ['style' => 'width: 15%'],
                         'enableSorting'=>false,
                         'format' => 'raw',
@@ -54,7 +54,7 @@ $this->title = 'Reporte de Llaves';
                     ],
                     [
                         'attribute' => 'cliente_comunidad',
-                        'label' => 'Cliente',
+                        'label' => Yii::t('app','Edificio'),
                         'headerOptions' => ['style' => 'width: 15%'],
                         'enableSorting'=>false,
                         'format' => 'raw',
@@ -64,7 +64,7 @@ $this->title = 'Reporte de Llaves';
                     ],
                     [
                         'attribute' => 'id_tipo',
-                        'label' => 'Tipo Llave',
+                        'label' => Yii::t('app','Tipo Llave'),
                         'headerOptions' => ['style' => 'width: 5%'],
                         'enableSorting'=>false,
                         'value' => function ($model) {
@@ -98,25 +98,25 @@ $this->title = 'Reporte de Llaves';
                     ],
                     [
                         'attribute' => 'codigo',
-                        'label' => 'Código',
+                        'label' => Yii::t('app','Código'),
                         'headerOptions' => ['style' => 'width: 8%'],
                         'enableSorting'=>false,
                     ],
                     [
                         'attribute' => 'descripcion',
-                        'label' => 'Descripción',
+                        'label' => Yii::t('app','Descripción'),
                         'headerOptions' => ['style' => 'width: 20%'],
                         'enableSorting'=>false,
                     ],
                     [
                         'attribute' => 'observacion',
-                        'label' => 'Observación',
+                        'label' => Yii::t('app','Observación'),
                         'headerOptions' => ['style' => 'width: 17%'],
                         'enableSorting'=>false,
                     ],
                     [
                         'attribute' => 'alarma',
-                        'label' => 'Alarma',
+                        'label' => Yii::t('app','Alarma'),
                         'headerOptions' => ['style' => 'width: 5%'],
                         'enableSorting'=>false,
                         'value' => function ($model) {
@@ -149,7 +149,7 @@ $this->title = 'Reporte de Llaves';
                     ],
                     [
                         'attribute' => 'facturable',
-                        'label' => 'Facturable',
+                        'label' => Yii::t('app','Facturable'),
                         'headerOptions' => ['style' => 'width: 5%'],
                         'enableSorting'=>false,
                         'value' => function ($model) {
@@ -182,7 +182,7 @@ $this->title = 'Reporte de Llaves';
                     ],
                     [
                         'attribute' => 'llaveLastStatus',
-                        'label' => 'Estado',
+                        'label' => Yii::t('app','Estado'),
                         'headerOptions' => ['style' => 'width: 5%'],
                         'enableSorting'=>false,
                         'value' => function ($model) {
@@ -202,7 +202,7 @@ $this->title = 'Reporte de Llaves';
                     ],
                     [
                         'attribute' => 'id',
-                        'label' => 'Info',
+                        'label' => Yii::t('app','Info'),
                         'filter'=>false,
                         'enableSorting'=>false,
                         'headerOptions' => ['style' => 'width: 5%'],
@@ -251,12 +251,12 @@ $this->title = 'Reporte de Llaves';
                     'toolbar' => [
                         [
                             'content' =>
-                                 Html::a('Recargar', Url::current(), [
+                                 Html::a(Yii::t('common', 'Recargar'), Url::current(), [
                                     'class' => 'btn bg-orange',
-                                    'title' => Yii::t('Common', 'Recargar manteniendo filtros')
-                                ]) . ' ' . Html::a('Limpiar', ['report'], [
+                                    'title' => Yii::t('common', 'Recargar manteniendo filtros')
+                                ]) . ' ' . Html::a(Yii::t('common', 'Limpiar'), ['report'], [
                                     'class' => 'btn btn-default',
-                                    'title' => Yii::t('Common', 'Limpiar filtros')
+                                    'title' => Yii::t('common', 'Limpiar filtros')
                                 ]),
                         ],
                         //count($dataProvider->models) < 100 ? '{toggleData}' : '',
