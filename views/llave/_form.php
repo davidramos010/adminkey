@@ -3,6 +3,7 @@
 use app\models\Llave;
 use kartik\widgets\SwitchInput;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -14,6 +15,11 @@ $strStyleVisiblePropietario = isset($model->tipo) && $model->tipo->propietario ?
 $strStyleVisibleComunidad = isset($model->tipo) && $model->tipo->comunidad ? '' : 'none';
 $strStyleVisibleBtnAdd = $model->isNewRecord ? '' : 'none';
 
+$url_find_attributes = Url::toRoute(['llave/ajax-find-attributes']);
+$url_find_code = Url::toRoute(['llave/ajax-find-code']);
+$url_create_comunidad = Url::toRoute(['comunidad/ajax-create']);
+$url_create_propietarios = Url::toRoute(['propietarios/ajax-create']);
+
 ?>
 <div class="llave-form">
     <div class="row">
@@ -21,8 +27,8 @@ $strStyleVisibleBtnAdd = $model->isNewRecord ? '' : 'none';
             <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
                 <?php
                 echo Html::ul([
-                    'El código se genera automáticamente al momento de seleccionar la comunidad.',
-                    'El sistema creará tantas llaves como copias existan.',
+                    Yii::t('app','El código se genera automáticamente al momento de seleccionar la comunidad.'),
+                        Yii::t('app','El sistema creará tantas llaves como copias existan.'),
                 ], ['encode' => false]);
                 ?>
             </div>
@@ -37,7 +43,7 @@ $strStyleVisibleBtnAdd = $model->isNewRecord ? '' : 'none';
     <!-- general form elements -->
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Llaves</h3>
+            <h3 class="card-title"><?= Yii::t('app', 'Llaves') ?></h3>
         </div>
         <!-- /.card-header -->
         <!-- form start -->
@@ -45,27 +51,27 @@ $strStyleVisibleBtnAdd = $model->isNewRecord ? '' : 'none';
         <div class="card-body">
             <div class="row">
                 <div class="col-md-3 ">
-                    <?= $form->field($model, 'id_tipo')->dropDownList(Llave::getTipoLlaveDropdownList(), ['onchange' => 'fnTipoLlaveSelected()', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'readonly' => $view])->label('Tipo'); ?>
+                    <?= $form->field($model, 'id_tipo')->dropDownList(Llave::getTipoLlaveDropdownList(), ['onchange' => 'fnTipoLlaveSelected()', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'readonly' => $view])->label(Yii::t('app','Tipo')); ?>
                 </div>
             </div>
             <div class="row" id="divFormComunidad" style="display: <?= $strStyleVisibleComunidad ?>">
                 <div class="col-md-6 ">
-                    <?= $form->field($model, 'id_comunidad')->dropDownList(Llave::getComunidadesDropdownList(), ['class' => 'form-control', 'prompt' => 'Seleccione Uno', 'readonly' => $view, 'data-js-find-nomenclatura'=>'comunidad'])->label('Comunidad'); ?>
+                    <?= $form->field($model, 'id_comunidad')->dropDownList(Llave::getComunidadesDropdownList(), ['class' => 'form-control', 'prompt' => 'Seleccione Uno', 'readonly' => $view, 'data-js-find-nomenclatura'=>'comunidad'])->label(Yii::t('app','Comunidad')); ?>
                 </div>
                 <div class="col-md-1 " style="vertical-align: bottom">
                     <div class="form-group field-id_comunidad_modal" style="display: <?= $strStyleVisibleBtnAdd ?>">
-                        <label class="control-label" for="id_comunidad_modal">Adicionar</label><br/>
+                        <label class="control-label" for="id_comunidad_modal"><?= Yii::t('app', 'Adicionar') ?></label><br/>
                         <?= Html::a('<i class="fas fa-info-circle"></i>', ['comunidad/create-modal'], ['class' => 'btn btn-success', 'id' => 'btn-modal-comunidad', 'title' => Yii::t('app', 'Nueva Comunidad')]); ?>
                     </div>
                 </div>
             </div>
             <div class="row" id="divFormPropietario" style="display: <?= $strStyleVisiblePropietario ?>">
                 <div class="col-md-6 ">
-                    <?= $form->field($model, 'id_propietario')->dropDownList(Llave::getPropietariosDropdownList(), ['id' => 'id_propietario', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'readonly' => $view, 'data-js-find-nomenclatura'=>'propietario'])->label('Propietario'); ?>
+                    <?= $form->field($model, 'id_propietario')->dropDownList(Llave::getPropietariosDropdownList(), ['id' => 'id_propietario', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'readonly' => $view, 'data-js-find-nomenclatura'=>'propietario'])->label(Yii::t('app','Propietario')); ?>
                 </div>
                 <div class="col-md-1" style="vertical-align: bottom">
                     <div class="form-group field-id_propietario_modal"  style="display: <?= $strStyleVisibleBtnAdd ?>">
-                        <label class="control-label" for="id_propietario_modal">Adicionar</label><br/>
+                        <label class="control-label" for="id_propietario_modal"><?= Yii::t('app', 'Adicionar') ?></label><br/>
                         <?= Html::a('<i class="fas fa-info-circle"></i>', ['propietarios/create-modal'], ['class' => 'btn btn-success', 'id' => 'btn-modal-propietario', 'title' => Yii::t('app', 'Nuevo Propietario')]); ?>
                     </div>
                 </div>
@@ -73,7 +79,7 @@ $strStyleVisibleBtnAdd = $model->isNewRecord ? '' : 'none';
             <div class="row">
 
                 <div class="col-md-6 ">
-                    <?= $form->field($model, 'id_llave_ubicacion')->dropDownList(Llave::getUbicacionDropdownList(), ['class' => 'form-control', 'prompt' => 'Seleccione Uno', 'readonly' => $view])->label('Ubicación Almacenamiento'); ?>
+                    <?= $form->field($model, 'id_llave_ubicacion')->dropDownList(Llave::getUbicacionDropdownList(), ['class' => 'form-control', 'prompt' => 'Seleccione Uno', 'readonly' => $view])->label(Yii::t('app', 'Ubicación Almacenamiento')); ?>
                 </div>
             </div>
             <div class="row">
@@ -83,44 +89,44 @@ $strStyleVisibleBtnAdd = $model->isNewRecord ? '' : 'none';
                     </div>
                 <?php endif; ?>
                 <div class="<?= (!$view)?'col-md-2':'col-md-1' ?>  ">
-                    <?= $form->field($model, 'codigo')->textInput(['id' => 'llave-codigo', 'maxlength' => true, 'class' => 'form-control', 'readonly' => $view])->label('Código Llave') ?>
+                    <?= $form->field($model, 'codigo')->textInput(['id' => 'llave-codigo', 'maxlength' => true, 'class' => 'form-control', 'readonly' => $view])->label(Yii::t('app', 'Código').' '. Yii::t('app', 'Llave')) ?>
                 </div>
                 <div class="col-md-1 ">
                     <?php if (!$view): ?>
                         <?= $form->field($model, 'alarma')->widget(SwitchInput::class, ['id' => 'alarma', 'pluginOptions' => ['id' => 'alarma', 'size' => 'small', 'onText' => 'SI', 'offText' => 'NO'], 'pluginEvents' => ["switchChange.bootstrapSwitch" => "function(item) { if($(item.currentTarget).is(':checked')){ $('#codigo_alarma').val('').prop('readonly', false); }else{ $('#codigo_alarma').val('').prop('readonly', true);} }"]])->label('Alarma'); ?>
                     <?php else: ?>
-                        <?= $form->field($model, 'alarma')->textInput(['id' => 'alarma', 'maxlength' => true, 'class' => 'form-control', 'readonly' => $view, 'value' => ($model->alarma) ? 'SI' : 'NO'])->label('Alarma') ?>
+                        <?= $form->field($model, 'alarma')->textInput(['id' => 'alarma', 'maxlength' => true, 'class' => 'form-control', 'readonly' => $view, 'value' => ($model->alarma) ? 'SI' : 'NO'])->label(Yii::t('app','Alarma')) ?>
                     <?php endif; ?>
                 </div>
                 <div class="col-md-2 ">
-                    <?= $form->field($model, 'codigo_alarma')->textInput(['id' => 'codigo_alarma', 'maxlength' => true, 'class' => 'form-control', 'readonly' => true])->label('Código Alarma') ?>
+                    <?= $form->field($model, 'codigo_alarma')->textInput(['id' => 'codigo_alarma', 'maxlength' => true, 'class' => 'form-control', 'readonly' => true])->label(Yii::t('app', 'Código').' '. Yii::t('app', 'Alarma')) ?>
                 </div>
             </div>
 
             <div class="form-group">
-                <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true, 'class' => 'form-control', 'readonly' => $view])->label('Descripción') ?>
+                <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true, 'class' => 'form-control', 'readonly' => $view])->label(Yii::t('app', 'Descripción')) ?>
             </div>
             <div class="form-group">
-                <?= $form->field($model, 'observacion')->textArea(['class' => 'form-control', 'readonly' => $view])->label('Observaciones') ?>
+                <?= $form->field($model, 'observacion')->textArea(['class' => 'form-control', 'readonly' => $view])->label(Yii::t('app', 'Observaciones')) ?>
             </div>
             <div class="row">
                 <div class="col-md-2">
-                    <?= $form->field($model, 'copia')->textInput(['type' => 'number', 'maxlength' => true, 'style'=>'width:50%;', 'class' => 'form-control', 'readonly' => !$model->isNewRecord])->label('Número de copias') ?>
+                    <?= $form->field($model, 'copia')->textInput(['type' => 'number', 'maxlength' => true, 'style'=>'width:50%;', 'class' => 'form-control', 'readonly' => !$model->isNewRecord])->label(Yii::t('app', 'Número de copias')) ?>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-2 ">
                     <?php if (!$view): ?>
-                        <?= $form->field($model, 'facturable')->widget(SwitchInput::class, ['id' => 'facturable', 'pluginOptions' => ['id' => 'facturable', 'size' => 'small', 'onText' => 'SI', 'offText' => 'NO']])->label('Facturable'); ?>
+                        <?= $form->field($model, 'facturable')->widget(SwitchInput::class, ['id' => 'facturable', 'pluginOptions' => ['id' => 'facturable', 'size' => 'small', 'onText' => 'SI', 'offText' => 'NO']])->label(Yii::t('app', 'Facturable')); ?>
                     <?php else: ?>
-                        <?= $form->field($model, 'facturable')->textInput(['id' => 'facturable', 'maxlength' => true, 'class' => 'form-control', 'readonly' => $view, 'value' => ($model->facturable) ? 'SI' : 'NO'])->label('Facturable') ?>
+                        <?= $form->field($model, 'facturable')->textInput(['id' => 'facturable', 'maxlength' => true, 'class' => 'form-control', 'readonly' => $view, 'value' => ($model->facturable) ? 'SI' : 'NO'])->label(Yii::t('app', 'Facturable')) ?>
                     <?php endif; ?>
 
                 </div>
             </div>
             <?php if (!$view): ?>
                 <div style="padding-top: 15px">
-                    <?= Html::submitButton('Guardar Llave', ['class' => 'btn btn-success ']) ?>
+                    <?= Html::submitButton(Yii::t('app','Guardar').' '.Yii::t('app','Llave'), ['class' => 'btn btn-success ']) ?>
                     <?= Html::a(Yii::t('app', 'Cancelar'), ['index'], ['class' => 'btn btn-default ']) ?>
                 </div>
             <?php endif; ?>
@@ -130,6 +136,16 @@ $strStyleVisibleBtnAdd = $model->isNewRecord ? '' : 'none';
 </div>
 
 <?php
+
+$this->registerJs(
+    <<<JS
+    const strUrlFindAttributes = '$url_find_attributes';
+    const strUrlFindCode = '$url_find_code';
+    const strUrlCreateComunidad = '$url_create_comunidad';
+    const strUrlCreatePropietarios = '$url_create_propietarios';
+    
+JS
+    , $this::POS_HEAD);
 
 $this->registerJs(
     '$(document).on("click", "[data-js-find-nomenclatura]", function (e) {
@@ -157,5 +173,17 @@ $this->registerJs(
                   .find(".modal-content")
                   .load($(this).attr("href"));  
        }); '
+);
+
+$this->registerJs(
+    '$(document).on("click", "[data-js-set-propietario]", function (e) {
+            fnSetPropietario();
+        });'
+);
+
+$this->registerJs(
+    '$(document).on("click", "[data-js-set-comunidad]", function (e) {
+            fnSetComunidad();
+        });'
 );
 ?>

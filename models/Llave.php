@@ -233,18 +233,21 @@ class Llave extends \yii\db\ActiveRecord
      */
     public function getNext() {
 
-        if(!empty($this->id_comunidad)){
-            $resultData = $this->find()->select('MAX(codigo) as codigo ,COUNT(1) as total')->where(['id_comunidad' => $this->id_comunidad])->one();
+        if(!empty($this->id_comunidad) && !empty($this->nomenclatura)){
+            $resultData = $this->find()->select(["MAX(SUBSTRING(codigo,6,3)) as codigo","COUNT(1) as total"])->where(['like','codigo',substr($this->nomenclatura,1,3).'-' ])->one();
+        }
+
+        if(!empty($this->id_comunidad) && empty($this->nomenclatura)){
+            $resultData = $this->find()->select(["MAX(SUBSTRING(codigo,6,3)) as codigo","COUNT(1) as total"])->where(['id_comunidad' => $this->id_comunidad])->one();
         }
 
         if(empty($resultData) && !empty($this->id_propietario)){
-            $resultData = $this->find()->select('MAX(codigo) as codigo ,COUNT(1) as total')->where(['id_propietario' => $this->id_propietario])->one();
+            $resultData = $this->find()->select(["MAX(SUBSTRING(codigo,6,3)) as codigo","COUNT(1) as total"])->where(['id_propietario' => $this->id_propietario])->one();
         }
 
-        $strCode = empty($resultData) || empty($resultData->codigo) ? '' : $resultData->codigo;
-        $numCantidad = (int) empty($resultData) || empty($resultData->total) ? 0 : $resultData->total;
-        $arrCode = (empty($strCode)) ? '' : explode('-',$strCode);
-        $numNext = !empty($strCode) && (int) $arrCode[1]<$numCantidad ? $arrCode[1] : $numCantidad;
+        $strCode = empty($resultData) || empty($resultData->codigo) ? '' : (int) $resultData->codigo;
+        $numCantidad = (int) empty($resultData) || empty($resultData->total) ? 0 : (int) $resultData->total;
+        $numNext = !empty($strCode) && (int) $strCode<$numCantidad ? $strCode : $numCantidad;
 
         return str_pad($numNext + 1, 3, '0', STR_PAD_LEFT) ;
     }

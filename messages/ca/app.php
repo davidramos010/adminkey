@@ -59,6 +59,9 @@ return [
     'Registro almacenado correctamente.'=>'Registre emmagatzemat correctament.',
     'El codigo de barras de cada llave se genera Automaticamente' => 'El codi de barres de cada clau es genera Automaticament',
     'El codigo de la llave hace referencia a una codificación interna del usuario.' => 'El codi de la clau fa referència a una codificació interna de l\'usuari.',
+    'El código se genera automáticamente al momento de seleccionar la comunidad.'=>'El codi es genera automàticament en el moment de seleccionar la comunitat.',
+    'El sistema creará tantas llaves como copias existan.'=>'El sistema crearà tantes claus com còpies existeixin.',
+    'Ubicación Almacenamiento'=>'Ubicació Emmagatzematge',
     'Nombre Responsable'=>'Nom Responsable',
     'Nombre / Razón Social'=>'Nom / Raó Social',
     'Ingresar Referencia'=> 'Ingressar Referència',
@@ -118,7 +121,7 @@ return [
     'FIRMA RECEPTOR' => 'FIRMA RECEPTOR',
     'Las claves deben devolverse a' => 'Les claus s\'han de retornar a ',
     ', en la misma oficina donde se han entregado y en un plazo de 24 horas desde la entrega. En caso contrario, el receptor informará de la causa del retraso y la fecha estimada de retorno.' => ',a la mateixa oficina on s\'han lliurat i en un termini de 24 hores des del lliurament. En cas contrari, el receptor ha d\'informar de la causa del retard i la data estimada de retorn.',
-
+    'Número de copias'=>'Nombre de còpies',
 
     'Información movimientos de llave' => 'Informació moviments de clau',
     'Historial de movimientos' => 'Historial de moviments',

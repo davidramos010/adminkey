@@ -197,12 +197,17 @@ class LlaveController extends BaseController
         $comunidad_id = $arrParam['comunidad'];
         $propietario_id = $arrParam['propietario'];
         $arrInfo = [];
-        if(!empty($comunidad_id)){
-            $objComunidad = Comunidad::findOne(['id'=>$comunidad_id]);
+        if (!empty($comunidad_id)) {
+            $objComunidad = Comunidad::findOne(['id' => (int) $comunidad_id]);
             $model = new Llave();
             $model->id_comunidad = (int) $comunidad_id;
-            $arrInfo['id'] = (string) $model->getNext();
+            $model->id_tipo = (isset($arrParam['tipo'])) ? (int)$arrParam['tipo'] : null;
+            $model->nomenclatura = $objComunidad->nomenclatura;
+            $arrInfo['id'] = (string)$model->getNext();
             $arrInfo['nomenclatura'] = $objComunidad->nomenclatura;
+            if ($model->id_tipo == 'P' || (int)$model->id_tipo == 2) {
+                $arrInfo['nomenclatura'] = str_replace('C', 'P', $objComunidad->nomenclatura);
+            }
         }
 
         if(!isset($model) && !empty($propietario_id)){

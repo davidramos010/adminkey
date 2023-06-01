@@ -56,6 +56,9 @@ return [
     'Registro almacenado correctamente.'=>'Record stored successfully.',
     'El codigo de barras de cada llave se genera Automaticamente' => 'The barcode of each key is generated automatically',
     'El codigo de la llave hace referencia a una codificación interna del usuario.' => 'The key code refers to an internal code of the user.',
+    'El código se genera automáticamente al momento de seleccionar la comunidad.'=>'The code is generated automatically when selecting the community.',
+    'El sistema creará tantas llaves como copias existan.'=>'The system will create as many keys as there are copies.',
+    'Ubicación Almacenamiento'=>'Storage Location',
     'Nombre Responsable'=>'Responsible Name',
     'Nombre / Razón Social'=>'Name / Company Name',
     'Nombre de quien retira la llave' => 'Name of the person who picks up the key',
@@ -95,6 +98,7 @@ return [
     'FIRMA RECEPTOR' => 'RECEIVER SIGNATURE',
     'Las claves deben devolverse a' => 'The keys must be returned to ',
     ', en la misma oficina donde se han entregado y en un plazo de 24 horas desde la entrega. En caso contrario, el receptor informará de la causa del retraso y la fecha estimada de retorno.' => ', in the same office where they were delivered and within 24 hours of delivery. Otherwise, the receiver will inform of the cause of the delay and the estimated date of return.',
+    'Número de copias'=>'Number of copies',
 
     'Registros de Salida' => 'Output Records',
     'Registros de Entrada' => 'Input Records',
