@@ -3,7 +3,7 @@
  */
 function fnTipoLlaveSelected(){
     let idTipoSelect = $('#llave-id_tipo').val();
-    let url = '../llave/ajax-find-attributes';
+    let url = strUrlFindAttributes;
     $.ajax({
         url: url,
         dataType: 'json',
@@ -53,7 +53,8 @@ function getInfoLlaveCard(id){
  */
 function findCodeLlave()
 {
-    let url = '../llave/ajax-find-code';
+    let url = strUrlFindCode;
+    let tipo = $('#llave-id_tipo').val();
     let comunidad = $('#llave-id_comunidad').val();
     let propietario = $('#id_propietario').val();
 
@@ -62,6 +63,7 @@ function findCodeLlave()
         dataType: 'JSON',
         type: 'POST',
         data: {
+            "tipo": tipo,
             "comunidad": comunidad,
             "propietario": propietario,
         },
@@ -143,7 +145,7 @@ function fnExcelReport(strName)
  */
 function fnSetComunidad(){
 
-    let url = '../comunidad/ajax-create';
+    let url = strUrlCreateComunidad;
     var form = $('#form-comunidad');
     var formData = form.serialize();
 
@@ -185,7 +187,7 @@ function fnSetComunidad(){
  * registrar Propietario en el formulario del modal
  */
 function fnSetPropietario(){
-    let url = '../propietarios/ajax-create';
+    let url = strUrlCreatePropietarios;
     var form = $('#form-propietario');
     var formData = form.serialize();
 
