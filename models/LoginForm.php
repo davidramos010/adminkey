@@ -30,6 +30,43 @@ class LoginForm extends Model
             // username and password are both required
             [['username', 'password'], 'string', 'max' => 255],
             [['perfil'], 'integer'],
+            [
+                ['username', 'password'],
+                'required',
+                'when' => function () {
+                    return $this->perfil==1;
+                },
+                'whenClient' => "function (attribute, value) {
+                 var validate = false; 
+                 if(
+                    ($('#loginform-perfil').val()=='1' || $('#loginform-perfil').val()==1) &&
+                     ($('#loginform-username').val()=='' ||
+                     $('#loginform-password').val()=='')
+                   )
+                   {
+                     validate = true;
+                   }
+                   return validate;
+                }"
+            ],
+            [
+                ['authkey'],
+                'required',
+                'when' => function () {
+                    return $this->perfil==2;
+                },
+                'whenClient' => "function (attribute, value) {
+                 var validate = false; 
+                 if(
+                    ($('#loginform-perfil').val()=='2' || $('#loginform-perfil').val()==2) &&
+                     $('#authkey').val()==''
+                   )
+                   {
+                     validate = true;
+                   }
+                   return validate;
+                }"
+            ],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
@@ -37,6 +74,8 @@ class LoginForm extends Model
             ['authkey', 'validateAuthkey'],
         ];
     }
+
+
 
     /**
      * Validates the password.
