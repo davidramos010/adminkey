@@ -311,4 +311,30 @@ class LlaveController extends BaseController
         $objTipoLLave = TipoLlave::findOne(['id'=>$numTipoLlave]);
         return !empty($objTipoLLave)? json_encode( $objTipoLLave->getAttributes() ):'';
     }
+
+    /**
+     * Funcion que retorna los atributos de una tipo de llave
+     * @return false|string
+     */
+    public function actionAjaxAddCopiKey()
+    {
+        $bolError = false;
+        $arrParam = $this->request->post();
+        $numIdLlave = (int) $arrParam['numIdLlave'];
+        $objKey = Llave::findOne(['id'=>$numIdLlave]);
+        $objKeyNew = clone $objKey;
+        $objKeyNew->id = null;
+        $objKeyNew->isNewRecord = true;
+        $arrNextCopi = $objKeyNew->getNextCopi();
+        $objKeyNew->copia = $arrNextCopi['copia'];
+        $objKeyNew->codigo = $arrNextCopi['codigo'];
+        if(!$objKeyNew->save()){
+            $bolError = true;
+            $strMessage = 'No se puede crear la copia. Comuniquese con el administrador';
+        }else{
+            $strMessage = 'Se crea la copia ('.$objKeyNew->copia.') con código '.$objKeyNew->codigo.' corretamente !!';
+        }
+
+        return  json_encode( ['error'=>$bolError,'message'=>$strMessage] );
+    }
 }
