@@ -49,6 +49,30 @@ function getInfoLlaveCard(id){
 }
 
 /**
+ * Crear la copia de una llave
+ * @param id
+ */
+function addCopiKeys(id){
+
+    let url = strUrlAddCopiKey;
+    $.ajax({
+        url: url,
+        dataType: 'JSON',
+        type: 'POST',
+        data: {
+            "numIdLlave": id,
+        },
+        success: function (data) {
+            if(data.error == false || data.error == 'false') {
+                toastr.success(data.message);
+            }else {
+                toastr.error(data.message);
+            }
+        }
+    });
+}
+
+/**
  * Buscar el codigo/nomenclatura de la comunidad
  */
 function findCodeLlave()

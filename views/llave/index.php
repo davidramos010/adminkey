@@ -3,11 +3,8 @@
 use app\models\Llave;
 use kartik\export\ExportMenu;
 use yii\helpers\Html;
-use yii\helpers\Url;
 use kartik\grid\GridView;
-use kartik\icons\Icon;
 use kartik\widgets\Select2;
-use yii\bootstrap\Modal;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
@@ -50,7 +47,7 @@ $this->registerJsFile('@web/js/llave.js');
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <?php Pjax::begin(); ?>
+                <?php Pjax::begin(['timeout' => false, 'enablePushState' => false, 'clientOptions' => ['method' => 'GET']]); ?>
                 <?php
 
                 $gridColumns = [
@@ -292,7 +289,7 @@ $this->registerJsFile('@web/js/llave.js');
                      ],
                 ]);
                 ?>
-                <?= \kartik\grid\GridView::widget([
+                <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'formatter' => array('class' => 'yii\i18n\Formatter', 'nullDisplay' => ''),

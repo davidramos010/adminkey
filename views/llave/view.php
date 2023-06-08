@@ -72,6 +72,7 @@ $this->registerJsFile('@web/js/llave.js');
                 <?= Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
                 <?= Html::a(Yii::t('app', 'Volver a listado'), ['index'], ['class' => 'btn btn-default ']) ?>
                 <?= Html::button('Imprimir Barras', [ 'class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { printDiv() })();' ]); ?>
+                <?= Html::button('Agregar Copia', [ 'class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { addCopiKeys('.$model->id.') })();' ]); ?>
             </div>
         </div>
     </div>

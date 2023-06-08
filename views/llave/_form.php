@@ -19,6 +19,7 @@ $url_find_attributes = Url::toRoute(['llave/ajax-find-attributes']);
 $url_find_code = Url::toRoute(['llave/ajax-find-code']);
 $url_create_comunidad = Url::toRoute(['comunidad/ajax-create']);
 $url_create_propietarios = Url::toRoute(['propietarios/ajax-create']);
+$url_add_copi_key = Url::toRoute(['llave/ajax-add-copi-key']);
 
 ?>
 <div class="llave-form">
@@ -143,6 +144,7 @@ $this->registerJs(
     const strUrlFindCode = '$url_find_code';
     const strUrlCreateComunidad = '$url_create_comunidad';
     const strUrlCreatePropietarios = '$url_create_propietarios';
+    const strUrlAddCopiKey = '$url_add_copi_key';
     
 JS
     , $this::POS_HEAD);

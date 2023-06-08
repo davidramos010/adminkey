@@ -113,7 +113,7 @@ class LlaveSearch extends Llave
 
         // Ordenamos por Codigo
         if (!isset($params['sort'])) {
-            $query->orderBy('ll.codigo ASC');
+            $query->orderBy('ll.codigo ASC, ll.copia ASC');
         }
 
         return $dataProvider;
@@ -234,7 +234,7 @@ class LlaveSearch extends Llave
                 ['like', 'll.codigo', 'C'.$strFindNomenclatura. '%', false],
                 ['like', 'll.codigo', 'P'.$strFindNomenclatura. '%', false ]]);
         }
-        $query->orderBy('ll.codigo ASC ');
+        $query->orderBy('ll.codigo ASC, ll.copia ASC ');
         $query->limit(100);
 
         return $query->all();
