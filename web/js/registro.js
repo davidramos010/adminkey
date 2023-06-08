@@ -3,6 +3,8 @@ var listKeySalida = [];
 var dataURL;
 
 
+
+
 /**
  * adicion de llave
  */
@@ -281,7 +283,7 @@ function generatePdfRegistro(numIdRegistro){
 }
 
 /**
- * Filtra los codigos postales y lo devuelve con la construcción esperada por el select2
+ * Filtra los resultados y lo devuelve con la construcción esperada por el select2
  * @param data
  * @returns {{results: *}}
  */
@@ -381,6 +383,17 @@ function findManualKeys() {
         });
 
 }
+
+/**
+ * Reset form de consulta manual
+ */
+function findManualKeysReset() {
+    $('#formFindKeys').trigger("reset");
+    $('#llavesearch-id_comunidad').val('').trigger("change");
+    $('#llavesearch-id_propietario').val('').trigger("change");
+    $('#llavesearch-comercial').val('').trigger("change");
+}
+
 
 function getBase64Image() {
     /*var element = $("#showBarcode"); // global variable

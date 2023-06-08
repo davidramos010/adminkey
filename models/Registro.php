@@ -394,15 +394,13 @@ class Registro extends \yii\db\ActiveRecord
                               ".$objRegistro->observacion."
                             </p>
                           </div>
-                          <div class='row'>
+                          <div class=\"row\">
                             <div class='table-responsive'>
-                                <table class='table'>
+                                <table style='width: 100%' >
                                 <tbody><tr>
-                                    <th  style='width:50%;text-align: center'>".Yii::t('app', 'FIRMA ENTREGA')."</th>
-                                    <th style='width:50%;text-align: center'>".Yii::t('app', 'FIRMA RECEPTOR')."</th>
+                                    <th style='text-align: center' >".Yii::t('app', 'FIRMA RECEPTOR')."</th>
                                 </tr><tr>
-                                    <td style='width:50%'>x.</td>
-                                    <td style='width:50%'>x.".$strFirma."</td>
+                                    <td style='text-align: center' >x.".$strFirma."</td>
                                 </tr></tbody>
                                 </table>
                             </div>
@@ -410,7 +408,7 @@ class Registro extends \yii\db\ActiveRecord
                           <!-- -->
                           <div class=\"col-12\">
                             <p class=\"text-muted well well-sm shadow-none small\" style=\"margin-top: 10px; text-align: justify \">
-                              ".Yii::t('app', 'Las claves deben devolverse a')."
+                              ".Yii::t('app', 'Las llaves deben devolverse a')."
                               ".Yii::$app->params['empresa']."
                               ".Yii::t('app', ', en la misma oficina donde se han entregado y en un plazo de 24 horas desde la entrega. En caso contrario, el receptor informará de la causa del retraso y la fecha estimada de retorno.')."
                             </p>

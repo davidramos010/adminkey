@@ -48,16 +48,16 @@ class RegistroSearch extends Registro
             'll.codigo',
             'u.username',
             'cm.nombre as comercial',
-            "( SELECT group_concat(llv.codigo) FROM llave llv WHERE llv.id IN (  
+            "( SELECT group_concat(llv.codigo SEPARATOR ' , ') FROM llave llv WHERE llv.id IN (  
                    SELECT st.id_llave FROM llave_status st WHERE st.id_registro = r.id
               )) AS llaves",
-            "( SELECT group_concat(llv.codigo) FROM llave llv WHERE llv.id IN (  
+            "( SELECT group_concat(llv.codigo SEPARATOR ' , ') FROM llave llv WHERE llv.id IN (  
                    SELECT st.id_llave FROM llave_status st WHERE st.id_registro = r.id and st.status = 'E'
               )) AS llaves_e",
-            "( SELECT group_concat(llv.codigo) FROM llave llv WHERE llv.id IN (  
+            "( SELECT group_concat(llv.codigo SEPARATOR ' , ') FROM llave llv WHERE llv.id IN (  
                    SELECT st.id_llave FROM llave_status st WHERE st.id_registro = r.id and st.status = 'S'
               )) AS llaves_s",
-            "( SELECT group_concat(c.nombre) FROM comunidad c WHERE id IN (  
+            "( SELECT group_concat(c.nombre SEPARATOR ' , ') FROM comunidad c WHERE id IN (  
                SELECT DISTINCT l.id_comunidad FROM llave l 
                INNER JOIN llave_status sta ON ( sta.id_llave=l.id ) 
                WHERE sta.id_registro = r.id
@@ -66,7 +66,7 @@ class RegistroSearch extends Registro
                                         WHEN p.nombre_propietario IS NOT NULL THEN p.nombre_propietario
                                         WHEN p.nombre_representante IS NOT NULL THEN p.nombre_representante
                                         ELSE NULL
-                                    END) FROM propietarios p WHERE p.id IN (
+                                    END  SEPARATOR ' , ') FROM propietarios p WHERE p.id IN (
                 SELECT DISTINCT l.id_propietario FROM llave l 
                        INNER JOIN llave_status stb ON ( stb.id_llave=l.id ) 
                        WHERE stb.id_registro = r.id

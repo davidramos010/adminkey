@@ -119,7 +119,7 @@ return [
     'INCIDENCIAS Y COMENTARIOS' => 'INCIDÈNCIES I COMENTARIS',
     'FIRMA ENTREGA' => 'FIRMA LLIURADOR',
     'FIRMA RECEPTOR' => 'FIRMA RECEPTOR',
-    'Las claves deben devolverse a' => 'Les claus s\'han de retornar a ',
+    'Las llaves deben devolverse a' => 'Les claus s\'han de retornar a ',
     ', en la misma oficina donde se han entregado y en un plazo de 24 horas desde la entrega. En caso contrario, el receptor informará de la causa del retraso y la fecha estimada de retorno.' => ',a la mateixa oficina on s\'han lliurat i en un termini de 24 hores des del lliurament. En cas contrari, el receptor ha d\'informar de la causa del retard i la data estimada de retorn.',
     'Número de copias'=>'Nombre de còpies',
 

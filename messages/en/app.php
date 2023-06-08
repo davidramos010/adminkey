@@ -96,7 +96,7 @@ return [
     'INCIDENCIAS Y COMENTARIOS' => 'INCIDENCES AND COMMENTS',
     'FIRMA ENTREGA' => 'DELIVERY SIGNATURE',
     'FIRMA RECEPTOR' => 'RECEIVER SIGNATURE',
-    'Las claves deben devolverse a' => 'The keys must be returned to ',
+    'Las llaves deben devolverse a' => 'The keys must be returned to ',
     ', en la misma oficina donde se han entregado y en un plazo de 24 horas desde la entrega. En caso contrario, el receptor informará de la causa del retraso y la fecha estimada de retorno.' => ', in the same office where they were delivered and within 24 hours of delivery. Otherwise, the receiver will inform of the cause of the delay and the estimated date of return.',
     'Número de copias'=>'Number of copies',
 
