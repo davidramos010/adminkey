@@ -278,6 +278,9 @@ $strAddBotonEliminar = isset($action) && $action == 'update' ? Html::button(Yii:
 
 $this->registerJs("
         var fieldsChanged = false;
+        $('#formFindKeys').change(function() {
+          findManualKeys();
+        });
 ");
 
 $this->registerJs(

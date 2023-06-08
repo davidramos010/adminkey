@@ -61,21 +61,24 @@ $buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
                         'attribute' => 'id',
                         'label' => 'ID',
                         'headerOptions' => ['style' => 'width: 5%'],
+                        'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; '],
                     ],
                     [
                         'attribute' => 'username',
                         'label' => Yii::t('app','User'),
-                        'headerOptions' => ['style' => 'width: 10%;'],
+                        'headerOptions' => ['style' => 'width: 5%;'],
+                        'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; font-size: small; '],
                         'format' => 'raw',
                         'enableSorting'=>false,
                         'value' => function($model){
                             return (isset($model->user))?strtoupper($model->user->username):'No Encontrado' ;
                         }
                     ],
-
                     [
                         'attribute' => 'comercial',
                         'label' => Yii::t('app','Empresa/Proveedor'),
+                        'headerOptions' => ['style' => 'width: 15%;'],
+                        'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle;  '],
                         'format' => 'raw',
                         'enableSorting'=>false,
                         'value' => function($model){
@@ -83,21 +86,35 @@ $buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
                         }
                     ],
                     [
+                        'attribute' => 'nombre_responsable',
+                        'label' => Yii::t('app','Responsable'),
+                        'headerOptions' => ['style' => 'width: 15%'],
+                        'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; '],
+                        'format' => 'raw',
+                        'enableSorting'=>false,
+                        'value' => function($model){
+                            return (isset($model->nombre_responsable))?strtoupper($model->nombre_responsable):'' ;
+                        }
+                    ],
+                    [
                         'attribute' => 'llaves',
                         'label' => Yii::t('app','Llaves'),
+                        'headerOptions' => ['style' => 'width: 15%;'],
                         'format' => 'raw',
                         'enableSorting'=>false,
                         'value' => function($model){
                             $strLLaves = '';
-                            $strLLaves .= (!empty($model->llaves_s))?'<span class="float-none badge bg-danger">'.strtoupper($model->llaves_s).'</span>':'';
+                            $strLLaves .= (!empty($model->llaves_s))?'<span class="float-none badge bg-danger" style="white-space: normal;">'.strtoupper($model->llaves_s).'</span>':'';
                             $strLLaves .= (!empty($strLLaves))?'<br>':'';
-                            $strLLaves .= (!empty($model->llaves_e))?'<span class="float-none badge bg-success">'.strtoupper($model->llaves_e).'</span>':'';
+                            $strLLaves .= (!empty($model->llaves_e))?'<span class="float-none badge bg-success" style="white-space: normal;">'.strtoupper($model->llaves_e).'</span>':'';
                             return (isset($strLLaves))?$strLLaves:'No Encontrado' ;
                         }
                     ],
                     [
                         'attribute' => 'propietarios',
                         'label' => Yii::t('app','Propietario'),
+                        'headerOptions' => ['style' => 'width: 15%; vertical-align: middle; '],
+                        'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; '],
                         'format' => 'raw',
                         'enableSorting'=>false,
                         'value' => function($model){
@@ -107,6 +124,8 @@ $buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
                     [
                         'attribute' => 'clientes',
                         'label' =>  Yii::t('app','Cliente'),
+                        'headerOptions' => ['style' => 'width: 15%; vertical-align: middle;  '],
+                        'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; font-size: small;'],
                         'format' => 'raw',
                         'enableSorting'=>false,
                         'value' => function($model){
@@ -115,7 +134,6 @@ $buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
                     ],
                     [
                         'attribute' => 'salida',
-                        'headerOptions' => ['style' => 'width: 10%'],
                         'enableSorting'=>false,
                         'value' => function ($model) {
                             return (isset($model->salida))? util::getDateTimeFormatedSqlToUser($model->salida) :  util::getDateTimeFormatedSqlToUser($model->entrada);
@@ -135,37 +153,15 @@ $buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
                             'placeholder' => Yii::t('app', 'Fecha').' '.Yii::t('app', 'Operación'),
                         ],
                         'label' => Yii::t('app', 'Fecha').' '.Yii::t('app', 'Operación'),
-                        'headerOptions' => ['class' => 'col-xs-2'],
-                        'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; ']
-                    ],
-                    [
-                        'attribute' => 'nombre_responsable',
-                        'label' => Yii::t('app','Responsable'),
-                        'headerOptions' => ['style' => 'width: 15%'],
-                        'format' => 'raw',
-                        'enableSorting'=>false,
-                        'value' => function($model){
-                            return (isset($model->nombre_responsable))?strtoupper($model->nombre_responsable):'' ;
-                        }
-                    ],
-                    [
-                        'attribute' => 'id',
-                        'label' => Yii::t('app', 'Soporte'),
-                        'headerOptions' => ['style' => 'width: 5%'],
-                        'enableSorting'=>false,
-                        'format' => 'raw',
-                        'filter'=>false,
-                        'value' => function($model){
-                            return Html::button('<i class="fas fa-download"></i> '.Yii::t('app', 'Descargar'), ['id' => 'btn_registrar', 'class' => 'btn btn-primary float-left btn-sm', 'onclick' => '(function ( $event ) { generatePdfRegistro( '.$model->id.' ) })();', 'style'=>'margin-right: 5px;']);
-                        }
+                        'headerOptions' => ['class' => 'col-xs-2','style' => 'width: 10%'],
+                        'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle;'],
                     ],
                     [
                         'class' => '\kartik\grid\ActionColumn',
                         'header' => '',
-                        'headerOptions' => array('style' => 'width: 100%'),
+                        'headerOptions' => ['style' => 'width: 5%;'],
                         'mergeHeader' => false,
-                        'template' => ' {view} ',
-                        'width'=>'70px',
+                        'template' => ' {view} {download}',
                         'vAlign'=>GridView::ALIGN_MIDDLE,
                         'hAlign'=>GridView::ALIGN_LEFT,
                         'buttons' => [
@@ -174,7 +170,7 @@ $buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
                                     Html::button('<i class="fas fa-eye"></i>', ['class' => 'btn btn-primary btn-xs'] ),
                                     ['registro/view', 'id' => $model['id']],
                                     [
-                                        'title' => Yii::t('common', 'Editar'),
+                                        'title' => Yii::t('common', 'Ver'),
                                         'data' => [
                                             'tooltip' => true,
                                             'pjax' => 0
@@ -182,6 +178,17 @@ $buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
                                     ]
                                 );
                                 return $viewButton;
+                            },
+                            'download' => function ($url, $model) {
+                                $downloadButton = Html::button('<i class="fas fa-download"></i> ' ,
+                                    [
+                                        'id' => 'btn_registrar',
+                                        'title' => Yii::t('common', 'Descargar'),
+                                        'class' => 'btn btn-primary btn-xs',
+                                        'onclick' => '(function ( $event ) { generatePdfRegistro( ' . $model->id . ' ) })();', 'style' => 'margin-right: 5px;'
+                                    ]
+                                );
+                                return $downloadButton;
                             },
                         ]
                     ]

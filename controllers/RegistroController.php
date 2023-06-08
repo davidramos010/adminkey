@@ -14,6 +14,7 @@ use app\models\RegistroLog;
 use app\models\RegistroSearch;
 use kartik\mpdf\Pdf;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -440,7 +441,7 @@ class RegistroController extends BaseController
     }
 
     /**
-     * Devuelve un listado de poblaciones en funcion del codipostal especificado
+     * Devuelve un listado de comerciales en funcion del nombre especificado
      * @param bool $q
      * @return array
      */
@@ -449,6 +450,41 @@ class RegistroController extends BaseController
         $rows = Comerciales::find()->select('id,nombre')->distinct()
             ->where(['like', 'nombre', $q])->andWhere(['estado' => 1])->asArray()->all();
         return json_encode($rows);
+    }
+
+    /**
+     * Devuelve un listado de comunidades en funcion del nombre especificado
+     * @param bool $q
+     * @return array
+     */
+    public function actionFindComunidad($q = false)
+    {
+        $rows = Comunidad::find()->select('id,nombre')->distinct()
+            ->where(['OR', ['like','nombre',$q],['like','nomenclatura',$q] ])
+            ->andWhere(['estado' => 1])->asArray()->all();
+        return json_encode($rows);
+    }
+
+    /**
+     * Devuelve un listado de propietarios en función del nombre especificado
+     * @param bool $q
+     * @return array
+     */
+    public function actionFindPropietarios($q = false)
+    {
+        $queryWhere = empty($q)?"":" WHERE (pp.nombre_propietario like '%".$q."%' OR pp.nombre_representante like '%".$q."%')";
+        $query = "SELECT pp.id, (CASE
+                                    WHEN pp.nombre_propietario IS NOT NULL THEN pp.nombre_propietario
+                                    WHEN pp.nombre_representante IS NOT NULL THEN pp.nombre_representante
+                                    ELSE NULL
+                                END) as nombre 
+                    FROM propietarios pp ".$queryWhere." 
+                    ORDER BY nombre_propietario ASC, nombre_representante ASC ";
+        $result = Yii::$app->db
+            ->createCommand($query)
+            ->queryAll();
+
+        return json_encode($result);
     }
 
     /**

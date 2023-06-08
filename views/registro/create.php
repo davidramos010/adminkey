@@ -8,12 +8,6 @@ use yii\helpers\Html;
 $this->title = Yii::t('app','Registrar Movimiento');
 $this->params['breadcrumbs'][] = ['label' => 'Registros', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-/*$assetDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
-$assetPlu = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/plugins');
-$this->registerCssFile( $assetPlu . '/datatables-bs4/css/dataTables.bootstrap4.min.css');
-$this->registerCssFile( $assetPlu . '/datatables-responsive/css/responsive.bootstrap4.min.css');
-$this->registerCssFile( $assetPlu . '/datatables-buttons/css/buttons.bootstrap4.min.css');
-$this->registerCssFile( $assetDir . '/css/adminlte.min.css');*/
 $this->registerJsFile('@web/js/registro.js');
 
 ?>
