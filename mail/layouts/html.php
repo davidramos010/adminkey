@@ -11,6 +11,14 @@ use yii\helpers\Html;
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=<?= Yii::$app->charset ?>" />
     <title>AdminKey::<?= Html::encode($this->title) ?></title>
+    <style type="text/css">
+        .login-logo, .register-logo {
+            font-size: 2.1rem;
+            font-weight: 300;
+            margin-bottom: 0.9rem;
+            text-align: center;
+        }
+    </style>
     <?php $this->head() ?>
 </head>
 <body>

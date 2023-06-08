@@ -56,6 +56,17 @@ $config = [
             // send all mails to a file by default.
             'useFileTransport' => true,
         ],
+        'mail' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.ionos.es',  // ej. smtp.mandrillapp.com o smtp.gmail.com
+                'username' => 'soporte@adminkeys.es',
+                'password' => 'soporte_ionos',
+                'port' => '587', // El puerto 25 es un puerto común también
+                'encryption' => 'tls', // Es usado también a menudo, revise la configuración del servidor
+            ],
+        ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
