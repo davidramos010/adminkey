@@ -362,4 +362,45 @@ class SiteController extends BaseController
             }
         }
     }
+
+    public function actionTestEmail()
+    {
+
+        $contentBody = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec lectus lectus, euismod vitae convallis in, placerat in ipsum. Vestibulum quam nisl, dapibus sit amet sodales id, gravida quis est. Proin non posuere turpis, quis ullamcorper eros. Sed convallis lorem vel velit cursus porta. Maecenas sed mattis sem. Phasellus eu quam sollicitudin, eleifend nisl eu, pretium dolor. Integer ultricies ornare elit eget pulvinar.";
+        $content = "<table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 860px;\">
+                        <tr>
+                            <td>
+                                <img src=\"http://adminkeys.es/assets/fcb6489d/img/AdminLTELogo.png\" style=\"width: 33px\"/>
+                                <div class=\"login-logo\">
+                                    <b>Admin</b>KEYS
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align=\"center\" style=\";margin-top:25px\">
+                                <p align=\"center\">". $contentBody ."</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span style=\"font-size: 11px;\">
+                                    <span style=\"font-family: arial,helvetica,sans-serif;\">
+                                        <span style=\"color: #808080;\"> Le recordamos que tiene derecho a dirigir sus reclamaciones ante las Autoridades de protección de datos.</span>
+                                    </span>
+                                </span>
+                                <br>
+                                <span style=\"color: #808080;\">
+                                    <span style=\"font-size: 11px;\">
+                                        <span style=\"font-family: arial,helvetica,sans-serif;\"><strong><em>Por favor, no responda a este correo, se trata de un correo automatizado.</em></strong></span>
+                                    </span>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>";
+        Yii::$app->mail->compose("@app/mail/layouts/html",['content'=>$content])
+            ->setFrom('soporte@adminkeys.es')
+            ->setTo('dramos@adminkeys.es')
+            ->setSubject('Email enviado desde Yii2-Swiftmailer')
+            ->send();
+    }
 }
