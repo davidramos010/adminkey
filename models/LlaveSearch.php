@@ -153,7 +153,7 @@ class LlaveSearch extends Llave
         $query->leftJoin('llave_status ls','ls.id_llave = ll.id and ls.id = (
            SELECT st.id
            FROM llave_status st 
-           WHERE st.id_llave = ll.id
+           WHERE st.id_llave = ll.id 
            ORDER BY st.fecha DESC limit 1
         )');
 
@@ -173,6 +173,9 @@ class LlaveSearch extends Llave
             // $query->where('0=1');
             return $dataProvider;
         }
+
+        // solo llaves activas
+        $query->where(['ll.activa' => 1]);
 
         // grid filtering conditions
         $query->andFilterWhere([
