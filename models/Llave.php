@@ -466,6 +466,7 @@ class Llave extends \yii\db\ActiveRecord
         // ------------------------------
         if (empty($avisos)) {
             foreach ($validador->getRows() as $file_key => $line) {
+                $strNomenclatura = "";
                 $numFilaArchivo = ($file_key+2);
                 $strCode = $line['CODIGO'];
                 $strOfic = $line['OFICINA'];
@@ -509,10 +510,12 @@ class Llave extends \yii\db\ActiveRecord
                     if (empty($objParticular)) {
                         //Conultar codpostal y provincia
                         $strDireccion = (isset($objComunidad) && !empty($objComunidad->direccion))?$objComunidad->direccion:$strDireccion;
+                        $strDireccion = empty($strDireccion)?'PENDIENTE':$strDireccion;
                         $strCodigoPostal = (isset($objComunidad) && !empty($objComunidad->cod_postal))?$objComunidad->cod_postal:$strCodigoPostal;
                         $objCodPostal = Codipostal::find()->where(['cp'=>$strCodigoPostal])->one();
                         $strPoblacion = (isset($objCodPostal) && !empty($objCodPostal->provincia))?$objCodPostal->provincia:'';
                         $strPoblacion = (empty($strPoblacion) && isset($objComunidad) && isset($objComunidad->poblacion))?$objComunidad->poblacion:'';
+                        $strMovil = empty($strMovil)?'999999999':$strMovil;
                         // ------------------------------
                         $objParticular = new Propietarios();
                         $objParticular->nombre_propietario = $strNombrePropietario;
@@ -525,7 +528,7 @@ class Llave extends \yii\db\ActiveRecord
                             $strCodigo = "001";
                             $avisos[] = 'Alerta en la linea:' . $numFilaArchivo . ' - Completar los datos de Propietario:' . $strNombrePropietario . '<br>';
                         } else {
-                            $avisos[] = 'Error en la linea:' . $numFilaArchivo . ' - No encuetra datos del Propietario:' . $strNombrePropietario . '<br>';
+                            $avisos[] = 'Error en la linea:' . $numFilaArchivo . ' - No encuentra datos del Propietario:' . $strNombrePropietario . '<br>';
                             continue;
                         }
                     }
