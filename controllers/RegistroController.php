@@ -448,7 +448,7 @@ class RegistroController extends BaseController
     public function actionFindComercial($q = false)
     {
         $rows = Comerciales::find()->select('id,nombre')->distinct()
-            ->where(['like', 'nombre', $q])->andWhere(['estado' => 1])->asArray()->all();
+            ->where(['like', 'nombre', $q])->andWhere(['estado' => 1])->orderBy('nombre ASC')->asArray()->all();
         return json_encode($rows);
     }
 
@@ -461,7 +461,7 @@ class RegistroController extends BaseController
     {
         $rows = Comunidad::find()->select(["id","CONCAT(nomenclatura, ' - ', nombre) as nombre"])->distinct()
             ->where(['OR', ['like','nombre',$q],['like','nomenclatura',$q] ])
-            ->andWhere(['estado' => 1])->asArray()->all();
+            ->andWhere(['estado' => 1])->orderBy('comunidad.nombre ASC')->asArray()->all();
         return json_encode($rows);
     }
 
