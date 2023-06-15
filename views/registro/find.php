@@ -45,9 +45,9 @@ $model = new LlaveSearch();
                                             'id' => 'llavesearch-id_comunidad'
                                         ],
                                         'pluginOptions' => [
-                                            'minimumInputLength' => 4,
+                                            'minimumInputLength' => 2,
                                             'language' => [
-                                                'inputTooShort' => new JsExpression("() => 'Escríbe 4 caracteres mínimo. Puedes buscar por comunidad.'"),
+                                                'inputTooShort' => new JsExpression("() => 'Escríbe 2 caracteres mínimo. Puedes buscar por comunidad.'"),
                                                 'errorLoading' => new JsExpression("() => 'Buscando...'"),
                                             ],
                                             'ajax' => [
@@ -56,7 +56,7 @@ $model = new LlaveSearch();
                                                 'processResults' => new JsExpression('(data) => procesarResultadosComercial(data)'),
                                                 'data' => new JsExpression('(params) => { return {q:params.term} }')
                                             ],
-                                            'templateResult' => new JsExpression('(params) => params.loading ? "Buscando..." : params.id + " - " + params.nombre'),
+                                            'templateResult' => new JsExpression('(params) => params.loading ? "Buscando..." : params.nombre'),
                                             'templateSelection' => new JsExpression('function (data) {
                                                 if(data.nombre==="" || data.nombre === undefined || data.nombre === null){
                                                     return data.text;
@@ -76,9 +76,9 @@ $model = new LlaveSearch();
                                             'id' => 'llavesearch-id_propietario'
                                         ],
                                         'pluginOptions' => [
-                                            'minimumInputLength' => 4,
+                                            'minimumInputLength' => 2,
                                             'language' => [
-                                                'inputTooShort' => new JsExpression("() => 'Escríbe 4 caracteres mínimo. Puedes buscar por Propietario.'"),
+                                                'inputTooShort' => new JsExpression("() => 'Escríbe 2 caracteres mínimo. Puedes buscar por Propietario.'"),
                                                 'errorLoading' => new JsExpression("() => 'Buscando...'"),
                                             ],
                                             'ajax' => [
@@ -87,7 +87,7 @@ $model = new LlaveSearch();
                                                 'processResults' => new JsExpression('(data) => procesarResultadosComercial(data)'),
                                                 'data' => new JsExpression('(params) => { return {q:params.term} }')
                                             ],
-                                            'templateResult' => new JsExpression('(params) => params.loading ? "Buscando..." : params.id + " - " + params.nombre'),
+                                            'templateResult' => new JsExpression('(params) => params.loading ? "Buscando..." : params.nombre'),
                                             'templateSelection' => new JsExpression('function (data) {
                                                 if(data.nombre==="" || data.nombre === undefined || data.nombre === null){
                                                     return data.text;
@@ -108,9 +108,9 @@ $model = new LlaveSearch();
                                             'id' => 'llavesearch-comercial'
                                         ],
                                         'pluginOptions' => [
-                                            'minimumInputLength' => 4,
+                                            'minimumInputLength' => 2,
                                             'language' => [
-                                                'inputTooShort' => new JsExpression("() => 'Escríbe 4 caracteres mínimo. Puedes buscar por comercial.'"),
+                                                'inputTooShort' => new JsExpression("() => 'Escríbe 2 caracteres mínimo. Puedes buscar por comercial.'"),
                                                 'errorLoading' => new JsExpression("() => 'Buscando...'"),
                                             ],
                                             'ajax' => [
@@ -119,7 +119,7 @@ $model = new LlaveSearch();
                                                 'processResults' => new JsExpression('(data) => procesarResultadosComercial(data)'),
                                                 'data' => new JsExpression('(params) => { return {q:params.term} }')
                                             ],
-                                            'templateResult' => new JsExpression('(params) => params.loading ? "Buscando..." : params.id + " - " + params.nombre'),
+                                            'templateResult' => new JsExpression('(params) => params.loading ? "Buscando..." : params.nombre'),
                                             'templateSelection' => new JsExpression('function (data) {
                                                 if(data.nombre==="" || data.nombre === undefined || data.nombre === null){
                                                     return data.text;
