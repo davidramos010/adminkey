@@ -459,7 +459,7 @@ class RegistroController extends BaseController
      */
     public function actionFindComunidad($q = false)
     {
-        $rows = Comunidad::find()->select('id,nombre')->distinct()
+        $rows = Comunidad::find()->select(["id","CONCAT(nomenclatura, ' - ', nombre) as nombre"])->distinct()
             ->where(['OR', ['like','nombre',$q],['like','nomenclatura',$q] ])
             ->andWhere(['estado' => 1])->asArray()->all();
         return json_encode($rows);
