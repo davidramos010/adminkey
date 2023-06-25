@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Mpdf\Tag\U;
+use phpDocumentor\Reflection\Types\This;
 use yii;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
@@ -24,7 +25,7 @@ use yii\web\IdentityInterface;
  * @property PerfilesUsuario $perfilesUsuario
  */
 
-class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
+class User extends ActiveRecord implements IdentityInterface
 {
     public $idPerfil = null;
     public $password_new = null;
@@ -205,5 +206,77 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             ->createCommand($query)
             ->queryAll();
         return ArrayHelper::map($result, 'id', 'nombre');
+    }
+
+    /**
+     * Registrar usuario en el sistema
+     * @param array $arrParams
+     * @return array
+     */
+    public function setUser( array $arrParams ):array
+    {
+        $modelInfo = new UserInfo();
+        $model = new This();
+        $strErrores = '';
+        //limpiar texto y poner en mayusculas
+        $arrParams['UserInfo']['nombres'] = Util::getStringFormatUpper($arrParams['UserInfo']['nombres']);
+        $arrParams['UserInfo']['apellidos'] = Util::getStringFormatUpper($arrParams['UserInfo']['apellidos']);
+        $arrParams['UserInfo']['direccion'] = Util::getStringFormatUpper($arrParams['UserInfo']['direccion']);
+        $arrParams['UserInfo']['codigo'] = Util::getStringFormatUpper($arrParams['UserInfo']['codigo']);
+
+        $arrUser['User'] = $arrParams['User'];
+        $arrUser['User']['name'] = trim($arrParams['UserInfo']['nombres']. ' ' .$arrParams['UserInfo']['apellidos']);
+        $arrUser['User']['password'] = trim($arrUser['User']['password_new']);
+        $arrUser['User']['authKey'] = trim($arrUser['User']['authKey_new']);
+        $transaction = Yii::$app->db->beginTransaction();
+        $bolInserUser = ($model->load($arrUser) && $model->save());
+        $bolInserPerfil = false;
+        // pintar errores
+        if(!$bolInserUser){
+            $arrError = $model->getErrors();
+            foreach ($arrError as $item){
+                if(isset($item[0])){
+                    $strErrores .= '<br>-'.trim($item[0]);
+                }
+            }
+        }
+
+        $arrUserInfo['UserInfo'] = $arrParams['UserInfo'];
+        $arrUserInfo['UserInfo']['id_user'] = $model->id;
+        $bolInserUserInfo = ($bolInserUser && $modelInfo->load($arrUserInfo) && $modelInfo->save());
+
+        // pintar errores
+        if($bolInserUser && !$bolInserUserInfo){
+            $arrError = $modelInfo->getErrors();
+            foreach ($arrError as $item){
+                if(isset($item[0])){
+                    $strErrores .= '<br>-'.trim($item[0]);
+                }
+            }
+        }
+
+        if($bolInserUser && $bolInserUserInfo){
+            $newPerfilUser = new PerfilesUsuario();
+            $newPerfilUser->id_user = (int) $model->id;
+            $newPerfilUser->id_perfil = (int) $model->idPerfil;
+            $bolInserPerfil = $newPerfilUser->save();
+            if(!$bolInserPerfil){
+                $strErrores .= '<br>-El perfil no se asigna correctamente';
+            }
+        }
+
+        if($bolInserPerfil && $bolInserUser && $bolInserUserInfo){
+            if(empty($transaction->commit())){
+                Yii::$app->session->setFlash('success', Yii::t('yii', 'Registrado Correctamente'));
+                return $this->redirect(['index']);
+            }else{
+                $strErrores .= '<br>-No se puede registrar. Valide los datos he intente nuevamente.';
+            }
+        }else{
+            $transaction->rollBack();
+            $strErrores .= '<br>-Error al guardar. Valide los datos y vuelva a intentar.';
+        }
+
+        return ['ok'=>empty($strErrores),'message'=> empty($strErrores)?'OK':$strErrores ];
     }
 }

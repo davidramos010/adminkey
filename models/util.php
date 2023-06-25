@@ -110,4 +110,14 @@ class util
         }
         return $dateFormated;
     }
+
+    /**
+     * Retorna una cadena con el contenido en mayusculas
+     * @param string $strCadena
+     * @return string
+     */
+    public static function getStringFormatUpper( string $strCadena ):string
+    {
+       return trim(strtoupper($strCadena));
+    }
 }
