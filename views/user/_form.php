@@ -27,12 +27,7 @@ $this->registerJsFile('@web/js/usuarios.js');
             <!-- form start -->
             <?php $form = ActiveForm::begin(['id' => 'formUser']); ?>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <?= $form->field($model, 'id')->hiddenInput(['id' => 'id'])->label(false); ?>
-                        <?= $form->field($model, 'username')->textInput(['id' => 'username', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'style' => 'width:40%; text-transform: uppercase', 'readonly' => !$model->isNewRecord])->label('*Username') ?>
-                    </div>
-                </div>
+
                 <div class="row">
                     <div class="col-md-2">
                         <?= $form->field($model_info, 'tipo_documento')->dropDownList(util::arrTipoDocumentos, ['class' => 'form-control', 'prompt' => 'Seleccione Uno'])->label('Tipo Doc.'); ?>
@@ -61,11 +56,9 @@ $this->registerJsFile('@web/js/usuarios.js');
                     <?= $form->field($model_info, 'direccion')->textInput(['maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'style' => 'text-transform: uppercase'])->label('Dirección') ?>
                 </div>
                 <div class="row">
-                    <div class="col-md-3">
-                        <?= $form->field($model, 'password_new')->passwordInput(['id' => 'password_new', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'placeholder' => 'Password'])->label('Password') ?>
-                    </div>
-                    <div class="col-md-3">
-                        <?= $form->field($model, 'authKey_new')->passwordInput(['id' => 'authKey_new', 'maxlength' => true, 'class' => 'form-control', 'value' => '', 'autocomplete' => 'off', 'onblur' => '(function ( $event ) { valideteKey() })();' ])->label('AuthKey') ?>
+                    <div class="col-md-4">
+                        <?= $form->field($model, 'id')->hiddenInput(['id' => 'id'])->label(false); ?>
+                        <?= $form->field($model, 'username')->textInput(['id' => 'username', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'style' => 'width:40%; text-transform: uppercase', 'readonly' => !$model->isNewRecord])->label('*Username') ?>
                     </div>
                 </div>
                 <div class="row">
@@ -79,7 +72,15 @@ $this->registerJsFile('@web/js/usuarios.js');
                         <?= $form->field($model_info, 'estado')->widget(SwitchInput::class, ['pluginOptions' => ['size' => 'small', 'onText' => 'Activo', 'offText' => 'Inactivo']])->label('Estado'); ?>
                     </div>
                 </div>
-                <h6 class="text-muted" ><?= Yii::t('app','titulo_usuario_relacion_comercial') ?></h6>
+                <div class="row">
+                    <div class="col-md-3">
+                        <?= $form->field($model, 'password_new')->passwordInput(['id' => 'password_new', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'placeholder' => 'Password'])->label('Password') ?>
+                    </div>
+                    <div class="col-md-3">
+                        <?= $form->field($model, 'authKey_new')->passwordInput(['id' => 'authKey_new', 'maxlength' => true, 'class' => 'form-control', 'value' => '', 'autocomplete' => 'off', 'onblur' => '(function ( $event ) { valideteKey() })();' ])->label('AuthKey') ?>
+                    </div>
+                </div>
+                <h6 class="text-muted" ><?= Yii::t('app','* Debe tener entre 6 y 7 caracteres.') ?></h6>
                 <div class="row">
                     <div class="col-md-12">
                         <?=  $form->field($model_info, 'id_comercial')->widget(Select2::class, [
@@ -114,7 +115,7 @@ $this->registerJsFile('@web/js/usuarios.js');
                         )->label('Empresa/Proveedor'); ?>
                     </div>
                 </div>
-
+                <h6 class="text-muted" ><?= Yii::t('app','titulo_usuario_relacion_comercial') ?></h6>
                 <div style="padding-top: 15px" >
                     <?= $form->field($model, 'password')->hiddenInput(['id'=>'password'])->label(false); ?>
                     <?= $form->field($model, 'authKey')->hiddenInput(['id'=>'authKey'])->label(false); ?>

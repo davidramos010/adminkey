@@ -97,7 +97,7 @@ class UserController extends BaseController
                 Yii::$app->session->setFlash('error', Yii::t('yii', 'No se puede registrar. Valide los datos he intente nuevamente o comuniquese con el administrador'));
             }
         }
-        
+
         $modelInfo->estado=1; // Activo por defecto
         return $this->render('create', [
             'model' => $model,
