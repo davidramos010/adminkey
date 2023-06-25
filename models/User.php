@@ -266,13 +266,12 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         if($bolInserPerfil && $bolInserUser && $bolInserUserInfo){
-            if(empty($transaction->commit())){
-                Yii::$app->session->setFlash('success', Yii::t('yii', 'Registrado Correctamente'));
-                return $this->redirect(['index']);
-            }else{
+            if(!empty($transaction->commit())){
                 $strErrores .= '<br>-No se puede registrar. Valide los datos he intente nuevamente.';
             }
-        }else{
+        }
+
+        if(!empty($strErrores)){
             $transaction->rollBack();
             $strErrores .= '<br>-Error al guardar. Valide los datos y vuelva a intentar.';
         }

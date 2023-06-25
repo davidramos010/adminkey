@@ -80,16 +80,24 @@ class UserController extends BaseController
     {
         $model = new User();
         $modelInfo = new UserInfo();
-        $strErrores = null;
         if(Yii::$app->request->post()){
             $arrParam = Yii::$app->request->post();
             $arrResultSet = $model->setUser($arrParam);
-        }
+            if(isset($arrResultSet['ok']) && $arrResultSet['ok']){
+                Yii::$app->session->setFlash('success', Yii::t('yii', 'Registrado Correctamente'));
+                return $this->redirect(['index']);
+            }
 
-        if(!empty($strErrores)){
-            Yii::$app->session->setFlash('error', $strErrores );
-        }
+            if(isset($arrResultSet['ok']) && !$arrResultSet['ok']){
+                Yii::$app->session->setFlash('success', Yii::t('yii', $arrResultSet['messaje']));
+                return $this->redirect(['index']);
+            }
 
+            if(!isset($arrResultSet['ok'])){
+                Yii::$app->session->setFlash('error', Yii::t('yii', 'No se puede registrar. Valide los datos he intente nuevamente o comuniquese con el administrador'));
+            }
+        }
+        
         $modelInfo->estado=1; // Activo por defecto
         return $this->render('create', [
             'model' => $model,
