@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Comunidad;
 use app\models\Llave;
+use app\models\LlaveNotas;
 use app\models\LlaveSearch;
 use app\models\LlaveStatus;
 use app\models\Propietarios;
@@ -90,8 +91,14 @@ class LlaveController extends BaseController
      */
     public function actionView($id)
     {
+        $modelLlaveNota = new LlaveNotas();
+        $modelLlaveNota->id_user = Yii::$app->user->identity->username;
+        $modelLlaveNota->created = date('Y/m/d H:i');
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'modelNota' => (object) LlaveNotas::find()->where(['id_llave'=>$id,'delete'=>0])->orderBy('id DESC')->all(),
+            'llaveNota' => $modelLlaveNota
         ]);
     }
 
@@ -103,11 +110,15 @@ class LlaveController extends BaseController
     public function actionCreate()
     {
         $model = new Llave();
+        $modelNotas = new LlaveNotas();
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->validate()) {
+            $arrParamsPost = $this->request->post();
+            if ($model->load($arrParamsPost) && $model->validate()) {
+                $strNota = isset($arrParamsPost['LlaveNotas']['nota']) && !empty($arrParamsPost['LlaveNotas']['nota']) ? trim($arrParamsPost['LlaveNotas']['nota']) : '';
                 $model->codigo = $strCodBase = $model->nomenclatura.'-'.$model->codigo;
                 $model->codigo .= ($model->copia>1)?'.1':'';
                 $model->save();
+                $modelNotas->setNewNota( $model->id , $strNota);
 
                 if((int) $model->copia > 1){
                     $numContador = 1;
@@ -117,8 +128,10 @@ class LlaveController extends BaseController
                         $modelClone->attributes = $model->attributes;
                         $modelClone->codigo = $strCodBase.'.'.$numContador;
                         $modelClone->save();
+                        $modelNotas->setNewNota( $modelClone->id , $strNota);
                     }
                 }
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -127,6 +140,7 @@ class LlaveController extends BaseController
 
         return $this->render('create', [
             'model' => $model,
+            'modelNota' => $modelNotas,
         ]);
     }
 
@@ -140,6 +154,10 @@ class LlaveController extends BaseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $modelLlaveNota = new LlaveNotas();
+        $modelLlaveNota->id_user = Yii::$app->user->identity->username;
+        $modelLlaveNota->created = date('Y/m/d H:i');
+
         if ($this->request->isPost && $model->load($this->request->post()) && $model->validate()) {
             $model->codigo = $model->nomenclatura.'-'.$model->codigo;
             $model->save();
@@ -150,6 +168,8 @@ class LlaveController extends BaseController
 
         return $this->render('update', [
             'model' => $model,
+            'llaveNota' => $modelLlaveNota,
+            'modelNota' => (object) LlaveNotas::find()->where(['id_llave'=>$id,'delete'=>0])->orderBy('id DESC')->all(),
         ]);
     }
 
@@ -165,6 +185,8 @@ class LlaveController extends BaseController
         $objLlave = Llave::findOne($id);
         $objLlave->activa =0;
         $objLlave->save();
+        $newNotaLlave = new LlaveNotas();
+        $newNotaLlave->setNewNota( $id , 'Eliminación/Inactivación de llave');
 
         return $this->redirect(['index']);
     }
@@ -219,6 +241,30 @@ class LlaveController extends BaseController
         }
 
         return json_encode( $arrInfo);
+    }
+
+    /**
+     * @return bool
+     */
+    public function actionAjaxDelLlaveNota(): bool
+    {
+        $arrParam = $this->request->post();
+        $numIdLlave = $arrParam['numIdLlave'];
+        $objLlaveNota = LlaveNotas::findOne(['id' => $numIdLlave]);
+        $objLlaveNota->delete = 1;
+        return $objLlaveNota->save();
+    }
+
+    /**
+     * @return bool
+     */
+    public function actionAjaxSetLlaveNota(): string
+    {
+        $arrParam = $this->request->post();
+        $numIdLlave = (int) $arrParam['numIdLlave'];
+        $strNotaLlave = $arrParam['strNota'];
+        $newNota = new LlaveNotas();
+        return json_encode($newNota->setNewNotaAjax($numIdLlave, $strNotaLlave)) ;
     }
 
     /**

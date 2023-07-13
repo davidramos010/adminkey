@@ -1,6 +1,8 @@
 <?php
 
+use app\components\Tools;
 use app\models\Llave;
+use app\models\LlaveNotas;
 use kartik\widgets\SwitchInput;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -8,6 +10,8 @@ use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Llave */
+/* @var $modelNota LlaveNotas */
+/* @var $llaveNota LlaveNotas */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $view bool */
 
@@ -18,7 +22,9 @@ $strStyleVisibleBtnAdd = $model->isNewRecord ? '' : 'none';
 $url_find_attributes = Url::toRoute(['llave/ajax-find-attributes']);
 $url_find_code = Url::toRoute(['llave/ajax-find-code']);
 $url_create_comunidad = Url::toRoute(['comunidad/ajax-create']);
+$url_create_notas = Url::toRoute(['llave/ajax-set-llave-nota']);
 $url_create_propietarios = Url::toRoute(['propietarios/ajax-create']);
+$url_delete_notas = Url::toRoute(['llave/ajax-del-llave-nota']);
 $url_add_copi_key = Url::toRoute(['llave/ajax-add-copi-key']);
 
 ?>
@@ -36,10 +42,11 @@ $url_add_copi_key = Url::toRoute(['llave/ajax-add-copi-key']);
         </div>
     </div>
 
-    <!-- form start -->
+    <!-- form modal start -->
     <?= $this->render('info_comunidad') ?>
     <?= $this->render('info_propietario') ?>
-    <!-- form end -->
+    <?= isset($llaveNota) ? $this->render('info_nota',['llaveNota'=> $llaveNota,'model'=>$model ]) : "" ?>
+    <!-- form modal end -->
 
     <!-- general form elements -->
     <div class="card card-primary">
@@ -78,8 +85,7 @@ $url_add_copi_key = Url::toRoute(['llave/ajax-add-copi-key']);
                 </div>
             </div>
             <div class="row">
-
-                <div class="col-md-6 ">
+                <div class="col-md-6">
                     <?= $form->field($model, 'id_llave_ubicacion')->dropDownList(Llave::getUbicacionDropdownList(), ['class' => 'form-control', 'prompt' => 'Seleccione Uno', 'readonly' => $view])->label(Yii::t('app', 'Ubicación Almacenamiento')); ?>
                 </div>
             </div>
@@ -89,7 +95,7 @@ $url_add_copi_key = Url::toRoute(['llave/ajax-add-copi-key']);
                         <?= $form->field($model, 'nomenclatura')->textInput(['id' => 'llave-nomenclatura', 'maxlength' => true, 'class' => 'form-control', 'readonly' => true])->label('_') ?>
                     </div>
                 <?php endif; ?>
-                <div class="<?= (!$view)?'col-md-2':'col-md-1' ?>  ">
+                <div class="col-md-2 ">
                     <?= $form->field($model, 'codigo')->textInput(['id' => 'llave-codigo', 'maxlength' => true, 'class' => 'form-control', 'readonly' => $view])->label(Yii::t('app', 'Código').' '. Yii::t('app', 'Llave')) ?>
                 </div>
                 <div class="col-md-1 ">
@@ -110,6 +116,42 @@ $url_add_copi_key = Url::toRoute(['llave/ajax-add-copi-key']);
             <div class="form-group">
                 <?= $form->field($model, 'observacion')->textArea(['class' => 'form-control', 'readonly' => $view])->label(Yii::t('app', 'Observaciones')) ?>
             </div>
+            <?php if($model->isNewRecord): ?>
+                <div class="form-group" style="display: <?= $model->isNewRecord ? 'Inline' : 'none' ?>" >
+                    <?= $form->field($modelNota, 'nota')->textArea(['class' => 'form-control', 'readonly' => $view])->label(Yii::t('app', 'Notas')) ?>
+                </div>
+            <?php else: ?>
+                <div class="form-group " style="align-content: center; display: <?= !$model->isNewRecord ? 'Inline' : 'none' ?>" >
+                    <div class="col-md-12 ">
+                        <table id="tblNotasList" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th style="width: 60%">Nota</th>
+                            <th style="width: 17%">Fecha</th>
+                            <th style="width: 18%">Usuario</th>
+                            <th style="width: 5%"><?= Html::button('<i class="fas fa-plus"></i>', ['class' => 'btn btn-success btn-xs', 'id' => 'btn-modal-addnota', 'title' => Yii::t('app', 'Nueva Nota')]); ?></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ( $modelNota as $valueNota ): ?>
+                            <tr id="tableNotaRow_<?= $valueNota['id'] ?>" >
+                                <td><?= $valueNota['nota']; ?></td>
+                                <td><?= Tools::getDateTimeFormatedSqlToUser($valueNota['created']) ; ?></td>
+                                <td><?= $valueNota->user->name; ?></td>
+                                <td><?= Html::button('<i class="fas fa-trash-alt"></i>', ['class' => 'btn btn-danger btn-xs deleteRowButton', 'onclick' => 'fnDelNotaLlave('.$valueNota['id'].') ']); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th colspan="4"><?= Yii::t('app', 'Historico de notas.') ?></th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <div class="row">
                 <div class="col-md-2">
                     <?= $form->field($model, 'copia')->textInput(['type' => 'number', 'maxlength' => true, 'style'=>'width:50%;', 'class' => 'form-control', 'readonly' => !$model->isNewRecord])->label(Yii::t('app', 'Número de copias')) ?>
@@ -143,8 +185,11 @@ $this->registerJs(
     const strUrlFindAttributes = '$url_find_attributes';
     const strUrlFindCode = '$url_find_code';
     const strUrlCreateComunidad = '$url_create_comunidad';
+    const strUrlCreateNotas = '$url_create_notas';
+    const strUrlDeleteNotas = '$url_delete_notas';
     const strUrlCreatePropietarios = '$url_create_propietarios';
     const strUrlAddCopiKey = '$url_add_copi_key';
+    
     
 JS
     , $this::POS_HEAD);
@@ -168,12 +213,20 @@ $this->registerJs(
                   .load($(this).attr("href"));  
        }); '
 );
+
 $this->registerJs(
     '$("#btn-modal-propietario").click(function(e){
        e.preventDefault();      
        $("#modal-propietario").modal("show")
                   .find(".modal-content")
                   .load($(this).attr("href"));  
+       }); '
+);
+
+$this->registerJs(
+    '$("#btn-modal-addnota").click(function(e){
+       e.preventDefault();      
+       $("#modal-addnota").modal("show");  
        }); '
 );
 
@@ -186,6 +239,12 @@ $this->registerJs(
 $this->registerJs(
     '$(document).on("click", "[data-js-set-comunidad]", function (e) {
             fnSetComunidad();
+        });'
+);
+
+$this->registerJs(
+    '$(document).on("click", "[data-js-set-nota]", function (e) {
+            fnSetNotaLlave();
         });'
 );
 ?>
