@@ -29,6 +29,10 @@ function fnTipoLlaveSelected(){
     });
 }
 
+
+
+
+
 /**
  * Consultar detalles de movimientos
  * @param id
@@ -162,6 +166,77 @@ function fnExcelReport(strName)
         sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
 
     return (sa);
+}
+
+/**
+ * Registrar nota en la llave
+ * @param idllave
+ */
+function fnSetNotaLlave(){
+    let url = strUrlCreateNotas;
+    let strNotaLlave =  $('#form-nota-nota').val().trim();
+    let idllave = $('#form-nota-llave').val();
+
+
+    setTimeout(function () {
+        if (strNotaLlave.length === 0) {
+            toastr.error('Atención el campo nota es incorrecto o falta por llenar. <br /> ' +
+                '<span class="small">Sí no detectas el error, mira que no haya espacios en blanco delante o detrás del campo erróneo. </span> ');
+            return false;
+        }else{
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: {
+                    "numIdLlave": idllave,
+                    "strNota": strNotaLlave
+                },
+                success: function (data) {
+                    data = jQuery.parseJSON(data);
+                    if(data.error != '' && data.error!=null) {
+                        toastr.error(data.error);
+                    }else {
+                        toastr.success(data.ok_sms);
+                        let strButton = '<button type="button" class="btn btn-danger btn-xs" onclick="fnDelNotaLlave('+data.id+') "><svg class="svg-inline--fa fa-trash-alt fa-w-14" aria-hidden="true" data-prefix="fas" data-icon="trash-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M0 84V56c0-13.3 10.7-24 24-24h112l9.4-18.7c4-8.2 12.3-13.3 21.4-13.3h114.3c9.1 0 17.4 5.1 21.5 13.3L312 32h112c13.3 0 24 10.7 24 24v28c0 6.6-5.4 12-12 12H12C5.4 96 0 90.6 0 84zm416 56v324c0 26.5-21.5 48-48 48H80c-26.5 0-48-21.5-48-48V140c0-6.6 5.4-12 12-12h360c6.6 0 12 5.4 12 12zm-272 68c0-8.8-7.2-16-16-16s-16 7.2-16 16v224c0 8.8 7.2 16 16 16s16-7.2 16-16V208zm96 0c0-8.8-7.2-16-16-16s-16 7.2-16 16v224c0 8.8 7.2 16 16 16s16-7.2 16-16V208zm96 0c0-8.8-7.2-16-16-16s-16 7.2-16 16v224c0 8.8 7.2 16 16 16s16-7.2 16-16V208z"></path></svg></button>';
+                        $('#tblNotasList').prepend('<tr id="tableNotaRow_'+data.id+'" ><td>'+data.nota+'</td><td>'+data.fecha+'</td><td>'+data.usuario+'</td><td>'+strButton+'</td></tr>');
+                        $('#btn_cancelar_modal_notas').click();
+                    }
+                },
+                error: function () {
+                    toastr.error("Something went wrong");
+                }
+            });
+        }
+    }, 350);
+
+}
+
+/**
+ *  Eliminar nota de la llave
+ * @param idllave
+ */
+function fnDelNotaLlave(idllave){
+
+    var opcion = confirm("Esta seguro que desea eliminar la nota?");
+    if (opcion != true) {
+        return true;
+    }
+
+    $.ajax({
+        url: strUrlDeleteNotas,
+        type: 'POST',
+        data: {
+            "numIdLlave": idllave,
+        },
+        success: function (data) {
+            if(data == false || data == 'false') {
+                toastr.error('El registro no se pudo eliminar. comuniqie al administrador');
+            }else {
+                toastr.success('La nota se ha eliminado');
+                $('#tableNotaRow_'+idllave).closest("tr").remove();
+            }
+        }
+    });
 }
 
 /**

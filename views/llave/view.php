@@ -4,7 +4,9 @@ use yii\widgets\DetailView;
 use barcode\barcode\BarcodeGenerator;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Comunidad */
+/* @var $model app\models\Llave */
+/* @var $modelNota stdClass */
+/* @var $llaveNota app\models\LlaveNotas */
 
 $this->title = 'Info General : '.$model->codigo;
 $this->params['breadcrumbs'][] = ['label' => 'Llaves', 'url' => ['index']];
@@ -40,7 +42,7 @@ $this->registerJsFile('@web/js/llave.js');
     <h1><?= Html::encode($this->title) ?></h1>
     <!-- form start -->
     <?= $this->render('_form', [
-        'model' => $model,'view'=>true
+        'model' => $model,'view'=>true, 'modelNota' => $modelNota, 'llaveNota' => $llaveNota
     ]) ?>
     <!-- form end -->
 
