@@ -123,6 +123,11 @@ return [
     ', en la misma oficina donde se han entregado y en un plazo de 24 horas desde la entrega. En caso contrario, el receptor informará de la causa del retraso y la fecha estimada de retorno.' => ',a la mateixa oficina on s\'han lliurat i en un termini de 24 hores des del lliurament. En cas contrari, el receptor ha d\'informar de la causa del retard i la data estimada de retorn.',
     'Número de copias'=>'Nombre de còpies',
 
+    'Listado de registro de entrada y salida de llaves.'=>'Llistat de registre d\'entrada i sortida de claus.',
+    'KO. Registros pendientes por devolver.'=>'KO. Registres pendents per tornar.',
+    'OK. Registros devueltos.'=>'OK. Registres tornats.',
+    'OK. Registros de almacenamiento.'=>'OK. Registres d\'emmagatzematge.',
+
     'Información movimientos de llave' => 'Informació moviments de clau',
     'Historial de movimientos' => 'Historial de moviments',
     'Este módulo solo esta habilitado para el administrador.' => 'Aquest mòdul només està habilitat per a l-administrador.',

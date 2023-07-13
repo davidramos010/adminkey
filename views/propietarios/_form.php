@@ -26,11 +26,11 @@ $this->registerJsFile('@web/js/propietarios.js');
             <?php $form = ActiveForm::begin(['id' => 'form-propietario', 'enableClientValidation' => true, 'enableAjaxValidation' => false]); ?>
             <div class="card-body">
 
-                <div class="row card-header text-muted border-bottom-0"> <i class="nav-icon fas fa-edit"></i> &nbsp;&nbsp; <h3 class="card-title">Datos Propietario</h3> </div>
+                <div class="row card-header text-muted border-bottom-0"> <i class="nav-icon fas fa-edit"></i> &nbsp;&nbsp; <h3 class="card-title"><?= Yii::t('app','Datos Propietario') ?></h3> </div>
                 <div class="row">
                     <div class="col-md-12 " >
                         <div class="line"></div>
-                        <?= $form->field($model, 'nombre_propietario')->textInput(['maxlength' => true,'class'=>'form-control','style'=>'text-transform: uppercase'])->label('Nombre Propietario') ?>
+                        <?= $form->field($model, 'nombre_propietario')->textInput(['maxlength' => true,'class'=>'form-control','style'=>'text-transform: uppercase'])->label(Yii::t('app', 'Nombre Propietario')) ?>
                     </div>
                 </div>
                 <div class="row">
@@ -38,15 +38,15 @@ $this->registerJsFile('@web/js/propietarios.js');
                         <?= $form->field($model, 'tipo_documento_propietario')->dropDownList( $model::arrTipoDocumentos , ['class'=>'form-control', 'prompt' => 'Seleccione Uno' ])->label('Tipo Doc.'); ?>
                     </div>
                     <div class="col-md-8 "  >
-                        <?= $form->field($model, 'documento_propietario')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Documento Propietario') ?>
+                        <?= $form->field($model, 'documento_propietario')->textInput(['maxlength' => true,'class'=>'form-control'])->label(Yii::t('app','Documento Propietario')) ?>
                     </div>
                 </div>
 
-                <div class="row card-header text-muted border-bottom-0"> <i class="nav-icon fas fa-edit"></i> &nbsp;&nbsp; <h3 class="card-title">Datos Representante</h3> </div>
+                <div class="row card-header text-muted border-bottom-0"> <i class="nav-icon fas fa-edit"></i> &nbsp;&nbsp; <h3 class="card-title"><?= Yii::t('app','Datos Representante') ?></h3> </div>
                 <div class="row">
                     <div class="col-md-12 " >
                         <div class="line"></div>
-                        <?= $form->field($model, 'nombre_representante')->textInput(['maxlength' => true,'class'=>'form-control','style'=>'text-transform: uppercase'])->label('Nombre Representante') ?>
+                        <?= $form->field($model, 'nombre_representante')->textInput(['maxlength' => true,'class'=>'form-control','style'=>'text-transform: uppercase'])->label(Yii::t('app', 'Nombre Representante')) ?>
                     </div>
                 </div>
                 <div class="row">
@@ -54,10 +54,10 @@ $this->registerJsFile('@web/js/propietarios.js');
                         <?= $form->field($model, 'tipo_documento_representante')->dropDownList( $model::arrTipoDocumentos , ['class'=>'form-control', 'prompt' => 'Seleccione Uno' ])->label('Tipo Doc.'); ?>
                     </div>
                     <div class="col-md-8 "  >
-                        <?= $form->field($model, 'documento_representante')->textInput(['maxlength' => true,'class'=>'form-control'])->label('Documento Representante') ?>
+                        <?= $form->field($model, 'documento_representante')->textInput(['maxlength' => true,'class'=>'form-control'])->label(Yii::t('app', 'Documento Representante')) ?>
                     </div>
                 </div>
-                <div class="row card-header text-muted border-bottom-0"><i class="nav-icon fas fa-edit"></i> &nbsp;&nbsp; <h3 class="card-title">Info. Contacto</h3> </div>
+                <div class="row card-header text-muted border-bottom-0"><i class="nav-icon fas fa-edit"></i> &nbsp;&nbsp; <h3 class="card-title"><?= Yii::t('app', 'Info. Contacto') ?></h3> </div>
                 <div class="row">
                     <div class="col-md-4 " >
                         <?=  $form->field($model, 'cod_postal')->widget(Select2::class, [

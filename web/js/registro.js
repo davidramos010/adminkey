@@ -2,9 +2,6 @@ var listKeyEntrada = [];
 var listKeySalida = [];
 var dataURL;
 
-
-
-
 /**
  * adicion de llave
  */
@@ -211,6 +208,22 @@ function sendForm()
     var form = $('#form-registro');
     var formData = form.serialize();
 
+    // validar que exista una llave de entrada o salida
+    if (listKeySalida.length == 0 && listKeyEntrada.length == 0) {
+        toastr.warning('Validar las llaves relacionadas.');
+        $('#id_llave').focus();
+        return true;
+    }
+
+    //validar que el campo responsable este lleno
+    let  strNombreResponsable =  $('#registro-nombre_responsable').val().trim();
+    if (strNombreResponsable.length == 0) {
+        toastr.warning('El campo responsable no puedes estar vacio.');
+        $('#id_llave').focus();
+        return true;
+    }
+
+
     $.ajax({
         url: url,
         dataType: 'JSON',
@@ -237,7 +250,7 @@ function sendForm()
             if (!signaturePad.isEmpty()) {
                 fnGuardarCuadroFirma();
             }else {
-                toastr.warning('El registro no incluye firma digital.');
+                //toastr.warning('El registro no incluye firma digital.');
                 setTimeout("window.location = strUrl;",600);
             }
         }
