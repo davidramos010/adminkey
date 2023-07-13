@@ -64,7 +64,7 @@ class Registro extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_user'], 'required'],
+            [['id_user','nombre_responsable'], 'required','message'=> Yii::t('yii',  '{attribute} es requerido')],
             [['id_user', 'id_llave', 'id_comercial','tipo_documento'], 'integer'],
             [['entrada', 'salida','signature','fecha_registro'], 'safe'],
             [['documento','telefono'], 'string', 'max' => 20],

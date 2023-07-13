@@ -6,13 +6,13 @@ use app\models\LlaveNotas;
 use kartik\widgets\SwitchInput;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Llave */
 /* @var $modelNota LlaveNotas */
 /* @var $llaveNota LlaveNotas */
-/* @var $form yii\widgets\ActiveForm */
+/* @var $form yii\bootstrap4\ActiveForm */
 /* @var $view bool */
 
 $strStyleVisiblePropietario = isset($model->tipo) && $model->tipo->propietario ? '' : 'none';

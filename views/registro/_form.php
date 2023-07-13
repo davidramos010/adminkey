@@ -9,7 +9,7 @@ use kartik\widgets\Select2;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\JsExpression;
-use yii\widgets\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Registro */
@@ -108,7 +108,7 @@ $strAddBotonEliminar = isset($action) && $action == 'update' ? Html::button(Yii:
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <?= $form->field($model, 'nombre_responsable')->textInput(['maxlength' => true, 'class' => 'form-control'])->label(Yii::t('app', 'Nombre de quien retira la llave')) ?>
+                            <?= $form->field($model, 'nombre_responsable')->textInput(['maxlength' => true, 'class' => 'form-control', 'id' => 'registro-nombre_responsable' ])->label('* '.Yii::t('app', 'Nombre de quien retira la llave')) ?>
                         </div>
                     </div>
                     <div class="row">

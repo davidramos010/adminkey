@@ -5,11 +5,11 @@ use kartik\widgets\SwitchInput;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\JsExpression;
-use yii\widgets\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Comunidad */
-/* @var $form yii\widgets\ActiveForm */
+/* @var $form yii\bootstrap4\ActiveForm */
 /* @var $modal boolean */
 
 $this->registerJsFile('@web/js/comunidad.js');
