@@ -31,29 +31,49 @@ $buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
 ?>
 <div class="registro-index">
     <div class="ribbon_wrap" >
-        <div class="row">
-            <div class="col-md-9">
-                <div class="ribbon_addon pull-right margin-r-" style="margin-right: 3% !important">
-                    <?php
-                    echo Html::ul([
-                        Yii::t('app','Listado de registro de entrada y salida de llaves.'),
-                    ], ['encode' => false]);
-                    ?>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
-                    <?php
-                    echo Html::ul([
-                        '<span style="font-size: x-small; border-color: #ed969e; background-color: #f5c6cb; border: 1px solid #dee2e6; "> &nbsp; &nbsp; &nbsp; &nbsp; </span> &nbsp; &nbsp; <span style="font-size: 14px">'.Yii::t('app','KO. Registros pendientes por devolver.').'</span>',
-                        '<span style="font-size: x-small; border-color: #8fd19e; background-color: #c3e6cb; border: 1px solid #dee2e6; "> &nbsp; &nbsp; &nbsp; &nbsp; </span> &nbsp; &nbsp; <span style="font-size: 14px">'.Yii::t('app','OK. Registros devueltos.').'</span>',
-                        '<span style="font-size: x-small; border: 1px solid #dee2e6; "> &nbsp; &nbsp; &nbsp; &nbsp; </span> &nbsp; &nbsp;  <span style="font-size: 14px">'.Yii::t('app', 'OK. Registros de almacenamiento.').' </span>',
-                    ], ['encode' => false]);
-                    ?>
-                </div>
-            </div>
 
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card collapsed-card">
+                        <div class="card-header">
+                            <h3 class="card-title"><?= Yii::t('app','Importante').' !!'; ?></h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="ribbon_addon pull-right margin-r-" style="margin-right: 3% !important">
+                                        <?php
+                                        echo Html::ul([
+                                            Yii::t('app','Listado de registro de entrada y salida de llaves.'),
+                                        ], ['encode' => false]);
+                                        ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
+                                        <?php
+                                        echo Html::ul([
+                                            '<span style="font-size: x-small; border-color: #ed969e; background-color: #f5c6cb; border: 1px solid #dee2e6; "> &nbsp; &nbsp; &nbsp; &nbsp; </span> &nbsp; &nbsp; <span style="font-size: 14px">'.Yii::t('app','KO. Registros pendientes por devolver.').'</span>',
+                                            '<span style="font-size: x-small; border-color: #8fd19e; background-color: #c3e6cb; border: 1px solid #dee2e6; "> &nbsp; &nbsp; &nbsp; &nbsp; </span> &nbsp; &nbsp; <span style="font-size: 14px">'.Yii::t('app','OK. Registros devueltos.').'</span>',
+                                            '<span style="font-size: x-small; border: 1px solid #dee2e6; "> &nbsp; &nbsp; &nbsp; &nbsp; </span> &nbsp; &nbsp;  <span style="font-size: 14px">'.Yii::t('app', 'OK. Registros de almacenamiento.').' </span>',
+                                        ], ['encode' => false]);
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+
 
         <div class="card card-primary">
             <!-- /.card-header -->

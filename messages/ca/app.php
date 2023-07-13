@@ -649,6 +649,7 @@ return [
     'Impersonar' => '',
     'Impersonar agente' => '',
     'importante' => 'important',
+    'Importante' => 'Important',
     'Importe' => '',
     'Importe  Factura' => '',
     'Importe Ahorro' => '',
