@@ -56,6 +56,8 @@ return [
     'Soporte' => 'Suport',
     'Este registro estara asociado al usuario en sesion'=>'Aquest registre estarà associat a l-usuari en sessió',
     'Las llaves se irán registrando según su último estado de disponibilidad.'=>'Les claus s-aniran registrant segons el darrer estat de disponibilitat.',
+    'Los campos Propietario y Empresa/Proveedor deben ser seleccionados aun que no son obligatorio.' => 'Els camps Propietari i Empresa/Proveïdor han de ser seleccionats encara que no són obligatoris.',
+    'El campo \'Nombre de quien retira la llave\': Es obligatorio.' => 'El camp \'Nom de qui retira la clau\': És obligatori.',
     'Registro almacenado correctamente.'=>'Registre emmagatzemat correctament.',
     'El codigo de barras de cada llave se genera Automaticamente' => 'El codi de barres de cada clau es genera Automaticament',
     'El codigo de la llave hace referencia a una codificación interna del usuario.' => 'El codi de la clau fa referència a una codificació interna de l\'usuari.',

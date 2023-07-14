@@ -480,11 +480,11 @@ class RegistroController extends BaseController
                                 END) as nombre 
                     FROM propietarios pp ".$queryWhere." 
                     ORDER BY nombre_propietario ASC, nombre_representante ASC ";
-        $result = Yii::$app->db
+        $rows = Yii::$app->db
             ->createCommand($query)
             ->queryAll();
 
-        return json_encode($result);
+        return json_encode($rows);
     }
 
     /**

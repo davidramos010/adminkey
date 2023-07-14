@@ -49,14 +49,34 @@ $strAddBotonEliminar = isset($action) && $action == 'update' ? Html::button(Yii:
         <?= Yii::t('app', 'Registro almacenado correctamente.'); ?>
     </div>
 
-    <div id="div_info" class="callout callout-info">
-        <h5><i class="fas fa-info"></i> Nota:</h5>
-        <?= Yii::t('app', 'Este registro estara asociado al usuario en sesion') ?> <label
-                class="exampleInputBorder">( <?= Yii::$app->user->identity->name ?> ) </label>.<br/>
-        <?= Yii::t('app', 'Las llaves se irán registrando según su último estado de disponibilidad.') ?>
-        <?= $strAddNota ?>
+    <div class="col-12">
+        <div class="card collapsed-card callout callout-info">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-info"></i> <?= Yii::t('app','Importante').' !!'; ?></h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <?=
+                     Html::ul([
+                         Yii::t('app', 'Este registro estara asociado al usuario en sesion').' <label class="exampleInputBorder"> '.Yii::$app->user->identity->name.'</label>',
+                         Yii::t('app', 'Las llaves se irán registrando según su último estado de disponibilidad.'),
+                         Yii::t('app', 'Los campos Propietario y Empresa/Proveedor deben ser seleccionados aun que no son obligatorio.'),
+                         Yii::t('app', 'El campo \'Nombre de quien retira la llave\': Es obligatorio.'),
+                         //$strAddNota
+                    ], ['encode' => false]);
 
+                ?>
+
+            </div>
+        </div>
     </div>
+
+
+
     <div class="col-md-12">
         <!-- general form elements -->
         <div class="card card-primary">
@@ -69,7 +89,39 @@ $strAddBotonEliminar = isset($action) && $action == 'update' ? Html::button(Yii:
             <div class="card-body">
                 <div class="form-group">
                     <div class="row">
-                        <div class="col-md-10">
+                        <div class="col-md-5">
+                            <?= $form->field($model, 'id_propietario')->widget(Select2::class, [
+                                    'theme' => Select2::THEME_BOOTSTRAP,
+                                    'size' => Select2::SMALL,
+                                    'data' => !empty($model->id_comercial) ? [$model->id_comercial => $model->comerciales->nombre] : [],
+                                    'options' => [
+                                        'data-js-req-cont' => 'generic',
+                                        'id' => 'id_propietario'
+                                    ],
+                                    'pluginOptions' => [
+                                        'minimumInputLength' => 3,
+                                        'language' => [
+                                            'inputTooShort' => new JsExpression("() => 'Escríbe 3 caracteres mínimo. Puedes buscar por nombre.'"),
+                                            'errorLoading' => new JsExpression("() => 'Buscando...'"),
+                                        ],
+                                        'ajax' => [
+                                            'url' => Url::to(['registro/find-propietarios']),
+                                            'dataType' => 'json',
+                                            'processResults' => new JsExpression('(data) => procesarResultadosComercial(data)'),
+                                            'data' => new JsExpression('(params) => { return {q:params.term} }')
+                                        ],
+                                        'templateResult' => new JsExpression('(params) => params.loading ? "Buscando..." : params.id + " - " + params.nombre'),
+                                        'templateSelection' => new JsExpression('function (data) { 
+                                                                                                if(data.nombre==="" || data.nombre === undefined || data.nombre === null){
+                                                                                                    return data.text;
+                                                                                                } else {
+                                                                                                    return data.nombre;
+                                                                                                } }'),
+                                    ],
+                                ]
+                            )->label(Yii::t('app', 'Propietario')); ?>
+                        </div>
+                        <div class="col-md-5">
                             <?= $form->field($model, 'id_comercial')->widget(Select2::class, [
                                     'theme' => Select2::THEME_BOOTSTRAP,
                                     'size' => Select2::SMALL,
