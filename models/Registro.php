@@ -3,12 +3,10 @@
 namespace app\models;
 
 use app\components\ValidadorCsv;
-use phpDocumentor\Reflection\Types\This;
 use Yii;
 use yii\base\Exception;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 use yii\helpers\Url;
 
 /**
@@ -18,24 +16,26 @@ use yii\helpers\Url;
  * @property int|null $id_user
  * @property int|null $id_llave
  * @property int|null $id_comercial
+ * @property int|null $id_propietario
  * @property string|null $entrada
  * @property string|null $salida
  * @property string|null $observacion
  * @property string|null $firma_soporte
- * @property Llave $llave
- * @property User $user
- * @property Comerciales $comerciales
  * @property string|null $tipo_documento
  * @property string|null $documento
  * @property string|null $nombre_responsable
  * @property string|null $telefono
+ *
+ * @property Llave $llave
+ * @property User $user
+ * @property Comerciales $comerciales
+ * @property Propietarios $propietarios
  */
 class Registro extends \yii\db\ActiveRecord
 {
     public $codigo = null;
     public $username = null;
     public $clientes = null;//cliente
-    public $propietarios = null;
     public $comercial = null;
     public $nombre_propietario = null;
     public $llaves = null;
