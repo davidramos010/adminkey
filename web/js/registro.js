@@ -200,7 +200,7 @@ function delKey(id)
 }
 
 /**
- * Envio de formulario
+ * Envio de formulario de registro
  */
 function sendForm()
 {
@@ -215,11 +215,17 @@ function sendForm()
         return true;
     }
 
+    if ($('#id_propietario').val()==null && $('#id_comercial').val()==null) {
+        toastr.warning('Debe seleccionar un Propietario o Empresa/Proveedor.');
+        $('#id_comercial').focus();
+        return true;
+    }
+
     //validar que el campo responsable este lleno
-    let  strNombreResponsable =  $('#registro-nombre_responsable').val().trim();
+    let  strNombreResponsable =  $('#nombre_responsable').val().trim();
     if (strNombreResponsable.length == 0) {
         toastr.warning('El campo responsable no puedes estar vacio.');
-        $('#id_llave').focus();
+        $('#nombre_responsable').focus();
         return true;
     }
 
@@ -331,7 +337,8 @@ function procesarResultadosResponsable(data) {
 }
 
 /**
- * setear campos en formulario
+ * setear campos en formulario del responsable.
+ * Función ejecutada en el autocompletar del responsable
  * @param data
  */
 function fnSelectionResponsable(data){
@@ -341,13 +348,13 @@ function fnSelectionResponsable(data){
     $('#registro-telefono').val('');
     // asignar datos
     if(data.selected == true){
-        if(typeof data.tipo_documento !== 'undefined' && data.tipo_documento.length>=1){
+        if(typeof data.tipo_documento !== 'undefined' && data.tipo_documento!= null && data.tipo_documento.length>=1){
             $('#registro-tipo_documento').val(parseInt(data.tipo_documento));
         }
-        if(typeof data.documento !== 'undefined' && data.documento.length>1){
+        if(typeof data.documento !== 'undefined' && data.documento!= null && data.documento.length>1){
             $('#registro-documento').val(data.documento);
         }
-        if(typeof data.telefono !== 'undefined' && data.telefono.length>1){
+        if(typeof data.telefono !== 'undefined' && data.telefono!= null && data.telefono.length>1){
             $('#registro-telefono').val(data.telefono);
         }
     }
