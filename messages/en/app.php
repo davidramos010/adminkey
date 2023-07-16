@@ -53,6 +53,8 @@ return [
     'Soporte' => 'Support',
     'Este registro estara asociado al usuario en sesion'=>'This record will be associated with the user in session',
     'Las llaves se irán registrando según su último estado de disponibilidad.'=>'The keys will be registered according to their last state of availability.',
+    'Los campos Propietario y Empresa/Proveedor deben ser seleccionados aun que no son obligatorio.' => 'The Owner and Company/Supplier fields must be selected even though they are not required.',
+    'El campo \'Nombre de quien retira la llave\': Es obligatorio.' => 'The field \'Name of the person who collects the key\': It is mandatory.',
     'Registro almacenado correctamente.'=>'Record stored successfully.',
     'El codigo de barras de cada llave se genera Automaticamente' => 'The barcode of each key is generated automatically',
     'El codigo de la llave hace referencia a una codificación interna del usuario.' => 'The key code refers to an internal code of the user.',

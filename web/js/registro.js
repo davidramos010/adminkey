@@ -200,7 +200,7 @@ function delKey(id)
 }
 
 /**
- * Envio de formulario
+ * Envio de formulario de registro
  */
 function sendForm()
 {
@@ -215,11 +215,17 @@ function sendForm()
         return true;
     }
 
+    if ($('#id_propietario').val()==null && $('#id_comercial').val()==null) {
+        toastr.warning('Debe seleccionar un Propietario o Empresa/Proveedor.');
+        $('#id_comercial').focus();
+        return true;
+    }
+
     //validar que el campo responsable este lleno
-    let  strNombreResponsable =  $('#registro-nombre_responsable').val().trim();
+    let  strNombreResponsable =  $('#nombre_responsable').val().trim();
     if (strNombreResponsable.length == 0) {
         toastr.warning('El campo responsable no puedes estar vacio.');
-        $('#id_llave').focus();
+        $('#nombre_responsable').focus();
         return true;
     }
 
@@ -305,6 +311,52 @@ function procesarResultadosComercial(data) {
         results: data.map(d => {
             return {id: d.id, nombre: d.nombre };
         })
+    }
+}
+
+/**
+ * Filtra los resultados y lo devuelve con la construcción esperada por el select2
+ * @param data
+ * @returns {{results: *}}
+ */
+function procesarResultadosResponsable(data) {
+
+    return {
+        results: data.map(d => {
+            let strNombre = d.nombre_responsable+' ';
+            if(d.documento.length){
+                strNombre += ';  [Id.: '+d.documento+']';
+            }
+            if(d.telefono.length){
+                strNombre += '- [tel: '+d.telefono+']';
+            }
+
+            return {id: d.nombre_responsable, nombre: d.nombre_responsable, tipo_documento: d.tipo_documento, documento: d.documento, telefono: d.telefono, responsable:strNombre  };
+        })
+    }
+}
+
+/**
+ * setear campos en formulario del responsable.
+ * Función ejecutada en el autocompletar del responsable
+ * @param data
+ */
+function fnSelectionResponsable(data){
+    //Limpiar campos
+    $('#registro-tipo_documento').val(0);
+    $('#registro-documento').val('');
+    $('#registro-telefono').val('');
+    // asignar datos
+    if(data.selected == true){
+        if(typeof data.tipo_documento !== 'undefined' && data.tipo_documento!= null && data.tipo_documento.length>=1){
+            $('#registro-tipo_documento').val(parseInt(data.tipo_documento));
+        }
+        if(typeof data.documento !== 'undefined' && data.documento!= null && data.documento.length>1){
+            $('#registro-documento').val(data.documento);
+        }
+        if(typeof data.telefono !== 'undefined' && data.telefono!= null && data.telefono.length>1){
+            $('#registro-telefono').val(data.telefono);
+        }
     }
 }
 

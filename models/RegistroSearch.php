@@ -18,7 +18,7 @@ class RegistroSearch extends Registro
     {
         return [
             [['id', 'id_user', 'id_llave', 'pendientes' ], 'integer'],
-            [['username','entrada', 'salida', 'fecha_registro','observacion', 'codigo', 'username','comunidad','comercial','propietarios','clientes','llaves','llaves_e','llaves_s','llaves_st','llaves_sp','nombre_responsable'], 'safe'],
+            [['username','entrada', 'salida', 'fecha_registro','observacion', 'codigo', 'username','comunidad','comercial','nombre_propietario','clientes','llaves','llaves_e','llaves_s','llaves_st','llaves_sp','nombre_responsable','propietario_responsable'], 'safe'],
         ];
     }
 
@@ -70,7 +70,8 @@ class RegistroSearch extends Registro
                 SELECT DISTINCT l.id_propietario FROM llave l 
                        INNER JOIN llave_status stb ON ( stb.id_llave=l.id ) 
                        WHERE stb.id_registro = r.id
-                    ) ) AS propietarios",
+                    ) ) AS nombre_propietario",
+            "(CASE WHEN pt.nombre_propietario IS NOT NULL THEN pt.nombre_propietario ELSE pt.nombre_representante END) as propietario_responsable",
             "( SELECT count(1) FROM llave_status st WHERE st.id_registro = r.id and st.status = 'S') AS llaves_st",
             "( SELECT count(1) 
              FROM llave_status lsp 
@@ -82,6 +83,7 @@ class RegistroSearch extends Registro
         $query->leftJoin('llave ll','r.id_llave = ll.id');
         $query->leftJoin('User u','r.id_user = u.id');
         $query->leftJoin('comerciales cm','r.id_comercial = cm.id');
+        $query->leftJoin('propietarios pt','r.id_propietario = pt.id');
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -110,7 +112,13 @@ class RegistroSearch extends Registro
         }
 
         if($this->comercial){
-            $query->andFilterWhere(['LIKE', 'cm.nombre', $this->comercial]);
+
+            $query->andFilterWhere(['or',
+                ['LIKE', 'cm.nombre', $this->comercial],
+                ['LIKE', 'pt.nombre_propietario', $this->comercial],
+                ['LIKE', 'pt.nombre_representante', $this->comercial]]);
+
+
         }
 
         if($this->salida){
@@ -148,7 +156,7 @@ class RegistroSearch extends Registro
         }
 
         if($this->propietarios){
-            $query->andHaving("propietarios like :P",[':P' => "%".$this->propietarios."%"]);
+            $query->andHaving("nombre_propietario like :P",[':P' => "%".$this->propietarios."%"]);
         }
 
         if(isset($params['pendientes']) && !empty($params['pendientes']) ){

@@ -101,18 +101,20 @@ $buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
                     ],
                     [
                         'attribute' => 'comercial',
-                        'label' => Yii::t('app','Empresa/Proveedor'),
+                        'label' => Yii::t('app','Responsable'),
                         'headerOptions' => ['style' => 'width: 15%;'],
                         'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle;  '],
                         'format' => 'raw',
                         'enableSorting'=>false,
                         'value' => function($model){
-                            return (isset($model->comercial))?strtoupper($model->comercial):'' ;
+                            $strEmpresaResponsable = (!empty($model->id_comercial) && isset($model->comercial))?strtoupper($model->comercial):null ;
+                            $strPropietarioResponsable = (!empty($model->id_propietario))?strtoupper($model->propietarios->getNombre()):null ;
+                            return !empty($strEmpresaResponsable) && !empty($strPropietarioResponsable)? $strEmpresaResponsable.'; '.$strPropietarioResponsable:$strEmpresaResponsable.$strPropietarioResponsable;
                         }
                     ],
                     [
                         'attribute' => 'nombre_responsable',
-                        'label' => Yii::t('app','Responsable'),
+                        'label' => Yii::t('app','Persona Responsable'),
                         'headerOptions' => ['style' => 'width: 15%'],
                         'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; '],
                         'format' => 'raw',
@@ -136,14 +138,14 @@ $buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
                         }
                     ],
                     [
-                        'attribute' => 'propietarios',
+                        'attribute' => 'nombre_propietario',
                         'label' => Yii::t('app','Propietario'),
                         'headerOptions' => ['style' => 'width: 15%; vertical-align: middle; '],
                         'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; '],
                         'format' => 'raw',
                         'enableSorting'=>false,
                         'value' => function($model){
-                            return (isset($model->propietarios))?strtoupper($model->propietarios):'' ;
+                            return (isset($model->nombre_propietario))?strtoupper($model->nombre_propietario):'' ;
                         }
                     ],
                     [

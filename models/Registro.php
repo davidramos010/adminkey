@@ -3,12 +3,10 @@
 namespace app\models;
 
 use app\components\ValidadorCsv;
-use phpDocumentor\Reflection\Types\This;
 use Yii;
 use yii\base\Exception;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 use yii\helpers\Url;
 
 /**
@@ -18,24 +16,26 @@ use yii\helpers\Url;
  * @property int|null $id_user
  * @property int|null $id_llave
  * @property int|null $id_comercial
+ * @property int|null $id_propietario
  * @property string|null $entrada
  * @property string|null $salida
  * @property string|null $observacion
  * @property string|null $firma_soporte
- * @property Llave $llave
- * @property User $user
- * @property Comerciales $comerciales
  * @property string|null $tipo_documento
  * @property string|null $documento
  * @property string|null $nombre_responsable
  * @property string|null $telefono
+ *
+ * @property Llave $llave
+ * @property User $user
+ * @property Comerciales $comerciales
+ * @property Propietarios $propietarios
  */
 class Registro extends \yii\db\ActiveRecord
 {
     public $codigo = null;
     public $username = null;
     public $clientes = null;//cliente
-    public $propietarios = null;
     public $comercial = null;
     public $nombre_propietario = null;
     public $llaves = null;
@@ -65,7 +65,7 @@ class Registro extends \yii\db\ActiveRecord
     {
         return [
             [['id_user','nombre_responsable'], 'required','message'=> Yii::t('yii',  '{attribute} es requerido')],
-            [['id_user', 'id_llave', 'id_comercial','tipo_documento'], 'integer'],
+            [['id_user', 'id_llave', 'id_comercial','tipo_documento','id_propietario'], 'integer'],
             [['entrada', 'salida','signature','fecha_registro'], 'safe'],
             [['documento','telefono'], 'string', 'max' => 20],
             [['nombre_responsable', 'observacion','codigo','username','firma_soporte'], 'string', 'max' => 255],
@@ -126,6 +126,16 @@ class Registro extends \yii\db\ActiveRecord
     }
 
     /**
+     *
+     * Gets query for [[Propietario]].
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPropietarios()
+    {
+        return $this->hasOne(Propietarios::className(), ['id' => 'id_propietario']);
+    }
+
+    /**
      * {@inheritdoc}
      * @return RegistroQuery the active query used by this AR class.
      */
@@ -148,6 +158,24 @@ class Registro extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return array
+     * @throws \yii\db\Exception
+     */
+    public static function getPropietariosDropdownList()
+    {
+        $query = "SELECT pp.id, (CASE
+                                    WHEN pp.nombre_propietario IS NOT NULL THEN pp.nombre_propietario
+                                    WHEN pp.nombre_representante IS NOT NULL THEN pp.nombre_representante
+                                    ELSE NULL
+                                END) as nombre 
+                    FROM propietarios pp ORDER BY nombre_propietario ASC, nombre_representante ASC ";
+        $result = Yii::$app->db
+            ->createCommand($query)
+            ->queryAll();
+        return ArrayHelper::map($result, 'id', 'nombre');
+    }
+
+    /**
      * @return string|null
      */
     public function getFechaRegistro(){
@@ -160,11 +188,14 @@ class Registro extends \yii\db\ActiveRecord
      * @param int $numIdRegistro
      * @return void
      */
-    public function getInfoRegistro(int $numIdRegistro){
-        $objRegistro = self::findOne(['id'=>$this->id]);
-        $objLlaves =   $this->getInfoByParams(['id'=>$this->id]);
-        $objComercial = Comerciales::findOne(['id'=>$objRegistro->id_comercial]);
-        return ['registro'=>$objRegistro,'llaves'=>$objLlaves,'comercial'=>$objComercial];
+    public function getInfoRegistro(int $numIdRegistro)
+    {
+        $objRegistro = self::findOne(['id' => $this->id]);
+        $objLlaves = $this->getInfoByParams(['id' => $this->id]);
+        $objComercial = (!empty($objRegistro->id_comercial)) ? Comerciales::findOne(['id' => $objRegistro->id_comercial]) : [];
+        $objPropietario = (!empty($objRegistro->id_propietario)) ? Propietarios::findOne(['id' => $objRegistro->id_propietario]) : [];
+
+        return ['registro' => $objRegistro, 'llaves' => $objLlaves, 'comercial' => $objComercial, 'propietario' => $objPropietario];
     }
 
     /**
@@ -270,6 +301,7 @@ class Registro extends \yii\db\ActiveRecord
 
         $objComercial = $arrParams['comercial'];
         $objRegistro = $arrParams['registro'];
+        $objPropietario = $arrParams['propietario'];
 
         $strFirma =  (!empty($objRegistro->firma_soporte))?"<img src='".Url::to('@app/web/firmas/'.$objRegistro->firma_soporte)."' width='150'>":"";
         $strCodeBarra64 = (!empty($arrParams['code']))?str_replace(' ','+',$arrParams['code']):'';
@@ -282,6 +314,11 @@ class Registro extends \yii\db\ActiveRecord
         $arrResponsable['telefono'] = trim(strtoupper($objRegistro->telefono));
 
         $strDivResponsableText = "";
+        $strDivResponsableText .= empty($objPropietario->id) ? "":"<strong>".$objPropietario->getNombre()."</strong><br/>";
+        $strDivResponsableText .= empty($objPropietario->direccion) ? "":$objPropietario->direccion."&nbsp;&nbsp;";
+        $strDivResponsableText .= empty($objPropietario->cod_postal) ? "":$objPropietario->cod_postal."&nbsp;&nbsp;";
+        $strDivResponsableText .= empty($objPropietario->poblacion) ? "":$objPropietario->poblacion."<br/>";
+
         $strDivResponsableText .= empty($objComercial->nombre) ? "":"<strong>".$objComercial->nombre."</strong><br>";
         $strDivResponsableText .= empty($objComercial->direccion) ? "":$objComercial->direccion."&nbsp;&nbsp;";
         $strDivResponsableText .= empty($objComercial->cod_postal) ? "":$objComercial->cod_postal."&nbsp;&nbsp;";
