@@ -118,7 +118,7 @@ class RegistroSearch extends Registro
                 ['LIKE', 'pt.nombre_propietario', $this->comercial],
                 ['LIKE', 'pt.nombre_representante', $this->comercial]]);
 
-            
+
         }
 
         if($this->salida){

@@ -28,11 +28,11 @@ $ajax_find_comercial = Url::toRoute(['registro/ajax-find-comercial']);
 $ajax_add_key = Url::toRoute(['registro/ajax-add-key']);
 $url_add_firma = Url::toRoute(['registro/add-firma']);
 
-$strAddNota = isset($action) && $action == 'update' ? "<br/>".Yii::t('app', 'Solo puede Editar / Eliminar registros creados con su usuario.') : '';
-$strAddNota .= !empty($strAddNota) ? "<br/>".Yii::t('app', '<label class="exampleInputBorder">Importante:</label> Validar el último estado de las llaves relacionadas.') : '';
+$strAddNota = isset($action) && $action == 'update' ? "<br/>" . Yii::t('app', 'Solo puede Editar / Eliminar registros creados con su usuario.') : '';
+$strAddNota .= !empty($strAddNota) ? "<br/>" . Yii::t('app', '<label class="exampleInputBorder">Importante:</label> Validar el último estado de las llaves relacionadas.') : '';
 
 $strAddBotonRegistrar = isset($action) && $action == 'update' ? '' : Html::button(Yii::t('app', 'Registrar Movimiento'), ['id' => 'btn_registrar', 'class' => 'btn btn-success', 'onclick' => '(function ( $event ) { sendForm() })();']);
-$strAddBotonCancelar =  Html::a(Yii::t('app', Yii::t('app', 'Cancelar')), ['create'], ['class' => 'btn btn-default ']);
+$strAddBotonCancelar = Html::a(Yii::t('app', Yii::t('app', 'Cancelar')), ['create'], ['class' => 'btn btn-default ']);
 $strAddBotonEditar = isset($action) && $action == 'update' ? Html::button(Yii::t('app', 'Editar Movimiento'), ['id' => 'btn_editar', 'class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { sendUpdateForm() })();']) : '';
 $strAddBotonEliminar = isset($action) && $action == 'update' ? Html::button(Yii::t('app', 'Eliminar Movimiento'), ['id' => 'btn_eliminar', 'class' => 'btn btn-danger', 'onclick' => '(function ( $event ) { sendDeleteForm() })();']) : '';
 
@@ -52,7 +52,7 @@ $strAddBotonEliminar = isset($action) && $action == 'update' ? Html::button(Yii:
     <div class="col-12">
         <div class="card collapsed-card callout callout-info">
             <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-info"></i> <?= Yii::t('app','Importante').' !!'; ?></h3>
+                <h3 class="card-title"><i class="fas fa-info"></i> <?= Yii::t('app', 'Importante') . ' !!'; ?></h3>
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                         <i class="fas fa-plus"></i>
@@ -61,20 +61,17 @@ $strAddBotonEliminar = isset($action) && $action == 'update' ? Html::button(Yii:
             </div>
             <div class="card-body">
                 <?=
-                     Html::ul([
-                         Yii::t('app', 'Este registro estara asociado al usuario en sesion').' <label class="exampleInputBorder"> '.Yii::$app->user->identity->name.'</label>',
-                         Yii::t('app', 'Las llaves se irán registrando según su último estado de disponibilidad.'),
-                         Yii::t('app', 'Los campos Propietario y Empresa/Proveedor deben ser seleccionados aun que no son obligatorio.'),
-                         Yii::t('app', 'El campo \'Nombre de quien retira la llave\': Es obligatorio.'),
-                         //$strAddNota
-                    ], ['encode' => false]);
-
+                Html::ul([
+                    Yii::t('app', 'Este registro estara asociado al usuario en sesion') . ' <label class="exampleInputBorder"> ' . Yii::$app->user->identity->name . '</label>',
+                    Yii::t('app', 'Las llaves se irán registrando según su último estado de disponibilidad.'),
+                    Yii::t('app', 'Los campos Propietario y Empresa/Proveedor deben ser seleccionados aun que no son obligatorio.'),
+                    Yii::t('app', 'El campo \'Nombre de quien retira la llave\': Es obligatorio.'),
+                    //$strAddNota
+                ], ['encode' => false]);
                 ?>
-
             </div>
         </div>
     </div>
-
 
 
     <div class="col-md-12">
@@ -159,8 +156,40 @@ $strAddBotonEliminar = isset($action) && $action == 'update' ? Html::button(Yii:
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
-                            <?= $form->field($model, 'nombre_responsable')->textInput(['maxlength' => true, 'class' => 'form-control', 'id' => 'registro-nombre_responsable' ])->label('* '.Yii::t('app', 'Nombre de quien retira la llave')) ?>
+                        <div class="col-md-7">
+                            <?= $form->field($model, 'nombre_responsable')->widget(Select2::class, [
+                                    'theme' => Select2::THEME_BOOTSTRAP,
+                                    'size' => Select2::SMALL,
+                                    'data' => [],
+                                    'options' => [
+                                        'data-js-req-cont' => 'generic',
+                                        'id' => 'nombre_responsable'
+                                    ],
+                                    'pluginOptions' => [
+                                        'tags' => true,
+                                        'minimumInputLength' => 4,
+                                        'language' => [
+                                            'inputTooShort' => new JsExpression("() => 'Escríbe 4 caracteres mínimo. Puedes buscar por nombre.'"),
+                                            'errorLoading' => new JsExpression("() => 'Buscando...'"),
+                                        ],
+                                        'ajax' => [
+                                            'url' => Url::to(['registro/find-responsables']),
+                                            'dataType' => 'json',
+                                            'processResults' => new JsExpression('(data) => procesarResultadosResponsable(data)'),
+                                            'data' => new JsExpression('(params) => { return {q:params.term} }')
+                                        ],
+                                        'cache' => true,
+                                        'templateResult' => new JsExpression('(params) => params.loading ? "Buscando..." : params.responsable'),
+                                        'templateSelection' => new JsExpression('function (data) {  
+                                                                                                if(data.nombre==="" || data.nombre === undefined || data.nombre === null){
+                                                                                                    return data.text;
+                                                                                                } else {
+                                                                                                    return data.nombre;
+                                                                                                } }'),
+                                    ],
+                                    'pluginEvents' => ['select2:select' => new JsExpression('({params}) => fnSelectionResponsable(params.data)')]
+                                ]
+                            )->label(Yii::t('app', 'Nombre de quien retira la llave')); ?>
                         </div>
                     </div>
                     <div class="row">
@@ -292,7 +321,7 @@ $strAddBotonEliminar = isset($action) && $action == 'update' ? Html::button(Yii:
                                         'format' => 'dd-mm-yyyy hh:ii',
                                         'daysOfWeekDisabled' => [0, 6],
                                         'autoclose' => true,
-                                        'startDate' => date("d-m-Y",strtotime(date("d-m-Y")."- 30 days")),
+                                        'startDate' => date("d-m-Y", strtotime(date("d-m-Y") . "- 30 days")),
                                     ],
                                 ])->label('Fecha Registro'); ?>
                         </div>
@@ -317,7 +346,7 @@ $strAddBotonEliminar = isset($action) && $action == 'update' ? Html::button(Yii:
                 </div>
                 <div style="padding-top: 15px">
                     <?= $form->field($model, 'id')->hiddenInput(['id' => 'id_registro'])->label(false); ?>
-                    <?= $strAddBotonRegistrar .' '. $strAddBotonEditar .' '. $strAddBotonEliminar .' '. $strAddBotonCancelar ?>
+                    <?= $strAddBotonRegistrar . ' ' . $strAddBotonEditar . ' ' . $strAddBotonEliminar . ' ' . $strAddBotonCancelar ?>
                 </div>
             </div>
             <?php ActiveForm::end(); ?>
@@ -355,7 +384,7 @@ $this->registerJs(
 
 $this->registerCss(".signature-pad--actions{ display:none; } ");
 $strAction = isset($action) && !empty($action) ? $action : '';
-if(!empty($model->id)){
+if (!empty($model->id)) {
     $this->registerJs(
         "$('document').ready(function(){ 
              fnLoadRegistro($model->id,'$strAction');

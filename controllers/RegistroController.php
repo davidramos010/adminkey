@@ -466,6 +466,21 @@ class RegistroController extends BaseController
     }
 
     /**
+     * Consultar los diferentes responsables
+     * @param $q
+     * @return false|string
+     */
+    public function actionFindResponsables($q = false)
+    {
+        $rows = Registro::find()->select(["tipo_documento","documento","telefono","UPPER(nombre_responsable) as nombre_responsable "])->distinct()
+            ->where(['IS NOT','nombre_responsable',null])
+            ->andWhere(['<>','nombre_responsable',''])
+            ->andWhere(['like','nombre_responsable',$q])
+            ->orderBy('nombre_responsable ASC')->asArray()->all();
+        return json_encode($rows);
+    }
+
+    /**
      * Devuelve un listado de propietarios en función del nombre especificado
      * @param bool $q
      * @return array

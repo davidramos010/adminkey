@@ -309,6 +309,51 @@ function procesarResultadosComercial(data) {
 }
 
 /**
+ * Filtra los resultados y lo devuelve con la construcción esperada por el select2
+ * @param data
+ * @returns {{results: *}}
+ */
+function procesarResultadosResponsable(data) {
+
+    return {
+        results: data.map(d => {
+            let strNombre = d.nombre_responsable+' ';
+            if(d.documento.length){
+                strNombre += ';  [Id.: '+d.documento+']';
+            }
+            if(d.telefono.length){
+                strNombre += '- [tel: '+d.telefono+']';
+            }
+
+            return {id: d.nombre_responsable, nombre: d.nombre_responsable, tipo_documento: d.tipo_documento, documento: d.documento, telefono: d.telefono, responsable:strNombre  };
+        })
+    }
+}
+
+/**
+ * setear campos en formulario
+ * @param data
+ */
+function fnSelectionResponsable(data){
+    //Limpiar campos
+    $('#registro-tipo_documento').val(0);
+    $('#registro-documento').val('');
+    $('#registro-telefono').val('');
+    // asignar datos
+    if(data.selected == true){
+        if(typeof data.tipo_documento !== 'undefined' && data.tipo_documento.length>=1){
+            $('#registro-tipo_documento').val(parseInt(data.tipo_documento));
+        }
+        if(typeof data.documento !== 'undefined' && data.documento.length>1){
+            $('#registro-documento').val(data.documento);
+        }
+        if(typeof data.telefono !== 'undefined' && data.telefono.length>1){
+            $('#registro-telefono').val(data.telefono);
+        }
+    }
+}
+
+/**
  * Copia los datos de contacto del comercial en el formulario
  * @param nombreContacto
  * @param numTelefono
