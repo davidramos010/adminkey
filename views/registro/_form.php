@@ -36,6 +36,14 @@ $strAddBotonCancelar = Html::a(Yii::t('app', Yii::t('app', 'Cancelar')), ['creat
 $strAddBotonEditar = isset($action) && $action == 'update' ? Html::button(Yii::t('app', 'Editar Movimiento'), ['id' => 'btn_editar', 'class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { sendUpdateForm() })();']) : '';
 $strAddBotonEliminar = isset($action) && $action == 'update' ? Html::button(Yii::t('app', 'Eliminar Movimiento'), ['id' => 'btn_eliminar', 'class' => 'btn btn-danger', 'onclick' => '(function ( $event ) { sendDeleteForm() })();']) : '';
 
+$arrInfoNota[] = Yii::t('app', 'Este registro estara asociado al usuario en sesion') . ' <label class="exampleInputBorder"> ' . Yii::$app->user->identity->name . '</label>';
+$arrInfoNota[] = Yii::t('app', 'Las llaves se irán registrando según su último estado de disponibilidad.');
+$arrInfoNota[] = Yii::t('app', 'Debe seleccionar por uno de estos campos: \'Propietario\' y \'Empresa/Proveedor\'.');
+$arrInfoNota[] = Yii::t('app', 'El campo \'Nombre de quien retira la llave\': Es obligatorio.');
+if(!empty($strAddNota)){
+    $arrInfoNota[] = $strAddNota;
+}
+
 ?>
 
 <div class="registro-form">
@@ -51,7 +59,7 @@ $strAddBotonEliminar = isset($action) && $action == 'update' ? Html::button(Yii:
 
     <div class="col-12">
         <div class="card collapsed-card callout callout-info">
-            <div class="card-header">
+            <div class="card-header" >
                 <h3 class="card-title"><i class="fas fa-info"></i> <?= Yii::t('app', 'Importante') . ' !!'; ?></h3>
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -59,16 +67,8 @@ $strAddBotonEliminar = isset($action) && $action == 'update' ? Html::button(Yii:
                     </button>
                 </div>
             </div>
-            <div class="card-body">
-                <?=
-                Html::ul([
-                    Yii::t('app', 'Este registro estara asociado al usuario en sesion') . ' <label class="exampleInputBorder"> ' . Yii::$app->user->identity->name . '</label>',
-                    Yii::t('app', 'Las llaves se irán registrando según su último estado de disponibilidad.'),
-                    Yii::t('app', 'Los campos Propietario y Empresa/Proveedor deben ser seleccionados aun que no son obligatorio.'),
-                    Yii::t('app', 'El campo \'Nombre de quien retira la llave\': Es obligatorio.'),
-                    //$strAddNota
-                ], ['encode' => false]);
-                ?>
+            <div class="card-body" style="padding-bottom:0px !important;">
+                <?=  Html::ul($arrInfoNota,  ['encode' => false]); ?>
             </div>
         </div>
     </div>
