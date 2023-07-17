@@ -215,6 +215,7 @@ function sendForm()
         return true;
     }
 
+    // validar que se tenga seleccionado una empresa o un reponsable
     if ($('#id_propietario').val()==null && $('#id_comercial').val()==null) {
         toastr.warning('Debe seleccionar un Propietario o Empresa/Proveedor.');
         $('#id_comercial').focus();
@@ -228,7 +229,6 @@ function sendForm()
         $('#nombre_responsable').focus();
         return true;
     }
-
 
     $.ajax({
         url: url,
