@@ -142,7 +142,7 @@ echo BarcodeGenerator::widget($optionsArray);
                             <?= $form->field($model, 'entrada')->textInput(['id'=>'fecha_registro','maxlength' => true,'class'=>'form-control','readonly' => true, 'value'=> util::getDateTimeFormatedSqlToUser($model->getFechaRegistro()) ])->label(Yii::t('app', 'Fecha Registro')) ?>
                         </div>
                         <div class="col-md-5 ">
-                            <?= $form->field($model, 'id_comercial')->dropDownList(Registro::getComercialesDropdownList(), ['id' => 'id_comercial', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'disabled' => true])->label(Yii::t('app', 'Empresa')); ?>
+                            <?= $form->field($model, 'id_comercial')->dropDownList(Registro::getComercialesDropdownList(), ['id' => 'id_comercial', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'disabled' => true])->label(Yii::t('app', 'Empresa/Proveedor')); ?>
                         </div>
                         <div class="col-md-5 ">
                             <?= $form->field($model, 'id_propietario')->dropDownList(Registro::getPropietariosDropdownList(), ['id' => 'id_propietario', 'class' => 'form-control', 'prompt' => 'Seleccione Uno', 'disabled' => true])->label(Yii::t('app', 'Propietario')); ?>

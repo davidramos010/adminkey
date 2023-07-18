@@ -101,20 +101,18 @@ $buttonFiltroPendientes = Html::a('Pendientes ' . (strpos(Url::current(),
                     ],
                     [
                         'attribute' => 'comercial',
-                        'label' => Yii::t('app','Responsable'),
+                        'label' => Yii::t('app','Empresa/Proveedor'),
                         'headerOptions' => ['style' => 'width: 15%;'],
                         'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle;  '],
                         'format' => 'raw',
                         'enableSorting'=>false,
                         'value' => function($model){
-                            $strEmpresaResponsable = (!empty($model->id_comercial) && isset($model->comercial))?strtoupper($model->comercial):null ;
-                            $strPropietarioResponsable = (!empty($model->id_propietario))?strtoupper($model->propietarios->getNombre()):null ;
-                            return !empty($strEmpresaResponsable) && !empty($strPropietarioResponsable)? $strEmpresaResponsable.'; '.$strPropietarioResponsable:$strEmpresaResponsable.$strPropietarioResponsable;
+                            return (isset($model->comercial))?strtoupper($model->comercial):'' ;
                         }
                     ],
                     [
                         'attribute' => 'nombre_responsable',
-                        'label' => Yii::t('app','Persona Responsable'),
+                        'label' => Yii::t('app','Responsable'),
                         'headerOptions' => ['style' => 'width: 15%'],
                         'contentOptions' => ['class' => 'text-center col-xs-2', 'style' => 'vertical-align: middle; '],
                         'format' => 'raw',

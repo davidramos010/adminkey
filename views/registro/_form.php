@@ -38,7 +38,7 @@ $strAddBotonEliminar = isset($action) && $action == 'update' ? Html::button(Yii:
 
 $arrInfoNota[] = Yii::t('app', 'Este registro estara asociado al usuario en sesion') . ' <label class="exampleInputBorder"> ' . Yii::$app->user->identity->name . '</label>';
 $arrInfoNota[] = Yii::t('app', 'Las llaves se irán registrando según su último estado de disponibilidad.');
-$arrInfoNota[] = Yii::t('app', 'Debe seleccionar por uno de estos campos: \'Propietario\' y \'Empresa/Proveedor\'.');
+$arrInfoNota[] = Yii::t('app', 'Debe seleccionar uno de estos campos: \'Propietario\' y \'Empresa/Proveedor\'.');
 $arrInfoNota[] = Yii::t('app', 'El campo \'Nombre de quien retira la llave\': Es obligatorio.');
 if(!empty($strAddNota)){
     $arrInfoNota[] = $strAddNota;
@@ -87,38 +87,6 @@ if(!empty($strAddNota)){
                 <div class="form-group">
                     <div class="row">
                         <div class="col-md-5">
-                            <?= $form->field($model, 'id_propietario')->widget(Select2::class, [
-                                    'theme' => Select2::THEME_BOOTSTRAP,
-                                    'size' => Select2::SMALL,
-                                    'data' => !empty($model->id_comercial) ? [$model->id_comercial => $model->comerciales->nombre] : [],
-                                    'options' => [
-                                        'data-js-req-cont' => 'generic',
-                                        'id' => 'id_propietario'
-                                    ],
-                                    'pluginOptions' => [
-                                        'minimumInputLength' => 3,
-                                        'language' => [
-                                            'inputTooShort' => new JsExpression("() => 'Escríbe 3 caracteres mínimo. Puedes buscar por nombre.'"),
-                                            'errorLoading' => new JsExpression("() => 'Buscando...'"),
-                                        ],
-                                        'ajax' => [
-                                            'url' => Url::to(['registro/find-propietarios']),
-                                            'dataType' => 'json',
-                                            'processResults' => new JsExpression('(data) => procesarResultadosComercial(data)'),
-                                            'data' => new JsExpression('(params) => { return {q:params.term} }')
-                                        ],
-                                        'templateResult' => new JsExpression('(params) => params.loading ? "Buscando..." : params.id + " - " + params.nombre'),
-                                        'templateSelection' => new JsExpression('function (data) { 
-                                                                                                if(data.nombre==="" || data.nombre === undefined || data.nombre === null){
-                                                                                                    return data.text;
-                                                                                                } else {
-                                                                                                    return data.nombre;
-                                                                                                } }'),
-                                    ],
-                                ]
-                            )->label(Yii::t('app', 'Propietario')); ?>
-                        </div>
-                        <div class="col-md-5">
                             <?= $form->field($model, 'id_comercial')->widget(Select2::class, [
                                     'theme' => Select2::THEME_BOOTSTRAP,
                                     'size' => Select2::SMALL,
@@ -149,6 +117,38 @@ if(!empty($strAddNota)){
                                     ],
                                 ]
                             )->label(Yii::t('app', 'Empresa/Proveedor')); ?>
+                        </div>
+                        <div class="col-md-5">
+                            <?= $form->field($model, 'id_propietario')->widget(Select2::class, [
+                                    'theme' => Select2::THEME_BOOTSTRAP,
+                                    'size' => Select2::SMALL,
+                                    'data' => !empty($model->id_comercial) ? [$model->id_comercial => $model->comerciales->nombre] : [],
+                                    'options' => [
+                                        'data-js-req-cont' => 'generic',
+                                        'id' => 'id_propietario'
+                                    ],
+                                    'pluginOptions' => [
+                                        'minimumInputLength' => 3,
+                                        'language' => [
+                                            'inputTooShort' => new JsExpression("() => 'Escríbe 3 caracteres mínimo. Puedes buscar por nombre.'"),
+                                            'errorLoading' => new JsExpression("() => 'Buscando...'"),
+                                        ],
+                                        'ajax' => [
+                                            'url' => Url::to(['registro/find-propietarios']),
+                                            'dataType' => 'json',
+                                            'processResults' => new JsExpression('(data) => procesarResultadosComercial(data)'),
+                                            'data' => new JsExpression('(params) => { return {q:params.term} }')
+                                        ],
+                                        'templateResult' => new JsExpression('(params) => params.loading ? "Buscando..." : params.id + " - " + params.nombre'),
+                                        'templateSelection' => new JsExpression('function (data) { 
+                                                                                                if(data.nombre==="" || data.nombre === undefined || data.nombre === null){
+                                                                                                    return data.text;
+                                                                                                } else {
+                                                                                                    return data.nombre;
+                                                                                                } }'),
+                                    ],
+                                ]
+                            )->label(Yii::t('app', 'Propietario')); ?>
                         </div>
                         <div class="col-md-2">
                             <label class="control-label" for="id_comercial_adicionar">&nbsp;</label><br/>
