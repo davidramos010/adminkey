@@ -219,7 +219,7 @@ class RegistroController extends BaseController
             $userPerfil = Yii::$app->user->identity->perfiluser->id_perfil;
 
             $numId = $arrModelLlave['id'];
-            $arrModelStatus = (object)LlaveStatus::find()->where(['id_llave' => $numId])->orderBy(['id' => SORT_DESC])->asArray()->one();
+            $arrModelStatus = (object)LlaveStatus::find()->where(['id_llave' => $numId])->orderBy(['fecha' => SORT_DESC])->asArray()->one();
             $arrComunidadLlave = (!empty($arrModelLlave)) ? Comunidad::find()->where(['id' => $arrModelLlave['id_comunidad']])->asArray()->one() : null;
             $arrPropietario = (!empty($arrModelLlave['id_propietario'])) ? Propietarios::find()->where(['id' => $arrModelLlave['id_propietario']])->one() : null;
             $strEstado = (empty($arrModelStatus) || !isset($arrModelStatus->status)) ? 'E' : $arrModelStatus->status;
