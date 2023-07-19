@@ -121,7 +121,7 @@ class Llave extends \yii\db\ActiveRecord
      */
     public function getLlaveLastStatus()
     {
-        return $this->hasOne(LlaveStatus::className(), ['id_llave' => 'id'])->orderBy(['id'=>SORT_DESC]);
+        return $this->hasOne(LlaveStatus::className(), ['id_llave' => 'id'])->orderBy(['fecha'=>SORT_DESC]);
     }
 
     /**
