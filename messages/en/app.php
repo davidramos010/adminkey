@@ -82,9 +82,13 @@ return [
     'Buscar' => 'Search',
     'Almacenada' => 'Stored',
     'Prestada' => 'Borrowed',
+    'El nombre del documento debe ser Unico' => 'The document name must be Unique',
+    'Una vez se cumpla la fecha de finalización el contrato, no estará disponible para impresión.' => 'Once the contract expiration date is fulfilled, it will not be available for printing.',
+    'Los documentos deben ser extension doc/docx.' => 'Documents must be extension doc/docx.',
 
     'Entrada' => 'Input',
     'Salida' => 'Output',
+
     'ALBARÁ - CONTROL DE ENTREGA DE LLAVES' => 'ALBARÁ - KEY DELIVERY CONTROL',
     'FECHA ENTREGA' => 'DELIVERY DATE',
     'No. OPERACION' => 'No. OPERATION',
