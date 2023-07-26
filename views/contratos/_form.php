@@ -21,9 +21,9 @@ use yii\web\JsExpression;
             <div class="ribbon_addon pull-right margin-r-5" style="margin-right: 3% !important">
                 <?php
                 echo Html::ul([
-                    'El nombre del documento debe ser Unico',
-                    'Una vez se cumpla la fecha de finalización el contrato, no estará disponible para impresión.',
-                    'Los documentos deben ser extension doc/docx.'
+                    Yii::t('app', 'El nombre del documento debe ser Unico'),
+                    Yii::t('app', 'Una vez se cumpla la fecha de finalización el contrato, no estará disponible para impresión.'),
+                    Yii::t('app', 'Los documentos deben ser extension doc/docx.')
                 ], ['encode' => false]);
                 ?>
             </div>

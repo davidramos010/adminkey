@@ -93,6 +93,9 @@ return [
     'Registro' => 'Registre',
     'Usuarios' => 'Usuaris',
     'Tipo Llave' => 'Tipus Clau',
+    'El nombre del documento debe ser Unico' => 'El nom del document ha de ser Unico',
+    'Una vez se cumpla la fecha de finalización el contrato, no estará disponible para impresión.' => 'Una vegada es compleixi la data de finalització el contracte, no estarà disponible per a impressió.',
+    'Los documentos deben ser extension doc/docx.' => 'Els documents han de ser extension doc/docx.',
 
     'Entrada' => 'Entrada',
     'Salida' => 'Sortida',
