@@ -13,10 +13,11 @@ $this->registerCssFile("@web/css/login.css", []);
 ?>
 
 
-<div class="login-page" style="height: 90vh !important;">
+<div class="login-page" style="height: 87vh !important;">
 
     <div class="login-box">
         <div class="login-logo">
+            <?= Html::img('@web/img/logo60px.png', ['style' => 'width:50px;width-max:60px', 'alt' => 'AdminKEYS']); ?>
             <b>Admin</b>KEYS
         </div>
         <!-- /.login-logo -->
@@ -111,7 +112,7 @@ $this->registerCssFile("@web/css/login.css", []);
 </div>
     <!-- /.login-card-body -->
     <div class=" h-100 d-flex align-items-center justify-content-center" >
-        <?= Html::img('@web/img/empresa_V.png', ['width' => 200, 'alt' => 'Empresa']); ?><br>
+        <?= Html::img('@web/img/empresa_V.png', ['style' => 'width:90%;width-max:200px', 'alt' => 'Logo Corporativo']); ?><br>
     </div>
 <?php
 
