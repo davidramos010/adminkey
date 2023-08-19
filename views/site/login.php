@@ -13,7 +13,7 @@ $this->registerCssFile("@web/css/login.css", []);
 ?>
 
 
-<div class="login-page" style="height: 90vh !important;">
+<div class="login-page" style="height: 87vh !important;">
 
     <div class="login-box">
         <div class="login-logo">
