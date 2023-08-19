@@ -9,7 +9,7 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="<?= Yii::$app->getHomeUrl() ?>" class="brand-link">
-        <img src="<?= $assetDir ?>/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <?= Html::img('@web/img/logo.png', ['width' => '100%', 'width-max' => '200', 'alt' => 'AdminKeys', 'class'=>'brand-image img-circle elevation-3', 'style'=>'opacity: .8']); ?>
         <span class="brand-text font-weight-light">AdminKeys</span>
     </a>
 
