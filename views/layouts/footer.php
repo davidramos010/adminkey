@@ -8,7 +8,7 @@ endif;
 <footer class="main-footer" style="<?= $strAddStyle ?>">
     <strong>Copyright &copy; <?= date('Y') ?>.</strong>
     All rights reserved. AdminKeys<br>
-    info@adminkeys.es
+    <a href = "mailto: info@adminkeys.es">info@adminkeys.es</a>
     <div class="float-right d-none d-sm-inline-block">
         <b>Version</b> 1.1.0 PRO
     </div>
