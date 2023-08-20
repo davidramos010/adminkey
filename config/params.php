@@ -1,17 +1,17 @@
 <?php
 
 return [
-    'dominio' => 'http://adminkeys.es/',
-    'adminEmail' => 'info@sga.cat',
-    'senderEmail' => 'info@sga.cat',
-    'senderName' => 'www.sga.cat',
-    'contacto' => 'Salvadó & Gubert - Telf. 972 600 411 - Palamós',
-    'empresa' => 'Salvadó & Gubert',
-    'email' => 'info@sga.cat',
-    'telefono' => '972 600 411',
-    'movil' => '972 819 338',
-    'direccion' => 'Carrer López i Puigcerver, 111',
-    'poblacion' => '17230 Palamós, Girona',
+    'dominio' => 'http://adminkeys.com.es/',
+    'adminEmail' => 'info@adminkeys.es',
+    'senderEmail' => 'info@adminkeys.es',
+    'senderName' => 'www.adminkeys.com.es',
+    'contacto' => 'AdminKeys - Telf. 972 410 867 - Santa Cristina d\'aro.',
+    'empresa' => 'AdminKEYS',
+    'email' => 'info@adminkeys.es',
+    'telefono' => '972 410 867',
+    'movil' => '611 135 191',
+    'direccion' => 'Carrer Pere Gerones, 7',
+    'poblacion' => '17246 Santa Cristina d\'aro, Girona',
     'bsVersion' => '4.x', // this will set globally `bsVersion` to Bootstrap 5.x for all Krajee Extensions
     'hail812/yii2-adminlte3' => [
         'pluginMap' => [
