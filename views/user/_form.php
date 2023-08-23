@@ -26,13 +26,8 @@ $this->registerJsFile('@web/js/usuarios.js');
             <!-- /.card-header -->
             <!-- form start -->
             <?php $form = ActiveForm::begin(['id' => 'formUser']); ?>
+            <?= $form->field($model, 'id')->hiddenInput(['id' => 'id'])->label(false); ?>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <?= $form->field($model, 'id')->hiddenInput(['id' => 'id'])->label(false); ?>
-                        <?= $form->field($model, 'username')->textInput(['id' => 'username', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'style' => 'width:40%; text-transform: uppercase', 'readonly' => !$model->isNewRecord])->label('*Username') ?>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-md-2">
                         <?= $form->field($model_info, 'tipo_documento')->dropDownList(util::arrTipoDocumentos, ['class' => 'form-control', 'prompt' => 'Seleccione Uno'])->label('Tipo Doc.'); ?>
@@ -69,6 +64,9 @@ $this->registerJsFile('@web/js/usuarios.js');
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-md-3">
+                        <?= $form->field($model, 'username')->textInput(['id' => 'username', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'style' => 'width:60%; text-transform: uppercase', 'readonly' => !$model->isNewRecord])->label('*Username') ?>
+                    </div>
                     <div class="col-md-3">
                         <?= $form->field($model, 'idPerfil')->dropDownList(User::getPerfilesDropdownList(), ['id' => 'idPerfil', 'class' => 'form-control', 'prompt' => 'Seleccione Perfil', 'value' => (isset($model->perfiluser)) ? $model->perfiluser->id_perfil : null])->label('Perfil'); ?>
                     </div>
