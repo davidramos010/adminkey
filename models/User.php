@@ -60,7 +60,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'password', 'authKey'], 'required', 'message'=> Yii::t('yii',  '{attribute} no es valido')],
+            [['username', 'password', 'authKey','nombres','apellidos'], 'required', 'message'=> Yii::t('yii',  '{attribute} no es valido')],
             [['name','username', 'password', 'authKey', 'accessToken','password_new','authKey_new'], 'string', 'max' => 255],
             [['password_new'], 'string', 'min' => 6, 'max' => 255,'message' => 'Debe tener más de 6 caracteres.'],
             [['authKey_new'], 'number', 'min' => 99999, 'max' => 9999999, 'message' => 'Debe tener entre 6 y 7 números.'],
