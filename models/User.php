@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-use Mpdf\Tag\U;
 use phpDocumentor\Reflection\Types\This;
 use yii;
 use yii\db\ActiveRecord;

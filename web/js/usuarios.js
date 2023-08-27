@@ -1,4 +1,23 @@
+function validateDocumento(){
+ let numTipoDoc = $('#userinfo-tipo_documento').val();
+ let strDocumento = $('#userinfo-documento').val();
+ let bolReturn = false;
+    if(numTipoDoc<=3){
+        let numValidate = validate_doc( strDocumento );
+        if (parseInt(numValidate)>0){
+            bolReturn = false;
+        }else{
+            bolReturn = true;
+            $('#userinfo-documento').val('');
+            toastr.error('El formato del documento no es valido.');
+        }
+    }
+    return bolReturn;
+}
 
+/**
+ *
+ */
 function valideteKey()
 {
     let url = '../ajax-validate-key';

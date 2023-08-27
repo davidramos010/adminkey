@@ -14,6 +14,7 @@ use yii\web\JsExpression;
 /* @var $model_info app\models\UserInfo */
 /* @var $form yii\bootstrap4\ActiveForm */
 $this->registerJsFile('@web/js/usuarios.js');
+$this->registerJsFile('@web/js/tools.js');
 
 ?>
 
@@ -33,7 +34,7 @@ $this->registerJsFile('@web/js/usuarios.js');
                         <?= $form->field($model_info, 'tipo_documento')->dropDownList(util::arrTipoDocumentos, ['class' => 'form-control', 'prompt' => 'Seleccione Uno'])->label('Tipo Doc.'); ?>
                     </div>
                     <div class="col-md-4">
-                        <?= $form->field($model_info, 'documento')->textInput(['maxlength' => true, 'class' => 'form-control'])->label('Documento Identidad') ?>
+                        <?= $form->field($model_info, 'documento')->textInput(['maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'onblur' => '(function ( $event ) { validateDocumento() })();' ])->label('Documento Identidad') ?>
                     </div>
                 </div>
                 <div class="row">
