@@ -1,3 +1,36 @@
+/**
+ * Habilita/Muestra campos en pantalla
+ */
+function fnDisplayDivInput(){
+    let numTipoUser = $('#idPerfil').val();
+
+    $('#password_new').val('');
+    $('#authKey_new').val('');
+
+    if(numTipoUser==1){
+        $('#div_input_authKey_new').hide();
+        $('#div_input_password_new').show(300,'');
+    }
+
+    if(numTipoUser==2){
+        $('#div_input_password_new').hide();
+        $('#div_input_authKey_new').show(300,'');
+    }
+}
+
+/**
+ * Generar el nombre de usuario
+ */
+function getNameUserGenerate(){
+    let strFName = $('#nombres').val();
+    let strSName = $('#apellidos').val();
+    let strUserName = '';
+    if(strFName!='' && strSName!=''){
+        strUserName = strFName.slice(0,1)+''+strSName;
+    }
+    $('#username').val(strUserName);
+}
+
 function validateDocumento(){
  let numTipoDoc = $('#userinfo-tipo_documento').val();
  let strDocumento = $('#userinfo-documento').val();
@@ -16,7 +49,7 @@ function validateDocumento(){
 }
 
 /**
- *
+ * validar que el codigo no exista
  */
 function valideteKey()
 {
@@ -24,8 +57,8 @@ function valideteKey()
     let authKey = $('#authKey_new').val();
     bolError = false;
 
-    if($('#authKey_new').val()!='' && ( $('#authKey_new').val()< 99999 || $('#authKey_new').val()>9999999)) {
-        toastr.error('El AuthKey bebe tener entre 6 y 7 números.');
+    if($('#authKey_new').val()!='' && $('#authKey_new').val().length<6 ) {
+        toastr.error('El AuthKey bebe tener mas de 6 caracteres.');
         $('#authKey_new').focus();
         bolError=true;
     }
@@ -98,13 +131,13 @@ function fnSubmit()
         }
     }
 
-    if($('#id').val()=='' && $("#authKey_new").val()==''){
+    if($('#id').val()=='' && $("#authKey_new").val()=='' && $("#idPerfil").val()==2){
         toastr.error('El authKey no es valido.');
         $('#authKey_new').focus();
         bolError=true;
     }
 
-    if($('#id').val()=='' && $("#password_new").val()==''){
+    if($('#id').val()=='' && $("#password_new").val()=='' && $("#idPerfil").val()==1){
         toastr.error('El password no es valido.');
         $('#password_new').focus();
         bolError=true;
@@ -113,12 +146,6 @@ function fnSubmit()
     if($('#id').val()==''){
         $('#password').val($('#password_new').val());
         $('#authKey').val($('#authKey_new').val());
-    }
-
-    if($('#authKey_new').val()!='' && ( $('#authKey_new').val()< 99999 || $('#authKey_new').val()>9999999)) {
-        toastr.error('El AuthKey bebe tener entre 6 y 7 números..');
-        $('#authKey_new').focus();
-        bolError=true;
     }
 
     if($('#idPerfil').val()==''){

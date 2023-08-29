@@ -7,6 +7,7 @@ use yii;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
+use app\models\util;
 
 /**
  * This is the model class for table "user".
@@ -36,6 +37,9 @@ class User extends ActiveRecord implements IdentityInterface
     public $perfil = null;
     public $estado = null;
 
+    const NUM_PERFIL_ADMINISTRADOR = 1;
+    const NUM_PERFIL_GESTOR = 2;
+
     /**
      * @inheritdoc
      */
@@ -53,26 +57,32 @@ class User extends ActiveRecord implements IdentityInterface
             'password' => Yii::t('User', 'Password'),
             'authKey' => Yii::t('User', 'AuthKey'),
             'accessToken' => Yii::t('User', 'AccessToken'),
+            'idPerfil' => Yii::t('User', 'Perfil'),
         ];
     }
 
     public function rules()
     {
         return [
-            [['username', 'password', 'authKey','nombres','apellidos'], 'required', 'message'=> Yii::t('yii',  '{attribute} no es valido')],
+            [['username', 'idPerfil'], 'required', 'message'=> Yii::t('yii',  '{attribute} no es valido')],
             [['name','username', 'password', 'authKey', 'accessToken','password_new','authKey_new'], 'string', 'max' => 255],
-            [['password_new'], 'string', 'min' => 6, 'max' => 255,'message' => 'Debe tener más de 6 caracteres.'],
-            [['authKey_new'], 'number', 'min' => 99999, 'max' => 9999999, 'message' => 'Debe tener entre 6 y 7 números.'],
-            [['authKey','password'], 'required', 'when' => function($model) {
-                return $model->isNewRecord;
+            [['password_new'], 'string', 'min' => 6, 'max' => 255,'message' => 'Debe tener más de 6 caracteres.','tooLong'=>'El campo no debe tener mas de 250 caracteres','tooShort'=>'El campo debe tener minimo 6 caracteres'],
+            [['authKey_new'], 'string', 'min' => 6, 'max' => 255,'message' => 'Debe tener más de 6 caracteres.','tooLong'=>'El campo no debe tener mas de 250 caracteres','tooShort'=>'El campo debe tener minimo 6 caracteres'],
+            [['password'], 'required', 'when' => function($model) {
+                return $model->idPerfil==self::NUM_PERFIL_ADMINISTRADOR ;
             },'whenClient' => "function (attribute, value) {
                 if($('#password').val()=='')
                   $('#password').val($('#password_new').val());
                   
+                return ($('#idPerfil').val()==1 && $('#password').val() != '');
+            }"],
+            [['authKey'], 'required', 'when' => function($model) {
+                return $model->idPerfil==self::NUM_PERFIL_GESTOR ;
+            },'whenClient' => "function (attribute, value) {
                 if($('#authKey').val()=='')
                   $('#authKey').val($('#authKey_new').val());  
                  
-                return ($('#password').val() != '' && $('#authKey').val() != '');
+                return ($('#idPerfil').val()==2 && $('#authKey').val() != '');
             }"],
             [['idPerfil'], 'integer'],
             [['username'], 'unique'],
@@ -215,16 +225,18 @@ class User extends ActiveRecord implements IdentityInterface
     public function setUser( array $arrParams ):array
     {
         $modelInfo = new UserInfo();
-        $model = new This();
+        $model = new User();
         $strErrores = '';
         //limpiar texto y poner en mayusculas
-        $arrParams['UserInfo']['nombres'] = Util::getStringFormatUpper($arrParams['UserInfo']['nombres']);
-        $arrParams['UserInfo']['apellidos'] = Util::getStringFormatUpper($arrParams['UserInfo']['apellidos']);
-        $arrParams['UserInfo']['direccion'] = Util::getStringFormatUpper($arrParams['UserInfo']['direccion']);
-        $arrParams['UserInfo']['codigo'] = Util::getStringFormatUpper($arrParams['UserInfo']['codigo']);
+        $arrParams['UserInfo']['nombres'] = util::getStringFormatUpper($arrParams['UserInfo']['nombres']);
+        $arrParams['UserInfo']['apellidos'] = util::getStringFormatUpper($arrParams['UserInfo']['apellidos']);
+        $arrParams['UserInfo']['direccion'] = util::getStringFormatUpper($arrParams['UserInfo']['direccion']);
+        $arrParams['UserInfo']['codigo'] =
+            isset($arrParams['UserInfo']['codigo']) ? util::getStringFormatUpper($arrParams['UserInfo']['codigo']) : '';
 
         $arrUser['User'] = $arrParams['User'];
-        $arrUser['User']['name'] = trim($arrParams['UserInfo']['nombres']. ' ' .$arrParams['UserInfo']['apellidos']);
+        $arrUser['User']['username'] = util::getStringFormatUpper($arrUser['User']['username']);
+        $arrUser['User']['name'] = trim($arrParams['UserInfo']['nombres'] . ' ' . $arrParams['UserInfo']['apellidos']);
         $arrUser['User']['password'] = trim($arrUser['User']['password_new']);
         $arrUser['User']['authKey'] = trim($arrUser['User']['authKey_new']);
         $transaction = Yii::$app->db->beginTransaction();
@@ -267,7 +279,7 @@ class User extends ActiveRecord implements IdentityInterface
         if($bolInserPerfil && $bolInserUser && $bolInserUserInfo){
             if(empty($transaction->commit())){
                 Yii::$app->session->setFlash('success', Yii::t('yii', 'Registrado Correctamente'));
-                return $this->redirect(['index']);
+
             }else{
                 $strErrores .= '<br>-No se puede registrar. Valide los datos he intente nuevamente.';
             }

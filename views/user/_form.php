@@ -15,7 +15,8 @@ use yii\web\JsExpression;
 /* @var $form yii\bootstrap4\ActiveForm */
 $this->registerJsFile('@web/js/usuarios.js');
 $this->registerJsFile('@web/js/tools.js');
-
+$strDisplayPass = (isset($model->perfiluser) && $model->perfiluser->id_perfil==1 && !$model->isNewRecord) ? 'inline':'none';
+$strDisplayAuth = (isset($model->perfiluser) && $model->perfiluser->id_perfil==2 && !$model->isNewRecord)  ? 'inline':'none';
 ?>
 
 <div class="user-form col-md-9">
@@ -42,7 +43,7 @@ $this->registerJsFile('@web/js/tools.js');
                         <?= $form->field($model_info, 'nombres')->textInput(['id' => 'nombres', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'style' => 'text-transform: uppercase'])->label('*Nombres') ?>
                     </div>
                     <div class="col-md-6">
-                        <?= $form->field($model_info, 'apellidos')->textInput(['id' => 'apellidos', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'style' => 'text-transform: uppercase'])->label('*Apellidos') ?>
+                        <?= $form->field($model_info, 'apellidos')->textInput(['id' => 'apellidos', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'style' => 'text-transform: uppercase', 'onblur' => '(function ( $event ) { getNameUserGenerate() })();'])->label('*Apellidos') ?>
                     </div>
                 </div>
                 <div class="row">
@@ -50,7 +51,7 @@ $this->registerJsFile('@web/js/tools.js');
                         <?= $form->field($model_info, 'telefono')->textInput(['id' => 'telefono', 'inputmode' => 'text', 'maxlength' => 10, 'class' => 'form-control', 'autocomplete' => 'off'])->label('Teléfono') ?>
                     </div>
                     <div class="col-md-9">
-                        <?= $form->field($model_info, 'email')->textInput(['id' => 'email', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off'])->label('Email') ?>
+                        <?= $form->field($model_info, 'email')->textInput(['id' => 'email', 'maxlength' => 254, 'class' => 'form-control', 'autocomplete' => 'off'])->label('Email') ?>
                     </div>
                 </div>
                 <div class="form-group">
@@ -58,24 +59,21 @@ $this->registerJsFile('@web/js/tools.js');
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-                        <?= $form->field($model, 'username')->textInput(['id' => 'username', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'style' => 'width:60%; text-transform: uppercase', 'readonly' => !$model->isNewRecord])->label('*Username') ?>
+                        <?= $form->field($model, 'username')->textInput(['id' => 'username', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'style' => ' text-transform: uppercase', 'readonly' => !$model->isNewRecord])->label('*Username') ?>
                     </div>
                     <div class="col-md-3">
-                        <?= $form->field($model, 'idPerfil')->dropDownList(User::getPerfilesDropdownList(), ['id' => 'idPerfil', 'class' => 'form-control', 'prompt' => 'Seleccione Perfil', 'value' => (isset($model->perfiluser)) ? $model->perfiluser->id_perfil : null])->label('Perfil'); ?>
-                    </div>
-                    <div class="col-md-3">
-                        <?= $form->field($model_info, 'codigo')->textInput(['maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'style' => 'text-transform: uppercase'])->label('Cod. Interno') ?>
+                        <?= $form->field($model, 'idPerfil')->dropDownList(User::getPerfilesDropdownList(), ['id' => 'idPerfil', 'class' => 'form-control', 'prompt' => 'Seleccione Perfil', 'value' => (isset($model->perfiluser)) ? $model->perfiluser->id_perfil : null, 'onchange' => '(function ( $event ) { fnDisplayDivInput() })();'])->label('Perfil'); ?>
                     </div>
                     <div class="col-md-3">
                         <?= $form->field($model_info, 'estado')->widget(SwitchInput::class, ['pluginOptions' => ['size' => 'small', 'onText' => 'Activo', 'offText' => 'Inactivo']])->label('Estado'); ?>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-4" id="div_input_password_new" style="display: <?= $strDisplayPass ?>">
                         <?= $form->field($model, 'password_new')->passwordInput(['id' => 'password_new', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'placeholder' => 'Password'])->label('Password') ?>
                     </div>
-                    <div class="col-md-3">
-                        <?= $form->field($model, 'authKey_new')->passwordInput(['id' => 'authKey_new', 'maxlength' => true, 'class' => 'form-control', 'value' => '', 'autocomplete' => 'off', 'onblur' => '(function ( $event ) { valideteKey() })();' ])->label('AuthKey') ?>
+                    <div class="col-md-4" id="div_input_authKey_new" style="display:  <?= $strDisplayAuth ?>">
+                        <?= $form->field($model, 'authKey_new')->passwordInput(['id' => 'authKey_new', 'maxlength' => true, 'class' => 'form-control', 'value' => '', 'autocomplete' => 'off',  'onkeypress' => '(function ( $event ) { validateNumber() })();', 'onblur' => '(function ( $event ) { valideteKey() })();' ])->label('AuthKey') ?>
                     </div>
                 </div>
                 <h6 class="text-muted" ><?= Yii::t('app','titulo_usuario_relacion_comercial') ?></h6>

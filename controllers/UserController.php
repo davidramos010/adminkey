@@ -81,16 +81,21 @@ class UserController extends BaseController
         $model = new User();
         $modelInfo = new UserInfo();
         $strErrores = null;
-        if(Yii::$app->request->post()){
+        if (Yii::$app->request->post()) {
             $arrParam = Yii::$app->request->post();
             $arrResultSet = $model->setUser($arrParam);
+            if ($arrResultSet['ok'] !== true) {
+                $strErrores = $arrResultSet['message'];
+            }
+
+            if (!empty($strErrores)) {
+                Yii::$app->session->setFlash('error', $strErrores);
+            }
+
+            return $this->redirect(['index']);
         }
 
-        if(!empty($strErrores)){
-            Yii::$app->session->setFlash('error', $strErrores );
-        }
-
-        $modelInfo->estado=1; // Activo por defecto
+        $modelInfo->estado = 1; // Activo por defecto
         return $this->render('create', [
             'model' => $model,
             'model_info' => $modelInfo,
