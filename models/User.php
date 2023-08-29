@@ -2,11 +2,12 @@
 
 namespace app\models;
 
-use Mpdf\Tag\U;
+use phpDocumentor\Reflection\Types\This;
 use yii;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
+use app\models\util;
 
 /**
  * This is the model class for table "user".
@@ -24,7 +25,7 @@ use yii\web\IdentityInterface;
  * @property PerfilesUsuario $perfilesUsuario
  */
 
-class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
+class User extends ActiveRecord implements IdentityInterface
 {
     public $idPerfil = null;
     public $password_new = null;
@@ -35,6 +36,9 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public $telefono = null;
     public $perfil = null;
     public $estado = null;
+
+    const NUM_PERFIL_ADMINISTRADOR = 1;
+    const NUM_PERFIL_GESTOR = 2;
 
     /**
      * @inheritdoc
@@ -53,26 +57,32 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'password' => Yii::t('User', 'Password'),
             'authKey' => Yii::t('User', 'AuthKey'),
             'accessToken' => Yii::t('User', 'AccessToken'),
+            'idPerfil' => Yii::t('User', 'Perfil'),
         ];
     }
 
     public function rules()
     {
         return [
-            [['username', 'password', 'authKey'], 'required', 'message'=> Yii::t('yii',  '{attribute} no es valido')],
+            [['username', 'idPerfil'], 'required', 'message'=> Yii::t('yii',  '{attribute} no es valido')],
             [['name','username', 'password', 'authKey', 'accessToken','password_new','authKey_new'], 'string', 'max' => 255],
-            [['password_new'], 'string', 'min' => 6, 'max' => 255,'message' => 'Debe tener más de 6 caracteres.'],
-            [['authKey_new'], 'number', 'min' => 99999, 'max' => 9999999, 'message' => 'Debe tener entre 6 y 7 números.'],
-            [['authKey','password'], 'required', 'when' => function($model) {
-                return $model->isNewRecord;
+            [['password_new'], 'string', 'min' => 6, 'max' => 255,'message' => 'Debe tener más de 6 caracteres.','tooLong'=>'El campo no debe tener mas de 250 caracteres','tooShort'=>'El campo debe tener minimo 6 caracteres'],
+            [['authKey_new'], 'string', 'min' => 6, 'max' => 255,'message' => 'Debe tener más de 6 caracteres.','tooLong'=>'El campo no debe tener mas de 250 caracteres','tooShort'=>'El campo debe tener minimo 6 caracteres'],
+            [['password'], 'required', 'when' => function($model) {
+                return $model->idPerfil==self::NUM_PERFIL_ADMINISTRADOR ;
             },'whenClient' => "function (attribute, value) {
                 if($('#password').val()=='')
                   $('#password').val($('#password_new').val());
                   
+                return ($('#idPerfil').val()==1 && $('#password').val() != '');
+            }"],
+            [['authKey'], 'required', 'when' => function($model) {
+                return $model->idPerfil==self::NUM_PERFIL_GESTOR ;
+            },'whenClient' => "function (attribute, value) {
                 if($('#authKey').val()=='')
                   $('#authKey').val($('#authKey_new').val());  
                  
-                return ($('#password').val() != '' && $('#authKey').val() != '');
+                return ($('#idPerfil').val()==2 && $('#authKey').val() != '');
             }"],
             [['idPerfil'], 'integer'],
             [['username'], 'unique'],
@@ -205,5 +215,79 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             ->createCommand($query)
             ->queryAll();
         return ArrayHelper::map($result, 'id', 'nombre');
+    }
+
+    /**
+     * Registrar usuario en el sistema
+     * @param array $arrParams
+     * @return array
+     */
+    public function setUser( array $arrParams ):array
+    {
+        $modelInfo = new UserInfo();
+        $model = new User();
+        $strErrores = '';
+        //limpiar texto y poner en mayusculas
+        $arrParams['UserInfo']['nombres'] = util::getStringFormatUpper($arrParams['UserInfo']['nombres']);
+        $arrParams['UserInfo']['apellidos'] = util::getStringFormatUpper($arrParams['UserInfo']['apellidos']);
+        $arrParams['UserInfo']['direccion'] = util::getStringFormatUpper($arrParams['UserInfo']['direccion']);
+        $arrParams['UserInfo']['codigo'] =
+            isset($arrParams['UserInfo']['codigo']) ? util::getStringFormatUpper($arrParams['UserInfo']['codigo']) : '';
+
+        $arrUser['User'] = $arrParams['User'];
+        $arrUser['User']['username'] = util::getStringFormatUpper($arrUser['User']['username']);
+        $arrUser['User']['name'] = trim($arrParams['UserInfo']['nombres'] . ' ' . $arrParams['UserInfo']['apellidos']);
+        $arrUser['User']['password'] = trim($arrUser['User']['password_new']);
+        $arrUser['User']['authKey'] = trim($arrUser['User']['authKey_new']);
+        $transaction = Yii::$app->db->beginTransaction();
+        $bolInserUser = ($model->load($arrUser) && $model->save());
+        $bolInserPerfil = false;
+        // pintar errores
+        if(!$bolInserUser){
+            $arrError = $model->getErrors();
+            foreach ($arrError as $item){
+                if(isset($item[0])){
+                    $strErrores .= '<br>-'.trim($item[0]);
+                }
+            }
+        }
+
+        $arrUserInfo['UserInfo'] = $arrParams['UserInfo'];
+        $arrUserInfo['UserInfo']['id_user'] = $model->id;
+        $bolInserUserInfo = ($bolInserUser && $modelInfo->load($arrUserInfo) && $modelInfo->save());
+
+        // pintar errores
+        if($bolInserUser && !$bolInserUserInfo){
+            $arrError = $modelInfo->getErrors();
+            foreach ($arrError as $item){
+                if(isset($item[0])){
+                    $strErrores .= '<br>-'.trim($item[0]);
+                }
+            }
+        }
+
+        if($bolInserUser && $bolInserUserInfo){
+            $newPerfilUser = new PerfilesUsuario();
+            $newPerfilUser->id_user = (int) $model->id;
+            $newPerfilUser->id_perfil = (int) $model->idPerfil;
+            $bolInserPerfil = $newPerfilUser->save();
+            if(!$bolInserPerfil){
+                $strErrores .= '<br>-El perfil no se asigna correctamente';
+            }
+        }
+
+        if($bolInserPerfil && $bolInserUser && $bolInserUserInfo){
+            if(empty($transaction->commit())){
+                Yii::$app->session->setFlash('success', Yii::t('yii', 'Registrado Correctamente'));
+
+            }else{
+                $strErrores .= '<br>-No se puede registrar. Valide los datos he intente nuevamente.';
+            }
+        }else{
+            $transaction->rollBack();
+            $strErrores .= '<br>-Error al guardar. Valide los datos y vuelva a intentar.';
+        }
+
+        return ['ok'=>empty($strErrores),'message'=> empty($strErrores)?'OK':$strErrores ];
     }
 }

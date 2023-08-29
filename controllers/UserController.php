@@ -81,72 +81,21 @@ class UserController extends BaseController
         $model = new User();
         $modelInfo = new UserInfo();
         $strErrores = null;
-        if(Yii::$app->request->post()){
+        if (Yii::$app->request->post()) {
             $arrParam = Yii::$app->request->post();
-            //Mayus
-            $arrParam['UserInfo']['nombres'] = trim(strtoupper($arrParam['UserInfo']['nombres']));
-            $arrParam['UserInfo']['apellidos'] = trim(strtoupper($arrParam['UserInfo']['apellidos']));
-            $arrParam['UserInfo']['direccion'] = trim(strtoupper($arrParam['UserInfo']['direccion']));
-            $arrParam['UserInfo']['codigo'] = trim(strtoupper($arrParam['UserInfo']['codigo']));
-            $arrUser['User'] = $arrParam['User'];
-            $arrUser['User']['name'] = trim($arrParam['UserInfo']['nombres']. ' ' .$arrParam['UserInfo']['apellidos']);
-            $arrUser['User']['password'] = $arrUser['User']['password_new'];
-            $arrUser['User']['authKey'] = $arrUser['User']['authKey_new'];
-            $transaction = Yii::$app->db->beginTransaction();
-            $bolInserUser = ($model->load($arrUser) && $model->save());
-            $bolInserPerfil = false;
-            // pintar errores
-            if(!$bolInserUser){
-                $arrError = $model->getErrors();
-                foreach ($arrError as $item){
-                    if(isset($item[0])){
-                        $strErrores .= '<br>-'.trim($item[0]);
-                    }
-                }
+            $arrResultSet = $model->setUser($arrParam);
+            if ($arrResultSet['ok'] !== true) {
+                $strErrores = $arrResultSet['message'];
             }
 
-            $arrUserInfo['UserInfo'] = $arrParam['UserInfo'];
-            $arrUserInfo['UserInfo']['id_user'] = $model->id;
-            $bolInserUserInfo = ($bolInserUser && $modelInfo->load($arrUserInfo) && $modelInfo->save());
-
-            // pintar errores
-            if($bolInserUser && !$bolInserUserInfo){
-                $arrError = $modelInfo->getErrors();
-                foreach ($arrError as $item){
-                    if(isset($item[0])){
-                        $strErrores .= '<br>-'.trim($item[0]);
-                    }
-                }
+            if (!empty($strErrores)) {
+                Yii::$app->session->setFlash('error', $strErrores);
             }
 
-            if($bolInserUser && $bolInserUserInfo){
-                $newPerfilUser = new PerfilesUsuario();
-                $newPerfilUser->id_user = (int) $model->id;
-                $newPerfilUser->id_perfil = (int) $model->idPerfil;
-                $bolInserPerfil = $newPerfilUser->save();
-                if(!$bolInserPerfil){
-                    $strErrores .= '<br>-El perfil no se asigna correctamente';
-                }
-            }
-
-            if($bolInserPerfil && $bolInserUser && $bolInserUserInfo){
-                if(empty($transaction->commit())){
-                    Yii::$app->session->setFlash('success', Yii::t('yii', 'Registrado Correctamente'));
-                    return $this->redirect(['index']);
-                }else{
-                    $strErrores .= '<br>-No se puede registrar. Valide los datos he intente nuevamente.';
-                }
-            }else{
-                $transaction->rollBack();
-                $strErrores .= '<br>-Error al guardar. Valide los datos y vuelva a intentar.';
-            }
+            return $this->redirect(['index']);
         }
 
-        if(!empty($strErrores)){
-            Yii::$app->session->setFlash('error', $strErrores );
-        }
-
-        $modelInfo->estado=1; // Activo por defecto
+        $modelInfo->estado = 1; // Activo por defecto
         return $this->render('create', [
             'model' => $model,
             'model_info' => $modelInfo,

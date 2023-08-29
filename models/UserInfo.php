@@ -41,15 +41,19 @@ class UserInfo extends \yii\db\ActiveRecord
         return [
             [['id_user', 'estado', 'id_comercial','tipo_documento'], 'integer'],
             [['created'], 'safe'],
-            [['nombres', 'apellidos', 'direccion', 'email'], 'string', 'max' => 255],
-            [['tipo_documento','documento','nombres', 'apellidos'], 'required', 'message'=> Yii::t('yii',  '{attribute} no es valido')],
+            [['nombres', 'apellidos', 'direccion'], 'string', 'max' => 255],
+            [['email'], 'email', 'message'=> Yii::t('yii',  '{attribute} no es valido')],
+            [['tipo_documento','nombres', 'apellidos'], 'required', 'message'=> Yii::t('yii',  '{attribute} no es valido')],
             [['telefono'], 'string', 'max' => 30],
             [['documento'], 'string', 'max' => 20],
             [['codigo'], 'string', 'max' => 100],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
             [['id_comercial'], 'exist', 'skipOnError' => true, 'targetClass' => Comerciales::className(), 'targetAttribute' => ['id_comercial' => 'id']],
             [['nombres'], 'required', 'when' => function($model) {
-                return $model->isNewRecord;
+                return  $model->isNewRecord;
+            }],
+            [['documento'], 'required', 'when' => function($model) {
+                return in_array($model->tipo_documento, [ util::arrTipoDocumentos[1],util::arrTipoDocumentos[2],util::arrTipoDocumentos[3] ]) ;
             }],
         ];
     }

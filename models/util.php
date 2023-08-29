@@ -5,7 +5,7 @@ namespace app\models;
 class util
 {
     const SALT = '4dm1nk3y';
-    const arrTipoDocumentos = [1=>'DNI',2=>'NIE',3=>'NIF',4=>'PASAPORTE',4=>'OTROS'];
+    const arrTipoDocumentos = [1=>'CIF',2=>'NIE',3=>'NIF',4=>'PASAPORTE',5=>'OTROS'];
 
     public static function hash($password) {
         return hash('md5', self::SALT . $password);
@@ -109,5 +109,15 @@ class util
             $dateFormated = $date;
         }
         return $dateFormated;
+    }
+
+    /**
+     * Retorna una cadena con el contenido en mayusculas
+     * @param string $strCadena
+     * @return string
+     */
+    public static function getStringFormatUpper( string $strCadena ):string
+    {
+       return trim(strtoupper($strCadena));
     }
 }
