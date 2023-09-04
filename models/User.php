@@ -178,7 +178,10 @@ class User extends ActiveRecord implements IdentityInterface
             if(!empty($objFindAuthKey)){
                 $this->addError('authKey', 'El authKey ingresado no es valido.');
                 return false;
+            }else{
+                $this->authKey = !empty($this->authKey_new) ?  $this->authKey_new : $this->authKey;
             }
+
         }
         return true;
     }
