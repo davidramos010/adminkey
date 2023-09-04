@@ -70,10 +70,10 @@ $strDisplayAuth = (isset($model->perfiluser) && $model->perfiluser->id_perfil==2
                 </div>
                 <div class="row">
                     <div class="col-md-4" id="div_input_password_new" style="display: <?= $strDisplayPass ?>">
-                        <?= $form->field($model, 'password_new')->passwordInput(['id' => 'password_new', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'placeholder' => 'Password'])->label('Password') ?>
+                        <?= $form->field($model, 'password_new')->passwordInput(['id' => 'password_new', 'maxlength' => true, 'class' => 'form-control', 'autocomplete' => 'off', 'placeholder' => Yii::t('app','Minimo 6 caracteres.')])->label('Password') ?>
                     </div>
                     <div class="col-md-4" id="div_input_authKey_new" style="display:  <?= $strDisplayAuth ?>">
-                        <?= $form->field($model, 'authKey_new')->passwordInput(['id' => 'authKey_new', 'maxlength' => true, 'class' => 'form-control', 'value' => '', 'autocomplete' => 'off',  'onkeypress' => '(function ( $event ) { validateNumber() })();', 'onblur' => '(function ( $event ) { valideteKey() })();' ])->label('AuthKey') ?>
+                        <?= $form->field($model, 'authKey_new')->passwordInput(['id' => 'authKey_new', 'maxlength' => true, 'class' => 'form-control', 'value' => '', 'autocomplete' => 'off', 'placeholder' => Yii::t('app','Minimo 6 números.'), 'onkeypress' => '(function ( $event ) { validateNumber() })();', 'onblur' => '(function ( $event ) { valideteKey() })();' ])->label('AuthKey') ?>
                     </div>
                 </div>
                 <h6 class="text-muted" ><?= Yii::t('app','titulo_usuario_relacion_comercial') ?></h6>

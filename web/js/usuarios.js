@@ -22,13 +22,17 @@ function fnDisplayDivInput(){
  * Generar el nombre de usuario
  */
 function getNameUserGenerate(){
+
+    if($('#nombres').val()!='' && $('#username').val()!='' ){
+        return false;
+    }
     let strFName = $('#nombres').val();
     let strSName = $('#apellidos').val();
     let strUserName = '';
     if(strFName!='' && strSName!=''){
         strUserName = strFName.slice(0,1)+''+strSName;
     }
-    $('#username').val(strUserName);
+    $('#username').val(strUserName.replace(/ /g, ""));
 }
 
 function validateDocumento(){
