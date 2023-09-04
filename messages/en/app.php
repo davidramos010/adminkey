@@ -113,6 +113,8 @@ return [
     'Las llaves deben devolverse a' => 'The keys must be returned to ',
     ', en la misma oficina donde se han entregado y en un plazo de 24 horas desde la entrega. En caso contrario, el receptor informará de la causa del retraso y la fecha estimada de retorno.' => ', in the same office where they were delivered and within 24 hours of delivery. Otherwise, the receiver will inform of the cause of the delay and the estimated date of return.',
     'Número de copias'=>'Number of copies',
+    'Minimo 6 caracteres.'=>'Minimum 6 characters.',
+    'Minimo 6 números.'=>'Minimum 6 numbers.',
 
     'Listado de registro de entrada y salida de llaves.'=>'List of entry and exit of keys',
     'KO. Registros pendientes por devolver.'=>'KO. Pending records to return.',
