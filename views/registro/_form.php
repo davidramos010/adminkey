@@ -35,6 +35,7 @@ $strAddBotonRegistrar = isset($action) && $action == 'update' ? '' : Html::butto
 $strAddBotonCancelar = Html::a(Yii::t('app', Yii::t('app', 'Cancelar')), ['create'], ['class' => 'btn btn-default ']);
 $strAddBotonEditar = isset($action) && $action == 'update' ? Html::button(Yii::t('app', 'Editar Movimiento'), ['id' => 'btn_editar', 'class' => 'btn btn-primary', 'onclick' => '(function ( $event ) { sendUpdateForm() })();']) : '';
 $strAddBotonEliminar = isset($action) && $action == 'update' ? Html::button(Yii::t('app', 'Eliminar Movimiento'), ['id' => 'btn_eliminar', 'class' => 'btn btn-danger', 'onclick' => '(function ( $event ) { sendDeleteForm() })();']) : '';
+$bolIsVisibleFechaRegistro = Tools::isAdmin();
 
 $arrInfoNota[] = Yii::t('app', 'Este registro estara asociado al usuario en sesion') . ' <label class="exampleInputBorder"> ' . Yii::$app->user->identity->name . '</label>';
 $arrInfoNota[] = Yii::t('app', 'Las llaves se irán registrando según su último estado de disponibilidad.');
@@ -310,7 +311,7 @@ if(!empty($strAddNota)){
                 <hr class="mt-2 mb-3"/>
                 <div class="form-group">
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-2" style="display:  <?= !$bolIsVisibleFechaRegistro ? 'none':'inline'  ?>">
                             <?= $form->field($model,
                                 'fecha_registro')->widget(DateTimePicker::class,
                                 [

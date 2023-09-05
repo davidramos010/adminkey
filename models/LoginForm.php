@@ -101,9 +101,10 @@ class LoginForm extends Model
            return true;
         }
 
-        if(!is_numeric($this->authkey) && !self::getAuthKey()){
-            $this->addError($attribute, 'El codigo de acceso no es valido');
-            Yii::$app->session->setFlash('error', 'El codigo de acceso no es valido');
+        if(!is_numeric($this->authkey) || !self::getAuthKey()){
+            $strMessaje = 'El código de acceso no es valido o el usuario esta inactivo';
+            $this->addError($attribute, $strMessaje);
+            Yii::$app->session->setFlash('error', $strMessaje);
         }
     }
 
@@ -114,35 +115,36 @@ class LoginForm extends Model
      */
     public function login()
     {
-        if(!empty($this->authkey) && (int) $this->perfil==2)
-        {
+        if (!empty($this->authkey) && (int)$this->perfil == 2) {
             $this->username = null;
             $this->password = null;
             $this->getAuthKey();
-        }else{
+        } else {
             $this->authkey = null;
-            if(!empty($this->password)){
+            if (!empty($this->password)) {
                 $this->password = util::hash($this->password);
             }
         }
 
         if ($this->validate() && !empty($this->getUser())) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         }
         return false;
     }
 
     /**
      * Finds user by [[username]]
-     *
+     * Validar estado del usuario
      * @return User|null
      */
     public function getUser()
     {
         if ($this->_user === false) {
             $this->_user = User::findByUsername($this->username);
+            if(isset($this->_user->userInfo) && $this->_user->userInfo->estado == 0){
+                $this->_user = false;
+            }
         }
-
         return $this->_user;
     }
 
@@ -156,7 +158,8 @@ class LoginForm extends Model
             $objUser = User::find()->where(['authkey'=> $this->authkey ])->one();
             if(!empty($objUser)){
                 $objUserPerfil = PerfilesUsuario::find()->where(['id_user'=>$objUser->id,'id_perfil'=>2])->one();
-                if(!empty($objUserPerfil)){
+                $objUserInfo = UserInfo::find()->where(['id_user'=>$objUser->id,'estado'=>1])->one();
+                if(!empty($objUserPerfil) && !empty($objUserInfo)){
                     $this->_user = false;
                     $this->username = (!empty($objUser))?$objUser->username:null;
                     $this->password = (!empty($objUser))?$objUser->password:null;

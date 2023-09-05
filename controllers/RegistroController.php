@@ -81,8 +81,9 @@ class RegistroController extends BaseController
             $searchModel = new RegistroSearch();
             $arrInfoStatusE = $searchModel->search_status($id, 'E');
             $arrInfoStatusS = $searchModel->search_status($id, 'S');
-            $bolActiveBotonProcess = $arrInfoStatusS->getTotalCount();
-            $bolActiveBotonUpdate = isset(Yii::$app->user) && !empty(Yii::$app->user->getIdentity()) && strtoupper(Yii::$app->user->identity->username) == strtoupper($modelRegistro->user->username);
+            $isAdmin = Tools::isAdmin();
+            $bolActiveBotonUpdate = $isAdmin && isset(Yii::$app->user) && !empty(Yii::$app->user->getIdentity()) && strtoupper(Yii::$app->user->identity->username) == strtoupper($modelRegistro->user->username);
+            $bolActiveBotonProcess = $isAdmin || $bolActiveBotonUpdate ? $arrInfoStatusS->getTotalCount() : false;
 
             return $this->render('view', [
                 'model' => $modelRegistro,

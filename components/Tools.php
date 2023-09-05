@@ -8,6 +8,8 @@ namespace app\components;
 
 use app\models\app\CodigoNotas;
 use app\models\app\Empresa;
+use app\models\PerfilesUsuario;
+use app\models\User;
 use factorenergia\adminlte\widgets\Box;
 use kartik\helpers\Html;
 use kartik\icons\Icon;
@@ -62,32 +64,15 @@ class Tools
      * Se cargan de la sesion del usuario
      * @return string
      */
-    public static function sideSelectCompany()
+    public static function isAdmin(): bool
     {
-        $user_company = Yii::$app->session->get('intranet_company');
-        $user_companies = Yii::$app->session->get('intranet_companies_user');
-
-        $html = '';
-        foreach ($user_companies as $u_company) {
-            $html .= Html::a(Html::img(Url::base() . "/images/favicon" . $u_company->empresa->clave . ".png",
-                ['style' => 'width:40px;']),
-                Url::to(['/site/cambiar-de-empresa']),
-                [
-                    'class' => $u_company->empresa->clave === $user_company ? 'selected_cp' : 'non-selected',
-                    'style' => 'text-align:center',
-                    'data' => [
-                        'method' => 'post',
-
-                        'params' => [
-                            'clave' => $u_company->empresa->clave,
-                            'id' => $u_company->empresa->id,
-                            'prev_url' => '/' . Yii::$app->view->context->route . '?' . http_build_query(Yii::$app->view->context->actionParams)
-                        ]
-                    ]
-                ]);
+        $numIdPerfil = 0;
+        if(isset(Yii::$app->user->identity)){
+            $objUser = User::findByUsername( Yii::$app->user->identity->username );
+            $numIdPerfil = !empty($objUser) && !empty($objUser->perfiluser) ? $objUser->perfiluser->id_perfil : 0;
         }
 
-        return $html;
+        return !empty($numIdPerfil) && $numIdPerfil== User::NUM_PERFIL_ADMINISTRADOR ? true : false;
     }
 
     public static function liItemsCompany()
