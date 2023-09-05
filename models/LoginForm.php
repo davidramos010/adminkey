@@ -128,6 +128,9 @@ class LoginForm extends Model
 
         if ($this->validate() && !empty($this->getUser())) {
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+        }else{
+            $strMessaje = 'El código de acceso no es valido o el usuario no esta activo';
+            Yii::$app->session->setFlash('error', $strMessaje);
         }
         return false;
     }
