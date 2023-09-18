@@ -263,7 +263,7 @@ class Llave extends \yii\db\ActiveRecord
         if(!empty($this->codigo)){
             $strCodeKey = substr($this->codigo,0,8);
             $resultData = $this->find()->where(['like','codigo', $strCodeKey])->orderBy('copia DESC')->one();
-            if($resultData->copia>1){
+            if($resultData->copia>=1){
                 $numCopies = $resultData->copia+1;
                 $strCodeKey = $strCodeKey.'-'.$numCopies;
             }
