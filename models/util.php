@@ -5,8 +5,7 @@ namespace app\models;
 class util
 {
     const SALT = '4dm1nk3y';
-    const arrTipoDocumentos = [1=>'CIF',2=>'NIE',3=>'NIF',4=>'PASAPORTE',5=>'OTROS'];
-
+    const arrTipoDocumentos = [1=>'NIF',2=>'NIE',3=>'PASS',4=>'OTROS'];
     public static function hash($password) {
         return hash('md5', self::SALT . $password);
     }

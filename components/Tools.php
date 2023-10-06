@@ -60,8 +60,7 @@ class Tools
     }
 
     /**
-     * Barra lateral con el listado de compañias
-     * Se cargan de la sesion del usuario
+     * Validacion del tipo de usuario Admin
      * @return string
      */
     public static function isAdmin(): bool
@@ -73,6 +72,21 @@ class Tools
         }
 
         return !empty($numIdPerfil) && $numIdPerfil== User::NUM_PERFIL_ADMINISTRADOR ? true : false;
+    }
+
+    /**
+     * Validacion del tipo de usuario Gestor Especial
+     * @return bool
+     */
+    public static function isGestorEspecial(): bool
+    {
+        $numIdPerfil = 0;
+        if(isset(Yii::$app->user->identity)){
+            $objUser = User::findByUsername( Yii::$app->user->identity->username );
+            $numIdPerfil = !empty($objUser) && !empty($objUser->perfiluser) ? $objUser->perfiluser->id_perfil : 0;
+        }
+
+        return !empty($numIdPerfil) && $numIdPerfil== User::NUM_PERFIL_GESTOR_ESPECIAL ? true : false;
     }
 
     public static function liItemsCompany()
