@@ -16,7 +16,7 @@ use yii\web\JsExpression;
 $this->registerJsFile('@web/js/usuarios.js');
 $this->registerJsFile('@web/js/tools.js');
 $strDisplayPass = (isset($model->perfiluser) && $model->perfiluser->id_perfil==1 && !$model->isNewRecord) ? 'inline':'none';
-$strDisplayAuth = (isset($model->perfiluser) && $model->perfiluser->id_perfil==2 && !$model->isNewRecord)  ? 'inline':'none';
+$strDisplayAuth = (isset($model->perfiluser) && $model->perfiluser->id_perfil>=2 && !$model->isNewRecord)  ? 'inline':'none';
 ?>
 
 <div class="user-form col-md-9">

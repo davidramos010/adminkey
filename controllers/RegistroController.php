@@ -82,8 +82,9 @@ class RegistroController extends BaseController
             $arrInfoStatusE = $searchModel->search_status($id, 'E');
             $arrInfoStatusS = $searchModel->search_status($id, 'S');
             $isAdmin = Tools::isAdmin();
+            $isAdminEsp = Tools::isGestorEspecial();
             $bolActiveBotonUpdate = $isAdmin && isset(Yii::$app->user) && !empty(Yii::$app->user->getIdentity()) && strtoupper(Yii::$app->user->identity->username) == strtoupper($modelRegistro->user->username);
-            $bolActiveBotonProcess = $isAdmin || $bolActiveBotonUpdate ? $arrInfoStatusS->getTotalCount() : false;
+            $bolActiveBotonProcess = $isAdminEsp || $isAdmin || $bolActiveBotonUpdate ? $arrInfoStatusS->getTotalCount() : false;
 
             return $this->render('view', [
                 'model' => $modelRegistro,
@@ -226,12 +227,12 @@ class RegistroController extends BaseController
             $strEstado = (empty($arrModelStatus) || !isset($arrModelStatus->status)) ? 'E' : $arrModelStatus->status;
             $strCliente = (!empty($arrComunidadLlave)) ? $arrComunidadLlave['nombre'] : $arrPropietario->nombre;
 
-            if ($userPerfil != 1 && $strEstado == 'S') { // si no es admin, evalua quien creo el registro
+            /*if ($userPerfil != 1 && $strEstado == 'S') { // si no es admin, evalúa quién creó el registro
                 $objRegistro = Registro::findOne(['id' => $arrModelStatus->id_registro]);
                 if (!empty($objRegistro) && (int)$objRegistro->id_user != (int)$userSession) {
                     $strError = Yii::t('app', 'Restriccion devolucion llave');
                 }
-            }
+            }*/
         }
 
         return json_encode(['llave' => $arrModelLlave, 'status' => $arrModelStatus, 'cliente' => $strCliente, 'estado' => $strEstado, 'error' => $strError]);
@@ -461,8 +462,8 @@ class RegistroController extends BaseController
     public function actionFindComunidad($q = false)
     {
         $rows = Comunidad::find()->select(["id","CONCAT(nomenclatura, ' - ', nombre) as nombre"])->distinct()
-            ->where(['OR', ['like','nombre',$q],['like','nomenclatura',$q] ])
-            ->andWhere(['estado' => 1])->orderBy('comunidad.nombre ASC')->asArray()->all();
+            ->where(['OR', ['like','nombre',$q],['like','nomenclatura','%'.$q,false] ])
+            ->andWhere(['estado' => 1])->orderBy('comunidad.nomenclatura ASC,comunidad.nombre ASC')->asArray()->all();
         return json_encode($rows);
     }
 

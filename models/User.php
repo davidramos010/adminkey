@@ -39,6 +39,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     const NUM_PERFIL_ADMINISTRADOR = 1;
     const NUM_PERFIL_GESTOR = 2;
+    const NUM_PERFIL_GESTOR_ESPECIAL = 3;
 
     /**
      * @inheritdoc
@@ -77,7 +78,7 @@ class User extends ActiveRecord implements IdentityInterface
                 return ($('#idPerfil').val()==1 && $('#password').val() != '');
             }"],
             [['authKey'], 'required', 'when' => function($model) {
-                return $model->idPerfil==self::NUM_PERFIL_GESTOR ;
+                return ($model->idPerfil==self::NUM_PERFIL_GESTOR || $model->idPerfil==self::NUM_PERFIL_GESTOR_ESPECIAL) ;
             },'whenClient' => "function (attribute, value) {
                 if($('#authKey').val()=='')
                   $('#authKey').val($('#authKey_new').val());  

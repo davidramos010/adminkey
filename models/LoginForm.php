@@ -160,7 +160,7 @@ class LoginForm extends Model
         if (!empty($this->authkey)) {
             $objUser = User::find()->where(['authkey'=> $this->authkey ])->one();
             if(!empty($objUser)){
-                $objUserPerfil = PerfilesUsuario::find()->where(['id_user'=>$objUser->id,'id_perfil'=>2])->one();
+                $objUserPerfil = PerfilesUsuario::find()->where(['id_user'=>$objUser->id])->andWhere(['in','id_perfil',[2,3]])->one();
                 $objUserInfo = UserInfo::find()->where(['id_user'=>$objUser->id,'estado'=>1])->one();
                 if(!empty($objUserPerfil) && !empty($objUserInfo)){
                     $this->_user = false;

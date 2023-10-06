@@ -139,12 +139,12 @@ class SiteController extends BaseController
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            $objPerfil = PerfilesUsuario::find()->where(['id_user'=>Yii::$app->user->identity->id ])->one();
-            if(!empty($objPerfil)){
-                if($objPerfil->id_perfil==1 && (int) $model->perfil==1 ){
+            $objPerfil = PerfilesUsuario::find()->where(['id_user' => Yii::$app->user->identity->id])->one();
+            if (!empty($objPerfil)) {
+                if ($objPerfil->id_perfil == 1 && (int)$model->perfil == 1) {
                     return $this->goHome();
                 }
-                if($objPerfil->id_perfil==2 && (int) $model->perfil==2){
+                if (in_array((int)$objPerfil->id_perfil, [2, 3]) && in_array((int)$model->perfil, [2, 3])) {
                     return $this->redirect('../registro/create');
                 }
             }
