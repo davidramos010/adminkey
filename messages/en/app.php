@@ -93,6 +93,9 @@ return [
     'Plantilla de contrato' => 'Contract template',
     'Guardar Contrato' => 'Save Contract',
     'Tiene cambios sin guardar, ¿está seguro de que desea salir de esta página?' => 'You have unsaved changes, are you sure you want to exit this page?',
+    'Reporte de Estado' => 'Status Report',
+    'Le recordamos que tiene derecho a dirigir sus reclamaciones ante las Autoridades de protección de datos.' => 'We remind you that you have the right to address your complaints to the Data Protection Authorities.',
+    'Por favor, no responda a este correo, se trata de un correo automatizado.' => 'Please do not reply to this email, this is an automated email.',
 
     'Entrada' => 'Input',
     'Salida' => 'Output',

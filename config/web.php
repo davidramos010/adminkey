@@ -61,9 +61,9 @@ $config = [
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.ionos.es',  // ej. smtp.mandrillapp.com o smtp.gmail.com
-                'username' => 'soporte@mail.es',
-                'password' => 'passwrd',
-                'port' => '123', // El puerto 25 es un puerto común también
+                'username' => 'info@adminkeys.es',
+                'password' => '1nf0.4dm1nk3y2',
+                'port' => '587', // El puerto 25 es un puerto común también
                 'encryption' => 'tls', // Es usado también a menudo, revise la configuración del servidor
             ],
         ],

@@ -32,4 +32,11 @@ return [
     'bsDependencyEnabled' => false, // this will not load Bootstrap CSS and JS for all Krajee extensions
     '@plantillas' => "@web/plantillas",
     '@documents' => "@web/documents",
+    'reporteMensual' => [
+        'to' => 'davidfernandoramos010@gmail.com',
+        'from' => 'soporte@adminkeys.es',
+        'subject_ca' => 'Report mensual de claus no tornades.',
+        'subject_es' => 'Reporte mensual de llaves no devueltas.',
+        'subject_en' => 'Monthly report of unreturned keys.'
+    ],
 ];

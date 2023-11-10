@@ -141,7 +141,6 @@ $gridColumns = [
             </div>
         </div>
     <?php endif; ?>
-
     <?php if(count($params['llaves']['arrLlavesFecha'][10])): ?>
         <?php
             $addHtmlGrid = " <button id='BtnGridView10' type='button' class='btn btn-outline-warning btn-xs' onclick='fnToogleSeeKey(10)'> ".Yii::t('common', 'Ver')." + </button> ";

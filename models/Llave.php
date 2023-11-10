@@ -53,7 +53,7 @@ class Llave extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'llave';
     }
@@ -61,7 +61,7 @@ class Llave extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['codigo', 'id_llave_ubicacion', 'id_tipo','descripcion'], 'required', 'message'=> Yii::t('yii',  'Es requerido')],
@@ -79,7 +79,7 @@ class Llave extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -292,6 +292,50 @@ class Llave extends \yii\db\ActiveRecord
         // Contador de llaves
         $arrParam['llavesDataProvider']['cliente'] = $searchModelStatus->searchDataByCliente();
         $arrParam['llavesDataProvider']['propietario'] = $searchModelStatus->searchDataByPropietario();
+        return $arrParam;
+    }
+
+    /**
+     * Buscar llaves por estado en un rango de fechas
+     * @return array
+     * @throws \yii\db\Exception
+     */
+    public static function getDataReport(): array
+    {
+        $searchModelStatus = new LlaveStatusSearch();
+        // Cantidad de llave y llaves prestadas
+        $query = Yii::$app->db;
+        // --------------------------
+        // Cantidad de llaves activas
+        $numLlaves = (int)Llave::find()->where(['activa' => 1])->count();
+        // ---------------------------
+        // Array de llaves con salida
+        $queryString = 'SELECT ls.id_llave ,ls.id AS lastid, ls.status
+            FROM llave_status ls
+            INNER JOIN  llave_status ls2 ON (ls2.id = ls.id and ls2.id_llave = ls.id_llave and ls2.id = (
+                SELECT st.id FROM llave_status st WHERE st.id_llave = ls.id_llave ORDER BY st.fecha DESC limit 1
+                ))
+            WHERE ls.status ="S"; ';
+        $resultadosSalida = $query->createCommand($queryString)->queryAll();
+        $numLlavesSalida = (int)count($resultadosSalida);
+        $porcLlavesSalida = ($numLlaves > 0 && $numLlavesSalida > 0) ? round((float)((100 / $numLlaves) * $numLlavesSalida), 2) : 0;
+        // --------------------------
+        $arrParam['num_llaves'] = $numLlaves;
+        $arrParam['porcentaje_salida'] = $porcLlavesSalida;
+        $arrParam['num_salida'] = $numLlavesSalida;
+        // --------------------------------------------
+        // Lista de llaves prestadas
+        $searchModelStatus->status = 'S';
+        $dataProviderSearchBetween5 = $searchModelStatus->searchBetween([], 5);
+        $dataProviderSearchBetween5->pagination->pageSize = 100;
+        $dataProviderSearchBetween10 = $searchModelStatus->searchBetween([], 10);
+        $dataProviderSearchBetween10->pagination->pageSize = 100;
+        $dataProviderSearchBetween15 = $searchModelStatus->searchBetween([]);
+        $dataProviderSearchBetween15->pagination->pageSize = 100;
+        $arrParam['llavesDataProvider'][5] = $dataProviderSearchBetween5;
+        $arrParam['llavesDataProvider'][10] = $dataProviderSearchBetween10;
+        $arrParam['llavesDataProvider'][15] = $dataProviderSearchBetween15;
+
         return $arrParam;
     }
 

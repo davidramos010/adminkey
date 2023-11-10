@@ -104,6 +104,9 @@ return [
     'Plantilla de contrato' => 'Plantilla de contracte',
     'Guardar Contrato' => 'Guardar Contracte',
     'Tiene cambios sin guardar, ¿está seguro de que desea salir de esta página?' => 'Té canvis sense desar, esteu segur que voleu sortir d\'aquesta pàgina?',
+    'Reporte de Estado' => 'Report d\'Estat',
+    'Le recordamos que tiene derecho a dirigir sus reclamaciones ante las Autoridades de protección de datos.' => 'Us recordem que teniu dret a dirigir les vostres reclamacions davant les Autoritats de protecció de dades.',
+    'Por favor, no responda a este correo, se trata de un correo automatizado.' => 'Si us plau, no responeu a aquest correu, es tracta d\'un correu automatitzat.',
 
     'Entrada' => 'Entrada',
     'Salida' => 'Sortida',
