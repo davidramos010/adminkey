@@ -499,7 +499,7 @@ class SiteController extends BaseController
         $strFooter2 = Yii::t('app', 'Por favor, no responda a este correo, se trata de un correo automatizado.');
 
         $contentBody5 = empty($numRegTotal5) ? "" : "<tr><td align=\"center\" style=\";margin-top:25px;color: #002c59\"><p align=\"center\"> " . Yii::t('app', 'indexBody5a') . " <strong> " . $numRegTotal5 . "</strong> " . Yii::t('app', 'indexBody5b') . '</p>' . $tableHtml5 . "</td></tr>";
-        $contentBody10 = empty($numRegTotal10) ? "" : "<tr><td align=\"center\" style=\";margin-top:25px;color: #002c59\"><p align=\"center\"> " . Yii::t('app', 'indexBody10a') . " <strong> " . $numRegTotal10 . "</strong> " . Yii::t('app', 'indexBod10b') . '</p>' . $tableHtml10 . "</td></tr>";
+        $contentBody10 = empty($numRegTotal10) ? "" : "<tr><td align=\"center\" style=\";margin-top:25px;color: #002c59\"><p align=\"center\"> " . Yii::t('app', 'indexBody10a') . " <strong> " . $numRegTotal10 . "</strong> " . Yii::t('app', 'indexBody10b') . '</p>' . $tableHtml10 . "</td></tr>";
         $contentBody15 = empty($numRegTotal15) ? "" : "<tr><td align=\"center\" style=\";margin-top:25px;color: #002c59\"><p align=\"center\"> " . Yii::t('app', 'indexBody15a') . " <strong> " . $numRegTotal15 . "</strong> " . Yii::t('app', 'indexBody15b') . '</p>' . $tableHtml15 . "</td></tr>";
 
         $content = "<table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%; color: #000000;\">
