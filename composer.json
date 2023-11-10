@@ -95,7 +95,8 @@
             "kartik\\icons\\": "",
             "kartik\\grid\\": "",
             "kartik\\dynagrid\\": "",
-            "kartik\\export\\": ""
+            "kartik\\export\\": "",
+            "app\\commands\\": "commands/"
         }
     },
     "config": {

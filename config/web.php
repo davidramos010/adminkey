@@ -60,10 +60,10 @@ $config = [
             'class' => 'yii\swiftmailer\Mailer',
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.ionos.es',  // ej. smtp.mandrillapp.com o smtp.gmail.com
-                'username' => 'soporte@mail.es',
-                'password' => 'passwrd',
-                'port' => '123', // El puerto 25 es un puerto común también
+                'host' => 'smtp.hot.es',  // ej. smtp.mandrillapp.com o smtp.gmail.com
+                'username' => 'mail.valid',
+                'password' => 'pass',
+                'port' => '25', // El puerto 25 es un puerto común también
                 'encryption' => 'tls', // Es usado también a menudo, revise la configuración del servidor
             ],
         ],

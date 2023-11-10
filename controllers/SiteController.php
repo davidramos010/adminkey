@@ -15,7 +15,10 @@ use app\models\Registro;
 use app\models\TipoLlave;
 use app\models\User;
 use app\models\util;
+use kartik\grid\GridView;
 use Yii;
+use yii\bootstrap4\Html;
+use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\web\Response;
 use yii\filters\VerbFilter;
@@ -363,44 +366,177 @@ class SiteController extends BaseController
         }
     }
 
-    public function actionTestEmail()
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public function actionReporteEmail():void
     {
+        $strAddCss = "table {
+                           width: 100%;
+                           border: 1px solid #999;
+                           text-align: left;
+                           border-collapse: collapse;
+                           margin: 0 0 1em 0;
+                           caption-side: top;
+                           color: #002c59;
+                        }
+                        caption, td, th {
+                           padding: 0.3em;
+                        }
+                        th, td {
+                           border-bottom: 1px solid #999;
+                           width: 25%;
+                        }
+                        caption {
+                           font-weight: bold;
+                           font-style: italic;
+                        }";
 
-        $contentBody = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec lectus lectus, euismod vitae convallis in, placerat in ipsum. Vestibulum quam nisl, dapibus sit amet sodales id, gravida quis est. Proin non posuere turpis, quis ullamcorper eros. Sed convallis lorem vel velit cursus porta. Maecenas sed mattis sem. Phasellus eu quam sollicitudin, eleifend nisl eu, pretium dolor. Integer ultricies ornare elit eget pulvinar.";
-        $content = "<table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 860px;\">
+        $gridColumns = [
+            [
+                'attribute' => 'id_llave',
+                'label' => 'Código',
+                'headerOptions' => ['style' => 'width: 10%; '],
+                'format' => 'raw',
+                'enableSorting' => false,
+                'value' =>function($model){
+                    return $model->llave->codigo;
+                }
+            ],
+            [
+                'attribute' => 'id_llave',
+                'label' => 'Descripción',
+                'headerOptions' => ['style' => 'width: 15%'],
+                'format' => 'raw',
+                'enableSorting' => false,
+                'value' => function($model){
+                    return isset($model->llave)?$model->llave->descripcion:'NA';
+                }
+            ],
+            [
+                'attribute' => 'id_llave',
+                'label' => 'Cliente',
+                'headerOptions' => ['style' => 'width: 15%'],
+                'format' => 'raw',
+                'enableSorting' => false,
+                'value' => function($model){
+                    return (isset($model->llave->comunidad) && !empty($model->llave->comunidad))?$model->llave->comunidad->nombre:'';
+                }
+            ],
+            [
+                'attribute' => 'id_llave',
+                'label' => 'Dirección',
+                'headerOptions' => ['style' => 'width: 20%'],
+                'format' => 'raw',
+                'enableSorting' => false,
+                'value' => function($model){
+                    return (isset($model->llave->comunidad) && !empty($model->llave->comunidad))?$model->llave->comunidad->poblacion.' '.$model->llave->comunidad->direccion:'';
+                }
+            ],
+            [
+                'attribute' => 'id_llave',
+                'label' => 'Responsable',
+                'headerOptions' => ['style' => 'width: 15%'],
+                'format' => 'raw',
+                'enableSorting' => false,
+                'value' => function($model){
+                    return (isset($model->registro->comerciales) && !empty($model->registro->comerciales))?$model->registro->comerciales->nombre:'';
+                }
+            ],
+            [
+                'attribute' => 'id_llave',
+                'label' => 'Teléfono',
+                'headerOptions' => ['style' => 'width: 10%'],
+                'format' => 'raw',
+                'enableSorting' => false,
+                'value' => function($model){
+                    return (isset($model->registro->comerciales) && !empty($model->registro->comerciales))?$model->registro->comerciales->telefono.' '.$model->registro->comerciales->movil:'';
+                }
+            ],
+            [
+                'attribute' => 'fecha',
+                'label' => 'Fecha Salida',
+                'headerOptions' => ['style' => 'width: 15%'],
+                'format' => 'raw',
+                'enableSorting' => false,
+                'value' => function($model){
+                    return $model->fecha ;
+                }
+            ],
+        ];
+        $newModelLlave = new Llave();
+        $arrData = $newModelLlave::getDataReport();
+        $addHtmlGrid5 = GridView::widget([
+            'dataProvider' => $arrData['llavesDataProvider'][5],
+            'columns' => $gridColumns,
+            'options' => ['style' => 'color: #000;border: 1px solid #ddd; border-collapse: collapse; width: 100%;'],
+        ]);
+
+        $addHtmlGrid10 = GridView::widget([
+            'dataProvider' => $arrData['llavesDataProvider'][10],
+            'columns' => $gridColumns,
+            'options' => ['style' => 'color: #000;border: 1px solid #ddd; border-collapse: collapse; width: 100%;'],
+        ]);
+
+        $addHtmlGrid15 = GridView::widget([
+            'dataProvider' => $arrData['llavesDataProvider'][15],
+            'columns' => $gridColumns,
+            'options' => ['style' => 'color: #000;border: 1px solid #ddd; border-collapse: collapse; width: 100%;'],
+        ]);
+
+        $numRegTotal5 = $arrData['llavesDataProvider'][5]->getCount();
+        $numRegTotal10 = $arrData['llavesDataProvider'][10]->getCount();
+        $numRegTotal15 = $arrData['llavesDataProvider'][15]->getCount();
+
+        // Add inline styles to the HTML table
+        $tableHtml5 = Html::tag('div', $addHtmlGrid5, ['style' => $strAddCss]);
+        $tableHtml10 = Html::tag('div', $addHtmlGrid10, ['style' => $strAddCss]);
+        $tableHtml15 = Html::tag('div', $addHtmlGrid15, ['style' => $strAddCss]);
+
+        $strTitulo = Yii::t('app', 'Reporte de Estado');
+        $strFooter1 = Yii::t('app', 'Le recordamos que tiene derecho a dirigir sus reclamaciones ante las Autoridades de protección de datos.');
+        $strFooter2 = Yii::t('app', 'Por favor, no responda a este correo, se trata de un correo automatizado.');
+
+        $contentBody5 = empty($numRegTotal5) ? "" : "<tr><td align=\"center\" style=\";margin-top:25px;color: #002c59\"><p align=\"center\"> " . Yii::t('app', 'indexBody5a') . " <strong> " . $numRegTotal5 . "</strong> " . Yii::t('app', 'indexBody5b') . '</p>' . $tableHtml5 . "</td></tr>";
+        $contentBody10 = empty($numRegTotal10) ? "" : "<tr><td align=\"center\" style=\";margin-top:25px;color: #002c59\"><p align=\"center\"> " . Yii::t('app', 'indexBody10a') . " <strong> " . $numRegTotal10 . "</strong> " . Yii::t('app', 'indexBod10b') . '</p>' . $tableHtml10 . "</td></tr>";
+        $contentBody15 = empty($numRegTotal15) ? "" : "<tr><td align=\"center\" style=\";margin-top:25px;color: #002c59\"><p align=\"center\"> " . Yii::t('app', 'indexBody15a') . " <strong> " . $numRegTotal15 . "</strong> " . Yii::t('app', 'indexBody15b') . '</p>' . $tableHtml15 . "</td></tr>";
+
+        $content = "<table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%; color: #000000;\">
                         <tr>
-                            <td>
-                                <img src=\"http://adminkeys.es/assets/fcb6489d/img/AdminLTELogo.png\" style=\"width: 33px\"/>
+                            <td align=\"center\">
+                                <img src=\"http://adminkeys.es/img/logo_adminkey_transparent.png\" style=\"width: 100px\"/>
                                 <div class=\"login-logo\">
-                                    <b>Admin</b>KEYS
+                                    <b>".$strTitulo."</b><br/>
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <td align=\"center\" style=\";margin-top:25px\">
-                                <p align=\"center\">". $contentBody ."</p>
-                            </td>
-                        </tr>
+                        ".$contentBody5."
+                        ".$contentBody10."
+                        ".$contentBody15."
                         <tr>
                             <td>
                                 <span style=\"font-size: 11px;\">
                                     <span style=\"font-family: arial,helvetica,sans-serif;\">
-                                        <span style=\"color: #808080;\"> Le recordamos que tiene derecho a dirigir sus reclamaciones ante las Autoridades de protección de datos.</span>
+                                        <span style=\"color: #808080;\">".$strFooter1."</span>
                                     </span>
                                 </span>
                                 <br>
                                 <span style=\"color: #808080;\">
                                     <span style=\"font-size: 11px;\">
-                                        <span style=\"font-family: arial,helvetica,sans-serif;\"><strong><em>Por favor, no responda a este correo, se trata de un correo automatizado.</em></strong></span>
+                                        <span style=\"font-family: arial,helvetica,sans-serif;\"><strong><em>".$strFooter2."</em></strong></span>
                                     </span>
                                 </span>
                             </td>
                         </tr>
                     </table>";
+
+        $arrEmail = Yii::$app->params['reporteMensual'];
+        $strSubject = $arrEmail['subject_'.Yii::$app->language];
         Yii::$app->mail->compose("@app/mail/layouts/html",['content'=>$content])
-            ->setFrom('soporte@adminkeys.es')
-            ->setTo('dramos@adminkeys.es')
-            ->setSubject('Email enviado desde Yii2-Swiftmailer')
+            ->setFrom($arrEmail['from'])
+            ->setTo($arrEmail['to'])
+            ->setSubject($strSubject)
             ->send();
     }
 }

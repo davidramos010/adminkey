@@ -75,7 +75,7 @@ class LlaveStatusSearch extends LlaveStatus
      * @param int $numDias
      * @return ActiveDataProvider
      */
-    public function searchBetween(array $params, int $numDias = 15)
+    public function searchBetween(array $params, int $numDias = 15): ActiveDataProvider
     {
         $fecha_actual = date("d-m-Y");
         $query = LlaveStatus::find()->alias('ls');
