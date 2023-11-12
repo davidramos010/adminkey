@@ -312,10 +312,11 @@ class Llave extends \yii\db\ActiveRecord
         // Array de llaves con salida
         $queryString = 'SELECT ls.id_llave ,ls.id AS lastid, ls.status
             FROM llave_status ls
+            INNER JOIN llave ll ON (ls.id_llave=ll.id and ll.activa=1)
             INNER JOIN  llave_status ls2 ON (ls2.id = ls.id and ls2.id_llave = ls.id_llave and ls2.id = (
                 SELECT st.id FROM llave_status st WHERE st.id_llave = ls.id_llave ORDER BY st.fecha DESC limit 1
                 ))
-            WHERE ls.status ="S"; ';
+            WHERE ls.status ="S" and ll.activa=1; ';
         $resultadosSalida = $query->createCommand($queryString)->queryAll();
         $numLlavesSalida = (int)count($resultadosSalida);
         $porcLlavesSalida = ($numLlaves > 0 && $numLlavesSalida > 0) ? round((float)((100 / $numLlaves) * $numLlavesSalida), 2) : 0;

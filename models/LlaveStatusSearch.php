@@ -80,6 +80,7 @@ class LlaveStatusSearch extends LlaveStatus
         $fecha_actual = date("d-m-Y");
         $query = LlaveStatus::find()->alias('ls');
         $query->select(["ls.*" ]);
+        $query->innerJoin('llave ll','ls.id_llave=ll.id and ll.activa=1');
         $query->innerJoin('llave_status ls2','ls2.id = ls.id and ls.id_llave = ls2.id_llave and ls2.id = (
            SELECT st.id
            FROM llave_status st 
