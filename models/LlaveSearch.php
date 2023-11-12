@@ -13,7 +13,7 @@ class LlaveSearch extends Llave
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['id', 'id_comunidad', 'id_tipo', 'copia', 'activa','alarma','id_propietario','facturable'], 'integer'],

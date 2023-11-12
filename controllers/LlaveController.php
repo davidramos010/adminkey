@@ -95,8 +95,12 @@ class LlaveController extends BaseController
         $modelLlaveNota->id_user = Yii::$app->user->identity->username;
         $modelLlaveNota->created = date('Y/m/d H:i');
 
+        $model = $this->findModel($id);
+        // definición de la variable nomenclatura
+        $model->nomenclatura = $model->getNomenclatura();
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
             'modelNota' => (object) LlaveNotas::find()->where(['id_llave'=>$id,'delete'=>0])->orderBy('id DESC')->all(),
             'llaveNota' => $modelLlaveNota
         ]);
@@ -164,7 +168,9 @@ class LlaveController extends BaseController
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        $model->codigo = str_replace($model->nomenclatura.'-','',$model->codigo);
+        // definición de la variable nomenclatura
+        $model->nomenclatura = $model->getNomenclatura();
+        $model->codigo = $model->getCodigoSinNomenclatura();
 
         return $this->render('update', [
             'model' => $model,
@@ -201,8 +207,6 @@ class LlaveController extends BaseController
     protected function findModel($id)
     {
         if (($model = Llave::findOne(['id' => $id])) !== null) {
-            // definicion de la variable nomenclatura
-            $model->nomenclatura = $model->getNomenclatura();
             return $model;
         }
 

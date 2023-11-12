@@ -38,6 +38,8 @@ use yii\web\UploadedFile;
 class Llave extends \yii\db\ActiveRecord
 {
 
+    const NUM_TIPO_COMUNIDAD = 1;
+    const NUM_TIPO_PARTICULAR = 2;
     public $llaveLastStatus = null;
     public $nombre_propietario = null;
     public $cliente_comunidad = null;
@@ -158,9 +160,29 @@ class Llave extends \yii\db\ActiveRecord
      * retorno de la variable de nomenclatura
      * @return string|null
      */
-    public function getNomenclatura()
+    public function getNomenclatura(): ?string
     {
-        return $this->nomenclatura = !empty($this->id_comunidad) ? $this->comunidad->nomenclatura : 'P'.$this->propietarios->id;
+        if(!empty($this->codigo)){
+            $arrData = explode('-',$this->codigo);
+            $this->nomenclatura = $arrData[0];
+        }else{
+            $this->nomenclatura = !empty($this->id_comunidad) && (int) $this->id_tipo == self::NUM_TIPO_COMUNIDAD ? $this->comunidad->nomenclatura : 'P'.$this->propietarios->id;
+        }
+        return $this->nomenclatura;
+    }
+
+    /**
+     * Retornar codigo sin nomenclatura
+     * @return string|null
+     */
+    public function getCodigoSinNomenclatura(): ?string
+    {
+        if(!empty($this->codigo)){
+            $arrData = explode('-',$this->codigo);
+            unset($arrData[0]);
+            $this->codigo = implode('-',$arrData);
+        }
+        return $this->codigo ;
     }
 
 
