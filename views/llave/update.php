@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $modelNota stdClass */
 /* @var $llaveNota app\models\LlaveNotas */
 
-$this->title = 'Info General : '.$model->codigo;
+$this->title = 'Info General : '.$model->nomenclatura.'-'.$model->codigo;
 $this->params['breadcrumbs'][] = ['label' => 'Llaves', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
