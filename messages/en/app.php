@@ -99,6 +99,7 @@ return [
 
     'Entrada' => 'Input',
     'Salida' => 'Output',
+    'Formato Contratos' => 'Contracts Format',
 
     'ALBARÁ - CONTROL DE ENTREGA DE LLAVES' => 'ALBARÁ - KEY DELIVERY CONTROL',
     'FECHA ENTREGA' => 'DELIVERY DATE',

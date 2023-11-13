@@ -317,7 +317,9 @@ class Registro extends \yii\db\ActiveRecord
         $strDivResponsableText .= empty($objPropietario->id) ? "":"<strong>".$objPropietario->getNombre()."</strong><br/>";
         $strDivResponsableText .= empty($objPropietario->direccion) ? "":$objPropietario->direccion."&nbsp;&nbsp;";
         $strDivResponsableText .= empty($objPropietario->cod_postal) ? "":$objPropietario->cod_postal."&nbsp;&nbsp;";
-        $strDivResponsableText .= empty($objPropietario->poblacion) ? "":$objPropietario->poblacion."<br/>";
+        $strDivResponsableText .= empty($objPropietario->poblacion) ? "":$objPropietario->poblacion;
+
+        $strDivResponsableText .= empty($strDivResponsableText) ? "":"<br/>";
 
         $strDivResponsableText .= empty($objComercial->nombre) ? "":"<strong>".$objComercial->nombre."</strong><br>";
         $strDivResponsableText .= empty($objComercial->direccion) ? "":$objComercial->direccion."&nbsp;&nbsp;";
@@ -325,7 +327,10 @@ class Registro extends \yii\db\ActiveRecord
         $strDivResponsableText .= empty($objComercial->poblacion) ? "":$objComercial->poblacion."&nbsp;&nbsp;";
         $strDivResponsableText .= empty($objComercial->email) ? "":"Email: ".$objComercial->email."&nbsp;&nbsp;";
         $strDivResponsableText .= empty($objComercial->email) ? "":Yii::t('app', 'Telefono').": ".$objComercial->telefono."&nbsp;&nbsp;";
-        $strDivResponsableText .= empty($objComercial->email) ? "":"Movíl: ".$objComercial->movil."<br/>";
+        $strDivResponsableText .= empty($objComercial->email) ? "":"Movíl: ".$objComercial->movil;
+
+        $strDivResponsableText .= empty($strDivResponsableText) ? "":"<br/>";
+
         $strDivResponsableText .= "<strong>".Yii::t('app', 'Responsable')."</strong><br/>";
         $strDivResponsableText .= empty($arrResponsable['documento']) ? "":$arrResponsable['documento'] ."&nbsp;&nbsp;";
         $strDivResponsableText .= empty($arrResponsable['nombre']) ? "":$arrResponsable['nombre'] ."<br/>";
