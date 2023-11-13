@@ -395,7 +395,7 @@ class RegistroController extends BaseController
     }
 
     /**
-     * Generacion de reoprte pdf
+     * Generación de reporte pdf
      * @return mixed
      */
     public function actionPrintRegister($id = null,$code='')
