@@ -48,7 +48,7 @@ $strUserName = (!empty(Yii::$app->user) && isset(Yii::$app->user) && isset(Yii::
                             ['label' => Yii::t('app', 'Llaves'), 'url' => ['llave/index'], 'iconStyle' => 'far'],
                             ['label' => Yii::t('app', 'Propietarios'), 'url' => ['propietarios/index'], 'iconStyle' => 'far'],
                             ['label' => Yii::t('app', 'Proveedores'), 'url' => ['comerciales/index'], 'iconStyle' => 'far'],
-                            ['label' => Yii::t('app', 'Contratos'), 'url' => ['contratos/index'], 'iconStyle' => 'far'],
+                            ['label' => Yii::t('app', 'Formato Contratos'), 'url' => ['contratos/index'], 'iconStyle' => 'far'],
                         ],
                         'visible' => ((int) Yii::$app->user->identity->perfiluser->id_perfil==1)
                     ],

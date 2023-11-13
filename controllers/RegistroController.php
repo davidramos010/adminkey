@@ -268,15 +268,15 @@ class RegistroController extends BaseController
             null : explode(',', $arrParam['listKeyEntrada']);
         $arrKeysSalida = (empty($arrParam['listKeySalida']) || !isset($arrParam['listKeySalida'])) ?
             null : explode(',', $arrParam['listKeySalida']);
-        $strFechaOperacion = isset($arrParam['Registro']['entrada']) && !empty($arrParam['Registro']['entrada']) ? Tools::getDateTimeFormatedUserToSql($arrParam['Registro']['entrada']) : date('Y-m-d H:i:s');
+        $strFechaRegistro = isset($arrParam['Registro']['fecha_registro']) && !empty($arrParam['Registro']['fecha_registro']) ? Tools::getDateTimeFormatedUserToSql($arrParam['Registro']['fecha_registro']) : date('Y-m-d H:i:s');
 
 
         if (!empty($arrKeysEntrada) || !empty($arrKeysSalida)) {
             $newRegistro = new Registro();
             $newRegistro->load($arrParam);
             $newRegistro->id_user = (int)Yii::$app->user->id;
-            $newRegistro->entrada = (!empty($arrKeysEntrada)) ? $strFechaOperacion : NULL;
-            $newRegistro->salida = (!empty($arrKeysSalida)) ? $strFechaOperacion : NULL;
+            $newRegistro->entrada = (!empty($arrKeysEntrada)) ? $strFechaRegistro : NULL;
+            $newRegistro->salida = (!empty($arrKeysSalida)) ? $strFechaRegistro : NULL;
             if ($newRegistro->save()) {
                 Yii::$app->session->set('lastRegistro', $newRegistro->id);
             }

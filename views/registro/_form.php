@@ -324,7 +324,7 @@ if(!empty($strAddNota)){
                                         'autoclose' => true,
                                         'startDate' => date("d-m-Y", strtotime(date("d-m-Y") . "- 30 days")),
                                     ],
-                                ])->label('Fecha Registro'); ?>
+                                ])->label('Fecha y hora Registro'); ?>
                         </div>
                     </div>
                     <div class="row">

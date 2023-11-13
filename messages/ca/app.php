@@ -110,6 +110,7 @@ return [
 
     'Entrada' => 'Entrada',
     'Salida' => 'Sortida',
+    'Formato Contratos' => 'Format Contractes',
 
     'Registros de Salida' => 'Registres de sortida',
     'Registros de Entrada' => 'Registres d-entrada',
