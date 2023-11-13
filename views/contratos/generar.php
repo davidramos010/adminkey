@@ -56,7 +56,7 @@ $strFileIsVisible = $model_log->isNewRecord ? 'none' : 'inline';
                         <?= $form->field($model_log, 'parametros')->hiddenInput(['id'=>'parametros'])->label(false); ?>
                         <?= $form->field($model_log, 'id')->hiddenInput(['id'=>'id'])->label(false); ?>
                         <div class="row">
-                            <div class="col-md-6 " >
+                            <div class="col-md-8 " >
                                 <?= $form->field($model_log, 'id_contrato')->dropDownList( Contratos::getContratosDropdownList()  , ['class'=>'form-control', 'prompt' => 'Seleccione Uno', 'disabled'=>!empty($model_log->copia_firma) ])->label('Contrato'); ?>
                             </div>
                         </div>
@@ -66,7 +66,7 @@ $strFileIsVisible = $model_log->isNewRecord ? 'none' : 'inline';
                             </div>
                         </div>
                         <div class="row" style="display: <?= $strFileIsVisible ?>">
-                            <div class="col-md-6" >
+                            <div class="col-md-8" >
                                 <?php $strLabel = (empty($model_log->copia_firma))?'':' * Ya existe un documento adjunto no puede registrar mas contratos'; ?>
                                 <?= $form->field($model_log, 'copia_firma', ['options' => ['class' => 'file-uploader']])->widget(FileInput::class, [
                                     'language' => 'es',
