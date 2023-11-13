@@ -86,10 +86,10 @@ class ContratosController extends BaseController
      * Lists all Contratos models.
      * @return mixed
      */
-    public function actionCreateContrato($idContratoLog=null)
+    public function actionCreateContrato($idContratoLog = null)
     {
         $model = new Contratos();
-        $modelLog = (empty($idContratoLog))?new ContratosLog():ContratosLog::findOne(['id'=>$idContratoLog]);
+        $modelLog = (empty($idContratoLog)) ? new ContratosLog() : ContratosLog::findOne(['id' => $idContratoLog]);
 
         $searchModel = new LlaveSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
@@ -126,24 +126,24 @@ class ContratosController extends BaseController
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->nombre = strtoupper($model->nombre);
             $model->id_user = Yii::$app->user->identity->id;
-            $model->fecha_ini = (!empty($model->fecha_ini))? date("Y-m-d", strtotime($model->fecha_ini)) :null;
-            $model->fecha_fin = (!empty($model->fecha_fin))? date("Y-m-d", strtotime($model->fecha_fin)) :null;
+            $model->fecha_ini = (!empty($model->fecha_ini)) ? date("Y-m-d", strtotime($model->fecha_ini)) : null;
+            $model->fecha_fin = (!empty($model->fecha_fin)) ? date("Y-m-d", strtotime($model->fecha_fin)) : null;
             $model->save();
             //Validar documento
             try {
                 $documentoContrato = UploadedFile::getInstance($model, 'documento');
-                $model->documento = $model->nombre.'.'. $documentoContrato->getExtension();
-                $documentoContrato->saveAs(Yii::getAlias('@webroot') . '/plantillas/' . $model->documento );
+                $model->documento = $model->nombre . '.' . $documentoContrato->getExtension();
+                $documentoContrato->saveAs(Yii::getAlias('@webroot') . '/plantillas/' . $model->documento);
                 $model->save();
                 Yii::$app->session->setFlash('success', Yii::t('yii', 'Registrado Correctamente'));
                 return $this->redirect(['index']);
-            }catch (ErrorException $e){
+            } catch (ErrorException $e) {
                 Yii::$app->session->setFlash('error', Yii::t('yii', 'El proceso no finaliza correctamente, por favor revise los datos.'));
             }
         }
 
-        $model->estado=1;//default
-        $model->fecha_ini = (empty($model->fecha_ini))? date("d-m-Y") :null;
+        $model->estado = 1;//default
+        $model->fecha_ini = (empty($model->fecha_ini)) ? date("d-m-Y") : null;
 
         return $this->render('create', [
             'model' => $model,
@@ -164,27 +164,27 @@ class ContratosController extends BaseController
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             //$model->nombre = strtoupper($model->nombre);
             $model->id_user = Yii::$app->user->identity->id;
-            $model->fecha_ini = (!empty($model->fecha_ini))? date("Y-m-d", strtotime($model->fecha_ini)) :null;
-            $model->fecha_fin = (!empty($model->fecha_fin))? date("Y-m-d", strtotime($model->fecha_fin)) :null;
+            $model->fecha_ini = (!empty($model->fecha_ini)) ? date("Y-m-d", strtotime($model->fecha_ini)) : null;
+            $model->fecha_fin = (!empty($model->fecha_fin)) ? date("Y-m-d", strtotime($model->fecha_fin)) : null;
             $model->save();
             //Validar documento
             try {
                 $documentoContrato = UploadedFile::getInstance($model, 'documento');
-                if(!empty($documentoContrato)){
-                    $model->documento = $model->nombre.'.'. $documentoContrato->getExtension();
-                    $documentoContrato->saveAs(Yii::getAlias('@webroot') . '/plantillas/' . $model->documento );
+                if (!empty($documentoContrato)) {
+                    $model->documento = $model->nombre . '.' . $documentoContrato->getExtension();
+                    $documentoContrato->saveAs(Yii::getAlias('@webroot') . '/plantillas/' . $model->documento);
                     $model->save();
                 }
 
                 Yii::$app->session->setFlash('success', Yii::t('yii', 'Registrado Correctamente'));
                 return $this->redirect(['index']);
-            }catch (ErrorException $e){
+            } catch (ErrorException $e) {
                 Yii::$app->session->setFlash('error', Yii::t('yii', 'El proceso no finaliza correctamente, por favor revise los datos.'));
             }
         }
 
-        $model->fecha_ini = (!empty($model->fecha_ini))? date("d-m-Y", strtotime($model->fecha_ini)) :null;
-        $model->fecha_fin = (!empty($model->fecha_fin))? date("d-m-Y", strtotime($model->fecha_fin)) :null;
+        $model->fecha_ini = (!empty($model->fecha_ini)) ? date("d-m-Y", strtotime($model->fecha_ini)) : null;
+        $model->fecha_fin = (!empty($model->fecha_fin)) ? date("d-m-Y", strtotime($model->fecha_fin)) : null;
 
         return $this->render('update', [
             'model' => $model,
@@ -201,10 +201,10 @@ class ContratosController extends BaseController
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $model->estado=0;
-        if($model->save()){
+        $model->estado = 0;
+        if ($model->save()) {
             Yii::$app->session->setFlash('success', Yii::t('yii', 'Se ha Inactivado correctamente'));
-        }else{
+        } else {
             Yii::$app->session->setFlash('error', Yii::t('yii', 'El proceso no finaliza correctamente, vuelva a intentar.'));
         }
 
@@ -222,9 +222,9 @@ class ContratosController extends BaseController
     {
         $bolResultModel = ContratosLog::setDeleteContratoLog($idContratoLog);
 
-        if($bolResultModel){
+        if ($bolResultModel) {
             Yii::$app->session->setFlash('success', Yii::t('yii', 'Se ha eliminado correctamente'));
-        }else{
+        } else {
             Yii::$app->session->setFlash('error', Yii::t('yii', 'El proceso no finaliza correctamente, vuelva a intentar.'));
         }
 
@@ -281,12 +281,12 @@ class ContratosController extends BaseController
             END) as nombre_propietario",
             "tl.descripcion as tipo"
         ]);
-        $query->leftJoin('llave_status ls','ls.id_llave = ll.id and ls.id = ( SELECT MAX(id) FROM llave_status cm WHERE ls.id_llave = ll.id )');
-        $query->leftJoin('propietarios pp','ll.id_propietario = pp.id');
-        $query->leftJoin('tipo_llave tl','ll.id_tipo = tl.id');
-        $query->leftJoin('llave_ubicaciones lu','ll.id_llave_ubicacion = lu.id');
-        $query->leftJoin('comunidad c','ll.id_comunidad = c.id');
-        $query->where(['ll.id'=>$numId]);
+        $query->leftJoin('llave_status ls', 'ls.id_llave = ll.id and ls.id = ( SELECT MAX(id) FROM llave_status cm WHERE ls.id_llave = ll.id )');
+        $query->leftJoin('propietarios pp', 'll.id_propietario = pp.id');
+        $query->leftJoin('tipo_llave tl', 'll.id_tipo = tl.id');
+        $query->leftJoin('llave_ubicaciones lu', 'll.id_llave_ubicacion = lu.id');
+        $query->leftJoin('comunidad c', 'll.id_comunidad = c.id');
+        $query->where(['ll.id' => $numId]);
         $arrLlave = $query->asArray()->all();
         return json_encode($arrLlave[0]);
 
@@ -358,12 +358,11 @@ class ContratosController extends BaseController
      */
     public function actionDescargarContrato()
     {
-
         $arrParam = $this->request->get();
         $numIdContratoLog = $arrParam['id'];
-        $objContratoLog = ContratosLog::findOne(['id'=>$numIdContratoLog]);
+        $objContratoLog = ContratosLog::findOne(['id' => $numIdContratoLog]);
         $objContrato = Contratos::findOne(['id' => $objContratoLog->id_contrato]);
-        $objContratoLogLlave = ContratosLogLlave::find()->where(['id_contrato_log'=>$objContratoLog->id])->all();
+        $objContratoLogLlave = ContratosLogLlave::find()->where(['id_contrato_log' => $objContratoLog->id])->all();
 
         $rutaContrato = Yii::getAlias('@webroot') . '/plantillas/' . $objContrato->documento;
         $templateProcessor = new TemplateProcessor($rutaContrato);
@@ -371,37 +370,33 @@ class ContratosController extends BaseController
         //Carga informacion de llaves y llaves
         $numLLaves = count($objContratoLogLlave);
         $arrLlaves = [];
-        if($numLLaves){
+        if ($numLLaves) {
             try {
-                //$templateProcessor->cloneRow('codigo_llave', $numLLaves);
-            }catch (Exception $exception ){
-                // no aplica
-            }
+                foreach ($objContratoLogLlave as $llave_key) {
+                    $arrLlaves[] = $llave_key->id_llave;
+                    $rowData[] = ['codigo_llave' => $llave_key->llave->codigo, 'descripcion_llave' => htmlspecialchars($llave_key->llave->descripcion)];
+                }
+                $templateProcessor->cloneRowAndSetValues('codigo_llave', $rowData);
+            } catch (\PhpOffice\PhpWord\Exception\Exception $e) {
 
-            $numRowLlave = 0;
-            foreach ($objContratoLogLlave as $llave_key){
-                $numRowLlave++;
-                $arrLlaves[] = $llave_key->id_llave;
-                $templateProcessor->setValue('codigo_llave#'.$numRowLlave, htmlspecialchars($llave_key->llave->codigo));
-                $templateProcessor->setValue('descripcion_llave#'.$numRowLlave, htmlspecialchars($llave_key->llave->descripcion));
             }
         }
 
         // Consultar Cliente
         $arrNombreClientes = [];
         $infoCliente = Comunidad::find()->alias('c')->select('c.nombre')->distinct();
-        $infoCliente->innerJoin('llave l','l.id_comunidad = c.id');
-        $infoCliente->where(['IN','l.id',$arrLlaves])->orderBy('c.nombre asc');
+        $infoCliente->innerJoin('llave l', 'l.id_comunidad = c.id');
+        $infoCliente->where(['IN', 'l.id', $arrLlaves])->orderBy('c.nombre asc');
         $infoCliente = $infoCliente->all();
-        if(count($infoCliente)){
-            foreach ($infoCliente as $keyCliente){
+        if (count($infoCliente)) {
+            foreach ($infoCliente as $keyCliente) {
                 $arrNombreClientes[] = strtoupper($keyCliente->nombre);
             }
         }
 
         // Consultar Propietario
-        $arrPropietarioNombre = null;
-        $arrPropietarioNombreIdentificacion = null;
+        $arrPropietarioNombre = [];
+        $arrPropietarioNombreIdentificacion = [];
         $infoPropietario = Propietarios::find()->alias('p')->select('(CASE
                                                                                         WHEN p.nombre_propietario IS NOT NULL THEN p.nombre_propietario
                                                                                         WHEN p.nombre_representante IS NOT NULL THEN p.nombre_representante
@@ -429,10 +424,10 @@ class ContratosController extends BaseController
         $templateProcessor->setValue('llaves', $objContratoLog->parametros);
         $templateProcessor->setValue('observaciones', $objContratoLog->observacion);
         $templateProcessor->setValue('fecha_actual', date('d/m/Y H:i:s'));
-        $templateProcessor->setValue('fecha_contrato', util::getDateTimeFormatedSqlToUser($objContratoLog->fecha) );
-        $templateProcessor->setValue('cliente', implode(',',$arrNombreClientes) );
-        $templateProcessor->setValue('propietario', implode(',',$arrPropietarioNombre));
-        $templateProcessor->setValue('propietario_identificacion', implode(',',$arrPropietarioNombreIdentificacion));
+        $templateProcessor->setValue('fecha_contrato', util::getDateTimeFormatedSqlToUser($objContratoLog->fecha));
+        $templateProcessor->setValue('cliente', implode(',', $arrNombreClientes));
+        $templateProcessor->setValue('propietario', implode(',', $arrPropietarioNombre));
+        $templateProcessor->setValue('propietario_identificacion', implode(',', $arrPropietarioNombreIdentificacion));
 
         $fileName = date('Ymd') . '_' . $objContrato->documento;
         $pathToSave = tempnam(sys_get_temp_dir(), $fileName);
@@ -441,8 +436,6 @@ class ContratosController extends BaseController
         if (file_exists($pathToSave)) {
             return Yii::$app->response->sendFile($pathToSave, date('Ymd') . '_' . $objContrato->documento, ['inline' => false]);
         }
-
     }
-
 
 }
