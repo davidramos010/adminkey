@@ -7,14 +7,16 @@ use app\models\Llave;
 use app\models\LlaveNotas;
 use app\models\LlaveSearch;
 use app\models\LlaveStatus;
+use app\models\LlaveStatusSearch;
 use app\models\Propietarios;
 use app\models\TipoLlave;
 use app\models\util;
 use kartik\helpers\Html;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Exception;
 use Yii;
 use yii\filters\AccessControl;
-use yii\helpers\UnsetArrayValue;
-use yii\web\Controller;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -62,6 +64,7 @@ class LlaveController extends BaseController
         $searchModel = new LlaveSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -70,12 +73,17 @@ class LlaveController extends BaseController
 
     /**
      * @return string
+     * @throws Exception
      */
     public function actionReport()
     {
         $searchModel = new LlaveSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
         $dataProvider->pagination->pageSize = 50;
+        $arrParamsGet = $this->request->get() ?? null;
+        if ($arrParamsGet && isset($arrParamsGet['report']) && $arrParamsGet['report'] == 'all') {
+            $this->fnGenerarReportConsolidadoExcel();
+        }
 
         return $this->render('report', [
             'searchModel' => $searchModel,
@@ -386,5 +394,47 @@ class LlaveController extends BaseController
         }
 
         return  json_encode( ['error'=>$bolError,'message'=>$strMessage] );
+    }
+
+    /**
+     * @return void|\yii\console\Response|\yii\web\Response
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function fnGenerarReportConsolidadoExcel()
+    {
+        $searchModelStatus = new LlaveStatusSearch();
+        $dataProviderCliente = $searchModelStatus->searchDataByCliente(true);
+        $dataProviderCliente->pagination->pageSize = 1000;
+        $dataProviderPropietario = $searchModelStatus->searchDataByPropietario(true);
+        $dataProviderPropietario->pagination->pageSize = 1000;
+        $content = [['COMUNIDADES'], ['NOMENCLATURA', 'COMUNIDAD', 'TOTAL', 'EN-PRESTAMO']];
+        $arrModelCliente = $dataProviderCliente->getModels();
+        if (!empty($arrModelCliente)) {
+            foreach ($arrModelCliente as $valueReg) {
+                $content[] = [$valueReg['nomenclatura'], $valueReg['descripcion'], $valueReg['total'], $valueReg['salida']];
+            }
+        }
+
+        $content[] = [''];
+        $content[] = [''];
+        $content[] = [''];
+        $content[] = ['PARTICULARES'];
+        $content[] = ['ID', 'PARTICULAR', 'TOTAL', 'EN-PRESTAMO'];
+        $arrModelPropietario = $dataProviderPropietario->getModels();
+        if (!empty($arrModelPropietario)) {
+            foreach ($arrModelPropietario as $valueReg) {
+                $content[] = [$valueReg['id_propietario'], $valueReg['descripcion'], $valueReg['total'], $valueReg['salida']];
+            }
+        }
+
+        $excel = new Spreadsheet();
+        $pathToSave = tempnam(sys_get_temp_dir(), "report_") . '.xlsx';
+        $page = $excel->getActiveSheet();
+        $page->fromArray($content);
+        $writer = new Xlsx($excel);
+        $writer->save($pathToSave);
+        if (file_exists($pathToSave)) {
+            return Yii::$app->response->sendFile($pathToSave, date('Ymd') . '_reporte_consolidado.xls', ['inline' => false]);
+        }
     }
 }

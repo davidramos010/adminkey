@@ -17,26 +17,24 @@ class Csv extends Model
      */
     public $csv_file;
 
-
     public function rules()
     {
         return [
             [['csv_file'], 'file', //'extensions' => 'csv,xlsx,xls',
-                'mimeTypes'  => [
+                'mimeTypes' => [
                     'application/vnd.ms-excel',
                     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                     'text/csv'
                 ],
-                'wrongMimeType'=> \Yii::t('app','Only csv,xlsx,xls files are allowed.'),
+                'wrongMimeType' => \Yii::t('app', 'Only csv,xlsx,xls files are allowed.'),
                 'checkExtensionByMimeType' => true,
                 'skipOnEmpty' => false],
         ];
     }
 
-
     public function attributeLabels()
     {
-        return ['csv_file'=>'Upload CSV File'];
+        return ['csv_file' => 'Upload CSV File'];
     }
 }
 

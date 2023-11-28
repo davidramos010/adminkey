@@ -174,43 +174,4 @@ class OperacionesController extends BaseController
     }
 
 
-    public function actionPlantillaCargaCsv(): bool
-    {
-        $rutaCsv = tempnam(sys_get_temp_dir(), "");
-        $csv = fopen($rutaCsv, 'w');
-        // Construimos cabeceras
-        $cabeceras = [
-            'nombre_cliente',
-            'mail',
-            'telefono',
-            'idioma',
-            'codigo_postal',
-            'direccion',
-            'origen',
-            'orientacion',
-            'inclinacion',
-            'consumo_anual',
-            'tipo_curva',
-            'precio_kwh',
-            'precio_kwh_excedente',
-            'precio_termino_energia',
-            'coste_termino_potencia',
-            'vida_util_instalacion',
-            'potencia_contratada',
-            'codigo_agente',
-            'marca',
-            'localidad',
-            'codigo_oferta'
-        ];
-
-        fputcsv($csv, $cabeceras, ';');
-        fclose($csv);
-
-        header('Content-Disposition: attachment; filename="plantilla-csv-calculadora-solar.csv"');
-        header("Content-Type: application/csv");
-        header("Content-Length: " . filesize($rutaCsv));
-        echo(file_get_contents($rutaCsv));
-        return true;
-    }
-
 }
