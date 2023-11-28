@@ -129,7 +129,7 @@ class LlaveStatusSearch extends LlaveStatus
      * Sub consulta para listar clientes con llaves en prestamo
      * @return ActiveDataProvider
      */
-    public function searchDataByCliente()
+    public function searchDataByCliente(bool $bolAllReg = false)
     {
         $subQuery = Llave::find()->alias('l');
         $subQuery->select(["COUNT(1) AS total, l.id_comunidad, c.nombre as descripcion,
@@ -140,11 +140,9 @@ class LlaveStatusSearch extends LlaveStatus
                                                                 ))
                                 INNER JOIN llave l2 on (ls.id_llave = l2.id )
                                 WHERE ls.status ='S' and l2.id_comunidad = l.id_comunidad
-                            ) AS salida" ]);
+                            ) AS salida,c.nomenclatura as nomenclatura" ]);
         $subQuery->leftJoin('comunidad c','l.id_comunidad = c.id ');
-
-
-        $subQuery->where(['l.activa'=>1]);
+        $subQuery->where(['l.activa'=>1,'l.id_tipo'=>1]);
         $subQuery->andWhere(['IS NOT', 'l.id_comunidad', NULL]);
         $subQuery->groupBy('l.id_comunidad');
         // Ordenamos por fecha de creación por defecto
@@ -152,8 +150,10 @@ class LlaveStatusSearch extends LlaveStatus
             $subQuery->orderBy('salida DESC,c.nombre ASC');
         }
         // Select All
-        $query = (new Query())->select('r.total as total,r.id_comunidad, r.descripcion, r.salida as salida')->from(['r' => $subQuery]);
-        $query->where(['>','r.salida',0]);
+        $query = (new Query())->select('r.total as total,r.id_comunidad, r.descripcion, r.salida as salida, r.nomenclatura as nomenclatura')->from(['r' => $subQuery]);
+        if(!$bolAllReg){
+            $query->where(['>','r.salida',0]);
+        }
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -165,7 +165,7 @@ class LlaveStatusSearch extends LlaveStatus
     /**
      * @return ActiveDataProvider
      */
-    public function searchDataByPropietario()
+    public function searchDataByPropietario(bool $bolAllReg = false)
     {
         $subQuery = Llave::find()->alias('l');
         $subQuery->select(["COUNT(1) AS total, l.id_propietario,
@@ -184,7 +184,7 @@ class LlaveStatusSearch extends LlaveStatus
                             ) AS salida" ]);
         $subQuery->leftJoin('propietarios p','l.id_propietario  = p.id');
 
-        $subQuery->where(['l.activa'=>1]);
+        $subQuery->where(['l.activa'=>1,'l.id_tipo'=>2]);
         $subQuery->andWhere(['IS NOT', 'l.id_propietario', NULL]);
         $subQuery->groupBy('l.id_propietario');
         // Ordenamos por fecha de creación por defecto
@@ -194,7 +194,9 @@ class LlaveStatusSearch extends LlaveStatus
 
         // Select All
         $query = (new Query())->select('r.*')->from(['r' => $subQuery]);
-        $query->where(['>','r.salida',0]);
+        if(!$bolAllReg){
+            $query->where(['>','r.salida',0]);
+        }
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

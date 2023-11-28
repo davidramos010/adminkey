@@ -20,7 +20,6 @@ $this->title = 'Reporte de Llaves';
     <!-- form start -->
     <?= $this->render('info') ?>
     <!-- form end -->
-
     <div class="ribbon_wrap" >
         <div class="row">
             <div class="col-md-10">
@@ -29,10 +28,13 @@ $this->title = 'Reporte de Llaves';
                     echo Html::ul([
                         'Utilice los recuadros de cada columna para filtrar la información que desea consultar.',
                     ], ['encode' => false]);
+
+                    echo Html::ul([
+                        'Exporte un consolidado de cantidad de llaves por Comunidad y Propietarios. ' .
+                        Html::button(Yii::t('app', 'Exportar Consolidado'), ['class' => 'btn btn-info btn-xs', 'data-js-export-excel' => true,]),
+                    ], ['encode' => false]);
                     ?>
                 </div>
-            </div>
-            <div class="col-md-2">
             </div>
         </div>
 
@@ -273,5 +275,12 @@ $this->title = 'Reporte de Llaves';
             <!-- /.card-body -->
         </div>
     </div>
-
 </div>
+
+<?php
+$this->registerJs('
+        $(document).on("click", "[data-js-export-excel]", function (e) {
+            window.location.replace("' . Url::toRoute('llave/report') . '" + "?report=all");
+        });
+');
+?>
