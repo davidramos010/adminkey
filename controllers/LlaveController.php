@@ -13,6 +13,7 @@ use app\models\TipoLlave;
 use app\models\util;
 use kartik\helpers\Html;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Writer\Exception;
 use Yii;
 use yii\filters\AccessControl;
@@ -75,7 +76,7 @@ class LlaveController extends BaseController
      * @return string
      * @throws Exception
      */
-    public function actionReport()
+    public function actionReport(): string
     {
         $searchModel = new LlaveSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
@@ -399,6 +400,7 @@ class LlaveController extends BaseController
     /**
      * @return void|\yii\console\Response|\yii\web\Response
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function fnGenerarReportConsolidadoExcel()
     {
@@ -407,31 +409,80 @@ class LlaveController extends BaseController
         $dataProviderCliente->pagination->pageSize = 1000;
         $dataProviderPropietario = $searchModelStatus->searchDataByPropietario(true);
         $dataProviderPropietario->pagination->pageSize = 1000;
-        $content = [['COMUNIDADES'], ['NOMENCLATURA', 'COMUNIDAD', 'TOTAL', 'EN-PRESTAMO']];
+
+        $content1[] = ['      '];
+        $content1[] = ['','Fecha : '.date('d/m/Y H:i:s')];
+        $content1[] = ['','LISTA DE COMUNIDADES'];
+        $content1[] = [''];
+        $content1[] = ['','NOMENCLATURA', 'COMUNIDAD', 'TOTAL', 'EN-PRESTAMO'];
+        $content1[] = [''];
         $arrModelCliente = $dataProviderCliente->getModels();
+        $numSumasTotal = 0;
+        $numSumasPrestamos = 0;
         if (!empty($arrModelCliente)) {
             foreach ($arrModelCliente as $valueReg) {
-                $content[] = [$valueReg['nomenclatura'], $valueReg['descripcion'], $valueReg['total'], $valueReg['salida']];
+                $numSumasTotal += (int) $valueReg['total'];
+                $numSumasPrestamos += (int) $valueReg['salida'];
+                $content1[] = ['',$valueReg['nomenclatura'], $valueReg['descripcion'], $valueReg['total'], $valueReg['salida']];
             }
         }
+        $content1[] = [''];
+        $content1[] = ['','','TOTALES',$numSumasTotal,$numSumasPrestamos];
 
-        $content[] = [''];
-        $content[] = [''];
-        $content[] = [''];
-        $content[] = ['PARTICULARES'];
-        $content[] = ['ID', 'PARTICULAR', 'TOTAL', 'EN-PRESTAMO'];
+        $spreadsheet = new Spreadsheet();
+        // Crear la primera hoja
+        $sheet1 = $spreadsheet->getActiveSheet();
+        $sheet1->setTitle('LISTA DE COMUNIDADES');
+        $sheet1->setCellValue('B3', 'LISTA DE COMUNIDADES');
+        $sheet1->getStyle('B3')->getFont()->setBold(true);
+        $sheet1->mergeCells('B3:E3');
+        $sheet1->getStyle('B3')->getFont()->getColor()->setARGB('FFFFFF');
+        $sheet1->getStyle('B3')->getFill()->setFillType(Fill::FILL_SOLID);
+        $sheet1->getStyle('B3')->getFill()->getStartColor()->setARGB('007bff');
+        $sheet1->fromArray($content1);
+        foreach (range('A', 'E') as $column) {
+            $sheet1->getColumnDimension($column)->setAutoSize(true);
+        }
+
+        // ==========================================================
+        $content2[] = ['      '];
+        $content2[] = ['','Fecha : '.date('d/m/Y H:i:s')];
+        $content2[] = ['','LISTA DE COMUNIDADES'];
+        $content2[] = [''];
+        $content2[] = ['','ID', 'PARTICULAR', 'TOTAL', 'EN-PRESTAMO'];
+        $content2[] = [''];
         $arrModelPropietario = $dataProviderPropietario->getModels();
+        $numSumasTotal = 0;
+        $numSumasPrestamos = 0;
         if (!empty($arrModelPropietario)) {
             foreach ($arrModelPropietario as $valueReg) {
-                $content[] = [$valueReg['id_propietario'], $valueReg['descripcion'], $valueReg['total'], $valueReg['salida']];
+                $numSumasTotal += (int) $valueReg['total'];
+                $numSumasPrestamos += (int) $valueReg['salida'];
+                $content2[] = ['',$valueReg['id_propietario'], $valueReg['descripcion'], $valueReg['total'], $valueReg['salida']];
             }
         }
+        $content2[] = [''];
+        $content2[] = ['','','TOTALES',$numSumasTotal,$numSumasPrestamos];
+        // Crear la segunda hoja
+        $spreadsheet->createSheet();
+        $sheet2 = $spreadsheet->setActiveSheetIndex(1);
+        $sheet2->setTitle('LISTA DE PARTICULARES');
+        $sheet2->setCellValue('B3', 'LISTA DE PARTICULARES');
+        $sheet2->getStyle('B3')->getFont()->setBold(true);
+        $sheet2->mergeCells('B3:E3');
+        $sheet2->getStyle('B3')->getFont()->getColor()->setARGB('FFFFFF');
+        $sheet2->getStyle('B3')->getFill()->setFillType(Fill::FILL_SOLID);
+        $sheet2->getStyle('B3')->getFill()->getStartColor()->setARGB('007bff');
+        $sheet2->fromArray($content2);
+        foreach (range('A', 'E') as $column) {
+            $sheet2->getColumnDimension($column)->setAutoSize(true);
+        }
 
-        $excel = new Spreadsheet();
+        //$spreadsheet = new Spreadsheet();
         $pathToSave = tempnam(sys_get_temp_dir(), "report_") . '.xlsx';
-        $page = $excel->getActiveSheet();
-        $page->fromArray($content);
-        $writer = new Xlsx($excel);
+        //$page = $spreadsheet->getActiveSheet();
+        //$page->fromArray($content);
+        $writer = new Xlsx($spreadsheet);
         $writer->save($pathToSave);
         if (file_exists($pathToSave)) {
             return Yii::$app->response->sendFile($pathToSave, date('Ymd') . '_reporte_consolidado.xls', ['inline' => false]);
