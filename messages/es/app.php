@@ -28,6 +28,8 @@ return [
     'indexLlavesFuera' => '% de llaves entregadas',
     'indexTituloCliente' => 'Lista de Clientes, por cantidad de llaves en Deposito y llaves por Entregadas.',
     'indexTituloPropietario' => 'Lista de Propietarios, por cantidad de llaves en Deposito y llaves Entregadas.',
+    'reportHeaderLlaves1' => 'Utilice los recuadros de cada columna para filtrar la información que desea consultar',
+    'reportHeaderLlaves2' => 'Exporte un consolidado de cantidad de llaves por Comunidad y Propietarios.',
 
     'Cliente' => 'Cliente',
     'Cant. Llaves' => 'Llaves en Deposito',

@@ -29,6 +29,9 @@ return [
     'indexTituloCliente' => 'List of Clients, by number of keys in Deposit and keys Delivered.',
     'indexTituloPropietario' => 'List of Owners, by number of keys in Deposit and keys Delivered.',
 
+    'reportHeaderLlaves1' => 'Use the boxes in each column to filter the information you want to consult',
+    'reportHeaderLlaves2' => 'Export a consolidated number of keys by Community and Owners.',
+
     'Llaves'=> 'Keys',
     'Cliente' => 'Client',
     'Cant. llaves' => 'Keys in Deposit',
