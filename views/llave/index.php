@@ -47,7 +47,7 @@ $this->registerJsFile('@web/js/llave.js');
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <?php Pjax::begin(['timeout' => false, 'enablePushState' => false, 'clientOptions' => ['method' => 'GET']]); ?>
+                <?php Pjax::begin(['timeout' => false, 'clientOptions' => ['method' => 'GET']]); ?>
                 <?php
 
                 $gridColumns = [
@@ -279,7 +279,19 @@ $this->registerJsFile('@web/js/llave.js');
                          ExportMenu::FORMAT_HTML => false,
                          ExportMenu::FORMAT_EXCEL => false,
                          ExportMenu::FORMAT_TEXT => false,
-                         ExportMenu::FORMAT_PDF => false,
+                         ExportMenu::FORMAT_PDF => [
+                             'pdfConfig' => [
+                                 'methods' => [
+                                     'SetTitle' => 'Grid Llaves - AdminKey.com',
+                                     'SetSubject' => 'Generating Report Llaves - AdminKey.com',
+                                     'SetHeader' => ['AdminKey.com ||Generated On: ' . date("r")],
+                                     'SetFooter' => ['|Page {PAGENO}|'],
+                                     'SetAuthor' => 'AdminKey.com',
+                                     'SetCreator' => 'AdminKey.com',
+                                     'SetKeywords' => 'Report Llaves - AdminKey.com',
+                                 ]
+                             ]
+                         ],
                          ExportMenu::FORMAT_CSV   => [
                              'label'           => Yii::t('app', 'CSV'),
                          ],
