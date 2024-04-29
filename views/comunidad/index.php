@@ -165,7 +165,19 @@ $this->title = 'Clientes';
                         ExportMenu::FORMAT_HTML => false,
                         ExportMenu::FORMAT_EXCEL => false,
                         ExportMenu::FORMAT_TEXT => false,
-                        ExportMenu::FORMAT_PDF => false,
+                        ExportMenu::FORMAT_PDF => [
+                            'pdfConfig' => [
+                                'methods' => [
+                                    'SetTitle' => 'Grid Clientes - AdminKey.com',
+                                    'SetSubject' => 'Generating Report Clientes - AdminKey.com',
+                                    'SetHeader' => ['AdminKey.com ||Generated On: ' . date("r")],
+                                    'SetFooter' => ['|Page {PAGENO}|'],
+                                    'SetAuthor' => 'AdminKey.com',
+                                    'SetCreator' => 'AdminKey.com',
+                                    'SetKeywords' => 'Report Clientes - AdminKey.com',
+                                ]
+                            ]
+                        ],
                         ExportMenu::FORMAT_CSV   => [
                             'label'           => Yii::t('app', 'CSV'),
                         ],

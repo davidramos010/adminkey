@@ -150,7 +150,19 @@ $this->title = 'Proveedores';
                         ExportMenu::FORMAT_HTML => false,
                         ExportMenu::FORMAT_EXCEL => false,
                         ExportMenu::FORMAT_TEXT => false,
-                        ExportMenu::FORMAT_PDF => false,
+                        ExportMenu::FORMAT_PDF => [
+                            'pdfConfig' => [
+                                'methods' => [
+                                    'SetTitle' => 'Grid Proveedores - AdminKey.com',
+                                    'SetSubject' => 'Generating Report Proveedores - AdminKey.com',
+                                    'SetHeader' => ['AdminKey.com ||Generated On: ' . date("r")],
+                                    'SetFooter' => ['|Page {PAGENO}|'],
+                                    'SetAuthor' => 'AdminKey.com',
+                                    'SetCreator' => 'AdminKey.com',
+                                    'SetKeywords' => 'Report Proveedores - AdminKey.com',
+                                ]
+                            ]
+                        ],
                         ExportMenu::FORMAT_CSV   => [
                             'label'           => Yii::t('app', 'CSV'),
                         ],
