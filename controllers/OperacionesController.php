@@ -105,14 +105,17 @@ class OperacionesController extends BaseController
         return $arrResult;
     }
 
-
+    /**
+     * @return array
+     * @throws \PhpOffice\PhpSpreadsheet\Calculation\Exception
+     * @throws \yii\base\Exception
+     */
     public function actionAjaxLoadRegistros()
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         // Validamos que sea un csv
         $file = UploadedFile::getInstanceByName('csv_file');
         if ($file->extension !== 'csv') {
-            //throw new Exception('No es un fichero .csv!');
             $arrResult['avisos'] = 'No es un fichero .csv!';
             $arrResult['respuesta'] = 'No es un fichero .csv!';
         }
