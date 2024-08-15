@@ -5,11 +5,7 @@ use kartik\export\ExportMenu;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use app\models\User;
-use hail812\adminlte3\yii\grid\ActionColumn;
-use kartik\icons\Icon;
-use kartik\widgets\Select2;
-use yii\helpers\Url;
+
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\PropietariosSearch */
