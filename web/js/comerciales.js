@@ -16,6 +16,7 @@ function fnLocalidadProvincia(params) {
  */
 
 function procesarResultadosCodigoPostal(data) {
+    $("#comerciales-cod_postal").val('');
     return {
         results: data.map(d => {
             return {id: d.cp, text: d.cp, poblacio: d.poblacio, provincia: d.provincia};

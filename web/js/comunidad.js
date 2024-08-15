@@ -5,7 +5,6 @@
  */
 function popularLocalidadProvincia(params) {
     if (params && params.data) {
-        //$("#altasin-dir_poblac").val(params.data.localidad);
         $("#comunidad-poblacion").val(params.data.poblacio+ ', '+params.data.provincia);
     }
 }
@@ -17,6 +16,7 @@ function popularLocalidadProvincia(params) {
  */
 
 function procesarResultadosCodigoPostal(data) {
+    $("#comunidad-cod_postal").val('');
     return {
         results: data.map(d => {
             return {id: d.cp, text: d.cp, poblacio: d.poblacio, provincia: d.provincia};
